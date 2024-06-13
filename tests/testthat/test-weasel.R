@@ -1,10 +1,12 @@
-test_that("weasel works with workflows", {
+test_that("weasel works with workflows - recipe", {
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow(rec_spec, lm_spec)
+  wf_spec <- workflows::workflow() %>%
+    workflows::add_recipe(rec_spec) %>%
+    workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
@@ -13,6 +15,41 @@ test_that("weasel works with workflows", {
   expect_s3_class(res, "weasel_class")
   expect_true(is.character(res))
   expect_named(res)
+  expect_length(res, 1 + (ncol(mtcars) - 1))
+})
+
+test_that("weasel works with workflows - formula", {
+  lm_spec <- parsnip::linear_reg()
+
+  wf_spec <- workflows::workflow() %>%
+    workflows::add_formula(mpg ~ .) %>%
+    workflows::add_model(lm_spec)
+
+  wf_fit <- parsnip::fit(wf_spec, mtcars)
+
+  res <- weasel(wf_fit)
+
+  expect_s3_class(res, "weasel_class")
+  expect_true(is.character(res))
+  expect_named(res, ".pred")
+  expect_length(res, 1)
+})
+
+test_that("weasel works with workflows - variables", {
+  lm_spec <- parsnip::linear_reg()
+
+  wf_spec <- workflows::workflow() %>%
+    workflows::add_variables(outcomes = "mpg", predictors = everything()) %>%
+    workflows::add_model(lm_spec)
+
+  wf_fit <- parsnip::fit(wf_spec, mtcars)
+
+  res <- weasel(wf_fit)
+
+  expect_s3_class(res, "weasel_class")
+  expect_true(is.character(res))
+  expect_named(res, ".pred")
+  expect_length(res, 1)
 })
 
 test_that("weasel errors on non-trained workflow", {
