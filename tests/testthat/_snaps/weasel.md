@@ -22,6 +22,14 @@
       Error in `weasel()`:
       ! `x` must be fitted model.
 
+# weasel errors nicely on post-processing
+
+    Code
+      weasel(wf_fit)
+    Condition
+      Error in `weasel()`:
+      ! post-processing is not yet supported in weasel.
+
 # weasel errors on wrong input
 
     Code

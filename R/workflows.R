@@ -4,6 +4,10 @@ weasel.workflow <- function(x, ...) {
     cli::cli_abort("{.arg x} must be a fully trained {.cls workflow}.")
   }
 
+  if (length(x$post$actions) != 0) {
+    cli::cli_abort("post-processing is not yet supported in weasel.")
+  }
+
   model_fit <- workflows::extract_fit_parsnip(x)
   out <- weasel(model_fit)
   

@@ -110,6 +110,24 @@ test_that("weasel errors on non-trained parsnip", {
   )
 })
 
+test_that("weasel errors nicely on post-processing", {
+  lm_spec <- parsnip::linear_reg()
+
+  wf_spec <- workflows::workflow() %>%
+    workflows::add_formula(mpg ~ .) %>%
+    workflows::add_model(lm_spec)
+
+  wf_fit <- parsnip::fit(wf_spec, mtcars)
+
+  # fake post-processing happening
+  wf_fit$post$actions <- list(thing = 1)
+  
+  expect_snapshot(
+    error = TRUE,
+    weasel(wf_fit)
+  )
+})
+
 test_that("weasel errors on wrong input", {
   expect_snapshot(
     error = TRUE,
