@@ -18,3 +18,5 @@ Imports:
     workflows
 Suggests:
     parsnip
+URL: https://github.com/EmilHvitfeldt/weasel
+BugReports: https://github.com/EmilHvitfeldt/weasel/issues
