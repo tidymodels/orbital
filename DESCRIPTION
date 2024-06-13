@@ -1,0 +1,20 @@
+Package: weasel
+Title: Turn Tidymodels Workflows Into Series of Equations
+Version: 0.0.0.9000
+Authors@R: 
+    person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0002-0679-1945"))
+Description: Turning tidymodels workflows into series of equations, to allow
+    for low dependency prediction locally or in databases.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1.9000
+Imports: 
+    cli,
+    recipes,
+    rlang,
+    tidypredict,
+    workflows
+Suggests:
+    parsnip
