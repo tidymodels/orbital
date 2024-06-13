@@ -1,11 +1,23 @@
 
 #' @export
-weasel.recipe <- function(x, eqs, ...) {
-  all_vars <- all.vars(rlang::parse_expr(eqs))
+weasel.recipe <- function(x, eqs = NULL, ...) {
+  if (!recipes::fully_trained(x)) {
+    cli::cli_abort("recipe must be fully trained.")
+  }
+
+  if (is.null(eqs)) {
+    ptype <- recipes::recipes_ptype(x, stage = "bake")
+    if (is.null(ptype)) {
+      cli::cli_abort("recipe must be created using version 1.1.0 or later.")
+    }
+    all_vars <- names(ptype)
+  } else {
+    all_vars <- all.vars(rlang::parse_expr(eqs))
+  }
 
   n_steps <- length(x$steps)
 
-  out <- c(.pred = eqs)
+  out <- c(.pred = unname(eqs))
   for (i in rev(seq_len(n_steps))) {
     res <- weasel(x$steps[[i]], all_vars)
 
@@ -19,7 +31,8 @@ weasel.recipe <- function(x, eqs, ...) {
       all_vars <- unique(c(all_vars, new_vars))
     }
   }
-  out
+
+  new_weasel_class(out)
 }
 
 #' @export

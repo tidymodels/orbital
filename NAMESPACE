@@ -3,6 +3,7 @@
 S3method(print,weasel_class)
 S3method(weasel,default)
 S3method(weasel,model_fit)
+S3method(weasel,model_spec)
 S3method(weasel,recipe)
 S3method(weasel,step_corr)
 S3method(weasel,step_normalize)

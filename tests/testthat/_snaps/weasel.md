@@ -6,6 +6,22 @@
       Error in `weasel()`:
       ! `x` must be a fully trained <workflow>.
 
+# weasel errors untrained recipe
+
+    Code
+      weasel(rec_spec)
+    Condition
+      Error in `weasel()`:
+      ! recipe must be fully trained.
+
+# weasel errors on non-trained parsnip
+
+    Code
+      weasel(lm_spec)
+    Condition
+      Error in `weasel()`:
+      ! `x` must be fitted model.
+
 # weasel errors on wrong input
 
     Code
