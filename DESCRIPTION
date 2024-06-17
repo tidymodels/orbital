@@ -17,6 +17,7 @@ Imports:
     tidypredict,
     workflows
 Suggests:
+    dplyr,
     parsnip,
     testthat (>= 3.0.0)
 URL: https://github.com/EmilHvitfeldt/weasel
