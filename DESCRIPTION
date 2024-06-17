@@ -17,6 +17,7 @@ Imports:
     tidypredict,
     workflows
 Suggests:
+    dbplyr,
     dplyr,
     parsnip,
     testthat (>= 3.0.0)
