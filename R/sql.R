@@ -1,6 +1,6 @@
 #' Convert to SQL code
 #' 
-#' @param x A weasel object.
+#' @param x A orbital object.
 #' @param con A connection object.
 #' 
 #' @returns SQL code.
@@ -19,13 +19,13 @@
 #' 
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
-#' weasel_obj <- weasel(wf_fit)
+#' orbital_obj <- orbital(wf_fit)
 #' 
 #' library(dbplyr)
 #' con <- simulate_dbi()
 #' 
-#' weasel_sql(weasel_obj, con)
+#' orbital_sql(orbital_obj, con)
 #' @export
-weasel_sql <- function(x, con) {
-  dbplyr::translate_sql(!!!weasel_inline(x), con = con)
+orbital_sql <- function(x, con) {
+  dbplyr::translate_sql(!!!orbital_inline(x), con = con)
 }

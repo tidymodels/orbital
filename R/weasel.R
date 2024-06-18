@@ -3,7 +3,7 @@
 #' @param x A workflow object.
 #' @param ... Not currently used.
 #' 
-#' @returns A weasel object.
+#' @returns A orbital object.
 #' 
 #' @examples
 #' library(workflows)
@@ -19,22 +19,22 @@
 #' 
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
-#' weasel(wf_fit)
+#' orbital(wf_fit)
 #' 
 #' @export
-weasel <- function(x, ...) {
-  UseMethod("weasel")
+orbital <- function(x, ...) {
+  UseMethod("orbital")
 }
 
 #' @export
-weasel.default <- function(x, ...) {
+orbital.default <- function(x, ...) {
   cli::cli_abort(
     "Is not implemented for {.obj_type_friendly {x}}."
   )
 }
 
 #' @export
-print.weasel_class <- function(x, ...) {
+print.orbital_class <- function(x, ...) {
   x <- unclass(x)
 
   eqs <- paste0(names(x), " = ", x)
@@ -42,7 +42,7 @@ print.weasel_class <- function(x, ...) {
   eqs <- paste(eqs, "...")
 
   cli::cli({
-    cli::cli_h1("Weasel Object")
+    cli::cli_h1("orbital Object")
     cli::cli_ul(eqs)
     cli::cli_rule()
     cli::cli_text("{length(x)} equations in total.")

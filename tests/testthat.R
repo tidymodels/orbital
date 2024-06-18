@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(weasel)
+library(orbital)
 
-test_check("weasel")
+test_check("orbital")

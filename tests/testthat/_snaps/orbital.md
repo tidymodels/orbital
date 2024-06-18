@@ -1,50 +1,50 @@
-# weasel errors on non-trained workflow
+# orbital errors on non-trained workflow
 
     Code
-      weasel(wf_spec)
+      orbital(wf_spec)
     Condition
-      Error in `weasel()`:
+      Error in `orbital()`:
       ! `x` must be a fully trained <workflow>.
 
-# weasel errors untrained recipe
+# orbital errors untrained recipe
 
     Code
-      weasel(rec_spec)
+      orbital(rec_spec)
     Condition
-      Error in `weasel()`:
+      Error in `orbital()`:
       ! recipe must be fully trained.
 
-# weasel errors on non-trained parsnip
+# orbital errors on non-trained parsnip
 
     Code
-      weasel(lm_spec)
+      orbital(lm_spec)
     Condition
-      Error in `weasel()`:
+      Error in `orbital()`:
       ! `x` must be fitted model.
 
-# weasel errors nicely on post-processing
+# orbital errors nicely on post-processing
 
     Code
-      weasel(wf_fit)
+      orbital(wf_fit)
     Condition
-      Error in `weasel()`:
-      ! post-processing is not yet supported in weasel.
+      Error in `orbital()`:
+      ! post-processing is not yet supported in orbital.
 
-# weasel errors on wrong input
+# orbital errors on wrong input
 
     Code
-      weasel(lm(mpg ~ ., data = mtcars))
+      orbital(lm(mpg ~ ., data = mtcars))
     Condition
-      Error in `weasel()`:
+      Error in `orbital()`:
       ! Is not implemented for a <lm> object.
 
-# weasel printing works
+# orbital printing works
 
     Code
-      weasel(wf_fit)
+      orbital(wf_fit)
     Message
       
-      -- Weasel Object ---------------------------------------------------------------
+      -- orbital Object --------------------------------------------------------------
       * cyl = (cyl - 6.1875) / 1.78592164694654 ...
       * disp = (disp - 230.721875) / 123.938693831382 ...
       * hp = (hp - 146.6875) / 68.5628684893206 ...

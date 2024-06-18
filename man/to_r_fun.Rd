@@ -2,22 +2,22 @@
 % Please edit documentation in R/to.R
 \name{to_r_fun}
 \alias{to_r_fun}
-\title{Turn weasel object into a R function}
+\title{Turn orbital object into a R function}
 \usage{
-to_r_fun(x, name = "weasel_predict", file)
+to_r_fun(x, name = "orbital_predict", file)
 }
 \arguments{
-\item{x}{A weasel object.}
+\item{x}{A orbital object.}
 
-\item{name}{Name of created function. Defaults to `"weasel_predict"``.}
+\item{name}{Name of created function. Defaults to `"orbital_predict"``.}
 
 \item{file}{A file name.}
 }
 \value{
-A weasel object.
+A orbital object.
 }
 \description{
-Turn weasel object into a R function
+Turn orbital object into a R function
 }
 \examples{
 library(workflows)
@@ -33,11 +33,11 @@ wf_spec <- workflow(rec_spec, lm_spec)
 
 wf_fit <- fit(wf_spec, mtcars)
 
-weasel_obj <- weasel(wf_fit)
+orbital_obj <- orbital(wf_fit)
 
 file_name <- tempfile()
 
-to_r_fun(weasel_obj, file = file_name)
+to_r_fun(orbital_obj, file = file_name)
 
 readLines(file_name)
 }

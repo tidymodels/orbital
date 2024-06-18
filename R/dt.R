@@ -1,6 +1,6 @@
 #' Convert to data.table code
 #' 
-#' @param x A weasel object.
+#' @param x A orbital object.
 #' 
 #' @returns data.table code.
 #' 
@@ -18,14 +18,14 @@
 #' 
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
-#' weasel_obj <- weasel(wf_fit)
+#' orbital_obj <- orbital(wf_fit)
 #' 
-#' weasel_dt(weasel_obj)
+#' orbital_dt(orbital_obj)
 #' @export
-weasel_dt <- function(x) {
+orbital_dt <- function(x) {
   dt <- dtplyr::lazy_dt(data.frame())
 
-  res <- dplyr::mutate(dt, !!!weasel_inline(x))
+  res <- dplyr::mutate(dt, !!!orbital_inline(x))
 
   dplyr::show_query(res)
 }

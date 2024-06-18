@@ -1,11 +1,11 @@
 #' Save as json file
 #' 
-#' @param x A weasel object.
+#' @param x A orbital object.
 #' @param path file on disk.
 #' 
 #' @returns nothing.
 #' 
-#' @seealso [weasel_json_read()]
+#' @seealso [orbital_json_read()]
 #' 
 #' @examples
 #' library(workflows)
@@ -21,15 +21,15 @@
 #' 
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
-#' weasel_obj <- weasel(wf_fit)
+#' orbital_obj <- orbital(wf_fit)
 #' 
 #' tmp_file <- tempfile()
 #' 
-#' weasel_json_write(weasel_obj, tmp_file)
+#' orbital_json_write(orbital_obj, tmp_file)
 #' 
 #' readLines(tmp_file)
 #' @export
-weasel_json_write <- function(x, path) {
+orbital_json_write <- function(x, path) {
   actions <- as.list(unclass(x))
 
   res <- list(actions = actions, version = 1)
@@ -38,13 +38,13 @@ weasel_json_write <- function(x, path) {
   writeLines(res, path)
 }
 
-#' Read weasel json file
+#' Read orbital json file
 #' 
 #' @param path file on disk.
 #' 
-#' @returns A weasel object
+#' @returns A orbital object
 #' 
-#' @seealso [weasel_json_write()]
+#' @seealso [orbital_json_write()]
 #' 
 #' @examples
 #' library(workflows)
@@ -60,18 +60,18 @@ weasel_json_write <- function(x, path) {
 #' 
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
-#' weasel_obj <- weasel(wf_fit)
+#' orbital_obj <- orbital(wf_fit)
 #' 
 #' tmp_file <- tempfile()
 #' 
-#' weasel_json_write(weasel_obj, tmp_file)
+#' orbital_json_write(orbital_obj, tmp_file)
 #' 
-#' weasel_json_read(tmp_file)
+#' orbital_json_read(tmp_file)
 #' @export
-weasel_json_read <- function(path) {
+orbital_json_read <- function(path) {
   res <- jsonlite::read_json(path)
 
   res <- unlist(res$actions)
   
-  new_weasel_class(res)
+  new_orbital_class(res)
 }

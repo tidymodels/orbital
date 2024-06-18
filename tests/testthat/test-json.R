@@ -8,13 +8,13 @@ test_that("read and write json works", {
   
   wf_fit <- parsnip::fit(wf_spec, mtcars)
   
-  weasel_obj <- weasel(wf_fit)
+  orbital_obj <- orbital(wf_fit)
   
   tmp_file <- tempfile()
   
-  weasel_json_write(weasel_obj, tmp_file)
+  orbital_json_write(orbital_obj, tmp_file)
   
-  new <- weasel_json_read(tmp_file)
+  new <- orbital_json_read(tmp_file)
 
-  expect_identical(new, weasel_obj)
+  expect_identical(new, orbital_obj)
 })

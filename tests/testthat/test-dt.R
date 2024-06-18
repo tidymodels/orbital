@@ -10,9 +10,9 @@ test_that("dt works", {
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
-  obj <- weasel(wf_fit)
+  obj <- orbital(wf_fit)
 
   expect_snapshot(
-    weasel_dt(obj)
+    orbital_dt(obj)
   )
 })

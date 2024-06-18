@@ -1,7 +1,7 @@
 # sql works
 
     Code
-      weasel_sql(obj, con)
+      orbital_sql(obj, con)
     Output
       <SQL> (`cyl` - 6.1875) / 1.78592164694654 AS cyl
       <SQL> (`disp` - 230.721875) / 123.938693831382 AS disp

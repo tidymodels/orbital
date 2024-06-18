@@ -1,6 +1,6 @@
 
 #' @export
-weasel.recipe <- function(x, eqs = NULL, ...) {
+orbital.recipe <- function(x, eqs = NULL, ...) {
   if (!recipes::fully_trained(x)) {
     cli::cli_abort("recipe must be fully trained.")
   }
@@ -19,7 +19,7 @@ weasel.recipe <- function(x, eqs = NULL, ...) {
 
   out <- c(.pred = unname(eqs))
   for (i in rev(seq_len(n_steps))) {
-    res <- weasel(x$steps[[i]], all_vars)
+    res <- orbital(x$steps[[i]], all_vars)
 
     out <- c(res, out)
 
@@ -32,11 +32,11 @@ weasel.recipe <- function(x, eqs = NULL, ...) {
     }
   }
 
-  new_weasel_class(out)
+  new_orbital_class(out)
 }
 
 #' @export
-weasel.step_pca <- function(x, all_vars, ...) {
+orbital.step_pca <- function(x, all_vars, ...) {
   rot <- x$res$rotation
   colnames(rot) <- recipes::names0(ncol(rot), x$prefix)
 
@@ -56,7 +56,7 @@ weasel.step_pca <- function(x, all_vars, ...) {
 }
 
 #' @export
-weasel.step_normalize <- function(x, all_vars, ...) {
+orbital.step_normalize <- function(x, all_vars, ...) {
   means <- x$means
   sds <- x$sds
 
@@ -70,16 +70,16 @@ weasel.step_normalize <- function(x, all_vars, ...) {
 }
 
 #' @export
-weasel.step_nzv <- function(x, all_vars, ...) {
+orbital.step_nzv <- function(x, all_vars, ...) {
   NULL
 }
 
 #' @export
-weasel.step_corr <- function(x, all_vars, ...) {
+orbital.step_corr <- function(x, all_vars, ...) {
   NULL
 }
 
-new_weasel_class <- function(x) {
-  class(x) <- "weasel_class"
+new_orbital_class <- function(x) {
+  class(x) <- "orbital_class"
   x
 }

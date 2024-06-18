@@ -1,6 +1,6 @@
-#' Use weasel object splicing function
+#' Use orbital object splicing function
 #' 
-#' @param x A weasel object.
+#' @param x A orbital object.
 #' 
 #' @details
 #' 
@@ -24,13 +24,13 @@
 #' 
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
-#' weasel_obj <- weasel(wf_fit)
+#' orbital_obj <- orbital(wf_fit)
 #' 
 #' library(dplyr)
 #' 
 #' mtcars %>%
-#'   mutate(!!!weasel_inline(weasel_obj))
+#'   mutate(!!!orbital_inline(orbital_obj))
 #' @export
-weasel_inline <- function(x) {
+orbital_inline <- function(x) {
   rlang::parse_quos(x, env = rlang::global_env())
 }

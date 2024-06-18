@@ -1,11 +1,11 @@
 #' @export
-weasel.model_fit <- function(x, ...) {
+orbital.model_fit <- function(x, ...) {
   res <- c(".pred" = deparse1(tidypredict::tidypredict_fit(x)))
   
-  new_weasel_class(res)
+  new_orbital_class(res)
 }
 
 #' @export
-weasel.model_spec <- function(x, ...) {
+orbital.model_spec <- function(x, ...) {
   cli::cli_abort("{.arg x} must be fitted model.")
 }

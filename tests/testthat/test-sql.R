@@ -10,11 +10,11 @@ test_that("sql works", {
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
-  obj <- weasel(wf_fit)
+  obj <- orbital(wf_fit)
 
   con <- dbplyr::simulate_dbi()
 
   expect_snapshot(
-    weasel_sql(obj, con)
+    orbital_sql(obj, con)
   )
 })

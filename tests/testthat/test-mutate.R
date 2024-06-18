@@ -1,4 +1,4 @@
-test_that("weasel works with workflows - recipe", {
+test_that("orbital works with workflows - recipe", {
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -10,15 +10,15 @@ test_that("weasel works with workflows - recipe", {
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
-  obj <- weasel(wf_fit)
+  obj <- orbital(wf_fit)
 
   expect_identical(
-    mtcars %>% weasel_mutate(obj),
-    mtcars %>% dplyr::mutate(!!!weasel_inline(obj))
+    mtcars %>% orbital_mutate(obj),
+    mtcars %>% dplyr::mutate(!!!orbital_inline(obj))
   )
 
   expect_identical(
-    mtcars %>% weasel_mutate(obj, only_pred = TRUE),
-    mtcars %>% dplyr::mutate(!!!weasel_inline(obj)) %>% dplyr::select(.pred)
+    mtcars %>% orbital_mutate(obj, only_pred = TRUE),
+    mtcars %>% dplyr::mutate(!!!orbital_inline(obj)) %>% dplyr::select(.pred)
   )
 })

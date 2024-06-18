@@ -1,7 +1,7 @@
-#' Use weasel in a mutate way
+#' Use orbital in a mutate way
 #' 
 #' @param .data A data frame that can be used with mutate.
-#' @param x A weasel object.
+#' @param x A orbital object.
 #' @param only_pred A logical value to determine if whole data set should be 
 #'   returned or just predictions.
 #' 
@@ -21,16 +21,16 @@
 #' 
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
-#' weasel_obj <- weasel(wf_fit)
+#' orbital_obj <- orbital(wf_fit)
 #' 
 #' mtcars %>%
-#'   weasel_mutate(weasel_obj)
+#'   orbital_mutate(orbital_obj)
 #' 
 #' mtcars %>%
-#'   weasel_mutate(weasel_obj, only_pred = TRUE)
+#'   orbital_mutate(orbital_obj, only_pred = TRUE)
 #' @export
-weasel_mutate <- function(.data, x, only_pred = FALSE) {
-  res <- dplyr::mutate(.data, !!!weasel_inline(x))
+orbital_mutate <- function(.data, x, only_pred = FALSE) {
+  res <- dplyr::mutate(.data, !!!orbital_inline(x))
 
   if (only_pred) {
     pred_name <- names(x)[length(x)]

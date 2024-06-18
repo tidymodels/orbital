@@ -1,7 +1,7 @@
 # dt works
 
     Code
-      weasel_dt(obj)
+      orbital_dt(obj)
     Output
       copy(`_DT1`)[, `:=`(c("cyl", "disp", "hp", "drat", "wt", "qsec", 
           "vs", "am", "gear", "carb", ".pred"), {

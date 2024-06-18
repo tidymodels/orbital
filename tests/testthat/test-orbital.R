@@ -1,4 +1,4 @@
-test_that("weasel works with workflows - recipe", {
+test_that("orbital works with workflows - recipe", {
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -10,15 +10,15 @@ test_that("weasel works with workflows - recipe", {
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
-  res <- weasel(wf_fit)
+  res <- orbital(wf_fit)
 
-  expect_s3_class(res, "weasel_class")
+  expect_s3_class(res, "orbital_class")
   expect_true(is.character(res))
   expect_named(res)
   expect_length(res, 1 + (ncol(mtcars) - 1))
 })
 
-test_that("weasel works with workflows - formula", {
+test_that("orbital works with workflows - formula", {
   lm_spec <- parsnip::linear_reg()
 
   wf_spec <- workflows::workflow() %>%
@@ -27,15 +27,15 @@ test_that("weasel works with workflows - formula", {
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
-  res <- weasel(wf_fit)
+  res <- orbital(wf_fit)
 
-  expect_s3_class(res, "weasel_class")
+  expect_s3_class(res, "orbital_class")
   expect_true(is.character(res))
   expect_named(res, ".pred")
   expect_length(res, 1)
 })
 
-test_that("weasel works with workflows - variables", {
+test_that("orbital works with workflows - variables", {
   lm_spec <- parsnip::linear_reg()
 
   wf_spec <- workflows::workflow() %>%
@@ -44,15 +44,15 @@ test_that("weasel works with workflows - variables", {
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
-  res <- weasel(wf_fit)
+  res <- orbital(wf_fit)
 
-  expect_s3_class(res, "weasel_class")
+  expect_s3_class(res, "orbital_class")
   expect_true(is.character(res))
   expect_named(res, ".pred")
   expect_length(res, 1)
 })
 
-test_that("weasel errors on non-trained workflow", {
+test_that("orbital errors on non-trained workflow", {
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -62,55 +62,55 @@ test_that("weasel errors on non-trained workflow", {
 
   expect_snapshot(
     error = TRUE,
-    weasel(wf_spec)
+    orbital(wf_spec)
   )
 })
 
-test_that("weasel works with recipe", {
+test_that("orbital works with recipe", {
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   rec_prep <- recipes::prep(rec_spec)
 
-  res <- weasel(rec_prep)
+  res <- orbital(rec_prep)
 
-  expect_s3_class(res, "weasel_class")
+  expect_s3_class(res, "orbital_class")
   expect_true(is.character(res))
   expect_named(res)
 })
 
-test_that("weasel errors untrained recipe", {
+test_that("orbital errors untrained recipe", {
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   expect_snapshot(
     error = TRUE,
-    weasel(rec_spec)
+    orbital(rec_spec)
   )
 })
 
-test_that("weasel works with parsnip", {
+test_that("orbital works with parsnip", {
   lm_spec <- parsnip::linear_reg()
 
   lm_fit <- parsnip::fit(lm_spec, mpg ~ ., data = mtcars)
   
-  res <- weasel(lm_fit)
+  res <- orbital(lm_fit)
 
-  expect_s3_class(res, "weasel_class")
+  expect_s3_class(res, "orbital_class")
   expect_true(is.character(res))
   expect_named(res, ".pred")
 })
 
-test_that("weasel errors on non-trained parsnip", {
+test_that("orbital errors on non-trained parsnip", {
   lm_spec <- parsnip::linear_reg()
   
   expect_snapshot(
     error = TRUE,
-    weasel(lm_spec)
+    orbital(lm_spec)
   )
 })
 
-test_that("weasel errors nicely on post-processing", {
+test_that("orbital errors nicely on post-processing", {
   lm_spec <- parsnip::linear_reg()
 
   wf_spec <- workflows::workflow() %>%
@@ -124,18 +124,18 @@ test_that("weasel errors nicely on post-processing", {
   
   expect_snapshot(
     error = TRUE,
-    weasel(wf_fit)
+    orbital(wf_fit)
   )
 })
 
-test_that("weasel errors on wrong input", {
+test_that("orbital errors on wrong input", {
   expect_snapshot(
     error = TRUE,
-    weasel(lm(mpg ~ ., data = mtcars))
+    orbital(lm(mpg ~ ., data = mtcars))
   )
 })
 
-test_that("weasel printing works", {
+test_that("orbital printing works", {
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -146,6 +146,6 @@ test_that("weasel printing works", {
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
   expect_snapshot(
-    weasel(wf_fit)
+    orbital(wf_fit)
   )
 })

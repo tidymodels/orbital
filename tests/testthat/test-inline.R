@@ -1,4 +1,4 @@
-test_that("weasel works with workflows - recipe", {
+test_that("orbital works with workflows - recipe", {
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -10,9 +10,9 @@ test_that("weasel works with workflows - recipe", {
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
-  obj <- weasel(wf_fit)
+  obj <- orbital(wf_fit)
 
-  res <- weasel_inline(obj)
+  res <- orbital_inline(obj)
 
   expect_s3_class(res, "quosures")
   expect_named(res, names(obj))
