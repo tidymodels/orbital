@@ -38,8 +38,13 @@ print.orbital_class <- function(x, ...) {
   x <- unclass(x)
 
   eqs <- paste0(names(x), " = ", x)
-  eqs <- substr(eqs, 1, cli::console_width() - 9)
-  eqs <- paste(eqs, "...")
+  
+  eqs_lens <- nchar(eqs)
+  max_width <- cli::console_width() - 9
+  clipped <- eqs_lens > max_width
+
+  eqs[clipped] <- substr(eqs[clipped], 1, max_width)
+  eqs[clipped] <- paste(eqs[clipped], "...")
 
   cli::cli({
     cli::cli_h1("orbital Object")
