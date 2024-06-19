@@ -7,7 +7,7 @@
 #' 
 #' @seealso [orbital_json_read()]
 #' 
-#' @examples
+#' @examplesIf rlang::is_installed("jsonlite")
 #' library(workflows)
 #' library(recipes)
 #' library(parsnip)
@@ -46,7 +46,7 @@ orbital_json_write <- function(x, path) {
 #' 
 #' @seealso [orbital_json_write()]
 #' 
-#' @examples
+#' @examplesIf rlang::is_installed("jsonlite")
 #' library(workflows)
 #' library(recipes)
 #' library(parsnip)

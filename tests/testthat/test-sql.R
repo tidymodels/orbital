@@ -1,4 +1,5 @@
 test_that("sql works", {
+  skip_if_not_installed("dbplyr")
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -15,6 +16,7 @@ test_that("sql works", {
   con <- dbplyr::simulate_dbi()
 
   expect_snapshot(
+    transform = pretty_print,
     orbital_sql(obj, con)
   )
 })
