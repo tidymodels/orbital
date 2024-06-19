@@ -146,6 +146,7 @@ test_that("orbital printing works", {
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
   expect_snapshot(
+    transform = pretty_print,
     orbital(wf_fit)
   )
 })

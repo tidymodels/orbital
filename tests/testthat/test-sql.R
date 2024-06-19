@@ -15,6 +15,7 @@ test_that("sql works", {
   con <- dbplyr::simulate_dbi()
 
   expect_snapshot(
+    transform = pretty_print,
     orbital_sql(obj, con)
   )
 })
