@@ -26,5 +26,5 @@ Suggests:
 URL: https://github.com/EmilHvitfeldt/orbital
 BugReports: https://github.com/EmilHvitfeldt/orbital/issues
 Config/testthat/edition: 3
-remotes:
+Remotes:
     tidymodels/recipes
