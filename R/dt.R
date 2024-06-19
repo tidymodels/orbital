@@ -4,7 +4,8 @@
 #' 
 #' @returns data.table code.
 #' 
-#' @examples
+#' @examplesIf rlang::is_installed(c("dbplyr", "dtplyr"))
+#' 
 #' library(workflows)
 #' library(recipes)
 #' library(parsnip)

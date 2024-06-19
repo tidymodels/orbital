@@ -16,6 +16,8 @@ data.table code.
 Convert to data.table code
 }
 \examples{
+\dontshow{if (rlang::is_installed(c("dbplyr", "dtplyr"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+
 library(workflows)
 library(recipes)
 library(parsnip)
@@ -32,4 +34,5 @@ wf_fit <- fit(wf_spec, mtcars)
 orbital_obj <- orbital(wf_fit)
 
 orbital_dt(orbital_obj)
+\dontshow{\}) # examplesIf}
 }

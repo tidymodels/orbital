@@ -18,6 +18,7 @@ nothing.
 Save as json file
 }
 \examples{
+\dontshow{if (rlang::is_installed("jsonlite")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)
@@ -38,6 +39,7 @@ tmp_file <- tempfile()
 orbital_json_write(orbital_obj, tmp_file)
 
 readLines(tmp_file)
+\dontshow{\}) # examplesIf}
 }
 \seealso{
 \code{\link[=orbital_json_read]{orbital_json_read()}}
