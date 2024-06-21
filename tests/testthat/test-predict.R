@@ -13,12 +13,7 @@ test_that("orbital works with workflows - recipe", {
   obj <- orbital(wf_fit)
 
   expect_identical(
-    mtcars %>% orbital_mutate(obj),
-    mtcars %>% dplyr::mutate(!!!orbital_inline(obj))
-  )
-
-  expect_identical(
-    mtcars %>% orbital_mutate(obj, only_pred = TRUE),
+    mtcars %>% orbital_predict(obj),
     mtcars %>% dplyr::mutate(!!!orbital_inline(obj)) %>% dplyr::select(.pred)
   )
 })

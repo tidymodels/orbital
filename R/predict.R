@@ -25,9 +25,9 @@
 #'   orbital_predict(orbital_obj)
 #' @export
 orbital_predict <- function(.data, x) {
-  pred_name <- names(x)[length(x)]
-
   res <- dplyr::mutate(.data, !!!orbital_inline(x))
+
+  pred_name <- names(x)[length(x)]
   res <- dplyr::select(res, dplyr::any_of(pred_name))
 
   res
