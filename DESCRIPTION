@@ -4,12 +4,11 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-0679-1945"))
-Description: Turning tidymodels workflows into series of equations, to allow
-    for low dependency prediction locally or in databases.
+Description: Turning tidymodels workflows into series of equations, to
+    allow for low dependency prediction locally or in databases.
 License: MIT + file LICENSE
-Encoding: UTF-8
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.1.9000
+URL: https://github.com/EmilHvitfeldt/orbital
+BugReports: https://github.com/EmilHvitfeldt/orbital/issues
 Imports: 
     cli,
     recipes (>= 1.0.10.9000),
@@ -18,13 +17,14 @@ Imports:
     workflows
 Suggests:
     dbplyr,
-    dtplyr,
     dplyr,
+    dtplyr,
     jsonlite,
     parsnip,
     testthat (>= 3.0.0)
-URL: https://github.com/EmilHvitfeldt/orbital
-BugReports: https://github.com/EmilHvitfeldt/orbital/issues
-Config/testthat/edition: 3
 Remotes:
     tidymodels/recipes
+Config/testthat/edition: 3
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.1.9000
