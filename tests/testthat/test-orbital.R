@@ -1,4 +1,5 @@
 test_that("orbital works with workflows - recipe", {
+  skip_if_not_installed("recipes")
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -53,6 +54,7 @@ test_that("orbital works with workflows - variables", {
 })
 
 test_that("orbital errors on non-trained workflow", {
+  skip_if_not_installed("recipes")
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -67,6 +69,7 @@ test_that("orbital errors on non-trained workflow", {
 })
 
 test_that("orbital works with recipe", {
+  skip_if_not_installed("recipes")
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -80,6 +83,7 @@ test_that("orbital works with recipe", {
 })
 
 test_that("orbital errors untrained recipe", {
+  skip_if_not_installed("recipes")
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 
@@ -136,6 +140,7 @@ test_that("orbital errors on wrong input", {
 })
 
 test_that("orbital printing works", {
+  skip_if_not_installed("recipes")
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 

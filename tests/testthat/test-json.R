@@ -1,4 +1,5 @@
 test_that("read and write json works", {
+  skip_if_not_installed("recipes")
   skip_if_not_installed("jsonlite")
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())

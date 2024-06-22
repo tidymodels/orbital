@@ -6,7 +6,7 @@
 #' 
 #' @returns A orbital object.
 #' 
-#' @examples
+#' @examplesIf rlang::is_installed("recipes")
 #' library(workflows)
 #' library(recipes)
 #' library(parsnip)

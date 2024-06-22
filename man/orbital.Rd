@@ -18,6 +18,7 @@ A orbital object.
 Turn tidymodels workflows into equations
 }
 \examples{
+\dontshow{if (rlang::is_installed("recipes")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)
@@ -32,5 +33,5 @@ wf_spec <- workflow(rec_spec, lm_spec)
 wf_fit <- fit(wf_spec, mtcars)
 
 orbital(wf_fit)
-
+\dontshow{\}) # examplesIf}
 }

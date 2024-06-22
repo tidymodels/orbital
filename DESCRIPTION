@@ -11,7 +11,6 @@ URL: https://github.com/EmilHvitfeldt/orbital
 BugReports: https://github.com/EmilHvitfeldt/orbital/issues
 Imports: 
     cli,
-    recipes (>= 1.0.10.9000),
     rlang,
     tidypredict,
     workflows
@@ -21,6 +20,7 @@ Suggests:
     dtplyr,
     jsonlite,
     parsnip,
+    recipes (>= 1.0.10.9000),
     testthat (>= 3.0.0)
 Remotes:
     tidymodels/recipes

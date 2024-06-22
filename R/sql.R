@@ -5,7 +5,7 @@
 #' 
 #' @returns SQL code.
 #' 
-#' @examplesIf rlang::is_installed("dbplyr")
+#' @examplesIf rlang::is_installed(c("dbplyr", "recipes"))
 #' library(workflows)
 #' library(recipes)
 #' library(parsnip)
