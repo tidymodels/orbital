@@ -21,6 +21,7 @@ This function is mostly going to be used for
 See examples for use cases.
 }
 \examples{
+\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)
@@ -40,4 +41,5 @@ library(dplyr)
 
 mtcars \%>\%
   mutate(!!!orbital_inline(orbital_obj))
+\dontshow{\}) # examplesIf}
 }

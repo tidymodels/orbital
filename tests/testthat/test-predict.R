@@ -1,4 +1,7 @@
 test_that("orbital works with workflows - recipe", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("workflows")
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 

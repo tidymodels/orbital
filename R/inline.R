@@ -10,7 +10,7 @@
 #' 
 #' @returns a list of quosures.
 #' 
-#' @examples
+#' @examplesIf rlang::is_installed(c("recipes", "tidypredict", "workflows"))
 #' library(workflows)
 #' library(recipes)
 #' library(parsnip)

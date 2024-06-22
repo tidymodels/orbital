@@ -5,7 +5,7 @@
 #'
 #' @returns A modified data frame.
 #'
-#' @examples
+#' @examplesIf rlang::is_installed(c("recipes", "tidypredict", "workflows"))
 #' library(workflows)
 #' library(recipes)
 #' library(parsnip)
