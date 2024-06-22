@@ -20,7 +20,7 @@ A orbital object.
 Turn orbital object into a R function
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("recipes", "tidypredict"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)

@@ -18,7 +18,7 @@ SQL code.
 Convert to SQL code
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("dbplyr", "recipes", "tidypredict"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("dbplyr", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)

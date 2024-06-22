@@ -16,7 +16,7 @@ data.table code.
 Convert to data.table code
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("dbplyr", "dtplyr", "recipes", "tidypredict"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("dbplyr", "dtplyr", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 
 library(workflows)
 library(recipes)
