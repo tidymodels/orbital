@@ -5,7 +5,7 @@
 #' 
 #' @returns A orbital object.
 #' 
-#' @examplesIf rlang::is_installed("recipes")
+#' @examplesIf rlang::is_installed(c("recipes", "tidypredict"))
 #' library(workflows)
 #' library(recipes)
 #' library(parsnip)

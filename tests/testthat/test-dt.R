@@ -2,6 +2,8 @@ test_that("dt works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("dbplyr")
   skip_if_not_installed("dtplyr")
+  skip_if_not_installed("tidypredict")
+  
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
 

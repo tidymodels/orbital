@@ -12,7 +12,6 @@ BugReports: https://github.com/EmilHvitfeldt/orbital/issues
 Imports: 
     cli,
     rlang,
-    tidypredict,
     workflows
 Suggests:
     dbplyr,
@@ -21,7 +20,8 @@ Suggests:
     jsonlite,
     parsnip,
     recipes (>= 1.0.10.9000),
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    tidypredict
 Remotes:
     tidymodels/recipes
 Config/testthat/edition: 3

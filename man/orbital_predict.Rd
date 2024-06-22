@@ -24,7 +24,7 @@ Use orbital in a mutate way
 Use orbital in a mutate way
 }
 \examples{
-\dontshow{if (rlang::is_installed("recipes")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes", "tidypredict"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)
@@ -43,7 +43,7 @@ orbital_obj <- orbital(wf_fit)
 mtcars \%>\%
   orbital_predict(orbital_obj)
 \dontshow{\}) # examplesIf}
-\dontshow{if (rlang::is_installed("recipes")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes", "tidypredict"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)
