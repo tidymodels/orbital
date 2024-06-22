@@ -115,6 +115,7 @@ test_that("orbital works with parsnip", {
 })
 
 test_that("orbital errors on non-trained parsnip", {
+  skip_if_not_installed("parsnip")
   lm_spec <- parsnip::linear_reg()
   
   expect_snapshot(
