@@ -19,7 +19,21 @@ orbital.recipe <- function(x, eqs = NULL, ...) {
 
   out <- c(.pred = unname(eqs))
   for (i in rev(seq_len(n_steps))) {
-    res <- orbital(x$steps[[i]], all_vars)
+    res <- tryCatch(
+      orbital(x$steps[[i]], all_vars),
+      error = function(cnd) {
+        if (grepl("not implemented", cnd$message)) {
+          cls <- class(x$steps[[i]])
+          cls <- setdiff(cls, "step")
+  
+          cli::cli_abort(
+            "The recipe step {.fun {cls}} is not supported.",
+            call = rlang::call2("orbital")
+          )
+        }
+        stop(cnd)
+      }
+    )
 
     out <- c(res, out)
 
