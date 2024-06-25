@@ -17,6 +17,7 @@ Suggests:
     dplyr,
     dtplyr,
     jsonlite,
+    kknn,
     parsnip,
     recipes (>= 1.0.10.9000),
     testthat (>= 3.0.0),
