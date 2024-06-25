@@ -6,11 +6,8 @@ orbital.recipe <- function(x, eqs = NULL, ...) {
   }
 
   if (is.null(eqs)) {
-    ptype <- recipes::recipes_ptype(x, stage = "bake")
-    if (is.null(ptype)) {
-      cli::cli_abort("recipe must be created using version 1.1.0 or later.")
-    }
-    all_vars <- names(ptype)
+    terms <- x$term_info
+    all_vars <- terms$variable[terms$role == "predictor"]
   } else {
     all_vars <- all.vars(rlang::parse_expr(eqs))
   }
@@ -46,54 +43,9 @@ orbital.recipe <- function(x, eqs = NULL, ...) {
     }
   }
 
-  new_orbital_class(out)
-}
-
-#' @export
-orbital.step_pca <- function(x, all_vars, ...) {
-  rot <- x$res$rotation
-  colnames(rot) <- recipes::names0(ncol(rot), x$prefix)
-
-  used_vars <- colnames(rot) %in% all_vars
-
-  rot <- rot[, used_vars]
-
-  row_nms <- rownames(rot)
-
-  out <- character(length(all_vars))
-  for (i in seq_along(all_vars)) {
-    out[i] <- paste(row_nms, "*", rot[, i], collapse = " + ")
+  if (is.null(out)) {
+    out <- character()
   }
 
-  names(out) <- all_vars
-  out
-}
-
-#' @export
-orbital.step_normalize <- function(x, all_vars, ...) {
-  means <- x$means
-  sds <- x$sds
-
-  used_vars <- names(means) %in% all_vars
-  means <- means[used_vars]
-  sds <- sds[used_vars]
-
-  out <- paste0("(", names(means), " - ", means ,") / ", sds)
-  names(out) <- names(means)
-  out
-}
-
-#' @export
-orbital.step_nzv <- function(x, all_vars, ...) {
-  NULL
-}
-
-#' @export
-orbital.step_corr <- function(x, all_vars, ...) {
-  NULL
-}
-
-new_orbital_class <- function(x) {
-  class(x) <- "orbital_class"
-  x
+  new_orbital_class(out)
 }

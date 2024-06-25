@@ -19,12 +19,10 @@ Suggests:
     jsonlite,
     kknn,
     parsnip,
-    recipes (>= 1.0.10.9000),
+    recipes,
     testthat (>= 3.0.0),
     tidypredict,
     workflows
-Remotes:
-    tidymodels/recipes
 Config/testthat/edition: 3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
