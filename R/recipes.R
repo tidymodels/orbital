@@ -92,8 +92,3 @@ orbital.step_nzv <- function(x, all_vars, ...) {
 orbital.step_corr <- function(x, all_vars, ...) {
   NULL
 }
-
-new_orbital_class <- function(x) {
-  class(x) <- "orbital_class"
-  x
-}

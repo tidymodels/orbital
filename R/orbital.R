@@ -33,6 +33,11 @@ orbital.default <- function(x, ...) {
   )
 }
 
+new_orbital_class <- function(x) {
+  class(x) <- "orbital_class"
+  x
+}
+
 #' @export
 print.orbital_class <- function(x, ...) {
   x <- unclass(x)
