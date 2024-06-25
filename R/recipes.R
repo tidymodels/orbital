@@ -6,11 +6,8 @@ orbital.recipe <- function(x, eqs = NULL, ...) {
   }
 
   if (is.null(eqs)) {
-    ptype <- recipes::recipes_ptype(x, stage = "bake")
-    if (is.null(ptype)) {
-      cli::cli_abort("recipe must be created using version 1.1.0 or later.")
-    }
-    all_vars <- names(ptype)
+    terms <- x$term_info
+    all_vars <- terms$variable[terms$role == "predictor"]
   } else {
     all_vars <- all.vars(rlang::parse_expr(eqs))
   }
@@ -44,6 +41,10 @@ orbital.recipe <- function(x, eqs = NULL, ...) {
       new_vars <- unique(new_vars)
       all_vars <- unique(c(all_vars, new_vars))
     }
+  }
+
+  if (is.null(out)) {
+    out <- character()
   }
 
   new_orbital_class(out)
