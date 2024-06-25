@@ -3,6 +3,7 @@ test_that("multiplication works", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("workflows")
   skip_if_not_installed("tidypredict")
+  skip_if_not_installed("kknn")
 
   rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_normalize(recipes::all_numeric_predictors())
