@@ -11,6 +11,12 @@ The goal of orbital is to enable running predictions of tidymodels
 
 ## Installation
 
+To install it, use:
+
+``` r
+install.packages("orbital")
+```
+
 You can install the development version of orbital from
 [GitHub](https://github.com/) with:
 
@@ -39,7 +45,7 @@ library(tidymodels)
 #> ✖ dplyr::filter()  masks stats::filter()
 #> ✖ dplyr::lag()     masks stats::lag()
 #> ✖ recipes::step()  masks stats::step()
-#> • Use tidymodels_prefer() to resolve common conflicts.
+#> • Dig deeper into tidy modeling with R at https://www.tmwr.org
 ```
 
 ``` r

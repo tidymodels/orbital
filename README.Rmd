@@ -22,6 +22,12 @@ The goal of orbital is to enable running predictions of tidymodels [workflows](h
 
 ## Installation
 
+To install it, use:
+
+``` r
+install.packages("orbital")
+```
+
 You can install the development version of orbital from [GitHub](https://github.com/) with:
 
 ``` r
