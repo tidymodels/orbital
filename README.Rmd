@@ -1,0 +1,75 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# orbital
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The goal of orbital is to enable running predictions of tidymodels [workflows](https://workflows.tidymodels.org/) inside databases.
+
+## Installation
+
+To install it, use:
+
+``` r
+install.packages("orbital")
+```
+
+You can install the development version of orbital from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("devtools")
+devtools::install_github("tidymodels/orbital")
+```
+
+## Example
+
+Given a fitted workflow
+
+```{r}
+library(tidymodels)
+
+rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+  step_normalize(all_numeric_predictors())
+
+lm_spec <- linear_reg()
+
+wf_spec <- workflow(rec_spec, lm_spec)
+
+wf_fit <- fit(wf_spec, mtcars)
+```
+
+You can predict with it like normal.
+
+```{r}
+predict(wf_fit, mtcars)
+```
+
+We can get the same results by first creating an orbital object
+
+```{r}
+library(orbital)
+orbital_obj <- orbital(wf_fit)
+orbital_obj
+```
+
+and then "predicting" with it using `orbital_predict()` to get the same results
+
+```{r}
+mtcars %>%
+  as_tibble() %>%
+  orbital_predict(orbital_obj)
+```
