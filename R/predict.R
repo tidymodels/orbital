@@ -24,7 +24,7 @@
 #'
 #' predict(orbital_obj, mtcars)
 #' @export
-predict <- function(object, new_data, ...) {
+predict.orbital_class <- function(object, new_data, ...) {
   rlang::check_dots_empty()
   res <- dplyr::mutate(new_data, !!!orbital_inline(object))
 
