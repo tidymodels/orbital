@@ -31,24 +31,6 @@ Given a fitted workflow
 
 ``` r
 library(tidymodels)
-#> ── Attaching packages ────────────────────────────────────── tidymodels 1.2.0 ──
-#> ✔ broom        1.0.6      ✔ recipes      1.0.10
-#> ✔ dials        1.2.1      ✔ rsample      1.2.1 
-#> ✔ dplyr        1.1.4      ✔ tibble       3.2.1 
-#> ✔ ggplot2      3.5.1      ✔ tidyr        1.3.1 
-#> ✔ infer        1.0.7      ✔ tune         1.2.1 
-#> ✔ modeldata    1.4.0      ✔ workflows    1.1.4 
-#> ✔ parsnip      1.2.1      ✔ workflowsets 1.1.0 
-#> ✔ purrr        1.0.2      ✔ yardstick    1.3.1
-#> ── Conflicts ───────────────────────────────────────── tidymodels_conflicts() ──
-#> ✖ purrr::discard() masks scales::discard()
-#> ✖ dplyr::filter()  masks stats::filter()
-#> ✖ dplyr::lag()     masks stats::lag()
-#> ✖ recipes::step()  masks stats::step()
-#> • Dig deeper into tidy modeling with R at https://www.tmwr.org
-```
-
-``` r
 
 rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
   step_normalize(all_numeric_predictors())
@@ -103,13 +85,10 @@ orbital_obj
 #> 11 equations in total.
 ```
 
-and then “predicting” with it using `orbital_predict()` to get the same
-results
+and then “predicting” with it using `predict()` to get the same results
 
 ``` r
-mtcars %>%
-  as_tibble() %>%
-  orbital_predict(orbital_obj)
+predict(orbital_obj, as_tibble(mtcars))
 #> # A tibble: 32 × 1
 #>    .pred
 #>    <dbl>

@@ -40,6 +40,7 @@ devtools::install_github("tidymodels/orbital")
 Given a fitted workflow
 
 ```{r}
+#| message: false
 library(tidymodels)
 
 rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
@@ -66,10 +67,8 @@ orbital_obj <- orbital(wf_fit)
 orbital_obj
 ```
 
-and then "predicting" with it using `orbital_predict()` to get the same results
+and then "predicting" with it using `predict()` to get the same results
 
 ```{r}
-mtcars %>%
-  as_tibble() %>%
-  orbital_predict(orbital_obj)
+predict(orbital_obj, as_tibble(mtcars))
 ```
