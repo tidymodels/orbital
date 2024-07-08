@@ -1,7 +1,8 @@
-#' Use orbital in a mutate way
+#' Prediction using orbital objects
 #'
-#' @param .data A data frame that can be used with mutate.
-#' @param x A orbital object.
+#' @param object A orbital object.
+#' @param new_data A data frame to predict with.
+#' @param ... Not currently used.
 #'
 #' @returns A modified data frame.
 #'
@@ -21,13 +22,13 @@
 #'
 #' orbital_obj <- orbital(wf_fit)
 #'
-#' mtcars %>%
-#'   orbital_predict(orbital_obj)
+#' predict(orbital_obj, mtcars)
 #' @export
-orbital_predict <- function(.data, x) {
-  res <- dplyr::mutate(.data, !!!orbital_inline(x))
+predict <- function(object, new_data, ...) {
+  rlang::check_dots_empty()
+  res <- dplyr::mutate(new_data, !!!orbital_inline(object))
 
-  pred_name <- names(x)[length(x)]
+  pred_name <- names(object)[length(object)]
   res <- dplyr::select(res, dplyr::any_of(pred_name))
 
   res
