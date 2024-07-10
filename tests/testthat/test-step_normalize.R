@@ -18,7 +18,7 @@ test_that("step_normalize works", {
 test_that("spark - step_normalize works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("sparklyr")
-  skip_if(is.null(testthat_spark_env_version()))
+  skip_if(is.na(testthat_spark_env_version()))
 
   mtcars <- dplyr::as_tibble(mtcars)
 
