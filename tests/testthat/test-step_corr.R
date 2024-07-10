@@ -18,3 +18,8 @@ test_that("step_corr works", {
 
   expect_identical(orbital(rec), orbital(rec_exp))
 })
+
+test_that("spark - step_corr works", {
+  # Isn't needed as `step_corr()` doesn't produce code
+  expect_true(TRUE)
+})

@@ -18,3 +18,8 @@ test_that("step_filter_missing works", {
 
   expect_identical(orbital(rec), orbital(rec_exp))
 })
+
+test_that("spark - step_filter_missing works", {
+  # Isn't needed as `step_filter_missing()` doesn't produce code
+  expect_true(TRUE)
+})
