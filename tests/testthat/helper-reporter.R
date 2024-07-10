@@ -101,8 +101,8 @@ PerformanceReporter <- R6::R6Class("PerformanceReporter",
 
       total <- dplyr::summarise(data, time = sum(time))
       total <- dplyr::mutate(total, time = format(time, digits = "3", scientific = F))
-      total <- dplyr::pull(total, total)
-
+      total <- total$total
+      
       cat("\n")
       cat("--- Performance Summary  ----\n\n")
       print(as.data.frame(summary), row.names = FALSE)
