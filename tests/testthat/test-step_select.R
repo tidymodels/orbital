@@ -18,3 +18,9 @@ test_that("step_select works", {
 
   expect_identical(orbital(rec), orbital(rec_exp))
 })
+
+
+test_that("spark - step_select works", {
+  # Isn't needed as `step_select()` doesn't produce code
+  expect_true(TRUE)
+})
