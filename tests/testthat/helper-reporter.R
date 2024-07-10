@@ -49,7 +49,7 @@ PerformanceReporter <- R6::R6Class("PerformanceReporter",
       # Capture at init so not affected by test settings
       self$width <- cli::console_width()
       self$unicode <- cli::is_utf8_output()
-      self$crayon <- crayon::has_color()
+      self$crayon <- function(x) cli::num_ansi_colors() > 1L
 
       testthat_msg <- Sys.getenv("TESTTHAT_MSG")
       if (testthat_msg != "") self$line(testthat_msg)

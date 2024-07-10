@@ -21,6 +21,7 @@ Suggests:
     jsonlite,
     kknn,
     parsnip,
+    R6,
     recipes,
     testthat (>= 3.0.0),
     tidypredict,
