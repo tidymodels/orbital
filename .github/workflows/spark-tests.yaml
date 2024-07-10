@@ -57,7 +57,6 @@ jobs:
       - name: Install Spark (via sparklyr)
         if: steps.cache-spark.outputs.cache-hit != 'true'
         run: |
-          devtools::load_all()
           sparklyr::spark_install(
             version = Sys.getenv("SPARK_VERSION"),
             hadoop_version = Sys.getenv("HADOOP_VERSION")
@@ -75,7 +74,6 @@ jobs:
       - name: Install Livy (via sparklyr)
         if: ${{ (steps.cache-livy.outputs.cache-hit != 'true') && (matrix.config.livy != '') }}
         run: |
-          devtools::load_all()
           sparklyr::livy_install(
             version = Sys.getenv("LIVY_VERSION"),
             spark_version = Sys.getenv("SPARK_VERSION")
@@ -92,7 +90,6 @@ jobs:
       - name: Install Scala (via sparklyr)
         if: steps.cache-scala.outputs.cache-hit != 'true'
         run: |
-          devtools::load_all()
           sparklyr::download_scalac()
         shell: Rscript {0}
 
@@ -127,7 +124,6 @@ jobs:
 
       - name: R Tests
         run: |
-          devtools::load_all()
           if(Sys.getenv("ARROW_VERSION") != "") {
             library(arrow)
           }
