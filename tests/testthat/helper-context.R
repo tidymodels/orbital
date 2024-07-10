@@ -50,7 +50,7 @@ testthat_spark_env_version <- function(set_to = NULL) {
     if(esv != "") sv <- esv
     if(!is.null(cv)) sv <- cv
     if(is.null(sv)) {
-      mv <- max(spark_installed_versions()$spark)
+      mv <- max(sparklyr::spark_installed_versions()$spark)
       sv <- mv
     }
   } else {

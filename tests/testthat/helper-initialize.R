@@ -1,5 +1,3 @@
-## For sparklyr testing
-
 testthat_init <- function() {
   options(timeout = 3600)
   options(sparklyr.connect.timeout = 300)
@@ -69,7 +67,6 @@ testthat_shell_connection <- function(method = "shell") {
     config$`sparklyr.sdf_collect.persistence_level` <- "NONE"
 
     packages <- NULL
-    if (spark_version >= "2.4.0") packages <- "arrow"
     if (spark_version >= "2.4.2") packages <- c(packages, "delta")
 
     sc <- spark_connect(
