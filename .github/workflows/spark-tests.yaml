@@ -57,7 +57,10 @@ jobs:
       - name: Install Spark (via sparklyr)
         if: steps.cache-spark.outputs.cache-hit != 'true'
         run: |
-          print("hello world")
+          sparklyr::spark_install(
+            version = Sys.getenv("SPARK_VERSION"),
+            hadoop_version = Sys.getenv("HADOOP_VERSION")
+          )
         shell: Rscript {0}
 
       - name: Cache Livy
