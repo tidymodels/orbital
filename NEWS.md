@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* `orbital()` now works on `tune::last_fit()` objects. (#13)
+
 * `orbital_predict()` has been removed and replaced with the more idiomatic `predict()` method. (#10)
 
 # orbital 0.1.0
