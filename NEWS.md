@@ -1,6 +1,8 @@
 # orbital (development version)
 
-* Support for `step_dummy()` has been added. (#16)
+* Support for `step_dummy()` has been added. (#17)
+
+* Support for `step_impute_mean()` has been added. (#17)
 
 * `orbital()` now works on `tune::last_fit()` objects. (#13)
 
