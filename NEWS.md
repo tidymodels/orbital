@@ -10,6 +10,8 @@
 
 * Support for `step_unknown()` has been added. (#17)
 
+* Support for `step_novel()` has been added. (#17)
+
 * `orbital()` now works on `tune::last_fit()` objects. (#13)
 
 * `orbital_predict()` has been removed and replaced with the more idiomatic `predict()` method. (#10)
