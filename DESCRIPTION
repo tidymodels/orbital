@@ -14,11 +14,11 @@ URL: https://github.com/tidymodels/orbital
 BugReports: https://github.com/tidymodels/orbital/issues
 Imports: 
     cli,
+    dplyr,
     rlang
 Suggests:
     arrow,
     dbplyr,
-    dplyr,
     dtplyr,
     hardhat,
     jsonlite,
