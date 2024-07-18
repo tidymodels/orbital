@@ -16,6 +16,9 @@ orbital.recipe <- function(x, eqs = NULL, ...) {
 
   out <- c(.pred = unname(eqs))
   for (step in rev(x$steps)) {
+    if (step$skip) {
+      next
+    }
     res <- tryCatch(
       orbital(step, all_vars),
       error = function(cnd) {
