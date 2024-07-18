@@ -29,6 +29,7 @@ Suggests:
     sparklyr,
     testthat (>= 3.0.0),
     tidypredict,
+    themis,
     workflows
 Config/testthat/edition: 3
 Encoding: UTF-8
