@@ -36,6 +36,8 @@
 
 * Support for `step_rename()` has been added. (#17)
 
+* Support for `step_upsample()`, `step_smote()`, `step_smotenc()`, `step_bsmote()`, `step_adasyn()`, `step_rose()`, `step_downsample()`, `step_nearmiss()`, and `step_tomek()` has been added. (#21)
+
 * `orbital()` now works on `tune::last_fit()` objects. (#13)
 
 * `orbital_predict()` has been removed and replaced with the more idiomatic `predict()` method. (#10)
