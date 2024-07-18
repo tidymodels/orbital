@@ -1,4 +1,4 @@
-# multiplication works
+# recipe works
 
     Code
       orbital(wf_fit)
