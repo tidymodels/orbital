@@ -18,6 +18,7 @@ Imports:
     rlang
 Suggests:
     arrow,
+    embed,
     dbplyr,
     dtplyr,
     hardhat,
