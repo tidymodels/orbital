@@ -18,6 +18,7 @@ Imports:
     rlang
 Suggests:
     arrow,
+    embed,
     dbplyr,
     dtplyr,
     hardhat,
@@ -26,6 +27,7 @@ Suggests:
     parsnip,
     R6,
     recipes,
+    rstanarm,
     sparklyr,
     testthat (>= 3.0.0),
     tidypredict,
