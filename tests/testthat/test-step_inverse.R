@@ -15,7 +15,7 @@ test_that("step_inverse works", {
   expect_equal(res, exp)
 })
 
-test_that("step_inverse only calculates what is cuffient", {
+test_that("step_inverse only calculates what is sufficient", {
   skip_if_not_installed("recipes")
 
   mtcars <- dplyr::as_tibble(mtcars)
