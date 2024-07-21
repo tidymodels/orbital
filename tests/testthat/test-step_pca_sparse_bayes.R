@@ -43,6 +43,8 @@ test_that("step_pca_sparse_bayes works with more than 9 PCs", {
 
 test_that("step_pca_sparse_bayes only calculates what is sufficient", {
   skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+  skip_if_not_installed("VBsparsePCA")
 
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars$hp <- NULL
