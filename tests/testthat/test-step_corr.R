@@ -19,6 +19,11 @@ test_that("step_corr works", {
   expect_identical(orbital(rec), orbital(rec_exp))
 })
 
+test_that("step_corr only calculates what is sufficient", {
+  # Isn't needed as `step_corr()` doesn't produce code
+  expect_true(TRUE)
+})
+
 test_that("step_corr works with empty selections", {
   # Isn't needed as `step_corr()` doesn't produce code
   expect_true(TRUE)
