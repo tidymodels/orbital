@@ -1,5 +1,7 @@
 test_that("step_pca_sparse_bayes works", {
   skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+  skip_if_not_installed("VBsparsePCA")
 
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars$hp <- NULL
@@ -20,6 +22,8 @@ test_that("step_pca_sparse_bayes works", {
 
 test_that("step_pca_sparse_bayes works with more than 9 PCs", {
   skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+  skip_if_not_installed("VBsparsePCA")
 
   mtcars <- dplyr::as_tibble(mtcars)
 
@@ -40,6 +44,8 @@ test_that("step_pca_sparse_bayes works with more than 9 PCs", {
 test_that("spark - step_pca_sparse_bayes works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("sparklyr")
+  skip_if_not_installed("embed")
+  skip_if_not_installed("VBsparsePCA")
   skip_if(is.na(testthat_spark_env_version()))
 
   mtcars0 <- dplyr::as_tibble(mtcars)

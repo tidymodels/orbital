@@ -1,5 +1,6 @@
 test_that("step_pca_truncated works", {
   skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
 
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars$hp <- NULL
@@ -20,6 +21,7 @@ test_that("step_pca_truncated works", {
 
 test_that("step_pca_truncated works with more than 9 PCs", {
   skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
 
   mtcars <- dplyr::as_tibble(mtcars)
 
@@ -39,6 +41,7 @@ test_that("step_pca_truncated works with more than 9 PCs", {
 
 test_that("spark - step_pca_truncated works", {
   skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
   skip_if_not_installed("sparklyr")
   skip_if(is.na(testthat_spark_env_version()))
 
