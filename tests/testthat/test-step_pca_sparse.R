@@ -6,7 +6,7 @@ test_that("step_pca_sparse works", {
 
   suppressWarnings(
     rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      recipes::step_pca(recipes::all_predictors()) %>%
+      embed::step_pca_sparse(recipes::all_predictors()) %>%
       recipes::prep()
   )
 

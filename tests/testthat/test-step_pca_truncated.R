@@ -1,4 +1,4 @@
-test_that("step_pca_sparse_bayes works", {
+test_that("step_pca_truncated works", {
   skip_if_not_installed("recipes")
 
   mtcars <- dplyr::as_tibble(mtcars)
@@ -6,7 +6,7 @@ test_that("step_pca_sparse_bayes works", {
 
   suppressWarnings(
     rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      embed::step_pca_sparse_bayes(recipes::all_predictors()) %>%
+      embed::step_pca_truncated(recipes::all_predictors()) %>%
       recipes::prep()
   )
 
@@ -18,14 +18,14 @@ test_that("step_pca_sparse_bayes works", {
   expect_equal(res, exp)
 })
 
-test_that("step_pca_sparse_bayes works with more than 9 PCs", {
+test_that("step_pca_truncated works with more than 9 PCs", {
   skip_if_not_installed("recipes")
 
   mtcars <- dplyr::as_tibble(mtcars)
 
   suppressWarnings(
     rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      embed::step_pca_sparse_bayes(recipes::all_predictors()) %>%
+      embed::step_pca_truncated(recipes::all_predictors()) %>%
       recipes::prep()
   )
 
@@ -37,7 +37,7 @@ test_that("step_pca_sparse_bayes works with more than 9 PCs", {
   expect_equal(res, exp)
 })
 
-test_that("spark - step_pca_sparse_bayes works", {
+test_that("spark - step_pca_truncated works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("sparklyr")
   skip_if(is.na(testthat_spark_env_version()))
@@ -47,7 +47,7 @@ test_that("spark - step_pca_sparse_bayes works", {
 
   suppressWarnings(
     rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
-      embed::step_pca_sparse_bayes(recipes::all_predictors()) %>%
+      embed::step_pca_truncated(recipes::all_predictors()) %>%
       recipes::prep()
   )
 
