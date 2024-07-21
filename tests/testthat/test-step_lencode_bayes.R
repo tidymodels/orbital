@@ -1,0 +1,52 @@
+test_that("step_lencode_bayes works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+  skip_if_not_installed("rstanarm")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars$gear <- as.factor(mtcars$gear)
+  mtcars$vs <- as.factor(mtcars$vs)
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+      embed::step_lencode_bayes(gear, vs, outcome = dplyr::vars(mpg)) %>%
+      recipes::prep()
+  )
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+})
+
+test_that("spark - step_lencode_bayes works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("sparklyr")
+  skip_if_not_installed("rstanarm")
+  skip_if(is.na(testthat_spark_env_version()))
+
+  mtcars_lencode_bayes <- dplyr::as_tibble(mtcars)
+  mtcars_lencode_bayes$gear <- as.factor(mtcars_lencode_bayes$gear)
+  mtcars_lencode_bayes$vs <- as.factor(mtcars_lencode_bayes$vs)
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_bayes) %>%
+      embed::step_lencode_bayes(gear, vs, outcome = dplyr::vars(mpg)) %>%
+      recipes::prep()
+  )
+
+  res <- dplyr::mutate(mtcars_lencode_bayes, !!!orbital_inline(orbital(rec)))
+
+  sc <- testthat_spark_connection()
+  mtcars_tbl <- testthat_tbl("mtcars_lencode_bayes")
+
+  res_spark <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_spark, res)
+})
+
+
+
