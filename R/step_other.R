@@ -2,6 +2,8 @@
 orbital.step_other <- function(x, all_vars, ...) {
   objects <- x$objects
 
+  objects <- objects[names(objects) %in% all_vars]
+
   if (length(objects) == 0) {
     return(NULL)
   }

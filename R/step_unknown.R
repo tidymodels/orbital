@@ -2,6 +2,8 @@
 orbital.step_unknown <- function(x, all_vars, ...) {
   vars <- names(x$objects)
 
+  vars <- vars[vars %in% all_vars]
+
   if (length(vars) == 0) {
     return(NULL)
   }

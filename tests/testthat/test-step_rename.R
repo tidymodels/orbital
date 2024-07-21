@@ -15,6 +15,22 @@ test_that("step_rename works", {
   expect_equal(res, exp)
 })
 
+test_that("step_rename only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_rename(mpg3 = mpg, aaa = disp) %>%
+    recipes::step_rm(aaa) %>%
+    recipes::prep()
+
+  expect_identical(
+    names(orbital(rec)),
+    "mpg3"
+  )
+})
+
 test_that("step_rename works with empty selections", {
   skip_if_not_installed("recipes")
 

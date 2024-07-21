@@ -2,6 +2,8 @@
 orbital.step_discretize <- function(x, all_vars, ...) {
   out <- character()
 
+  x$objects <- x$objects[names(x$objects) %in% all_vars]
+
   for (i in seq_along(x$objects)) {
     object <- x$objects[[i]]
     if (object$bins == 0) {

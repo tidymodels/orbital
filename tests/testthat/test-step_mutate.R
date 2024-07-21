@@ -3,7 +3,7 @@ test_that("step_mutate works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec <- recipes::recipe(~ ., data = mtcars) %>%
     recipes::step_mutate(mpg = mpg + 5, disp4 = disp / 4) %>%
     recipes::prep()
 
@@ -13,6 +13,22 @@ test_that("step_mutate works", {
   exp <- exp[names(res)]
 
   expect_equal(res, exp)
+})
+
+test_that("step_mutate only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(~ ., data = mtcars) %>%
+    recipes::step_mutate(mpg = mpg + 5, disp4 = disp / 4) %>%
+    recipes::step_rm(disp4) %>%
+    recipes::prep()
+
+  expect_identical(
+    names(orbital(rec)),
+    "mpg"
+  )
 })
 
 test_that("step_mutate works with empty selections", {

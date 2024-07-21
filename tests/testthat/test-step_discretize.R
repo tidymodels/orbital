@@ -5,7 +5,7 @@ test_that("step_discretize works", {
   mtcars[1, ] <- NA
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    rec <- recipes::recipe(~ ., data = mtcars) %>%
       recipes::step_discretize(mpg, disp, min_unique = 4) %>%
       recipes::prep()
   )
@@ -60,6 +60,24 @@ test_that("step_discretize works when min_unique is too high", {
   exp <- exp[names(res)]
 
   expect_equal(res, exp)
+})
+
+test_that("step_discretize only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
+      recipes::step_rm(mpg) %>%
+      recipes::prep()
+  )
+
+  expect_identical(
+    names(orbital(rec)),
+    "disp"
+  )
 })
 
 test_that("step_discretize works with empty selections", {

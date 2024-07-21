@@ -17,6 +17,22 @@ test_that("step_bin2factor works", {
   expect_equal(res, exp)
 })
 
+test_that("step_bin2factor only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_bin2factor(vs, am) %>%
+    recipes::step_rm(vs) %>%
+    recipes::prep()
+
+  expect_identical(
+    names(orbital(rec)),
+    "am"
+  )
+})
+
 test_that("step_bin2factor works with empty selections", {
   skip_if_not_installed("recipes")
 

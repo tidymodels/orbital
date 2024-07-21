@@ -15,6 +15,22 @@ test_that("step_BoxCox works", {
   expect_equal(res, exp)
 })
 
+test_that("step_BoxCox only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(~ ., data = mtcars) %>%
+    recipes::step_BoxCox(mpg, disp) %>%
+    recipes::step_rm(mpg) %>%
+    recipes::prep()
+
+  expect_identical(
+    names(orbital(rec)),
+    "disp"
+  )
+})
+
 test_that("step_BoxCox works with empty selections", {
   skip_if_not_installed("recipes")
 
