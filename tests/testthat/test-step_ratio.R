@@ -16,6 +16,25 @@ test_that("step_ratio works", {
   expect_equal(res, exp)
 })
 
+test_that("step_ratio only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_ratio(recipes::all_predictors(), 
+                        denom = recipes::denom_vars(disp)) %>%
+    recipes::step_rm(dplyr::contains("t_o")) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+})
+
 test_that("step_ratio works with empty selections", {
   skip_if_not_installed("recipes")
 
