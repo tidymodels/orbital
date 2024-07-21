@@ -21,6 +21,11 @@ lencode_helper <- function(x) {
 }
 
 pca_helper <- function(rot, prefix, all_vars) {
+  if (is.null(rot) || identical(rot, NA) || 
+      identical(rot, matrix(logical(0), nrow = 0L, ncol = 0L))) {
+    return(NULL)
+  }
+
   colnames(rot) <- recipes::names0(ncol(rot), prefix)
 
   used_vars <- pca_naming(colnames(rot), prefix) %in% 

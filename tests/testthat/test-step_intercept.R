@@ -15,6 +15,11 @@ test_that("step_intercept works", {
   expect_equal(res, exp)
 })
 
+test_that("step_intercept works with empty selections", {
+  # Isn't needed as `step_intercept()` doesn't have selections
+  expect_true(TRUE)
+})
+
 test_that("spark - step_intercept works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("sparklyr")

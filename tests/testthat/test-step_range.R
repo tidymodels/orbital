@@ -32,6 +32,23 @@ test_that("step_range works with clipping argument", {
   expect_equal(res, exp)
 })
 
+test_that("step_range works with empty selections", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_range() %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+})
+
 test_that("spark - step_range works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("sparklyr")

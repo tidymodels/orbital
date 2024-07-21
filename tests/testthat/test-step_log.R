@@ -15,13 +15,30 @@ test_that("step_log works", {
   expect_equal(res, exp)
 })
 
-test_that("step_log works eith signed argument", {
+test_that("step_log works with signed argument", {
   skip_if_not_installed("recipes")
 
   mtcars <- dplyr::as_tibble(mtcars)
 
   rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
     recipes::step_log(recipes::all_predictors(), signed = TRUE) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+})
+
+test_that("step_log works with empty selections", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_log() %>%
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))

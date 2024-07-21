@@ -1,6 +1,12 @@
 #' @export
 orbital.step_sqrt <- function(x, all_vars, ...) {
-  out <- paste0("sqrt(", x$columns, ")")
-  names(out) <- names(x$columns)
+  columns <- x$columns
+
+  if (length(columns) == 0) {
+    return(NULL)
+  }
+
+  out <- paste0("sqrt(", columns, ")")
+  names(out) <- names(columns)
   out
 }
