@@ -2,6 +2,10 @@
 orbital.step_inverse <- function(x, all_vars, ...) {
   offset <- x$offset
 
+  if (length(x$columns) == 0) {
+    return(NULL)
+  }
+
   if (offset == 0) {
     out <- paste0("1 / ", x$columns)
   } else {

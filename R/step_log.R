@@ -2,6 +2,10 @@
 orbital.step_log <- function(x, all_vars, ...) {
   columns <- x$columns
 
+  if (length(columns) == 0) {
+    return(NULL)
+  }
+
   used_vars <- columns %in% all_vars
   columns <- columns[used_vars]
 

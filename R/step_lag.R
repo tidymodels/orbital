@@ -1,5 +1,9 @@
 #' @export
 orbital.step_lag <- function(x, all_vars, ...) {
+  if (length(x$columns) == 0) {
+    return(NULL)
+  }
+  
   configs <- expand.grid(lag = x$lag, columns = x$columns)
   col_names <- paste0(x$prefix, configs$lag, "_", configs$columns)
 
