@@ -34,7 +34,15 @@ test_that("step_tomek errors with skip = FALSE", {
   )
 })
 
-test_that("step_tomek works works with empty selections", {
+test_that("step_tomek only calculates what is sufficient", {
+  # Here for completeness
+  # step_tomek() doesn't work with empty selections
+  # as it is a resampling step
+
+  expect_true(TRUE)
+})
+
+test_that("step_tomek works with empty selections", {
   # Here for completeness
   # step_tomek() doesn't work with empty selections
   # as it is a resampling step

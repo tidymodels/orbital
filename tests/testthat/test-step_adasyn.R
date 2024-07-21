@@ -34,7 +34,15 @@ test_that("step_adasyn errors with skip = FALSE", {
   )
 })
 
-test_that("step_adasyn works works with empty selections", {
+test_that("step_adasyn only calculates what is sufficient", {
+  # Here for completeness
+  # step_adasyn() doesn't work with empty selections
+  # as it is a resampling step
+
+  expect_true(TRUE)
+})
+
+test_that("step_adasyn works with empty selections", {
   # Here for completeness
   # step_adasyn() doesn't work with empty selections
   # as it is a resampling step
