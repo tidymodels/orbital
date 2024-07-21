@@ -62,6 +62,24 @@ test_that("step_discretize works when min_unique is too high", {
   expect_equal(res, exp)
 })
 
+test_that("step_discretize works with empty selections", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars[1, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_discretize() %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+})
+
 test_that("spark - step_discretize works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("sparklyr")

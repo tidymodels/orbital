@@ -39,6 +39,25 @@ test_that("step_pca_truncated works with more than 9 PCs", {
   expect_equal(res, exp)
 })
 
+test_that("step_pca_truncated works with empty selections", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars$hp <- NULL
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    embed::step_pca_truncated() %>%
+    recipes::prep()
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+  res <- res[names(exp)]
+
+  expect_equal(res, exp)
+})
+
 test_that("spark - step_pca_truncated works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("embed")

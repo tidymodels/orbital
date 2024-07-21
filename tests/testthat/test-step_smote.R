@@ -34,6 +34,14 @@ test_that("step_smote errors with skip = FALSE", {
   )
 })
 
+test_that("step_smote works works with empty selections", {
+  # Here for completeness
+  # step_smote() doesn't work with empty selections
+  # as it is a resampling step
+
+  expect_true(TRUE)
+})
+
 test_that("spark - step_smote works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("themis")

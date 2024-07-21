@@ -34,6 +34,14 @@ test_that("step_nearmiss errors with skip = FALSE", {
   )
 })
 
+test_that("step_nearmiss works works with empty selections", {
+  # Here for completeness
+  # step_nearmiss() doesn't work with empty selections
+  # as it is a resampling step
+
+  expect_true(TRUE)
+})
+
 test_that("spark - step_nearmiss works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("themis")

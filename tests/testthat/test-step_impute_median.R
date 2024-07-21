@@ -16,6 +16,24 @@ test_that("step_impute_median works", {
   expect_equal(res, exp)
 })
 
+test_that("step_impute_median works with empty selections", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_impute_median() %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+})
+
 test_that("spark - step_impute_median works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("sparklyr")

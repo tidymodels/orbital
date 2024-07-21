@@ -19,6 +19,11 @@ test_that("step_zv works", {
   expect_identical(orbital(rec), orbital(rec_exp))
 })
 
+test_that("step_zv works with empty selections", {
+  # Isn't needed as `step_zv()` doesn't produce code
+  expect_true(TRUE)
+})
+
 test_that("spark - step_zv works", {
   # Isn't needed as `step_zv()` doesn't produce code
   expect_true(TRUE)
