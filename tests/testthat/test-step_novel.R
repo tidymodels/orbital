@@ -22,6 +22,25 @@ test_that("step_novel works", {
   expect_equal(res, exp)
 })
 
+test_that("step_novel only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars[2:4, ] <- NA
+  mtcars$gear <- letters[mtcars$gear]
+  mtcars$carb <- letters[mtcars$carb]
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_novel(recipes::all_nominal_predictors()) %>%
+    recipes::step_rm(gear) %>%
+    recipes::prep(strings_as_factors = FALSE)
+
+  expect_identical(
+    names(orbital(rec)),
+    "carb"
+  )
+})
+
 test_that("step_novel works with empty selections", {
   skip_if_not_installed("recipes")
 

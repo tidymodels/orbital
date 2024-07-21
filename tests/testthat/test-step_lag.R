@@ -15,6 +15,24 @@ test_that("step_lag works", {
   expect_equal(res, exp)
 })
 
+test_that("step_lag only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_lag(recipes::all_predictors(), lag = 1:4) %>%
+    recipes::step_rm(dplyr::starts_with("lag_1")) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+})
+
 test_that("step_lag works with empty selections", {
   skip_if_not_installed("recipes")
 

@@ -15,6 +15,24 @@ test_that("step_intercept works", {
   expect_equal(res, exp)
 })
 
+test_that("step_intercept only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_intercept(value = 5) %>%
+    recipes::step_rm(intercept) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+})
+
 test_that("step_intercept works with empty selections", {
   # Isn't needed as `step_intercept()` doesn't have selections
   expect_true(TRUE)

@@ -34,7 +34,15 @@ test_that("step_bsmote errors with skip = FALSE", {
   )
 })
 
-test_that("step_bsmote works works with empty selections", {
+test_that("step_bsmote only calculates what is sufficient", {
+  # Here for completeness
+  # step_bsmote() doesn't work with empty selections
+  # as it is a resampling step
+
+  expect_true(TRUE)
+})
+
+test_that("step_bsmote works with empty selections", {
   # Here for completeness
   # step_bsmote() doesn't work with empty selections
   # as it is a resampling step

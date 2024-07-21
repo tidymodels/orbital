@@ -2,6 +2,8 @@
 orbital.step_impute_mode <- function(x, all_vars, ...) {
   modes <- x$modes
 
+  modes <- modes[names(modes) %in% all_vars]
+
   if (length(modes) == 0) {
     return(NULL)
   }

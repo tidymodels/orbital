@@ -15,6 +15,22 @@ test_that("step_sqrt works", {
   expect_equal(res, exp)
 })
 
+test_that("step_sqrt only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_sqrt(recipes::all_predictors()) %>%
+    recipes::step_rm(disp) %>%
+    recipes::prep()
+
+  expect_identical(
+    names(orbital(rec)),
+    setdiff(names(mtcars), c("mpg", 'disp'))
+  )
+})
+
 test_that("step_sqrt works with empty selections", {
   skip_if_not_installed("recipes")
 

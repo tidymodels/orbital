@@ -1,16 +1,19 @@
 #' @export
 orbital.step_inverse <- function(x, all_vars, ...) {
   offset <- x$offset
+  columns <- x$columns
+  
+  columns <- columns[columns %in% all_vars]
 
-  if (length(x$columns) == 0) {
+  if (length(columns) == 0) {
     return(NULL)
   }
 
   if (offset == 0) {
-    out <- paste0("1 / ", x$columns)
+    out <- paste0("1 / ", columns)
   } else {
-    out <- paste0("1 / (", x$columns, " + ", offset, ")")
+    out <- paste0("1 / (", columns, " + ", offset, ")")
   }
-  names(out) <- names(x$columns)
+  names(out) <- names(columns)
   out
 }

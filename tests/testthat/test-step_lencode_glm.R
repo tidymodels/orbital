@@ -20,6 +20,27 @@ test_that("step_lencode_glm works", {
   expect_equal(res, exp)
 })
 
+test_that("step_lencode_glm only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars$gear <- as.factor(mtcars$gear)
+  mtcars$vs <- as.factor(mtcars$vs)
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
+      recipes::step_rm(gear) %>%
+      recipes::prep()
+  )
+    
+  expect_identical(
+    names(orbital(rec)),
+    "vs"
+  )
+})
+
 test_that("step_lencode_glm works with empty selections", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("embed")

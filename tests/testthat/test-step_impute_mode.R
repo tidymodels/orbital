@@ -18,6 +18,25 @@ test_that("step_impute_mode works", {
   expect_equal(res, exp)
 })
 
+test_that("step_impute_mode only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars$gear <- letters[mtcars$gear]
+  mtcars$carb <- letters[mtcars$carb]
+  mtcars[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
+    recipes::step_rm(gear) %>%
+    recipes::prep(strings_as_factors = FALSE)
+
+  expect_identical(
+    names(orbital(rec)),
+    "carb"
+  )
+})
+
 test_that("step_impute_mode works with empty selections", {
   skip_if_not_installed("recipes")
 

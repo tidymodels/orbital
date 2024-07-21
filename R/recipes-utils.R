@@ -1,5 +1,7 @@
-lencode_helper <- function(x) {
+lencode_helper <- function(x, all_vars) {
   out <- character()
+  
+  x$mapping <- x$mapping[names(x$mapping) %in% all_vars]
 
   for (i in seq_along(x$mapping)) {
     mapping <- x$mapping[[i]]

@@ -33,6 +33,23 @@ test_that("step_pca works with more than 9 PCs", {
   expect_equal(res, exp)
 })
 
+test_that("step_pca only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars$hp <- NULL
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_pca(recipes::all_predictors()) %>%
+    recipes::step_rm(PC1, PC3, PC5) %>%
+    recipes::prep()
+
+  expect_identical(
+    names(orbital(rec)),
+    c("PC2", "PC4")
+  )
+})
+
 test_that("step_pca works with empty selections", {
   skip_if_not_installed("recipes")
 

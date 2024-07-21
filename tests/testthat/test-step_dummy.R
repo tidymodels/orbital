@@ -38,6 +38,26 @@ test_that("step_dummy works with `one_hot = TRUE`", {
   expect_equal(res, exp)
 })
 
+test_that("step_dummy only calculates what is sufficient", {
+  skip_if_not_installed("recipes")
+
+  mtcars1 <- dplyr::as_tibble(mtcars)
+
+  mtcars1$gear <- as.character(mtcars1$gear)
+  mtcars1$carb <- as.character(mtcars1$carb)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
+    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
+    recipes::step_rm(dplyr::ends_with("4")) %>%
+    recipes::prep()
+
+  exp <- recipes::bake(rec, new_data = mtcars1)
+  
+  res <- dplyr::mutate(mtcars1, !!!orbital_inline(orbital(rec)))
+  res <- res[names(exp)]
+
+  expect_equal(res, exp)
+})
 
 test_that("step_dummy works with empty selections", {
   skip_if_not_installed("recipes")
