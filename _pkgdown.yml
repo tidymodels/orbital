@@ -1,4 +1,41 @@
 url: https://orbital.tidymodels.org
 template:
+  package: tidytemplate
   bootstrap: 5
+  bslib:
+    primary: "#CA225E"
 
+  includes:
+      in_header: |
+        <script defer data-domain="orbital.tidymodels.org,all.tidymodels.org" src="https://plausible.io/js/plausible.js"></script>
+
+development:
+  mode: auto
+
+reference:
+  - title: Create orbital objects
+    desc: >
+      Turn a fitted workflow, parsnip or recipes object into an orbital object. This will almost
+      always be the first function you use.
+    contents:
+      - orbital
+  - title: Prediction
+    desc: >
+      An orbital object can be predicted with, using data.frames or connections to data bases.
+    contents:
+      - predict.orbital_class
+  - title: Code generation
+    desc: >
+      An orbital object can be turned into code itself that produces the same output as 
+      predicting would.
+    contents:
+      - orbital_dt
+      - orbital_inline
+      - orbital_sql
+      - to_r_fun
+  - title: Read and Write
+    desc: >
+      Reading and writing orbital objects to json files for easy storage.
+    contents:
+      - orbital_json_read
+      - orbital_json_write
