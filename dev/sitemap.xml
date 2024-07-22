@@ -1,0 +1,17 @@
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://orbital.tidymodels.org/dev/LICENSE-text.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/LICENSE.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/authors.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/index.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/news/index.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/index.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/orbital.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/orbital_dt.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/orbital_inline.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/orbital_json_read.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/orbital_json_write.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/orbital_sql.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/predict.orbital_class.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/dev/reference/to_r_fun.html</loc></url>
+</urlset>
+
