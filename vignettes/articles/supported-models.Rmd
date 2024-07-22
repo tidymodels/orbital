@@ -1,0 +1,55 @@
+---
+title: "Supported Models and recipes steps"
+---
+
+The supported models currently all come from [tidypredict](https://tidypredict.tidymodels.org/) right now.
+
+## Supported models
+
+The following models are supported by `tidypredict`:
+
+- Linear Regression - `lm()`
+- Generalized Linear model - `glm()`
+- Random Forest models - `randomForest::randomForest()`
+- Random Forest models, via `ranger` - `ranger::ranger()`
+- MARS models - `earth::earth()`
+- XGBoost models - `xgboost::xgb.Booster.complete()` 
+- Cubist models - `Cubist::cubist()` 
+- Tree models, via `partykit` - `partykit::ctree()` 
+
+### `parsnip` 
+
+`tidypredict` supports models fitted via the `parsnip` interface. The ones confirmed currently work in `tidypredict` are:
+
+- `lm()` - `parsnip`: `linear_reg()` with *"lm"* as the engine.
+- `randomForest::randomForest()` - `parsnip`: `rand_forest()` with *"randomForest"* as the engine.
+- `ranger::ranger()` - `parsnip`: `rand_forest()` with *"ranger"* as the engine.
+- `earth::earth()`  - `parsnip`: `mars()` with *"earth"* as the engine.
+
+## Recipes steps
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(orbital)
+```
+
+```{r}
+#| echo: false
+all_funs <- ls(getNamespace("orbital"))
+
+steps <- grep("orbital.step_", all_funs, value = TRUE)
+steps <- gsub("orbital.", "", steps)
+```
+
+The following `r length(steps)` recipes steps are supported
+
+```{r, results='asis'}
+#| echo: false
+cat(paste0("- `", steps, "()`\n"))
+```
