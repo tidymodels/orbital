@@ -1,9 +1,20 @@
-#' Turn tidymodels workflows into equations
+#' Turn tidymodels objects into orbital objects
 #' 
-#' @param x A workflow object.
+#' Fitted workflows, parsnip objects, and recipes objects can be turned into an
+#' orbital object that contain all the information needed to perform 
+#' predictions.
+#' 
+#' @param x A fitted workflow, parsnip, or recipes object.
 #' @param ... Not currently used.
 #' 
 #' @returns A orbital object.
+#' 
+#' @details
+#' An orbital object contains all the information that is needed to perform
+#' predictions. This makes the objects substantially smaller than the original 
+#' objects. The main downside with this object is that all the input checking
+#' has been removed, and it is thus up to the user to make sure the data is 
+#' correct.
 #' 
 #' @examplesIf rlang::is_installed(c("recipes", "tidypredict", "workflows"))
 #' library(workflows)
@@ -20,6 +31,14 @@
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
 #' orbital(wf_fit)
+#' 
+#' # Also works on parsnip object by itself
+#' fit(lm_spec, mpg ~ disp, data = mtcars) %>%
+#'   orbital()
+#' 
+#' # And prepped recipes
+#' prep(rec_spec) %>%
+#'   orbital()
 #' 
 #' @export
 orbital <- function(x, ...) {

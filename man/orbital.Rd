@@ -2,12 +2,12 @@
 % Please edit documentation in R/orbital.R
 \name{orbital}
 \alias{orbital}
-\title{Turn tidymodels workflows into equations}
+\title{Turn tidymodels objects into orbital objects}
 \usage{
 orbital(x, ...)
 }
 \arguments{
-\item{x}{A workflow object.}
+\item{x}{A fitted workflow, parsnip, or recipes object.}
 
 \item{...}{Not currently used.}
 }
@@ -15,7 +15,16 @@ orbital(x, ...)
 A orbital object.
 }
 \description{
-Turn tidymodels workflows into equations
+Fitted workflows, parsnip objects, and recipes objects can be turned into an
+orbital object that contain all the information needed to perform
+predictions.
+}
+\details{
+An orbital object contains all the information that is needed to perform
+predictions. This makes the objects substantially smaller than the original
+objects. The main downside with this object is that all the input checking
+has been removed, and it is thus up to the user to make sure the data is
+correct.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -33,5 +42,13 @@ wf_spec <- workflow(rec_spec, lm_spec)
 wf_fit <- fit(wf_spec, mtcars)
 
 orbital(wf_fit)
+
+# Also works on parsnip object by itself
+fit(lm_spec, mpg ~ disp, data = mtcars) \%>\%
+  orbital()
+
+# And prepped recipes
+prep(rec_spec) \%>\%
+  orbital()
 \dontshow{\}) # examplesIf}
 }
