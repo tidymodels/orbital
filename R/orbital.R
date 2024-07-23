@@ -58,18 +58,20 @@ new_orbital_class <- function(x) {
 }
 
 #' @export
-print.orbital_class <- function(x, ..., digits = 7) {
+print.orbital_class <- function(x, ..., digits = 7, truncate = TRUE) {
   x <- unclass(x)
   x <- pretty_print(x, digits)
 
   eqs <- paste0(names(x), " = ", x)
   
-  eqs_lens <- nchar(eqs)
-  max_width <- cli::console_width() - 9
-  clipped <- eqs_lens > max_width
-
-  eqs[clipped] <- substr(eqs[clipped], 1, max_width)
-  eqs[clipped] <- paste(eqs[clipped], "...")
+  if (truncate) {
+    eqs_lens <- nchar(eqs)
+    max_width <- cli::console_width() - 9
+    clipped <- eqs_lens > max_width
+  
+    eqs[clipped] <- substr(eqs[clipped], 1, max_width)
+    eqs[clipped] <- paste(eqs[clipped], "...")
+  }
 
   cli::cli({
     cli::cli_h1("orbital Object")

@@ -170,4 +170,8 @@ test_that("orbital printing works", {
   expect_snapshot(
     print(orbital(wf_fit), digits = 2)
   )
+
+  expect_snapshot(
+    print(orbital(wf_fit), truncate = FALSE)
+  )
 })
