@@ -19,7 +19,7 @@ test_that("dt works", {
   obj <- orbital(wf_fit)
 
   expect_snapshot(
-    transform = pretty_print,
+    transform = orbital:::pretty_print,
     orbital_dt(obj)
   )
 })
