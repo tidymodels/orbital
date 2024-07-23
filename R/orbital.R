@@ -16,6 +16,12 @@
 #' has been removed, and it is thus up to the user to make sure the data is 
 #' correct.
 #' 
+#' The printing of orbital objects reduce the number of significant digits for
+#' easy viewing, the can be changes by using the `digits` argument of `print()`
+#' like so `print(orbital_object, digits = 10)`. The printing likewise truncates
+#' each equation to fit on one line. This can be turned off using the `truncate`
+#' argument like so `print(orbital_object, truncate = FALSE)`.
+#' 
 #' @examplesIf rlang::is_installed(c("recipes", "tidypredict", "workflows"))
 #' library(workflows)
 #' library(recipes)

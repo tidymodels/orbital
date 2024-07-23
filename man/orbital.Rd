@@ -25,6 +25,12 @@ predictions. This makes the objects substantially smaller than the original
 objects. The main downside with this object is that all the input checking
 has been removed, and it is thus up to the user to make sure the data is
 correct.
+
+The printing of orbital objects reduce the number of significant digits for
+easy viewing, the can be changes by using the \code{digits} argument of \code{print()}
+like so \code{print(orbital_object, digits = 10)}. The printing likewise truncates
+each equation to fit on one line. This can be turned off using the \code{truncate}
+argument like so \code{print(orbital_object, truncate = FALSE)}.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
