@@ -24,11 +24,11 @@
 #' 
 #' file_name <- tempfile()
 #' 
-#' to_r_fun(orbital_obj, file = file_name)
+#' orbital_r_fun(orbital_obj, file = file_name)
 #' 
 #' readLines(file_name)
 #' @export
-to_r_fun <- function(x, name = "orbital_predict", file) {
+orbital_r_fun <- function(x, name = "orbital_predict", file) {
   fun <- c(
     paste(name, "<- function(x) {"),
     "with(x, {",
