@@ -7,13 +7,18 @@
 orbital_dt(x)
 }
 \arguments{
-\item{x}{An \link{orbital} object.}
+\item{x}{An \link{orbital} object.
+
+This function requires \href{https://dtplyr.tidyverse.org/}{dtplyr} to be
+installed to run. The resulting code will likely need to be adopted to your
+use-case. Most likely by removing the initial \code{copy(data-name)} at the start.}
 }
 \value{
 data.table code.
 }
 \description{
-Convert to data.table code
+Returns \href{https://rdatatable.gitlab.io/data.table/}{data.table} code that
+is equivilant to prediction code.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("dbplyr", "dtplyr", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
