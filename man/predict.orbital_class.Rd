@@ -7,7 +7,7 @@
 \method{predict}{orbital_class}(object, new_data, ...)
 }
 \arguments{
-\item{object}{A orbital object.}
+\item{object}{An \link{orbital} object.}
 
 \item{new_data}{A data frame to predict with.}
 

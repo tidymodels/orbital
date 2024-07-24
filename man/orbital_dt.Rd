@@ -7,7 +7,7 @@
 orbital_dt(x)
 }
 \arguments{
-\item{x}{A orbital object.}
+\item{x}{An \link{orbital} object.}
 }
 \value{
 data.table code.

@@ -1,10 +1,10 @@
 #' Turn orbital object into a R function
 #' 
-#' @param x A orbital object.
+#' @param x An [orbital] object.
 #' @param name Name of created function. Defaults to `"orbital_predict"``.
 #' @param file A file name.
 #' 
-#' @returns A orbital object.
+#' @returns An [orbital] object.
 #' 
 #' @examplesIf rlang::is_installed(c("recipes", "tidypredict", "workflows"))
 #' library(workflows)

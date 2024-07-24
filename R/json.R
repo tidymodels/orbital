@@ -1,6 +1,6 @@
 #' Save as json file
 #' 
-#' @param x A orbital object.
+#' @param x An [orbital] object.
 #' @param path file on disk.
 #' 
 #' @returns nothing.

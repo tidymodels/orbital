@@ -7,7 +7,7 @@
 orbital_inline(x)
 }
 \arguments{
-\item{x}{A orbital object.}
+\item{x}{An \link{orbital} object.}
 }
 \value{
 a list of quosures.

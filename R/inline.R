@@ -1,6 +1,6 @@
 #' Use orbital object splicing function
 #' 
-#' @param x A orbital object.
+#' @param x An [orbital] object.
 #' 
 #' @details
 #' 

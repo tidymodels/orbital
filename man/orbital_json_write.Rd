@@ -7,7 +7,7 @@
 orbital_json_write(x, path)
 }
 \arguments{
-\item{x}{A orbital object.}
+\item{x}{An \link{orbital} object.}
 
 \item{path}{file on disk.}
 }

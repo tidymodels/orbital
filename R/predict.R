@@ -1,6 +1,6 @@
 #' Prediction using orbital objects
 #'
-#' @param object A orbital object.
+#' @param object An [orbital] object.
 #' @param new_data A data frame to predict with.
 #' @param ... Not currently used.
 #'

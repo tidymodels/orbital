@@ -7,7 +7,7 @@
 orbital_sql(x, con)
 }
 \arguments{
-\item{x}{A orbital object.}
+\item{x}{An \link{orbital} object.}
 
 \item{con}{A connection object.}
 }

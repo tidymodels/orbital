@@ -12,7 +12,7 @@ orbital(x, ...)
 \item{...}{Not currently used.}
 }
 \value{
-A orbital object.
+An \link{orbital} object.
 }
 \description{
 Fitted workflows, parsnip objects, and recipes objects can be turned into an

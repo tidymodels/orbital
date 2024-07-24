@@ -7,14 +7,14 @@
 orbital_r_fun(x, name = "orbital_predict", file)
 }
 \arguments{
-\item{x}{A orbital object.}
+\item{x}{An \link{orbital} object.}
 
 \item{name}{Name of created function. Defaults to `"orbital_predict"``.}
 
 \item{file}{A file name.}
 }
 \value{
-A orbital object.
+An \link{orbital} object.
 }
 \description{
 Turn orbital object into a R function

@@ -1,6 +1,6 @@
 #' Convert to SQL code
 #' 
-#' @param x A orbital object.
+#' @param x An [orbital] object.
 #' @param con A connection object.
 #' 
 #' @returns SQL code.

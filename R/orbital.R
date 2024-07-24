@@ -7,7 +7,7 @@
 #' @param x A fitted workflow, parsnip, or recipes object.
 #' @param ... Not currently used.
 #' 
-#' @returns A orbital object.
+#' @returns An [orbital] object.
 #' 
 #' @details
 #' An orbital object contains all the information that is needed to perform

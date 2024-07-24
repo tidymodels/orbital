@@ -2,7 +2,7 @@
 #' 
 #' 
 #' 
-#' @param x A orbital object.
+#' @param x An [orbital] object.
 #' 
 #' @returns data.table code.
 #' 
