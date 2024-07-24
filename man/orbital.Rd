@@ -31,6 +31,10 @@ easy viewing, the can be changes by using the \code{digits} argument of \code{pr
 like so \code{print(orbital_object, digits = 10)}. The printing likewise truncates
 each equation to fit on one line. This can be turned off using the \code{truncate}
 argument like so \code{print(orbital_object, truncate = FALSE)}.
+
+These objects will not be useful by themselves. They can be used to
+\link[=predict.orbital_class]{predict()} with, or to generate code using functions
+such as \code{\link[=orbital_sql]{orbital_sql()}} or \code{\link[=orbital_dt]{orbital_dt()}}.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

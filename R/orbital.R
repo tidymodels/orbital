@@ -22,6 +22,10 @@
 #' each equation to fit on one line. This can be turned off using the `truncate`
 #' argument like so `print(orbital_object, truncate = FALSE)`.
 #' 
+#' These objects will not be useful by themselves. They can be used to 
+#' [predict()][predict.orbital_class] with, or to generate code using functions 
+#' such as [orbital_sql()] or [orbital_dt()].
+#' 
 #' @examplesIf rlang::is_installed(c("recipes", "tidypredict", "workflows"))
 #' library(workflows)
 #' library(recipes)
