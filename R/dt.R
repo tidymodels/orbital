@@ -1,5 +1,7 @@
 #' Convert to data.table code
 #' 
+#' 
+#' 
 #' @param x A orbital object.
 #' 
 #' @returns data.table code.
@@ -24,6 +26,8 @@
 #' orbital_dt(orbital_obj)
 #' @export
 orbital_dt <- function(x) {
+  rlang::check_installed("dtplyr")
+
   dt <- dtplyr::lazy_dt(data.frame())
 
   res <- dplyr::mutate(dt, !!!orbital_inline(x))
