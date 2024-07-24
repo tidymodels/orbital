@@ -1,5 +1,10 @@
 ---
 title: "Supported Models and recipes steps"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{supported-models}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 The supported models currently all come from [tidypredict](https://tidypredict.tidymodels.org/) right now.

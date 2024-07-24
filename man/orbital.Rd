@@ -32,6 +32,9 @@ like so \code{print(orbital_object, digits = 10)}. The printing likewise truncat
 each equation to fit on one line. This can be turned off using the \code{truncate}
 argument like so \code{print(orbital_object, truncate = FALSE)}.
 
+Full list of supported models and recipes steps can be found here:
+\code{vignette("supported-models")}.
+
 These objects will not be useful by themselves. They can be used to
 \link[=predict.orbital_class]{predict()} with, or to generate code using functions
 such as \code{\link[=orbital_sql]{orbital_sql()}} or \code{\link[=orbital_dt]{orbital_dt()}}.

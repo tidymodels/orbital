@@ -22,6 +22,9 @@
 #' each equation to fit on one line. This can be turned off using the `truncate`
 #' argument like so `print(orbital_object, truncate = FALSE)`.
 #' 
+#' Full list of supported models and recipes steps can be found here: 
+#' `vignette("supported-models")`.
+#' 
 #' These objects will not be useful by themselves. They can be used to 
 #' [predict()][predict.orbital_class] with, or to generate code using functions 
 #' such as [orbital_sql()] or [orbital_dt()].
