@@ -14,10 +14,17 @@ orbital_r_fun(x, name = "orbital_predict", file)
 \item{file}{A file name.}
 }
 \value{
-An \link{orbital} object.
+Nothing.
 }
 \description{
-Turn orbital object into a R function
+Returns a R file that contains a function that output predictions when
+applied to data frames.
+}
+\details{
+The generated function is only expected to work on data frame objects. The
+generated function doesn't require the orbital package to be loaded.
+Depending on what models and steps are used, other packages such as dplyr
+will need to be loaded as well.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

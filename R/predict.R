@@ -1,10 +1,20 @@
 #' Prediction using orbital objects
 #'
+#' Running prediction on data frame of remote database table, without needing to
+#' load original packages used to fit model.
+#' 
 #' @param object An [orbital] object.
-#' @param new_data A data frame to predict with.
+#' @param new_data A data frame or remote database table.
 #' @param ... Not currently used.
 #'
-#' @returns A modified data frame.
+#' @details
+#' Using this function should give identical results to running `predict()` or
+#' `bake()` on the orginal object. 
+#' 
+#' The prediction done will only return prediction colunms, a opposed to 
+#' returning all modified functions as done with [orbital_inline()].
+#' 
+#' @returns A modified data frame or remote database table.
 #'
 #' @examplesIf rlang::is_installed(c("recipes", "tidypredict", "workflows"))
 #' library(workflows)

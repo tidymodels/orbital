@@ -1,4 +1,7 @@
-#' Use orbital object splicing function
+#' Convert orbital objects to quosures
+#' 
+#' Use orbital object splicing function to apply orbital prediction in a quosure
+#' aware function such as [dplyr::mutate()].
 #' 
 #' @param x An [orbital] object.
 #' 
@@ -6,9 +9,15 @@
 #' 
 #' This function is mostly going to be used for 
 #' [Dots Injection](https://rlang.r-lib.org/reference/topic-inject.html#dots-injection).
-#' See examples for use cases.
+#' This function is used internally in [predict()][predict.orbital_class], but
+#' is also exported for user flexibility. Should be used with `!!!` as seen in
+#' the examples.
 #' 
-#' @returns a list of quosures.
+#' Note should be taken that using this function modifies existing variables and 
+#' creates new variables, unlike [predict()][predict.orbital_class] which only
+#' returns predictions.
+#' 
+#' @returns a list of [quosures][rlang::quos].
 #' 
 #' @examplesIf rlang::is_installed(c("recipes", "tidypredict", "workflows"))
 #' library(workflows)
@@ -25,6 +34,8 @@
 #' wf_fit <- fit(wf_spec, mtcars)
 #' 
 #' orbital_obj <- orbital(wf_fit)
+#' 
+#' orbital_inline(orbital_obj)
 #' 
 #' library(dplyr)
 #' 

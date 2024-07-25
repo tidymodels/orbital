@@ -1,9 +1,17 @@
-#' Save as json file
+#' Save orbital object as json file
+#' 
+#' Saving an orbital object to disk in a human and machine readable way.
 #' 
 #' @param x An [orbital] object.
 #' @param path file on disk.
 #' 
-#' @returns nothing.
+#' @details
+#' The structure of the resulting JSON file allows for easy reading, both by
+#' orbital itself with [orbital_json_read()], but potentially by other packages
+#' and langauges. The file is versioned by the `version` field to allow for 
+#' changes why being backwards combatible with older file versions.
+#' 
+#' @returns Nothing.
 #' 
 #' @seealso [orbital_json_read()]
 #' 
@@ -40,9 +48,15 @@ orbital_json_write <- function(x, path) {
 
 #' Read orbital json file
 #' 
+#' Reading an orbital object from disk
+#' 
 #' @param path file on disk.
 #' 
-#' @returns A orbital object
+#' @details
+#' This function is aware of the `version` field of the orbital object, and will
+#' read it in correctly, according to its specification.
+#' 
+#' @returns An [orbital] object.
 #' 
 #' @seealso [orbital_json_write()]
 #' 
@@ -69,6 +83,8 @@ orbital_json_write <- function(x, path) {
 #' orbital_json_read(tmp_file)
 #' @export
 orbital_json_read <- function(path) {
+  rlang::check_installed("jsonlite")
+  
   res <- jsonlite::read_json(path)
 
   res <- unlist(res$actions)

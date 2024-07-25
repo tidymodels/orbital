@@ -2,7 +2,7 @@
 % Please edit documentation in R/json.R
 \name{orbital_json_write}
 \alias{orbital_json_write}
-\title{Save as json file}
+\title{Save orbital object as json file}
 \usage{
 orbital_json_write(x, path)
 }
@@ -12,10 +12,16 @@ orbital_json_write(x, path)
 \item{path}{file on disk.}
 }
 \value{
-nothing.
+Nothing.
 }
 \description{
-Save as json file
+Saving an orbital object to disk in a human and machine readable way.
+}
+\details{
+The structure of the resulting JSON file allows for easy reading, both by
+orbital itself with \code{\link[=orbital_json_read]{orbital_json_read()}}, but potentially by other packages
+and langauges. The file is versioned by the \code{version} field to allow for
+changes why being backwards combatible with older file versions.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("jsonlite", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

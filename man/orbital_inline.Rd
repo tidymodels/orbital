@@ -2,7 +2,7 @@
 % Please edit documentation in R/inline.R
 \name{orbital_inline}
 \alias{orbital_inline}
-\title{Use orbital object splicing function}
+\title{Convert orbital objects to quosures}
 \usage{
 orbital_inline(x)
 }
@@ -10,15 +10,22 @@ orbital_inline(x)
 \item{x}{An \link{orbital} object.}
 }
 \value{
-a list of quosures.
+a list of \link[rlang:defusing-advanced]{quosures}.
 }
 \description{
-Use orbital object splicing function
+Use orbital object splicing function to apply orbital prediction in a quosure
+aware function such as \code{\link[dplyr:mutate]{dplyr::mutate()}}.
 }
 \details{
 This function is mostly going to be used for
 \href{https://rlang.r-lib.org/reference/topic-inject.html#dots-injection}{Dots Injection}.
-See examples for use cases.
+This function is used internally in \link[=predict.orbital_class]{predict()}, but
+is also exported for user flexibility. Should be used with \verb{!!!} as seen in
+the examples.
+
+Note should be taken that using this function modifies existing variables and
+creates new variables, unlike \link[=predict.orbital_class]{predict()} which only
+returns predictions.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
@@ -36,6 +43,8 @@ wf_spec <- workflow(rec_spec, lm_spec)
 wf_fit <- fit(wf_spec, mtcars)
 
 orbital_obj <- orbital(wf_fit)
+
+orbital_inline(orbital_obj)
 
 library(dplyr)
 
