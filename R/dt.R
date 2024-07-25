@@ -1,6 +1,13 @@
 #' Convert to data.table code
 #' 
-#' @param x A orbital object.
+#' Returns [data.table](https://rdatatable.gitlab.io/data.table/) code that
+#' is equivilant to prediction code.
+#' 
+#' @param x An [orbital] object.
+#' 
+#' This function requires [dtplyr](https://dtplyr.tidyverse.org/) to be
+#' installed to run. The resulting code will likely need to be adopted to your
+#' use-case. Most likely by removing the initial `copy(data-name)` at the start.
 #' 
 #' @returns data.table code.
 #' 
@@ -24,6 +31,8 @@
 #' orbital_dt(orbital_obj)
 #' @export
 orbital_dt <- function(x) {
+  rlang::check_installed("dtplyr")
+
   dt <- dtplyr::lazy_dt(data.frame())
 
   res <- dplyr::mutate(dt, !!!orbital_inline(x))

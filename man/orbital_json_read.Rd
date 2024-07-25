@@ -10,10 +10,14 @@ orbital_json_read(path)
 \item{path}{file on disk.}
 }
 \value{
-A orbital object
+An \link{orbital} object.
 }
 \description{
-Read orbital json file
+Reading an orbital object from disk
+}
+\details{
+This function is aware of the \code{version} field of the orbital object, and will
+read it in correctly, according to its specification.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("jsonlite", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

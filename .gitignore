@@ -6,3 +6,4 @@
 .quarto
 derby.log
 docs
+inst/doc

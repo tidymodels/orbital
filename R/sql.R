@@ -1,7 +1,13 @@
 #' Convert to SQL code
 #' 
-#' @param x A orbital object.
+#' Returns SQL code that is equivilant to prediction code.
+#' 
+#' @param x An [orbital] object.
 #' @param con A connection object.
+#' 
+#' @details
+#' This function requires a database connection object, as the resulting code
+#' SQL code can differ depending on the type of database.
 #' 
 #' @returns SQL code.
 #' 

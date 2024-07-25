@@ -72,3 +72,8 @@ and then "predicting" with it using `predict()` to get the same results
 ```{r}
 predict(orbital_obj, as_tibble(mtcars))
 ```
+
+# Supported models and recipes steps
+
+Full list of supported models and recipes steps can be found here: 
+#' `vignette("supported-models")`.

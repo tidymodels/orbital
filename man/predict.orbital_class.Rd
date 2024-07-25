@@ -7,17 +7,25 @@
 \method{predict}{orbital_class}(object, new_data, ...)
 }
 \arguments{
-\item{object}{A orbital object.}
+\item{object}{An \link{orbital} object.}
 
-\item{new_data}{A data frame to predict with.}
+\item{new_data}{A data frame or remote database table.}
 
 \item{...}{Not currently used.}
 }
 \value{
-A modified data frame.
+A modified data frame or remote database table.
 }
 \description{
-Prediction using orbital objects
+Running prediction on data frame of remote database table, without needing to
+load original packages used to fit model.
+}
+\details{
+Using this function should give identical results to running \code{predict()} or
+\code{bake()} on the orginal object.
+
+The prediction done will only return prediction colunms, a opposed to
+returning all modified functions as done with \code{\link[=orbital_inline]{orbital_inline()}}.
 }
 \examples{
 \dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}

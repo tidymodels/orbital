@@ -32,7 +32,7 @@ reference:
       - orbital_dt
       - orbital_inline
       - orbital_sql
-      - to_r_fun
+      - orbital_r_fun
   - title: Read and Write
     desc: >
       Reading and writing orbital objects to json files for easy storage.
