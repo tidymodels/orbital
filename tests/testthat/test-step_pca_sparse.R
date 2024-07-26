@@ -160,3 +160,29 @@ test_that("duckdb - step_pca_sparse works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_pca_sparse works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars0 <- dplyr::as_tibble(mtcars)
+  mtcars0$hp <- NULL
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
+      embed::step_pca_sparse(recipes::all_predictors()) %>%
+      recipes::prep()
+  )
+
+  exp <- dplyr::mutate(mtcars0, !!!orbital_inline(orbital(rec)))
+  
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars0)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, exp)
+})

@@ -151,3 +151,30 @@ test_that("duckdb - step_other works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_other works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars_other <- dplyr::as_tibble(mtcars)
+  mtcars_other$gear <- letters[mtcars$gear]
+  mtcars_other$carb <- letters[mtcars$carb]
+  mtcars_other[2:4, ] <- NA
+  mtcars_other$gear[1] <- "aa"
+  mtcars_other$carb[1] <- "aa"
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_other) %>%
+    recipes::step_other(recipes::all_nominal_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_other, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars_other)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

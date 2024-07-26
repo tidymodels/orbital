@@ -135,3 +135,28 @@ test_that("duckdb - step_impute_mode works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_impute_mode works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars_impute_mode <- dplyr::as_tibble(mtcars)
+  mtcars_impute_mode$gear <- letters[mtcars$gear]
+  mtcars_impute_mode$carb <- letters[mtcars$carb]
+  mtcars_impute_mode[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) %>%
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
+    recipes::prep(strings_as_factors = FALSE)
+
+  res <- dplyr::mutate(mtcars_impute_mode, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars_impute_mode)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

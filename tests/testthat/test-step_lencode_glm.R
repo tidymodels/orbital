@@ -144,3 +144,29 @@ test_that("duckdb - step_lencode_glm works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_lencode_glm works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars_lencode_glm <- dplyr::as_tibble(mtcars)
+  mtcars_lencode_glm$gear <- as.factor(mtcars_lencode_glm$gear)
+  mtcars_lencode_glm$vs <- as.factor(mtcars_lencode_glm$vs)
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) %>%
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
+      recipes::prep()
+  )
+
+  res <- dplyr::mutate(mtcars_lencode_glm, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars_lencode_glm)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

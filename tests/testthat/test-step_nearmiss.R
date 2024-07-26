@@ -127,3 +127,27 @@ test_that("duckdb - step_nearmiss works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_nearmiss works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("themis")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars_nearmiss <- dplyr::as_tibble(mtcars)
+  mtcars_nearmiss$vs <- as.factor(mtcars$vs)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_nearmiss) %>%
+    themis::step_nearmiss(vs, skip = TRUE) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_nearmiss, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars_nearmiss)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

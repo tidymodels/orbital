@@ -19,6 +19,7 @@ Imports:
 Suggests:
     arrow,
     DBI,
+    data.table,
     dbplyr,
     dtplyr,
     duckdb,

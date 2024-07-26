@@ -103,3 +103,25 @@ test_that("duckdb - step_lag works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_lag works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_lag(recipes::all_predictors(), lag = 1:4) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

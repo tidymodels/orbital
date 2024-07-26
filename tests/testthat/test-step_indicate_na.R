@@ -126,3 +126,26 @@ test_that("duckdb - step_indicate_na works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_indicate_na works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars_indicate_na <- dplyr::as_tibble(mtcars)
+  mtcars_indicate_na[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_indicate_na) %>%
+    recipes::step_indicate_na(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_indicate_na, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars_indicate_na)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

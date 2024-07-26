@@ -122,3 +122,26 @@ test_that("duckdb - step_impute_mean works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_impute_mean works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars_impute_mean <- dplyr::as_tibble(mtcars)
+  mtcars_impute_mean[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mean) %>%
+    recipes::step_impute_mean(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_impute_mean, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars_impute_mean)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})
