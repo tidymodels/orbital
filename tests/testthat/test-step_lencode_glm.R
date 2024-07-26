@@ -89,5 +89,30 @@ test_that("spark - step_lencode_glm works", {
   expect_equal(res_spark, res)
 })
 
+test_that("SQLite - step_lencode_glm works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("RSQLite")
 
+  mtcars_lencode_glm <- dplyr::as_tibble(mtcars)
+  mtcars_lencode_glm$gear <- as.factor(mtcars_lencode_glm$gear)
+  mtcars_lencode_glm$vs <- as.factor(mtcars_lencode_glm$vs)
 
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) %>%
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
+      recipes::prep()
+  )
+
+  res <- dplyr::mutate(mtcars_lencode_glm, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_lencode_glm)
+
+  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_sql, res)
+
+  DBI::dbDisconnect(con)
+})

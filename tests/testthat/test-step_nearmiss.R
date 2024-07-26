@@ -74,3 +74,30 @@ test_that("spark - step_nearmiss works", {
 
   expect_equal(res_spark, res)
 })
+
+test_that("SQLite - step_nearmiss works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("themis")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("RSQLite")
+
+  mtcars_nearmiss <- dplyr::as_tibble(mtcars)
+  mtcars_nearmiss$vs <- as.factor(mtcars$vs)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_nearmiss) %>%
+    themis::step_nearmiss(vs, skip = TRUE) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_nearmiss, !!!orbital_inline(orbital(rec)))
+  res$vs <- as.character(res$vs)
+
+  con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_nearmiss)
+
+  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_sql, res)
+
+  DBI::dbDisconnect(con)
+})

@@ -90,3 +90,28 @@ test_that("spark - step_pca works", {
 
   expect_equal(res_spark, exp)
 })
+
+test_that("SQLite - step_pca works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("RSQLite")
+
+  mtcars0 <- dplyr::as_tibble(mtcars)
+  mtcars0$hp <- NULL
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
+    recipes::step_pca(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars0, !!!orbital_inline(orbital(rec)))
+  
+  con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars0)
+
+  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_sql, res)
+
+  DBI::dbDisconnect(con)
+})
