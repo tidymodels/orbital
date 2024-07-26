@@ -92,5 +92,32 @@ test_that("spark - step_novel works", {
   expect_equal(res_spark, res)
 })
 
+test_that("SQLite - step_novel works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("RSQLite")
 
+  mtcars_novel <- dplyr::as_tibble(mtcars)
+  mtcars_novel$gear <- letters[mtcars$gear]
+  mtcars_novel$carb <- letters[mtcars$carb]
+  mtcars_novel[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) %>%
+    recipes::step_novel(recipes::all_nominal_predictors()) %>%
+    recipes::prep()
+
+  mtcars_novel[1, 10] <- "aaaaa"
+
+  res <- dplyr::mutate(mtcars_novel, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_novel)
+
+  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_sql, res)
+
+  DBI::dbDisconnect(con)
+})
 

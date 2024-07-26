@@ -33,3 +33,8 @@ test_that("spark - step_zv works", {
   # Isn't needed as `step_zv()` doesn't produce code
   expect_true(TRUE)
 })
+
+test_that("SQLite - step_zv works", {
+  # Isn't needed as `step_zv()` doesn't produce code
+  expect_true(TRUE)
+})

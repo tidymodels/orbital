@@ -18,6 +18,7 @@ Imports:
     rlang
 Suggests:
     arrow,
+    DBI,
     dbplyr,
     dtplyr,
     embed,
@@ -30,6 +31,7 @@ Suggests:
     R6,
     recipes,
     rmarkdown,
+    RSQLite,
     rstanarm,
     sparklyr,
     testthat (>= 3.0.0),

@@ -43,7 +43,6 @@ test_that("step_other only calculates what is sufficient", {
   )
 })
 
-
 test_that("step_other works with empty selections", {
   skip_if_not_installed("recipes")
 
@@ -95,5 +94,31 @@ test_that("spark - step_other works", {
   expect_equal(res_spark, res)
 })
 
+test_that("SQLite - step_other works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("RSQLite")
 
+  mtcars_other <- dplyr::as_tibble(mtcars)
+  mtcars_other$gear <- letters[mtcars$gear]
+  mtcars_other$carb <- letters[mtcars$carb]
+  mtcars_other[2:4, ] <- NA
+  mtcars_other$gear[1] <- "aa"
+  mtcars_other$carb[1] <- "aa"
 
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_other) %>%
+    recipes::step_other(recipes::all_nominal_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_other, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_other)
+
+  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_sql, res)
+
+  DBI::dbDisconnect(con)
+})

@@ -102,3 +102,31 @@ test_that("spark - step_pca_truncated works", {
 
   expect_equal(res_spark, exp)
 })
+
+test_that("SQLite - step_pca_truncated works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("RSQLite")
+
+  mtcars0 <- dplyr::as_tibble(mtcars)
+  mtcars0$hp <- NULL
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
+      embed::step_pca_truncated(recipes::all_predictors()) %>%
+      recipes::prep()
+  )
+
+  exp <- dplyr::mutate(mtcars0, !!!orbital_inline(orbital(rec)))
+  
+  con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars0)
+
+  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_sql, exp)
+
+  DBI::dbDisconnect(con)
+})

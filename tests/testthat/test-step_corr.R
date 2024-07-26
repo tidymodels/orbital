@@ -33,3 +33,8 @@ test_that("spark - step_corr works", {
   # Isn't needed as `step_corr()` doesn't produce code
   expect_true(TRUE)
 })
+
+test_that("SQLite - step_corr works", {
+  # Isn't needed as `step_corr()` doesn't produce code
+  expect_true(TRUE)
+})
