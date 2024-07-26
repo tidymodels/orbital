@@ -40,7 +40,7 @@ Given a fitted workflow
 ``` r
 library(tidymodels)
 
-rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+rec_spec <- recipe(mpg ~ ., data = mtcars) |>
   step_normalize(all_numeric_predictors())
 
 lm_spec <- linear_reg()
@@ -111,6 +111,70 @@ predict(orbital_obj, as_tibble(mtcars))
 #>  9  24.4
 #> 10  18.7
 #> # ℹ 22 more rows
+```
+
+you can also predict in most SQL databases
+
+``` r
+library(DBI)
+library(RSQLite)
+
+con <- dbConnect(SQLite(), path = ":memory:")
+db_mtcars <- copy_to(con, mtcars)
+
+predict(orbital_obj, db_mtcars)
+#> # Source:   SQL [?? x 1]
+#> # Database: sqlite 3.46.0 []
+#>    .pred
+#>    <dbl>
+#>  1  22.6
+#>  2  22.1
+#>  3  26.3
+#>  4  21.2
+#>  5  17.7
+#>  6  20.4
+#>  7  14.4
+#>  8  22.5
+#>  9  24.4
+#> 10  18.7
+#> # ℹ more rows
+```
+
+and spark databases
+
+``` r
+library(sparklyr)
+#> 
+#> Attaching package: 'sparklyr'
+#> The following object is masked from 'package:purrr':
+#> 
+#>     invoke
+#> The following object is masked from 'package:stats':
+#> 
+#>     filter
+```
+
+``` r
+sc <- spark_connect(master = "local")
+
+sc_mtcars <- copy_to(sc, mtcars, overwrite = TRUE)
+
+predict(orbital_obj, sc_mtcars)
+#> # Source:   SQL [?? x 1]
+#> # Database: spark_connection
+#>    .pred
+#>    <dbl>
+#>  1  22.6
+#>  2  22.1
+#>  3  26.3
+#>  4  21.2
+#>  5  17.7
+#>  6  20.4
+#>  7  14.4
+#>  8  22.5
+#>  9  24.4
+#> 10  18.7
+#> # ℹ more rows
 ```
 
 # Supported models and recipes steps

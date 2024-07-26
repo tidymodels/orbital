@@ -47,7 +47,7 @@ Given a fitted workflow
 #| message: false
 library(tidymodels)
 
-rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+rec_spec <- recipe(mpg ~ ., data = mtcars) |>
   step_normalize(all_numeric_predictors())
 
 lm_spec <- linear_reg()
@@ -75,6 +75,29 @@ and then "predicting" with it using `predict()` to get the same results
 
 ```{r}
 predict(orbital_obj, as_tibble(mtcars))
+```
+
+you can also predict in most SQL databases
+
+```{r}
+library(DBI)
+library(RSQLite)
+
+con <- dbConnect(SQLite(), path = ":memory:")
+db_mtcars <- copy_to(con, mtcars)
+
+predict(orbital_obj, db_mtcars)
+```
+
+and spark databases
+
+```{r}
+library(sparklyr)
+sc <- spark_connect(master = "local")
+
+sc_mtcars <- copy_to(sc, mtcars, overwrite = TRUE)
+
+predict(orbital_obj, sc_mtcars)
 ```
 
 # Supported models and recipes steps
