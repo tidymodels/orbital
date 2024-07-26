@@ -8,9 +8,10 @@ orbital.step_impute_median <- function(x, all_vars, ...) {
     return(NULL)
   }
 
-  out <- paste0(
-    "ifelse(is.na(", names(medians), "), ", medians ,", ", names(medians), ")"
+  out <- glue::glue(
+    "ifelse(is.na({names(medians)}), {medians}, {names(medians)})"
   )
+
   names(out) <- names(medians)
   out
 }

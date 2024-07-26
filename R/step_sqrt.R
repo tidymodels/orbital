@@ -8,7 +8,8 @@ orbital.step_sqrt <- function(x, all_vars, ...) {
     return(NULL)
   }
 
-  out <- paste0("sqrt(", columns, ")")
+  out <- glue::glue("sqrt({columns})")
+  
   names(out) <- names(columns)
   out
 }
