@@ -101,3 +101,29 @@ test_that("SQLite - step_tomek works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("duckdb - step_tomek works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("themis")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars_tomek <- dplyr::as_tibble(mtcars)
+  mtcars_tomek$vs <- as.factor(mtcars$vs)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) %>%
+    themis::step_tomek(vs, skip = TRUE) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_tomek, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_tomek)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+
+  DBI::dbDisconnect(con)
+})

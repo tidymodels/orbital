@@ -37,3 +37,8 @@ test_that("SQLite - step_filter_missing works", {
   # Isn't needed as `step_filter_missing()` doesn't produce code
   expect_true(TRUE)
 })
+
+test_that("duckdb - step_filter_missing works", {
+  # Isn't needed as `step_filter_missing()` doesn't produce code
+  expect_true(TRUE)
+})

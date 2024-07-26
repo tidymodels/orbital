@@ -79,3 +79,27 @@ test_that("SQLite - step_lag works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("duckdb - step_lag works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_lag(recipes::all_predictors(), lag = 1:4) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  mtcars_tbl <- dplyr::copy_to(con, mtcars)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+
+  DBI::dbDisconnect(con)
+})

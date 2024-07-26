@@ -70,7 +70,7 @@ test_that("spark - step_center works", {
   expect_equal(res_new, res)
 })
 
-test_that("spark - step_center works", {
+test_that("SQLite - step_center works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("DBI")
   skip_if_not_installed("RSQLite")
@@ -84,6 +84,30 @@ test_that("spark - step_center works", {
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
 
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+
+  DBI::dbDisconnect(con)
+})
+
+test_that("duckdb - step_center works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_center(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars)
 
   res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%

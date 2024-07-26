@@ -38,3 +38,8 @@ test_that("SQLite - step_rm works", {
   # Isn't needed as `step_zv()` doesn't produce code
   expect_true(TRUE)
 })
+
+test_that("duckdb - step_rm works", {
+  # Isn't needed as `step_zv()` doesn't produce code
+  expect_true(TRUE)
+})

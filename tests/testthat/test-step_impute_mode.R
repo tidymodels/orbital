@@ -98,8 +98,34 @@ test_that("SQLite - step_impute_mode works", {
 
   res <- dplyr::mutate(mtcars_impute_mode, !!!orbital_inline(orbital(rec)))
 
-
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_mode)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+
+  DBI::dbDisconnect(con)
+})
+
+test_that("duckdb - step_impute_mode works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars_impute_mode <- dplyr::as_tibble(mtcars)
+  mtcars_impute_mode$gear <- letters[mtcars$gear]
+  mtcars_impute_mode$carb <- letters[mtcars$carb]
+  mtcars_impute_mode[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) %>%
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
+    recipes::prep(strings_as_factors = FALSE)
+
+  res <- dplyr::mutate(mtcars_impute_mode, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_mode)
 
   res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%

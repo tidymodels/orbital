@@ -137,3 +137,32 @@ test_that("SQLite - step_pca_sparse_bayes works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("duckdb - step_pca_sparse_bayes works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+  skip_if_not_installed("VBsparsePCA")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars0 <- dplyr::as_tibble(mtcars)
+  mtcars0$hp <- NULL
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
+      embed::step_pca_sparse_bayes(recipes::all_predictors()) %>%
+      recipes::prep()
+  )
+
+  exp <- dplyr::mutate(mtcars0, !!!orbital_inline(orbital(rec)))
+  
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  mtcars_tbl <- dplyr::copy_to(con, mtcars0)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, exp)
+
+  DBI::dbDisconnect(con)
+})

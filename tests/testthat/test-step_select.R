@@ -38,3 +38,8 @@ test_that("SQLite - step_select works", {
   # Isn't needed as `step_select()` doesn't produce code
   expect_true(TRUE)
 })
+
+test_that("duckdb - step_select works", {
+  # Isn't needed as `step_select()` doesn't produce code
+  expect_true(TRUE)
+})

@@ -74,7 +74,7 @@ test_that("spark - step_impute_median works", {
   expect_equal(res_new, res)
 })
 
-test_that("SQL - step_impute_median works", {
+test_that("SQLite - step_impute_median works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("DBI")
   skip_if_not_installed("RSQLite")
@@ -89,6 +89,31 @@ test_that("SQL - step_impute_median works", {
   res <- dplyr::mutate(mtcars_impute_median, !!!orbital_inline(orbital(rec)))
 
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_median)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+
+  DBI::dbDisconnect(con)
+})
+
+test_that("duckdb - step_impute_median works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars_impute_median <- dplyr::as_tibble(mtcars)
+  mtcars_impute_median[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) %>%
+    recipes::step_impute_median(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_impute_median, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_median)
 
   res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
