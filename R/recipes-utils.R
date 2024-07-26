@@ -12,10 +12,11 @@ lencode_helper <- function(x, all_vars) {
     values <- mapping[["..value"]][!new_ind]
     default <- mapping[["..value"]][new_ind]
 
-    eq <- paste0(col, " == \"", levels, "\" ~ ", values)
-    eq <- c(eq, paste0(".default = ", default))
+    eq <- glue::glue("{col} == \"{levels}\" ~ {values}")
+    eq <- c(eq, glue::glue(".default = {default}"))
+    eq <- paste(eq, collapse = ", ")
+    eq <- glue::glue("dplyr::case_when({eq})")
 
-    eq <- paste0("dplyr::case_when(", paste0(eq, collapse = ", "), ")")
     names(eq) <- col
     out <- c(out, eq)
   }
@@ -39,7 +40,7 @@ pca_helper <- function(rot, prefix, all_vars) {
 
   out <- character(length(all_vars))
   for (i in seq_along(all_vars)) {
-    out[i] <- paste(row_nms, "*", rot[, i], collapse = " + ")
+    out[i] <- paste(glue::glue("{row_nms} * {rot[, i]}"), collapse = " + ")
   }
 
   names(out) <- all_vars

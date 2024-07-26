@@ -75,7 +75,7 @@ print.orbital_class <- function(x, ..., digits = 7, truncate = TRUE) {
   x <- unclass(x)
   x <- pretty_print(x, digits)
 
-  eqs <- paste0(names(x), " = ", x)
+  eqs <- glue::glue("{names(x)} = {x}")
   
   if (truncate) {
     eqs_lens <- nchar(eqs)

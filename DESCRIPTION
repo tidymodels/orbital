@@ -21,6 +21,7 @@ Suggests:
     dbplyr,
     dtplyr,
     embed,
+    glue,
     hardhat,
     jsonlite,
     kknn,

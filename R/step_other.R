@@ -14,12 +14,11 @@ orbital.step_other <- function(x, all_vars, ...) {
       next
     }
     levels <- objects[[col]]$keep
-    levels <- paste0("\"", levels, "\"")
-    levels <- paste0(levels, collapse = ", ")
-    levels <- paste0("c(", levels, ")")
-    out[[col]] <- paste0(
-      "ifelse(is.na(", col, "), NA, ifelse(", col, " %in% ", levels, ", ", col,
-      ", \"", objects[[col]]$other, "\"))"
+    levels <- glue::glue("\"{levels}\"")
+    levels <- paste(levels, collapse = ", ")
+    levels <- glue::glue("c({levels})")
+    out[[col]] <- glue::glue(
+      "ifelse(is.na({col}), NA, ifelse({col} %in% {levels}, {col}, \"{objects[[col]]$other}\"))"
     )
   }
   out

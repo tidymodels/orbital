@@ -1,6 +1,7 @@
 
 #' @export
 orbital.recipe <- function(x, eqs = NULL, ...) {
+  rlang::check_installed("glue")
   if (!recipes::fully_trained(x)) {
     cli::cli_abort("recipe must be fully trained.")
   }

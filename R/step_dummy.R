@@ -11,7 +11,7 @@ orbital.step_dummy <- function(x, all_vars, ...) {
     levels <- levels[level_ind]
     var_out <- var_out[level_ind]
 
-    eqs <- paste0("as.numeric(", var, " == \"", levels, "\")")
+    eqs <- glue::glue("as.numeric({var} == \"{levels}\")")
     out <- c(out, stats::setNames(eqs, var_out))
   }
 
