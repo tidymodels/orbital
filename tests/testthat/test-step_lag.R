@@ -72,10 +72,10 @@ test_that("SQLite - step_lag works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars)
 
-  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_sql, res)
+  expect_equal(res_new, res)
 
   DBI::dbDisconnect(con)
 })

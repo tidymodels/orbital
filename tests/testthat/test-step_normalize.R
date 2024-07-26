@@ -64,10 +64,10 @@ test_that("spark - step_normalize works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars")
 
-  res_spark <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_spark, res)
+  expect_equal(res_new, res)
 })
 
 test_that("SQLite - step_normalize works", {
@@ -86,8 +86,8 @@ test_that("SQLite - step_normalize works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars")
 
-  res_spark <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_spark, res)
+  expect_equal(res_new, res)
 })

@@ -99,10 +99,10 @@ test_that("spark - step_pca_sparse works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars0")
 
-  res_spark <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_spark, exp)
+  expect_equal(res_new, exp)
 })
 
 test_that("SQLite - step_pca_sparse works", {
@@ -125,10 +125,10 @@ test_that("SQLite - step_pca_sparse works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars0)
 
-  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_sql, exp)
+  expect_equal(res_new, exp)
 
   DBI::dbDisconnect(con)
 })
