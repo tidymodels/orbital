@@ -60,7 +60,7 @@
 <div class="page-header"><h1 id="orbital">orbital<a class="anchor" aria-label="anchor" href="#orbital"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- badges: end -->
+
 <p>The goal of orbital is to enable running predictions of tidymodels <a href="https://workflows.tidymodels.org/" class="external-link">workflows</a> inside databases.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -80,7 +80,7 @@
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">%&gt;%</span></span>
+<span><span class="va">rec_spec</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lm_spec</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span></span>
@@ -142,12 +142,79 @@
 <span><span class="co">#&gt;  9  24.4</span></span>
 <span><span class="co">#&gt; 10  18.7</span></span>
 <span><span class="co">#&gt; # ℹ 22 more rows</span></span></code></pre></div>
+<p>you can also predict in most SQL databases</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://dbi.r-dbi.org" class="external-link">DBI</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://rsqlite.r-dbi.org" class="external-link">RSQLite</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">con</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbi.r-dbi.org/reference/dbConnect.html" class="external-link">dbConnect</a></span><span class="op">(</span><span class="fu"><a href="https://rsqlite.r-dbi.org/reference/SQLite.html" class="external-link">SQLite</a></span><span class="op">(</span><span class="op">)</span>, path <span class="op">=</span> <span class="st">":memory:"</span><span class="op">)</span></span>
+<span><span class="va">db_mtcars</span> <span class="op">&lt;-</span> <span class="fu">copy_to</span><span class="op">(</span><span class="va">con</span>, <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orbital_obj</span>, <span class="va">db_mtcars</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # Source:   SQL [?? x 1]</span></span>
+<span><span class="co">#&gt; # Database: sqlite 3.46.0 []</span></span>
+<span><span class="co">#&gt;    .pred</span></span>
+<span><span class="co">#&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  22.6</span></span>
+<span><span class="co">#&gt;  2  22.1</span></span>
+<span><span class="co">#&gt;  3  26.3</span></span>
+<span><span class="co">#&gt;  4  21.2</span></span>
+<span><span class="co">#&gt;  5  17.7</span></span>
+<span><span class="co">#&gt;  6  20.4</span></span>
+<span><span class="co">#&gt;  7  14.4</span></span>
+<span><span class="co">#&gt;  8  22.5</span></span>
+<span><span class="co">#&gt;  9  24.4</span></span>
+<span><span class="co">#&gt; 10  18.7</span></span>
+<span><span class="co">#&gt; # ℹ more rows</span></span></code></pre></div>
+<p>and spark databases</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.posit.co/" class="external-link">sparklyr</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'sparklyr'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:purrr':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     invoke</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:stats':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     filter</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/spark-connections.html" class="external-link">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sc_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orbital_obj</span>, <span class="va">sc_mtcars</span><span class="op">)</span></span>
+<span><span class="co">#&gt; # Source:   SQL [?? x 1]</span></span>
+<span><span class="co">#&gt; # Database: spark_connection</span></span>
+<span><span class="co">#&gt;    .pred</span></span>
+<span><span class="co">#&gt;    &lt;dbl&gt;</span></span>
+<span><span class="co">#&gt;  1  22.6</span></span>
+<span><span class="co">#&gt;  2  22.1</span></span>
+<span><span class="co">#&gt;  3  26.3</span></span>
+<span><span class="co">#&gt;  4  21.2</span></span>
+<span><span class="co">#&gt;  5  17.7</span></span>
+<span><span class="co">#&gt;  6  20.4</span></span>
+<span><span class="co">#&gt;  7  14.4</span></span>
+<span><span class="co">#&gt;  8  22.5</span></span>
+<span><span class="co">#&gt;  9  24.4</span></span>
+<span><span class="co">#&gt; 10  18.7</span></span>
+<span><span class="co">#&gt; # ℹ more rows</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level1">
 <h1 id="supported-models-and-recipes-steps">Supported models and recipes steps<a class="anchor" aria-label="anchor" href="#supported-models-and-recipes-steps"></a>
 </h1>
 <p>Full list of supported models and recipes steps can be found here: #’ <code><a href="articles/supported-models.html">vignette("supported-models")</a></code>.</p>
+<div class="section level2">
+<h2 id="contributing">contributing<a class="anchor" aria-label="anchor" href="#contributing"></a>
+</h2>
+<p>This project is released with a <a href="https://github.com/tidymodels/orbital/blob/main/.github/CODE_OF_CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<ul>
+<li><p>For questions and discussions about tidymodels packages, modeling, and machine learning, please <a href="https://forum.posit.co/new-topic?category_id=15&amp;tags=tidymodels,question" class="external-link">post on Posit Community</a>.</p></li>
+<li><p>If you think you have encountered a bug, please <a href="https://github.com/tidymodels/orbital/issues" class="external-link">submit an issue</a>.</p></li>
+<li><p>Either way, learn how to create and share a <a href="https://reprex.tidyverse.org/articles/articles/learn-reprex.html" class="external-link">reprex</a> (a minimal, reproducible example), to clearly communicate about your code.</p></li>
+<li><p>Check out further details on <a href="https://www.tidymodels.org/contribute/" class="external-link">contributing guidelines for tidymodels packages</a> and <a href="https://www.tidymodels.org/help/" class="external-link">how to get help</a>.</p></li>
+</ul>
+</div>
 </div>
 
   </main><aside class="col-md-3"><div class="links">
@@ -167,6 +234,12 @@
 </ul>
 </div>
 
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
@@ -184,7 +257,15 @@
 </ul>
 </div>
 
-
+<div class="dev-status">
+<h2 data-toc-skip>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="https://github.com/tidymodels/orbital/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/tidymodels/orbital/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://CRAN.R-project.org/package=orbital" class="external-link"><img src="https://www.r-pkg.org/badges/version/orbital" alt="CRAN status"></a></li>
+<li><a href="https://app.codecov.io/gh/tidymodels/orbital?branch=main" class="external-link"><img src="https://codecov.io/gh/tidymodels/orbital/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+</ul>
+</div>
 
   </aside>
 </div>
