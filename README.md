@@ -4,6 +4,14 @@
 # orbital
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/tidymodels/orbital/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidymodels/orbital/actions/workflows/R-CMD-check.yaml)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/orbital)](https://CRAN.R-project.org/package=orbital)
+[![Codecov test
+coverage](https://codecov.io/gh/tidymodels/orbital/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/orbital?branch=main)
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 <!-- badges: end -->
 
 The goal of orbital is to enable running predictions of tidymodels
@@ -32,7 +40,7 @@ Given a fitted workflow
 ``` r
 library(tidymodels)
 
-rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+rec_spec <- recipe(mpg ~ ., data = mtcars) |>
   step_normalize(all_numeric_predictors())
 
 lm_spec <- linear_reg()
@@ -105,7 +113,93 @@ predict(orbital_obj, as_tibble(mtcars))
 #> # ℹ 22 more rows
 ```
 
+you can also predict in most SQL databases
+
+``` r
+library(DBI)
+library(RSQLite)
+
+con <- dbConnect(SQLite(), path = ":memory:")
+db_mtcars <- copy_to(con, mtcars)
+
+predict(orbital_obj, db_mtcars)
+#> # Source:   SQL [?? x 1]
+#> # Database: sqlite 3.46.0 []
+#>    .pred
+#>    <dbl>
+#>  1  22.6
+#>  2  22.1
+#>  3  26.3
+#>  4  21.2
+#>  5  17.7
+#>  6  20.4
+#>  7  14.4
+#>  8  22.5
+#>  9  24.4
+#> 10  18.7
+#> # ℹ more rows
+```
+
+and spark databases
+
+``` r
+library(sparklyr)
+#> 
+#> Attaching package: 'sparklyr'
+#> The following object is masked from 'package:purrr':
+#> 
+#>     invoke
+#> The following object is masked from 'package:stats':
+#> 
+#>     filter
+```
+
+``` r
+sc <- spark_connect(master = "local")
+
+sc_mtcars <- copy_to(sc, mtcars, overwrite = TRUE)
+
+predict(orbital_obj, sc_mtcars)
+#> # Source:   SQL [?? x 1]
+#> # Database: spark_connection
+#>    .pred
+#>    <dbl>
+#>  1  22.6
+#>  2  22.1
+#>  3  26.3
+#>  4  21.2
+#>  5  17.7
+#>  6  20.4
+#>  7  14.4
+#>  8  22.5
+#>  9  24.4
+#> 10  18.7
+#> # ℹ more rows
+```
+
 # Supported models and recipes steps
 
 Full list of supported models and recipes steps can be found here: \#’
 `vignette("supported-models")`.
+
+## contributing
+
+This project is released with a [Contributor Code of
+Conduct](https://github.com/tidymodels/orbital/blob/main/.github/CODE_OF_CONDUCT.md).
+By contributing to this project, you agree to abide by its terms.
+
+- For questions and discussions about tidymodels packages, modeling, and
+  machine learning, please [post on Posit
+  Community](https://forum.posit.co/new-topic?category_id=15&tags=tidymodels,question).
+
+- If you think you have encountered a bug, please [submit an
+  issue](https://github.com/tidymodels/orbital/issues).
+
+- Either way, learn how to create and share a
+  [reprex](https://reprex.tidyverse.org/articles/articles/learn-reprex.html)
+  (a minimal, reproducible example), to clearly communicate about your
+  code.
+
+- Check out further details on [contributing guidelines for tidymodels
+  packages](https://www.tidymodels.org/contribute/) and [how to get
+  help](https://www.tidymodels.org/help/).
