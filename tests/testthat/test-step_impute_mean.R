@@ -67,10 +67,10 @@ test_that("spark - step_impute_mean works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_impute_mean")
 
-  res_spark <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_spark, res)
+  expect_equal(res_new, res)
 })
 
 test_that("SQLite - step_impute_mean works", {
@@ -90,10 +90,35 @@ test_that("SQLite - step_impute_mean works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_mean)
 
-  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_sql, res)
+  expect_equal(res_new, res)
+
+  DBI::dbDisconnect(con)
+})
+
+test_that("duckdb - step_impute_mean works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars_impute_mean <- dplyr::as_tibble(mtcars)
+  mtcars_impute_mean[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mean) %>%
+    recipes::step_impute_mean(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_impute_mean, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_mean)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
 
   DBI::dbDisconnect(con)
 })

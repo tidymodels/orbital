@@ -117,10 +117,10 @@ test_that("spark - step_discretize works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_discretize")
 
-  res_spark <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_spark, res)
+  expect_equal(res_new, res)
 })
 
 test_that("SQLite - step_discretize works", {
@@ -142,10 +142,37 @@ test_that("SQLite - step_discretize works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_discretize)
 
-  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_sql, res)
+  expect_equal(res_new, res)
+
+  DBI::dbDisconnect(con)
+})
+
+test_that("duckdb - step_discretize works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars_discretize <- dplyr::as_tibble(mtcars)
+  mtcars_discretize[1, ] <- NA
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) %>%
+      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
+      recipes::prep()
+  )
+
+  res <- dplyr::mutate(mtcars_discretize, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_discretize)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
 
   DBI::dbDisconnect(con)
 })

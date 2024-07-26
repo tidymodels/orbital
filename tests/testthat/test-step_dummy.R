@@ -95,13 +95,13 @@ test_that("spark - step_dummy works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars1")
 
-  res_spark <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_spark, exp)
+  expect_equal(res_new, exp)
 })
 
-test_that("SQL - step_dummy works", {
+test_that("SQLite - step_dummy works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("DBI")
   skip_if_not_installed("RSQLite")
@@ -120,10 +120,37 @@ test_that("SQL - step_dummy works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars1)
 
-  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_sql, exp)
+  expect_equal(res_new, exp)
+
+  DBI::dbDisconnect(con)
+})
+
+test_that("duckdb - step_dummy works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars1 <- dplyr::as_tibble(mtcars)
+
+  mtcars1$gear <- as.character(mtcars1$gear)
+  mtcars1$carb <- as.character(mtcars1$carb)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
+    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
+    recipes::prep()
+
+  exp <- dplyr::mutate(mtcars1, !!!orbital_inline(orbital(rec)))
+  
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  mtcars_tbl <- dplyr::copy_to(con, mtcars1)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, exp)
 
   DBI::dbDisconnect(con)
 })

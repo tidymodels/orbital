@@ -69,10 +69,10 @@ test_that("spark - step_bsmote works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_bsmote")
 
-  res_spark <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_spark, res)
+  expect_equal(res_new, res)
 })
 
 test_that("SQLite - step_bsmote works", {
@@ -94,10 +94,36 @@ test_that("SQLite - step_bsmote works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_bsmote)
 
-  res_sql <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
-  expect_equal(res_sql, res)
+  expect_equal(res_new, res)
+
+  DBI::dbDisconnect(con)
+})
+
+test_that("duckdb - step_bsmote works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("themis")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars_bsmote <- dplyr::as_tibble(mtcars)
+  mtcars_bsmote$vs <- as.factor(mtcars$vs)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_bsmote) %>%
+    themis::step_bsmote(vs, skip = TRUE) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_bsmote, !!!orbital_inline(orbital(rec)))
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_bsmote)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
 
   DBI::dbDisconnect(con)
 })
