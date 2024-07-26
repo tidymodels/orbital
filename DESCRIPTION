@@ -21,6 +21,7 @@ Suggests:
     DBI,
     dbplyr,
     dtplyr,
+    duckdb,
     embed,
     glue,
     hardhat,
