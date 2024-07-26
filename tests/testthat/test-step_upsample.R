@@ -127,3 +127,27 @@ test_that("duckdb - step_upsample works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_upsample works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("themis")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars_upsample <- dplyr::as_tibble(mtcars)
+  mtcars_upsample$vs <- as.factor(mtcars$vs)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_upsample) %>%
+    themis::step_upsample(vs, skip = TRUE) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_upsample, !!!orbital_inline(orbital(rec)))
+  
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars_upsample)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

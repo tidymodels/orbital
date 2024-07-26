@@ -94,10 +94,11 @@ test_that("SQLite - step_sqrt works", {
   DBI::dbDisconnect(con)
 })
 
-test_that("duckdb - step_sqrt works", {
+test_that("data.table - step_sqrt works", {
   skip_if_not_installed("recipes")
-  skip_if_not_installed("DBI")
-  skip_if_not_installed("duckdb")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
 
   mtcars <- dplyr::as_tibble(mtcars)
 
@@ -107,13 +108,10 @@ test_that("duckdb - step_sqrt works", {
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
 
-  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
-  mtcars_tbl <- dplyr::copy_to(con, mtcars)
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars)
 
   res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
     dplyr::collect()
 
   expect_equal(res_new, res)
-
-  DBI::dbDisconnect(con)
 })

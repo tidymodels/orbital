@@ -43,3 +43,8 @@ test_that("duckdb - step_nzv works", {
   # Isn't needed as `step_nzv()` doesn't produce code
   expect_true(TRUE)
 })
+
+test_that("data.table - step_nzv works", {
+  # Isn't needed as `step_nzv()` doesn't produce code
+  expect_true(TRUE)
+})

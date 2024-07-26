@@ -123,3 +123,26 @@ test_that("duckdb - step_impute_median works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("data.table - step_impute_median works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("dtplyr")
+  
+  `:=` <- data.table::`:=`
+
+  mtcars_impute_median <- dplyr::as_tibble(mtcars)
+  mtcars_impute_median[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) %>%
+    recipes::step_impute_median(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_impute_median, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- dtplyr::lazy_dt(mtcars_impute_median)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})
