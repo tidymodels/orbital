@@ -4,6 +4,9 @@
 # orbital
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/tidymodels/orbital/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/orbital?branch=main)
 <!-- badges: end -->
 
 The goal of orbital is to enable running predictions of tidymodels
