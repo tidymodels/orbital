@@ -8,7 +8,7 @@ orbital.step_unknown <- function(x, all_vars, ...) {
     return(NULL)
   }
 
-  out <- glue::glue("ifelse(is.na({vars}), \"{x$new_level}\", {vars})")
+  out <- glue::glue("dplyr::if_else(is.na({vars}), \"{x$new_level}\", {vars})")
   
   names(out) <- vars
   out

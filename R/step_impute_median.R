@@ -9,7 +9,7 @@ orbital.step_impute_median <- function(x, all_vars, ...) {
   }
 
   out <- glue::glue(
-    "ifelse(is.na({names(medians)}), {medians}, {names(medians)})"
+    "dplyr::if_else(is.na({names(medians)}), {medians}, {names(medians)})"
   )
 
   names(out) <- names(medians)
