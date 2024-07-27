@@ -2,7 +2,7 @@
 title: "Supported Models and recipes steps"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{supported-models}
+  %\VignetteIndexEntry{Supported Models and recipes steps}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
