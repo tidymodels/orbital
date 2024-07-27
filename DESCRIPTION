@@ -28,6 +28,7 @@ Suggests:
     jsonlite,
     kknn,
     knitr,
+    modeldata,
     parsnip,
     R6,
     recipes,
