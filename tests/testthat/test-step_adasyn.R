@@ -127,3 +127,25 @@ test_that("duckdb - step_adasyn works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("arrow - step_adasyn works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("themis")
+  skip_if_not_installed("arrow")
+
+  mtcars_adasyn <- dplyr::as_tibble(mtcars)
+  mtcars_adasyn$vs <- as.factor(mtcars$vs)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_adasyn) %>%
+    themis::step_adasyn(vs, skip = TRUE) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_adasyn, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- arrow::as_arrow_table(mtcars_adasyn)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

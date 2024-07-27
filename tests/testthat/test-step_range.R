@@ -138,3 +138,25 @@ test_that("duckdb - step_range works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("arrow - step_range works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("arrow")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_range(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- arrow::as_arrow_table(mtcars)
+
+  suppressWarnings(
+    res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+      dplyr::collect()
+  )
+
+  expect_equal(res_new, res)
+})

@@ -127,3 +127,25 @@ test_that("duckdb - step_rose works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("arrow - step_rose works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("themis")
+  skip_if_not_installed("arrow")
+
+  mtcars_rose <- dplyr::as_tibble(mtcars)
+  mtcars_rose$vs <- as.factor(mtcars$vs)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_rose) %>%
+    themis::step_rose(vs, skip = TRUE) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars_rose, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- arrow::as_arrow_table(mtcars_rose)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

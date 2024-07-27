@@ -176,3 +176,26 @@ test_that("duckdb - step_discretize works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("arrow - step_discretize works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("arrow")
+
+  mtcars_discretize <- dplyr::as_tibble(mtcars)
+  mtcars_discretize[1, ] <- NA
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) %>%
+      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
+      recipes::prep()
+  )
+
+  res <- dplyr::mutate(mtcars_discretize, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- arrow::as_arrow_table(mtcars_discretize)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})
