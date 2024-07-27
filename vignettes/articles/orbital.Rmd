@@ -1,0 +1,111 @@
+---
+title: "Introduction to orbital"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+
+The orbital package allows you to turn a fitted workflow into a new object, that retains all the information needed to perform prediction. These predictions should be identical to predictions made using the original workflow objects but with smaller objects and fewer dependencies needed.
+
+## Creating a fitted model
+
+```{r setup}
+library(orbital)
+library(recipes)
+library(parsnip)
+library(workflows)
+library(modeldata)
+```
+
+We will be using the Ames housing data:
+
+```{r}
+ames
+```
+
+We won't do a [data split](https://www.tmwr.org/splitting) here to get to the point of the package faster, but you should do that in practice.
+
+our model will be in two parts. First, we will create a recipe to do the preprocessing, then specify a parsnip model to go along with it.
+
+This is the recipe we will be going with
+
+```{r}
+rec_spec <- recipe(Sale_Price ~ ., data = ames) |>
+  step_impute_median(all_numeric_predictors()) |>
+  step_unknown(all_nominal_predictors()) |>
+  step_other(all_nominal_predictors()) |>
+  step_dummy(all_nominal_predictors()) |>
+  step_nzv(all_numeric_predictors()) |>
+  step_normalize(all_numeric_predictors()) |>
+  step_corr(all_numeric_predictors())
+```
+
+we will be using a standard linear regression
+
+```{r}
+lm_spec <- linear_reg()
+```
+
+Putting them together in a workflow gives us this fitted model.
+
+```{r}
+wf_spec <- workflow(rec_spec, lm_spec)
+wf_fit <- fit(wf_spec, data = ames)
+wf_fit
+```
+
+## Converting model
+
+Once we have a fitted workflow all we have to do is call the `orbital()` function on the fitted workflow. This will create an orbital object that we will use from here on out.
+
+```{r}
+orbital_obj <- orbital(wf_fit)
+orbital_obj
+```
+
+One of the neat things about orbital objects is that they only require the orbital package to be loaded, compared to the workflow object which needs recipes, parsnip, workflows and the engine package to be loaded. It is also substantially smaller in size.
+
+```{r}
+object.size(orbital_obj)
+object.size(wf_fit)
+```
+
+## Predicting
+
+Predicting with an orbital object is done using the `predict()` function, the same way it is done with workflows objects.
+
+```{r}
+predict(orbital_obj, ames)
+```
+
+Notice how it produces the same results as if we were to `predict()` on the workflow object.
+
+```{r}
+predict(wf_fit, ames)
+```
+
+orbital objects also allow for prediction in database objects such as SQL or spark databases. Below is a small example using an ephemeral in-memory RSQLite database.
+
+```{r}
+library(DBI)
+library(RSQLite)
+
+con <- dbConnect(SQLite(), path = ":memory:")
+ames_sqlite <- copy_to(con, ames)
+
+predict(orbital_obj, ames_sqlite)
+```
+
+## Code Generation
+
+In the same way that you can predict in databases, you can also get the code needed to run the query.
+
+```{r}
+orbital_sql(orbital_obj, con)
+```

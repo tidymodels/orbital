@@ -18,7 +18,7 @@ orbital.step_other <- function(x, all_vars, ...) {
     levels <- paste(levels, collapse = ", ")
     levels <- glue::glue("c({levels})")
     out[[col]] <- glue::glue(
-      "ifelse(is.na({col}), NA, ifelse({col} %in% {levels}, {col}, \"{objects[[col]]$other}\"))"
+      "dplyr::if_else(is.na({col}), NA, dplyr::if_else({col} %in% {levels}, {col}, \"{objects[[col]]$other}\"))"
     )
   }
   out

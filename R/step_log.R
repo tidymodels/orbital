@@ -11,7 +11,7 @@ orbital.step_log <- function(x, all_vars, ...) {
 
   if (x$signed) {
     out <- glue::glue(
-      "ifelse(abs({columns}) < 1, 0, sign({columns}) * log(abs({columns}), base = {x$base}))"
+      "dplyr::if_else(abs({columns}) < 1, 0, sign({columns}) * log(abs({columns}), base = {x$base}))"
     )
   } else {
     out <- glue::glue(

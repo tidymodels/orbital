@@ -8,7 +8,7 @@ orbital.step_impute_mode <- function(x, all_vars, ...) {
     return(NULL)
   }
 
-  out <- glue::glue("ifelse(is.na({names(modes)}), \"{modes}\", {names(modes)})")
+  out <- glue::glue("dplyr::if_else(is.na({names(modes)}), \"{modes}\", {names(modes)})")
 
   names(out) <- names(modes)
   out

@@ -8,7 +8,7 @@ orbital.step_bin2factor <- function(x, all_vars, ...) {
   }
 
   out <- glue::glue(
-    "ifelse({columns} == 1, \"{x$levels[1]}\", \"{x$levels[2]}\")"
+    "dplyr::if_else({columns} == 1, \"{x$levels[1]}\", \"{x$levels[2]}\")"
   )
 
   names(out) <- columns
