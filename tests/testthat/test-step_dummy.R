@@ -154,3 +154,26 @@ test_that("duckdb - step_dummy works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("arrow - step_dummy works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("arrow")
+
+  mtcars1 <- dplyr::as_tibble(mtcars)
+
+  mtcars1$gear <- as.character(mtcars1$gear)
+  mtcars1$carb <- as.character(mtcars1$carb)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
+    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
+    recipes::prep()
+
+  exp <- dplyr::mutate(mtcars1, !!!orbital_inline(orbital(rec)))
+  
+  mtcars_tbl <- arrow::as_arrow_table(mtcars1)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, exp)
+})

@@ -103,3 +103,9 @@ test_that("duckdb - step_lag works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("arrow - step_lag works", {
+  # For completeness
+  # lag isn't supported in arrow
+  expect_true(TRUE)
+})

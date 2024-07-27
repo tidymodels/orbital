@@ -150,3 +150,27 @@ test_that("duckdb - step_novel works", {
   DBI::dbDisconnect(con)
 })
 
+test_that("arrow - step_novel works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("arrow")
+
+  mtcars_novel <- dplyr::as_tibble(mtcars)
+  mtcars_novel$gear <- letters[mtcars$gear]
+  mtcars_novel$carb <- letters[mtcars$carb]
+  mtcars_novel[2:4, ] <- NA
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) %>%
+    recipes::step_novel(recipes::all_nominal_predictors()) %>%
+    recipes::prep()
+
+  mtcars_novel[1, 10] <- "aaaaa"
+
+  res <- dplyr::mutate(mtcars_novel, !!!orbital_inline(orbital(rec)))
+
+  mtcars_tbl <- arrow::as_arrow_table(mtcars_novel)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})

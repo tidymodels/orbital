@@ -140,3 +140,24 @@ test_that("duckdb - step_pca works", {
 
   DBI::dbDisconnect(con)
 })
+
+test_that("arrow - step_pca works", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("arrow")
+
+  mtcars0 <- dplyr::as_tibble(mtcars)
+  mtcars0$hp <- NULL
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
+    recipes::step_pca(recipes::all_predictors()) %>%
+    recipes::prep()
+
+  res <- dplyr::mutate(mtcars0, !!!orbital_inline(orbital(rec)))
+  
+  mtcars_tbl <- arrow::as_arrow_table(mtcars0)
+
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    dplyr::collect()
+
+  expect_equal(res_new, res)
+})
