@@ -10,7 +10,7 @@ Description: Turn 'tidymodels' workflows into objects containing the
     objects allow for low dependency prediction locally or directly in
     databases.
 License: MIT + file LICENSE
-URL: https://github.com/tidymodels/orbital
+URL: https://github.com/tidymodels/orbital, https://orbital.tidymodels.org
 BugReports: https://github.com/tidymodels/orbital/issues
 Imports: 
     cli,
