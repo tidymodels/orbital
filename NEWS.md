@@ -1,40 +1,6 @@
 # orbital (development version)
 
-* Support for `step_dummy()` has been added. (#17)
-
-* Support for `step_impute_mean()` has been added. (#17)
-
-* Support for `step_impute_median()` has been added. (#17)
-
-* Support for `step_impute_mode()` has been added. (#17)
-
-* Support for `step_unknown()` has been added. (#17)
-
-* Support for `step_novel()` has been added. (#17)
-
-* Support for `step_other()` has been added. (#17)
-
-* Support for `step_BoxCox()` has been added. (#17)
-
-* Support for `step_inverse()` has been added. (#17)
-
-* Support for `step_mutate()` has been added. (#17)
-
-* Support for `step_sqrt()` has been added. (#17)
-
-* Support for `step_indicate_na()` has been added. (#17)
-
-* Support for `step_range()` has been added. (#17)
-
-* Support for `step_intercept()` has been added. (#17)
-
-* Support for `step_ratio()` has been added. (#17)
-
-* Support for `step_lag()` has been added. (#17)
-
-* Support for `step_log()` has been added. (#17)
-
-* Support for `step_rename()` has been added. (#17)
+* Support for `step_dummy()`,  `step_impute_mean()`, `step_impute_median()`, `step_impute_mode()`,  `step_unknown()`, `step_novel()`, `step_other()`, `step_BoxCox()`, `step_inverse()`, `step_mutate()`, `step_sqrt()`, `step_indicate_na()`, `step_range()`, `step_intercept()`, `step_ratio()`, `step_lag()`, `step_log()`, `step_rename()` has been added. (#17)
 
 * Support for `step_upsample()`, `step_smote()`, `step_smotenc()`, `step_bsmote()`, `step_adasyn()`, `step_rose()`, `step_downsample()`, `step_nearmiss()`, and `step_tomek()` has been added. (#21)
 
