@@ -179,7 +179,7 @@ predict(orbital_obj, sc_mtcars)
 
 # Supported models and recipes steps
 
-Full list of supported models and recipes steps can be found here: \#’
+Full list of supported models and recipes steps can be found here:
 `vignette("supported-models")`.
 
 ## contributing

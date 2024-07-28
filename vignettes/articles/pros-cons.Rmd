@@ -1,0 +1,64 @@
+---
+title: "Pros and Cons"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The orbital package like any other package isn't a magic bullet and will therefore come with pros and cons with its use. Please read this page to help you determine if this package is right for your task.
+
+All of these bullets are answers to the question "Why should I use orbital over tidymodels directly".
+
+## Pros
+
+### Smaller object size
+
+The orbital object is going to have a smaller memory footprint than the original workflow. Even smaller than the [butchered](https://butcher.tidymodels.org/) version of the workflow.
+
+This is happening because the orbital object is only saving the operations and information that is needed to perform prediction. Any model diagnostic can't be done on orbital objects. The orbital size isn't the minimum size possible to perform predictions, but considerably smaller than the workflow size.
+
+### Fewer dependencies needed
+
+When predicting with a workflow object you need to load several packages. These include; workflows, parsnip, recipes, the engine model and the possible additional packages supporting specific recipes steps. Each of these packages imports their own packages as well. When predicting with an orbital object you need the orbital package, which imports cli, rlang, and dplyr. 
+
+This hopefully leads to a smaller and easier-to-handle production environment.
+
+### Prediction in databases
+
+Prediction using orbital objects can be done directly using databases such as SQL, spark, duckdb and arrow as seen in [Using Databases](databases.html).
+
+### Code generation
+
+Orbital provides some code generation functions to be able to do predictions in other manners. One such function is `orbital_sql()` which you can use to generate SQL which when run mimics the prediction.
+
+This means that with a little bit of work, you can do R-less prediction, directly in a database.
+
+## Cons
+
+### Not all models are supported
+
+The main con for most people will be that their workflow uses a model or recipe that isn't supported. Sometimes you can fix this by using a slightly different model or changing the recipe a little.
+
+If you suspect a model or recipes step could be supported but isn't right now, please [file an issue](https://github.com/tidymodels/orbital/issues). But there are groups of models that just don't work in this framework due to their nature. Please note that models will have to work in and out of SQL and spark with few exceptions. 
+
+### Doesn't do input checking
+
+Tidymodels provides a lot of input checking and error handling to make sure that you know what is happening when something goes wrong. Orbital doesn't do any of that. So it is up to you to make sure that the data used for prediction has the right types.
+
+### Can't guarantee predictions speed
+
+Predictions from orbital objects will generally be pretty fast, but they are unlikely to be faster, and sometimes they will be slower. This is because many of these operations are done column by column, whereas the original implementation uses something faster, such as linear algebra.
+
+### Factors are not universally supported
+
+Care has been taken to try to maintain variable types, but sometimes, especially with factors they won't be. They will be converted to character vectors, especially in databases where factors aren't a thing.
+
+This should not be a big deal most of the time, but it is a known downside.
+
+### Modifies the whole data set
+
+Modifications are done to the data itself. So if you are applying the changes using `orbital_inline()` then the resulting data will be unlikely to be useful by itself other than the predictions themselves.
