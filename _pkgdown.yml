@@ -24,6 +24,7 @@ reference:
       An orbital object can be predicted with, using data.frames or connections to data bases.
     contents:
       - predict.orbital_class
+      - augment.orbital_class
   - title: Code generation
     desc: >
       An orbital object can be turned into code itself that produces the same output as 
