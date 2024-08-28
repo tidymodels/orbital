@@ -15,6 +15,7 @@ BugReports: https://github.com/tidymodels/orbital/issues
 Imports: 
     cli,
     dplyr,
+    generics (>= 0.1.2),
     rlang
 Suggests:
     arrow,
