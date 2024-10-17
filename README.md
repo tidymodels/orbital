@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# orbital
+# orbital <a href="https://orbital.tidymodels.org"><img src="man/figures/logo.png" align="right" height="138" alt="orbital website" /></a>
 
 <!-- badges: start -->
 
@@ -152,9 +152,6 @@ library(sparklyr)
 #> The following object is masked from 'package:stats':
 #> 
 #>     filter
-```
-
-``` r
 sc <- spark_connect(master = "local")
 
 sc_mtcars <- copy_to(sc, mtcars, overwrite = TRUE)
