@@ -4,12 +4,17 @@
 \alias{orbital}
 \title{Turn tidymodels objects into orbital objects}
 \usage{
-orbital(x, ...)
+orbital(x, ..., prefix = ".pred")
 }
 \arguments{
 \item{x}{A fitted workflow, parsnip, or recipes object.}
 
 \item{...}{Not currently used.}
+
+\item{prefix}{A single string, specifies the prediction naming scheme.
+If \code{x} produces a prediction, tidymodels standards dictate that the
+predictions will start with \code{.pred}. This is not a valid name for
+some data bases.}
 }
 \value{
 An \link{orbital} object.

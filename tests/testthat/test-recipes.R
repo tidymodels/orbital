@@ -39,3 +39,17 @@ test_that("recipe works with skip argument", {
 
   expect_equal(res, exp)
 })
+
+test_that("prefix argument works", {
+  skip_if_not_installed("recipes")
+
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+    recipes::step_normalize(recipes::all_numeric_predictors())
+
+  rec_fit <- recipes::prep(rec_spec)
+
+  orb_obj <- orbital(rec_fit, prefix = "pred")
+
+  expect_false("pred" %in% names(orb_obj))
+  expect_false(".pred" %in% names(orb_obj))
+})

@@ -1,6 +1,6 @@
 
 #' @export
-orbital.recipe <- function(x, eqs = NULL, ...) {
+orbital.recipe <- function(x, eqs = NULL, ..., prefix = ".pred") {
   rlang::check_installed("glue")
   if (!recipes::fully_trained(x)) {
     cli::cli_abort("recipe must be fully trained.")
@@ -15,7 +15,12 @@ orbital.recipe <- function(x, eqs = NULL, ...) {
 
   n_steps <- length(x$steps)
 
-  out <- c(.pred = unname(eqs))
+  if (is.null(eqs)) {
+    out <- c()
+  } else {
+    out <- stats::setNames(unname(eqs), prefix)
+  }
+
   for (step in rev(x$steps)) {
     if (step$skip) {
       next

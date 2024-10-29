@@ -1,4 +1,4 @@
-# multiplication works
+# normal usage works works
 
     Code
       orbital(wf_fit)

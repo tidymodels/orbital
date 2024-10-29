@@ -6,6 +6,10 @@
 #' 
 #' @param x A fitted workflow, parsnip, or recipes object.
 #' @param ... Not currently used.
+#' @param prefix A single string, specifies the prediction naming scheme.
+#'   If `x` produces a prediction, tidymodels standards dictate that the 
+#'   predictions will start with `.pred`. This is not a valid name for 
+#'   some data bases.
 #' 
 #' @returns An [orbital] object.
 #' 
@@ -54,7 +58,7 @@
 #'   orbital()
 #' 
 #' @export
-orbital <- function(x, ...) {
+orbital <- function(x, ..., prefix = ".pred") {
   UseMethod("orbital")
 }
 
