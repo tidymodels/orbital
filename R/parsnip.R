@@ -1,5 +1,5 @@
 #' @export
-orbital.model_fit <- function(x, ...) {
+orbital.model_fit <- function(x, ..., prefix = ".pred") {
   res <- tryCatch(
     tidypredict::tidypredict_fit(x),
     error = function(cnd) {
@@ -17,7 +17,7 @@ orbital.model_fit <- function(x, ...) {
     }
   )
 
-  res <- c(".pred" = deparse1(res))
+  res <- stats::setNames(deparse1(res), prefix)
   
   new_orbital_class(res)
 }

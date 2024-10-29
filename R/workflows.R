@@ -1,5 +1,5 @@
 #' @export
-orbital.workflow <- function(x, ...) {
+orbital.workflow <- function(x, ..., prefix = ".pred") {
   if (!workflows::is_trained_workflow(x)) {
     cli::cli_abort("{.arg x} must be a fully trained {.cls workflow}.")
   }
@@ -9,14 +9,14 @@ orbital.workflow <- function(x, ...) {
   }
 
   model_fit <- workflows::extract_fit_parsnip(x)
-  out <- orbital(model_fit)
+  out <- orbital(model_fit, prefix = prefix)
   
   preprocessor <- workflows::extract_preprocessor(x)
 
   if (inherits(preprocessor, "recipe")) {
     recipe_fit <- workflows::extract_recipe(x)
 
-    out <- orbital(recipe_fit, out)
+    out <- orbital(recipe_fit, out, prefix = prefix)
   }
 
   new_orbital_class(out)
