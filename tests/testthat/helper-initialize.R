@@ -30,7 +30,7 @@ testthat_spark_connection <- function() {
 }
 
 testthat_method_connection <- function() {
-	sc <- spark_connect(
+	sc <- sparklyr::spark_connect(
 		master = using_master_get(),
 		method = using_method_get()
 	)
@@ -44,7 +44,7 @@ testthat_shell_connection <- function(method = "shell") {
 
 	if (connected) {
 		sc <- testthat_spark_connection_object()
-		connected <- connection_is_open(sc)
+		connected <- sparklyr::connection_is_open(sc)
 	}
 
 	if (Sys.getenv("INSTALL_WINUTILS") == "true") {
@@ -70,7 +70,7 @@ testthat_shell_connection <- function(method = "shell") {
 		packages <- NULL
 		if (spark_version >= "2.4.2") packages <- c(packages, "delta")
 
-		sc <- spark_connect(
+		sc <- sparklyr::spark_connect(
 			master = "local",
 			method = method,
 			version = spark_version,
@@ -91,7 +91,7 @@ testthat_livy_connection <- function() {
 
 		spark_version <- testthat_spark_env_version()
 
-		livy_service_start(
+		sparklyr::livy_service_start(
 			version = using_livy_version(),
 			spark_version = spark_version
 		)
@@ -102,7 +102,7 @@ testthat_livy_connection <- function() {
 			timeout_s = 30
 		)
 
-		sc <- spark_connect(
+		sc <- sparklyr::spark_connect(
 			master = "http://localhost:8998",
 			method = "livy",
 			version = spark_version
