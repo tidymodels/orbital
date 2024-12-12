@@ -57,7 +57,7 @@ testthat_shell_connection <- function(method = "shell") {
 		options(sparklyr.na.omit.verbose = TRUE)
 		options(sparklyr.na.action.verbose = TRUE)
 
-		config <- spark_config()
+		config <- sparklyr::spark_config()
 		config[["sparklyr.shell.driver-memory"]] <- "3G"
 		config[["sparklyr.apply.env.foo"]] <- "env-test"
 		config[["spark.sql.warehouse.dir"]] <- get_spark_warehouse_dir()
