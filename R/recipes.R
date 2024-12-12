@@ -1,60 +1,59 @@
-
 #' @export
 orbital.recipe <- function(x, eqs = NULL, ..., prefix = ".pred") {
-  rlang::check_installed("glue")
-  if (!recipes::fully_trained(x)) {
-    cli::cli_abort("recipe must be fully trained.")
-  }
+	rlang::check_installed("glue")
+	if (!recipes::fully_trained(x)) {
+		cli::cli_abort("recipe must be fully trained.")
+	}
 
-  if (is.null(eqs)) {
-    terms <- x$term_info
-    all_vars <- terms$variable[terms$role == "predictor"]
-  } else {
-    all_vars <- all.vars(rlang::parse_expr(eqs))
-  }
+	if (is.null(eqs)) {
+		terms <- x$term_info
+		all_vars <- terms$variable[terms$role == "predictor"]
+	} else {
+		all_vars <- all.vars(rlang::parse_expr(eqs))
+	}
 
-  n_steps <- length(x$steps)
+	n_steps <- length(x$steps)
 
-  if (is.null(eqs)) {
-    out <- c()
-  } else {
-    out <- stats::setNames(unname(eqs), prefix)
-  }
+	if (is.null(eqs)) {
+		out <- c()
+	} else {
+		out <- stats::setNames(unname(eqs), prefix)
+	}
 
-  for (step in rev(x$steps)) {
-    if (step$skip) {
-      next
-    }
-    res <- tryCatch(
-      orbital(step, all_vars),
-      error = function(cnd) {
-        if (grepl("not implemented", cnd$message)) {
-          cls <- class(step)
-          cls <- setdiff(cls, "step")
-  
-          cli::cli_abort(
-            "The recipe step {.fun {cls}} is not supported.",
-            call = rlang::call2("orbital")
-          )
-        }
-        stop(cnd)
-      }
-    )
+	for (step in rev(x$steps)) {
+		if (step$skip) {
+			next
+		}
+		res <- tryCatch(
+			orbital(step, all_vars),
+			error = function(cnd) {
+				if (grepl("not implemented", cnd$message)) {
+					cls <- class(step)
+					cls <- setdiff(cls, "step")
 
-    out <- c(res, out)
+					cli::cli_abort(
+						"The recipe step {.fun {cls}} is not supported.",
+						call = rlang::call2("orbital")
+					)
+				}
+				stop(cnd)
+			}
+		)
 
-    if (!is.null(res)) {
-      new_vars <- rlang::parse_exprs(res)
-      new_vars <- lapply(new_vars, all.vars)
-      new_vars <- unlist(new_vars)
-      new_vars <- unique(new_vars)
-      all_vars <- unique(c(all_vars, new_vars))
-    }
-  }
+		out <- c(res, out)
 
-  if (is.null(out)) {
-    out <- character()
-  }
+		if (!is.null(res)) {
+			new_vars <- rlang::parse_exprs(res)
+			new_vars <- lapply(new_vars, all.vars)
+			new_vars <- unlist(new_vars)
+			new_vars <- unique(new_vars)
+			all_vars <- unique(c(all_vars, new_vars))
+		}
+	}
 
-  new_orbital_class(out)
+	if (is.null(out)) {
+		out <- character()
+	}
+
+	new_orbital_class(out)
 }

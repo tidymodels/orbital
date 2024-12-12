@@ -1,23 +1,23 @@
 #' @export
 orbital.workflow <- function(x, ..., prefix = ".pred") {
-  if (!workflows::is_trained_workflow(x)) {
-    cli::cli_abort("{.arg x} must be a fully trained {.cls workflow}.")
-  }
+	if (!workflows::is_trained_workflow(x)) {
+		cli::cli_abort("{.arg x} must be a fully trained {.cls workflow}.")
+	}
 
-  if (length(x$post$actions) != 0) {
-    cli::cli_abort("post-processing is not yet supported in orbital.")
-  }
+	if (length(x$post$actions) != 0) {
+		cli::cli_abort("post-processing is not yet supported in orbital.")
+	}
 
-  model_fit <- workflows::extract_fit_parsnip(x)
-  out <- orbital(model_fit, prefix = prefix)
-  
-  preprocessor <- workflows::extract_preprocessor(x)
+	model_fit <- workflows::extract_fit_parsnip(x)
+	out <- orbital(model_fit, prefix = prefix)
 
-  if (inherits(preprocessor, "recipe")) {
-    recipe_fit <- workflows::extract_recipe(x)
+	preprocessor <- workflows::extract_preprocessor(x)
 
-    out <- orbital(recipe_fit, out, prefix = prefix)
-  }
+	if (inherits(preprocessor, "recipe")) {
+		recipe_fit <- workflows::extract_recipe(x)
 
-  new_orbital_class(out)
+		out <- orbital(recipe_fit, out, prefix = prefix)
+	}
+
+	new_orbital_class(out)
 }
