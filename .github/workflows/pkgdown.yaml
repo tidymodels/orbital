@@ -48,8 +48,10 @@ jobs:
         if: steps.cache-spark.outputs.cache-hit != 'true'
         run: |
           sparklyr::spark_install(
-            version = Sys.getenv("3.3.4"),
-            hadoop_version = Sys.getenv("3")
+            version = "3.3.4",
+            hadoop_version = "3"
+          )
+        shell: Rscript {0}
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
