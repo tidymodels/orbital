@@ -28,7 +28,7 @@ test_that("step_discretize works num_breaks = 2", {
 
 	suppressWarnings(
 		rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-			recipes::step_discretize(vs, am, min_unique = 1, num_breaks = 2) %>%
+			recipes::step_discretize(vs, am, num_breaks = 2) %>%
 			recipes::prep()
 	)
 
@@ -36,8 +36,6 @@ test_that("step_discretize works num_breaks = 2", {
 
 	exp <- recipes::bake(rec, new_data = mtcars)
 	exp <- exp[names(res)]
-	exp$am <- as.character(exp$am)
-	exp$vs <- as.character(exp$vs)
 
 	expect_equal(res, exp)
 })
