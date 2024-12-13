@@ -1,25 +1,25 @@
 test_that("dt works", {
-  skip_if_not_installed("recipes")
-  skip_if_not_installed("dbplyr")
-  skip_if_not_installed("dtplyr")
-  skip_if_not_installed("tidypredict")
-  skip_if_not_installed("workflows")
-  
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_normalize(recipes::all_numeric_predictors())
+	skip_if_not_installed("recipes")
+	skip_if_not_installed("dbplyr")
+	skip_if_not_installed("dtplyr")
+	skip_if_not_installed("tidypredict")
+	skip_if_not_installed("workflows")
 
-  lm_spec <- parsnip::linear_reg()
+	rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+		recipes::step_normalize(recipes::all_numeric_predictors())
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_recipe(rec_spec) %>%
-    workflows::add_model(lm_spec)
+	lm_spec <- parsnip::linear_reg()
 
-  wf_fit <- parsnip::fit(wf_spec, mtcars)
+	wf_spec <- workflows::workflow() %>%
+		workflows::add_recipe(rec_spec) %>%
+		workflows::add_model(lm_spec)
 
-  obj <- orbital(wf_fit)
+	wf_fit <- parsnip::fit(wf_spec, mtcars)
 
-  expect_snapshot(
-    transform = orbital:::pretty_print,
-    orbital_dt(obj)
-  )
+	obj <- orbital(wf_fit)
+
+	expect_snapshot(
+		transform = orbital:::pretty_print,
+		orbital_dt(obj)
+	)
 })
