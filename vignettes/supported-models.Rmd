@@ -7,29 +7,68 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-The supported models currently all come from [tidypredict](https://tidypredict.tidymodels.org/) right now.
+The supported methods currently all come from [tidypredict](https://tidypredict.tidymodels.org/) right now.
 
 ## Supported models
 
-The following models are supported by `tidypredict`:
+This table doesn't exhaustively list fully unsupported models. Please file [an issue](https://github.com/tidymodels/orbital/issues) to add model to table.
 
-- Linear Regression - `lm()`
-- Generalized Linear model - `glm()`
-- Random Forest models - `randomForest::randomForest()`
-- Random Forest models, via `ranger` - `ranger::ranger()`
-- MARS models - `earth::earth()`
-- XGBoost models - `xgboost::xgb.Booster.complete()` 
-- Cubist models - `Cubist::cubist()` 
-- Tree models, via `partykit` - `partykit::ctree()` 
+```{r}
+#| echo: false
+#| message: false
+if (!rlang::is_installed(c("gt", "tibble"))) {
+  knitr::knit_exit()
+}
+```
 
-### `parsnip` 
+```{r}
+#| echo: false
+#| message: false
+library(gt)
+library(dplyr)
 
-`tidypredict` supports models fitted via the `parsnip` interface. The ones confirmed currently work in `tidypredict` are:
-
-- `lm()` - `parsnip`: `linear_reg()` with *"lm"* as the engine.
-- `randomForest::randomForest()` - `parsnip`: `rand_forest()` with *"randomForest"* as the engine.
-- `ranger::ranger()` - `parsnip`: `rand_forest()` with *"ranger"* as the engine.
-- `earth::earth()`  - `parsnip`: `mars()` with *"earth"* as the engine.
+tibble::tribble(
+  ~parsnip,               ~engine,              ~numeric, ~class, ~prob,
+  "`boost_tree()`",       "`\"xgboost\"`",      "✅",     "⚪",    "⚪",
+  "`cubist_rules()`",     "`\"Cubist\"`",       "✅",     "❌",    "❌",
+  "`decision_tree()`",    "`\"partykit\"`",     "✅",     "⚪",    "⚪",
+  "`linear_reg()`",       "`\"lm\"`",           "✅",     "❌",    "❌",
+  "`linear_reg()`",       "`\"glmnet\"`",       "⚪",     "❌",    "❌",
+  "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "⚪",
+  "`logistic_reg()`",     "`\"glmnet\"`",       "❌",     "⚪",    "⚪",
+  "`mars()`",             "`\"earth\"`",        "✅",     "⚪",    "⚪",
+  "`naive_Bayes()`",      "`\"naivebayes\"`",   "❌",     "⚪",    "⚪",
+  "`nearest_neighbor()`", "`any`",              "❌",     "❌",    "❌", 
+  "`rand_forest()`",      "`\"randomForest\"`", "✅",     "⚪",    "⚪",
+  "`rand_forest()`",      "`\"ranger\"`",       "✅",     "⚪",    "⚪"
+) |>
+  gt() |>
+  tab_spanner(
+    label = "Model",
+    columns = c(parsnip, engine)
+  ) |>
+  tab_spanner(
+    label = "Regression",
+    columns = c(numeric)
+  ) |>
+  tab_spanner(
+    label = "Classification",
+    columns = c(class, prob)
+  ) |>
+  tab_header(
+    title = "Supported Prediction Types"
+  ) |>
+  cols_align(
+    "center",
+    columns = c(numeric, class, prob)
+  ) |>
+  tab_footnote("✅: Supported") |>
+  tab_footnote("❌: Cannot be supported") |>
+  tab_footnote("⚪: Not yet supported") |>
+  fmt_markdown(
+    columns = c(parsnip, engine)
+  )
+```
 
 ## Recipes steps
 
