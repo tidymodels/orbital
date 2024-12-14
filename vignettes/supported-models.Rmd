@@ -11,13 +11,19 @@ The supported methods currently all come from [tidypredict](https://tidypredict.
 
 ## Supported models
 
+This table doesn't exhaustively list fully unsupported models. Please file [an issue](https://github.com/tidymodels/orbital/issues) to add model to table.
+
 ```{r}
+#| echo: false
+#| message: false
 if (!rlang::is_installed(c("gt", "tibble"))) {
   knitr::knit_exit()
 }
 ```
 
 ```{r}
+#| echo: false
+#| message: false
 library(gt)
 library(dplyr)
 
@@ -63,8 +69,6 @@ tibble::tribble(
     columns = c(parsnip, engine)
   )
 ```
-
-This table doesn't exhaustively list fully unsupported models. Please file [an issue](https://github.com/tidymodels/orbital/issues) to add model to table.
 
 ## Recipes steps
 
