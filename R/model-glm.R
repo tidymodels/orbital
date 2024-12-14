@@ -10,9 +10,7 @@ orbital.glm <- function(x, ..., mode = c("classification", "regression")) {
 		res <- glue::glue(
 			"dplyr::case_when({res} < 0.5 ~ {levels[1]}, .default = {levels[2]})"
 		)
-	}
-
-	if (mode == "regression") {
+	} else if (mode == "regression") {
 		res <- tidypredict::tidypredict_fit(x)
 	}
 	res
