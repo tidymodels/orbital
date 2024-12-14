@@ -27,7 +27,11 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 
 	if (mode == "classification") {
 		names <- NULL
-		type <- type %||% "class"
+
+		if (is.null(type)) {
+			type <- "class"
+		}
+
 		if ("class" %in% type) {
 			names <- c(names, paste0(prefix, "_class"))
 		}

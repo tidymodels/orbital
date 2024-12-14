@@ -14,7 +14,9 @@ orbital.glm <- function(
 		eq <- tidypredict::tidypredict_fit(x)
 		eq <- deparse1(eq)
 
-		type <- type %||% "class"
+		if (is.null(type)) {
+			type <- "class"
+		}
 
 		res <- NULL
 		if ("class" %in% type) {
