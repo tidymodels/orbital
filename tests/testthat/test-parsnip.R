@@ -32,4 +32,30 @@ test_that("prefix argument works", {
 
 	expect_true("pred" %in% names(orb_obj))
 	expect_false(".pred" %in% names(orb_obj))
+
+	lr_spec <- parsnip::logistic_reg()
+
+	mtcars$vs <- factor(mtcars$vs)
+
+	lr_fit <- parsnip::fit(lr_spec, vs ~ disp, mtcars)
+
+	orb_obj <- orbital(lr_fit, prefix = "pred")
+
+	expect_true("pred_class" %in% names(orb_obj))
+	expect_false(".pred_class" %in% names(orb_obj))
+})
+
+test_that("errors on invalid modes", {
+	skip_if_not_installed("parsnip")
+
+	lm_spec <- parsnip::linear_reg()
+
+	lm_fit <- parsnip::fit(lm_spec, mpg ~ ., mtcars)
+
+	lm_fit$spec$mode <- "invalid mode"
+
+	expect_snapshot(
+		error = TRUE,
+		orbital(lm_fit)
+	)
 })
