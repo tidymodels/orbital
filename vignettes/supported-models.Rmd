@@ -34,7 +34,7 @@ tibble::tribble(
   "`decision_tree()`",    "`\"partykit\"`",     "✅",     "⚪",    "⚪",
   "`linear_reg()`",       "`\"lm\"`",           "✅",     "❌",    "❌",
   "`linear_reg()`",       "`\"glmnet\"`",       "⚪",     "❌",    "❌",
-  "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "⚪",
+  "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "✅",
   "`logistic_reg()`",     "`\"glmnet\"`",       "❌",     "⚪",    "⚪",
   "`mars()`",             "`\"earth\"`",        "✅",     "⚪",    "⚪",
   "`naive_Bayes()`",      "`\"naivebayes\"`",   "❌",     "⚪",    "⚪",

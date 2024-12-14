@@ -4,7 +4,9 @@
 
 * `orbital()` gained `prefix` argument to allow for renaming of prediction columns. (#59)
 
-* `orbital()` now works with `logistic_reg()` models. (#62)
+* `orbital()` now works with `logistic_reg()` models for class prediction and probability predictions. (#62, #66)
+
+* `orbital()` has gained `type` argument to change prediction type. (#66)
 
 # orbital 0.2.0
 

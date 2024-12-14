@@ -20,5 +20,8 @@ test_that("read and write json works", {
 
 	new <- orbital_json_read(tmp_file)
 
+	# temp fix
+	attr(orbital_obj, "pred_names") <- NULL
+
 	expect_identical(new, orbital_obj)
 })

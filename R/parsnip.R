@@ -1,10 +1,10 @@
 #' @export
-orbital.model_fit <- function(x, ..., prefix = ".pred") {
+orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 	mode <- x$spec$mode
-
 	check_mode(mode)
+	check_type(type, mode)
 
-	res <- try(orbital(x$fit, mode = mode), silent = TRUE)
+	res <- try(orbital(x$fit, mode = mode, type = type), silent = TRUE)
 
 	if (inherits(res, "try-error")) {
 		res <- tryCatch(
@@ -26,14 +26,29 @@ orbital.model_fit <- function(x, ..., prefix = ".pred") {
 	}
 
 	if (mode == "classification") {
-		prefix <- paste0(prefix, "_class")
+		names <- NULL
+
+		if (is.null(type)) {
+			type <- "class"
+		}
+
+		if ("class" %in% type) {
+			names <- c(names, paste0(prefix, "_class"))
+		}
+		if ("prob" %in% type) {
+			names <- c(names, paste0(prefix, "_", x$lvl))
+		}
+	}
+	if (mode == "regression") {
+		names <- prefix
 	}
 
 	if (is.language(res)) {
 		res <- deparse1(res)
 	}
 
-	res <- stats::setNames(res, prefix)
+	attr(res, "pred_names") <- names
+	res <- stats::setNames(res, names)
 
 	new_orbital_class(res)
 }
@@ -50,6 +65,30 @@ check_mode <- function(mode, call = rlang::caller_env()) {
 		cli::cli_abort(
 			"Only models with modes {.val {supported_modes}} are supported. 
       Not {.val {mode}}.",
+			call = call
+		)
+	}
+}
+
+check_type <- function(type, mode, call = rlang::caller_env()) {
+	if (is.null(type)) {
+		return(invisible())
+	}
+
+	supported_types <- c("numeric", "class", "prob")
+	rlang::arg_match(type, supported_types, multiple = TRUE, error_call = call)
+
+	if (mode == "regression" && any(!type %in% "numeric")) {
+		cli::cli_abort(
+			"{.arg type} can only be {.val numeric} for model with mode 
+			{.val regression}, not {.val {type}}.",
+			call = call
+		)
+	}
+	if (mode == "classification" && any(!type %in% c("class", "prob"))) {
+		cli::cli_abort(
+			"{.arg type} can only be {.val class} or {.val prob} for model with mode 
+			{.val classification}, not {.val {type}}.",
 			call = call
 		)
 	}
