@@ -12,6 +12,12 @@ The supported methods currently all come from [tidypredict](https://tidypredict.
 ## Supported models
 
 ```{r}
+if (!rlang::is_installed(c("gt", "tibble"))) {
+  knitr::knit_exit()
+}
+```
+
+```{r}
 library(gt)
 library(dplyr)
 
