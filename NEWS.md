@@ -6,6 +6,8 @@
 
 * `orbital()` now works with `logistic_reg()` models. (#62)
 
+* `orbital()` has gained `type` argument to change prediction type. (#66)
+
 # orbital 0.2.0
 
 * Support for `step_dummy()`,  `step_impute_mean()`, `step_impute_median()`, `step_impute_mode()`,  `step_unknown()`, `step_novel()`, `step_other()`, `step_BoxCox()`, `step_inverse()`, `step_mutate()`, `step_sqrt()`, `step_indicate_na()`, `step_range()`, `step_intercept()`, `step_ratio()`, `step_lag()`, `step_log()`, `step_rename()` has been added. (#17)

@@ -4,7 +4,7 @@
 \alias{orbital}
 \title{Turn tidymodels objects into orbital objects}
 \usage{
-orbital(x, ..., prefix = ".pred")
+orbital(x, ..., prefix = ".pred", type = NULL)
 }
 \arguments{
 \item{x}{A fitted workflow, parsnip, or recipes object.}
@@ -15,6 +15,12 @@ orbital(x, ..., prefix = ".pred")
 If \code{x} produces a prediction, tidymodels standards dictate that the
 predictions will start with \code{.pred}. This is not a valid name for
 some data bases.}
+
+\item{type}{A vector of strings, specifies the prediction type. Regression
+models allow for \code{"numeric"} and classification models allow for \code{"class"}
+and \code{"prob"}. Multiple values are allowed to produce hard and soft
+predictions for classification models. Defaults to \code{NULL} which defaults to
+\code{"numeric"} for regression models and \code{"class"} for classification models.}
 }
 \value{
 An \link{orbital} object.

@@ -10,6 +10,11 @@
 #'   If `x` produces a prediction, tidymodels standards dictate that the
 #'   predictions will start with `.pred`. This is not a valid name for
 #'   some data bases.
+#' @param type A vector of strings, specifies the prediction type. Regression
+#'   models allow for `"numeric"` and classification models allow for `"class"`
+#'   and `"prob"`. Multiple values are allowed to produce hard and soft
+#'   predictions for classification models. Defaults to `NULL` which defaults to
+#'   `"numeric"` for regression models and `"class"` for classification models.
 #'
 #' @returns An [orbital] object.
 #'
@@ -58,7 +63,7 @@
 #'   orbital()
 #'
 #' @export
-orbital <- function(x, ..., prefix = ".pred") {
+orbital <- function(x, ..., prefix = ".pred", type = NULL) {
 	UseMethod("orbital")
 }
 

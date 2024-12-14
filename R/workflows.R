@@ -1,5 +1,5 @@
 #' @export
-orbital.workflow <- function(x, ..., prefix = ".pred") {
+orbital.workflow <- function(x, ..., prefix = ".pred", type = NULL) {
 	if (!workflows::is_trained_workflow(x)) {
 		cli::cli_abort("{.arg x} must be a fully trained {.cls workflow}.")
 	}
@@ -9,7 +9,7 @@ orbital.workflow <- function(x, ..., prefix = ".pred") {
 	}
 
 	model_fit <- workflows::extract_fit_parsnip(x)
-	out <- orbital(model_fit, prefix = prefix)
+	out <- orbital(model_fit, prefix = prefix, type = type)
 
 	preprocessor <- workflows::extract_preprocessor(x)
 

@@ -1,8 +1,8 @@
 #' @export
-orbital.model_fit <- function(x, ..., prefix = ".pred") {
+orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 	mode <- x$spec$mode
-
 	check_mode(mode)
+	check_type(type, mode)
 
 	res <- try(orbital(x$fit, mode = mode), silent = TRUE)
 
@@ -50,6 +50,30 @@ check_mode <- function(mode, call = rlang::caller_env()) {
 		cli::cli_abort(
 			"Only models with modes {.val {supported_modes}} are supported. 
       Not {.val {mode}}.",
+			call = call
+		)
+	}
+}
+
+check_type <- function(type, mode, call = rlang::caller_env()) {
+	if (is.null(type)) {
+		return(invisible())
+	}
+
+	supported_types <- c("numeric", "class", "prob")
+	rlang::arg_match(type, supported_types, multiple = TRUE, error_call = call)
+
+	if (mode == "regression" && any(!type %in% "numeric")) {
+		cli::cli_abort(
+			"{.arg type} can only be {.val numeric} for models with mode 
+			{.val regression}, not {.val {type}}.",
+			call = call
+		)
+	}
+	if (mode == "classification" && any(!type %in% c("class", "prob"))) {
+		cli::cli_abort(
+			"{.arg type} can only be {.val class} or {.val prob} for models with mode 
+			{.val classification}, not {.val {type}}.",
 			call = call
 		)
 	}
