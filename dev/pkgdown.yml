@@ -6,7 +6,7 @@ articles:
   articles/orbital: orbital.html
   articles/pros-cons: pros-cons.html
   supported-models: supported-models.html
-last_built: 2024-12-13T23:56Z
+last_built: 2024-12-14T00:59Z
 urls:
   reference: https://orbital.tidymodels.org/reference
   article: https://orbital.tidymodels.org/articles
