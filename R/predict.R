@@ -38,8 +38,10 @@ predict.orbital_class <- function(object, new_data, ...) {
 	rlang::check_dots_empty()
 	res <- dplyr::mutate(new_data, !!!orbital_inline(object))
 
-	pred_name <- names(object)[length(object)]
-	res <- dplyr::select(res, dplyr::any_of(pred_name))
+	pred_name <- attr(object, "pred_names")
+	if (!is.null(pred_name)) {
+		res <- dplyr::select(res, dplyr::any_of(pred_name))
+	}
 
 	res
 }

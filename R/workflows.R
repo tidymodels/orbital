@@ -16,7 +16,9 @@ orbital.workflow <- function(x, ..., prefix = ".pred", type = NULL) {
 	if (inherits(preprocessor, "recipe")) {
 		recipe_fit <- workflows::extract_recipe(x)
 
+		pred_names <- attr(out, "pred_names")
 		out <- orbital(recipe_fit, out, prefix = prefix)
+		attr(out, "pred_names") <- pred_names
 	}
 
 	new_orbital_class(out)

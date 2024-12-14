@@ -4,7 +4,7 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 	check_mode(mode)
 	check_type(type, mode)
 
-	res <- try(orbital(x$fit, mode = mode), silent = TRUE)
+	res <- try(orbital(x$fit, mode = mode, type = type), silent = TRUE)
 
 	if (inherits(res, "try-error")) {
 		res <- tryCatch(
@@ -26,14 +26,25 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 	}
 
 	if (mode == "classification") {
-		prefix <- paste0(prefix, "_class")
+		names <- NULL
+		type <- type %||% "class"
+		if ("class" %in% type) {
+			names <- c(names, paste0(prefix, "_class"))
+		}
+		if ("prob" %in% type) {
+			names <- c(names, paste0(prefix, "_", x$lvl))
+		}
+	}
+	if (mode == "regression") {
+		names <- prefix
 	}
 
 	if (is.language(res)) {
 		res <- deparse1(res)
 	}
 
-	res <- stats::setNames(res, prefix)
+	attr(res, "pred_names") <- names
+	res <- stats::setNames(res, names)
 
 	new_orbital_class(res)
 }
