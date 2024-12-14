@@ -16,15 +16,16 @@ library(gt)
 library(dplyr)
 
 tibble::tribble(
-  ~parsnip,            ~engine,              ~numeric, ~class, ~prob,
-  "`boost_tree()`",    "`\"xgboost\"`",      "✅",     "⚪",    "⚪",
-  "`cubist_rules()`",  "`\"Cubist\"`",       "✅",     "❌",    "❌",
-  "`decision_tree()`", "`\"partykit\"`",     "✅",     "⚪",    "⚪",
-  "`linear_reg()`",    "`\"lm\"`",           "✅",     "❌",    "❌",
-  "`logistic_reg()`",  "`\"glm\"`",          "❌",     "✅",    "⚪",
-  "`mars()`",          "`\"earth\"`",        "✅",     "⚪",    "⚪",
-  "`rand_forest()`",   "`\"randomForest\"`", "✅",     "⚪",    "⚪",
-  "`rand_forest()`",   "`\"ranger\"`",       "✅",     "⚪",    "⚪"
+  ~parsnip,               ~engine,              ~numeric, ~class, ~prob,
+  "`boost_tree()`",       "`\"xgboost\"`",      "✅",     "⚪",    "⚪",
+  "`cubist_rules()`",     "`\"Cubist\"`",       "✅",     "❌",    "❌",
+  "`decision_tree()`",    "`\"partykit\"`",     "✅",     "⚪",    "⚪",
+  "`linear_reg()`",       "`\"lm\"`",           "✅",     "❌",    "❌",
+  "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "⚪",
+  "`mars()`",             "`\"earth\"`",        "✅",     "⚪",    "⚪",
+  "`nearest_neighbor()`", "`any`",                "❌",     "❌",    "❌", 
+  "`rand_forest()`",      "`\"randomForest\"`", "✅",     "⚪",    "⚪",
+  "`rand_forest()`",      "`\"ranger\"`",       "✅",     "⚪",    "⚪"
 ) |>
   gt() |>
   tab_spanner(
