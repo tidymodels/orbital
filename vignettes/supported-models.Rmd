@@ -27,9 +27,12 @@ tibble::tribble(
   "`cubist_rules()`",     "`\"Cubist\"`",       "✅",     "❌",    "❌",
   "`decision_tree()`",    "`\"partykit\"`",     "✅",     "⚪",    "⚪",
   "`linear_reg()`",       "`\"lm\"`",           "✅",     "❌",    "❌",
+  "`linear_reg()`",       "`\"glmnet\"`",       "⚪",     "❌",    "❌",
   "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "⚪",
+  "`logistic_reg()`",     "`\"glmnet\"`",       "❌",     "⚪",    "⚪",
   "`mars()`",             "`\"earth\"`",        "✅",     "⚪",    "⚪",
-  "`nearest_neighbor()`", "`any`",                "❌",     "❌",    "❌", 
+  "`naive_Bayes()`",      "`\"naivebayes\"`",   "❌",     "⚪",    "⚪",
+  "`nearest_neighbor()`", "`any`",              "❌",     "❌",    "❌", 
   "`rand_forest()`",      "`\"randomForest\"`", "✅",     "⚪",    "⚪",
   "`rand_forest()`",      "`\"ranger\"`",       "✅",     "⚪",    "⚪"
 ) |>
