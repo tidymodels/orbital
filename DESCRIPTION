@@ -39,8 +39,8 @@ Suggests:
     rstanarm,
     sparklyr,
     testthat (>= 3.0.0),
-    tibble,
     themis,
+    tibble,
     tidypredict,
     workflows
 VignetteBuilder: 
