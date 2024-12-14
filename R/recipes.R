@@ -9,7 +9,10 @@ orbital.recipe <- function(x, eqs = NULL, ..., prefix = ".pred") {
 		terms <- x$term_info
 		all_vars <- terms$variable[terms$role == "predictor"]
 	} else {
-		all_vars <- all.vars(rlang::parse_expr(eqs))
+		all_vars <- rlang::parse_exprs(eqs)
+		all_vars <- lapply(all_vars, all.vars)
+		all_vars <- unlist(all_vars, use.names = FALSE)
+		all_vars <- unique(all_vars)
 	}
 
 	n_steps <- length(x$steps)
@@ -17,7 +20,7 @@ orbital.recipe <- function(x, eqs = NULL, ..., prefix = ".pred") {
 	if (is.null(eqs)) {
 		out <- c()
 	} else {
-		out <- stats::setNames(unname(eqs), prefix)
+		out <- unclass(eqs)
 	}
 
 	for (step in rev(x$steps)) {
