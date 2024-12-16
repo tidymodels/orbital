@@ -1,0 +1,59 @@
+#' @export
+orbital.xgb.Booster <- function(
+	x,
+	...,
+	mode = c("classification", "regression"),
+	type = NULL,
+	lvl = NULL
+) {
+	mode <- rlang::arg_match(mode)
+
+	if (mode == "classification") {
+		trees <- tidypredict::.extract_xgb_trees(x)
+
+		trees_split <- split(trees, rep(seq_along(lvl), x$niter))
+		trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
+
+		trees_split <- gsub("dplyr::case_when", "case_when", trees_split)
+		trees_split <- gsub("case_when", "dplyr::case_when", trees_split)
+
+		res <- stats::setNames(trees_split, lvl)
+
+		if (is.null(type)) {
+			type <- "class"
+		}
+
+		if ("class" %in% type) {
+			res <- c(
+				res,
+				".pred_class" = softmax(lvl)
+			)
+		}
+		if ("prob" %in% type) {
+			res <- c(
+				res,
+				"norm" = glue::glue_collapse(glue::glue("exp({lvl})"), sep = " + "),
+				stats::setNames(glue::glue("exp({lvl}) / norm"), NA)
+			)
+		}
+	} else if (mode == "regression") {
+		res <- tidypredict::tidypredict_fit(x)
+	}
+	res
+}
+
+softmax <- function(lvl) {
+	res <- character(0)
+
+	for (i in seq(1, length(lvl) - 1)) {
+		line <- glue::glue("{lvl[i]} > {lvl[-i]}")
+		line <- glue::glue_collapse(line, sep = " & ")
+		line <- glue::glue("{line} ~ {glue::double_quote(lvl[i])}")
+		res[i] <- line
+	}
+
+	res <- glue::glue_collapse(res, ", ")
+	default <- glue::double_quote(lvl[length(lvl)])
+
+	glue::glue("dplyr::case_when({res}, .default = {default})")
+}
