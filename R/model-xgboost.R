@@ -42,14 +42,17 @@ xgboost_multisoft <- function(x, type, lvl) {
 	if ("class" %in% type) {
 		res <- c(
 			res,
-			".pred_class" = softmax(lvl)
+			orbital_tmp_class_name = softmax(lvl)
 		)
 	}
 	if ("prob" %in% type) {
+		eqs <- glue::glue("exp({lvl}) / norm")
+		names(eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
+
 		res <- c(
 			res,
 			"norm" = glue::glue_collapse(glue::glue("exp({lvl})"), sep = " + "),
-			stats::setNames(glue::glue("exp({lvl}) / norm"), NA)
+			eqs
 		)
 	}
 	res
@@ -80,7 +83,7 @@ xgboost_logistic <- function(x, type, lvl) {
 
 		res <- c(
 			res,
-			.pred_class = glue::glue(
+			orbital_tmp_class_name = glue::glue(
 				"dplyr::case_when({eq} > 0.5 ~ {levels[1]}, .default = {levels[2]})"
 			)
 		)
@@ -88,8 +91,8 @@ xgboost_logistic <- function(x, type, lvl) {
 	if ("prob" %in% type) {
 		res <- c(
 			res,
-			glue::glue("{eq}"),
-			glue::glue("1 - ({eq})")
+			orbital_tmp_prob_name1 = glue::glue("{eq}"),
+			orbital_tmp_prob_name2 = glue::glue("1 - ({eq})")
 		)
 	}
 	res
