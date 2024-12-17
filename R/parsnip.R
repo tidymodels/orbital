@@ -4,7 +4,14 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 	check_mode(mode)
 	check_type(type, mode)
 
-	res <- try(orbital(x$fit, mode = mode, type = type), silent = TRUE)
+	if (mode == "classification") {
+		res <- try(
+			orbital(x$fit, mode = mode, type = type, lvl = x$lvl),
+			silent = TRUE
+		)
+	} else {
+		res <- try(orbital(x$fit, mode = mode, type = type), silent = TRUE)
+	}
 
 	if (inherits(res, "try-error")) {
 		res <- tryCatch(
@@ -48,7 +55,19 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 	}
 
 	attr(res, "pred_names") <- names
-	res <- stats::setNames(res, names)
+	if (
+		inherits(x, "_xgb.Booster") &&
+			isTRUE(x$fit$params$objective == "multi:softprob")
+	) {
+		if (anyNA(names(res))) {
+			na_fields <- which(is.na(names(res)))
+			tmp_names <- names(res)
+			tmp_names[na_fields] <- paste0(prefix, "_", x$lvl)
+			names(res) <- tmp_names
+		}
+	} else {
+		res <- stats::setNames(res, names)
+	}
 
 	new_orbital_class(res)
 }
