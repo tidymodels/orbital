@@ -6,6 +6,7 @@ orbital.glm <- function(
 	type = NULL
 ) {
 	mode <- rlang::arg_match(mode)
+	type <- default_type(type)
 
 	if (mode == "classification") {
 		outcome <- names(attr(x$terms, "dataClasses"))[attr(x$terms, "response")]
@@ -13,10 +14,6 @@ orbital.glm <- function(
 		levels <- glue::double_quote(levels)
 		eq <- tidypredict::tidypredict_fit(x)
 		eq <- deparse1(eq)
-
-		if (is.null(type)) {
-			type <- "class"
-		}
 
 		res <- NULL
 		if ("class" %in% type) {

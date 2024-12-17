@@ -7,6 +7,7 @@ orbital.xgb.Booster <- function(
 	lvl = NULL
 ) {
 	mode <- rlang::arg_match(mode)
+	type <- default_type(type)
 
 	if (mode == "classification") {
 		objective <- x$params$objective
@@ -14,10 +15,6 @@ orbital.xgb.Booster <- function(
 			objective,
 			c("multi:softprob", "binary:logistic")
 		)
-
-		if (is.null(type)) {
-			type <- "class"
-		}
 
 		extractor <- switch(
 			objective,

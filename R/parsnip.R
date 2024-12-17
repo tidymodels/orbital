@@ -3,6 +3,7 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 	mode <- x$spec$mode
 	check_mode(mode)
 	check_type(type, mode)
+	type <- default_type(type)
 
 	res <- try(
 		orbital(x$fit, mode = mode, type = type, lvl = x$lvl),
@@ -30,10 +31,6 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 
 	if (mode == "classification") {
 		names <- NULL
-
-		if (is.null(type)) {
-			type <- "class"
-		}
 
 		if ("class" %in% type) {
 			names <- c(names, paste0(prefix, "_class"))
@@ -107,4 +104,12 @@ check_type <- function(type, mode, call = rlang::caller_env()) {
 			call = call
 		)
 	}
+}
+
+default_type <- function(type) {
+	if (is.null(type)) {
+		type <- "class"
+	}
+
+	type
 }
