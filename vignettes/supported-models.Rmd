@@ -29,7 +29,7 @@ library(dplyr)
 
 tibble::tribble(
   ~parsnip,               ~engine,              ~numeric, ~class, ~prob,
-  "`boost_tree()`",       "`\"xgboost\"`",      "✅",     "⚪",    "⚪",
+  "`boost_tree()`",       "`\"xgboost\"`",      "✅",     "✅",    "✅",
   "`cubist_rules()`",     "`\"Cubist\"`",       "✅",     "❌",    "❌",
   "`decision_tree()`",    "`\"partykit\"`",     "✅",     "⚪",    "⚪",
   "`linear_reg()`",       "`\"lm\"`",           "✅",     "❌",    "❌",

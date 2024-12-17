@@ -9,32 +9,67 @@ orbital.xgb.Booster <- function(
 	mode <- rlang::arg_match(mode)
 
 	if (mode == "classification") {
-		trees <- tidypredict::.extract_xgb_trees(x)
+		objective <- x$params$objective
+		# match arg objective
 
-		trees_split <- split(trees, rep(seq_along(lvl), x$niter))
-		trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
+		if (objective == "multi:softprob") {
+			trees <- tidypredict::.extract_xgb_trees(x)
 
-		trees_split <- gsub("dplyr::case_when", "case_when", trees_split)
-		trees_split <- gsub("case_when", "dplyr::case_when", trees_split)
+			trees_split <- split(trees, rep(seq_along(lvl), x$niter))
+			trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
 
-		res <- stats::setNames(trees_split, lvl)
+			trees_split <- gsub("dplyr::case_when", "case_when", trees_split)
+			trees_split <- gsub("case_when", "dplyr::case_when", trees_split)
 
-		if (is.null(type)) {
-			type <- "class"
-		}
+			res <- stats::setNames(trees_split, lvl)
 
-		if ("class" %in% type) {
-			res <- c(
-				res,
-				".pred_class" = softmax(lvl)
-			)
-		}
-		if ("prob" %in% type) {
-			res <- c(
-				res,
-				"norm" = glue::glue_collapse(glue::glue("exp({lvl})"), sep = " + "),
-				stats::setNames(glue::glue("exp({lvl}) / norm"), NA)
-			)
+			if (is.null(type)) {
+				type <- "class"
+			}
+
+			if ("class" %in% type) {
+				res <- c(
+					res,
+					".pred_class" = softmax(lvl)
+				)
+			}
+			if ("prob" %in% type) {
+				res <- c(
+					res,
+					"norm" = glue::glue_collapse(glue::glue("exp({lvl})"), sep = " + "),
+					stats::setNames(glue::glue("exp({lvl}) / norm"), NA)
+				)
+			}
+		} else if (objective == "binary:logistic") {
+			eq <- tidypredict::tidypredict_fit(x)
+
+			eq <- deparse1(eq)
+
+			eq <- gsub("dplyr::case_when", "case_when", eq)
+			eq <- gsub("case_when", "dplyr::case_when", eq)
+
+			if (is.null(type)) {
+				type <- "class"
+			}
+
+			res <- NULL
+			if ("class" %in% type) {
+				levels <- glue::double_quote(lvl)
+
+				res <- c(
+					res,
+					.pred_class = glue::glue(
+						"dplyr::case_when({eq} > 0.5 ~ {levels[1]}, .default = {levels[2]})"
+					)
+				)
+			}
+			if ("prob" %in% type) {
+				res <- c(
+					res,
+					glue::glue("{eq}"),
+					glue::glue("1 - ({eq})")
+				)
+			}
 		}
 	} else if (mode == "regression") {
 		res <- tidypredict::tidypredict_fit(x)
