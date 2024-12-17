@@ -19,7 +19,7 @@ orbital.glm <- function(
 		if ("class" %in% type) {
 			res <- c(
 				res,
-				glue::glue(
+				orbital_tmp_class_name = glue::glue(
 					"dplyr::case_when({eq} < 0.5 ~ {levels[1]}, .default = {levels[2]})"
 				)
 			)
@@ -27,8 +27,8 @@ orbital.glm <- function(
 		if ("prob" %in% type) {
 			res <- c(
 				res,
-				glue::glue("1 - ({eq})"),
-				glue::glue("{eq}")
+				orbital_tmp_prob_name1 = glue::glue("1 - ({eq})"),
+				orbital_tmp_prob_name2 = glue::glue("{eq}")
 			)
 		}
 	} else if (mode == "regression") {

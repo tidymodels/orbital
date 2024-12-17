@@ -29,40 +29,46 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 		)
 	}
 
-	if (mode == "classification") {
-		names <- NULL
-
-		if ("class" %in% type) {
-			names <- c(names, paste0(prefix, "_class"))
-		}
-		if ("prob" %in% type) {
-			names <- c(names, paste0(prefix, "_", x$lvl))
-		}
-	}
-	if (mode == "regression") {
-		names <- prefix
-	}
-
 	if (is.language(res)) {
 		res <- deparse1(res)
 	}
 
-	attr(res, "pred_names") <- names
-	if (
-		inherits(x, "_xgb.Booster") &&
-			isTRUE(x$fit$params$objective == "multi:softprob")
-	) {
-		if (anyNA(names(res))) {
-			na_fields <- which(is.na(names(res)))
-			tmp_names <- names(res)
-			tmp_names[na_fields] <- paste0(prefix, "_", x$lvl)
-			names(res) <- tmp_names
-		}
-	} else {
-		res <- stats::setNames(res, names)
-	}
+	res <- set_pred_names(res, x, mode, type, prefix)
 
 	new_orbital_class(res)
+}
+
+set_pred_names <- function(res, x, mode, type, prefix) {
+	if (mode == "regression") {
+		res <- stats::setNames(res, prefix)
+		attr(res, "pred_names") <- prefix
+	}
+
+	if (mode == "classification") {
+		class_names <- NULL
+		prob_names <- NULL
+
+		if ("class" %in% type) {
+			class_names <- paste0(prefix, "_class")
+		}
+		if ("prob" %in% type) {
+			prob_names <- paste0(prefix, "_", x$lvl)
+		}
+
+		attr(res, "pred_names") <- c(class_names, prob_names)
+
+		eq_names <- names(res)
+
+		class_ind <- eq_names %in% "orbital_tmp_class_name"
+		prob_ind <- grepl("^orbital_tmp_prob_name", eq_names)
+
+		eq_names[class_ind] <- class_names
+		eq_names[prob_ind] <- prob_names
+
+		names(res) <- eq_names
+	}
+
+	res
 }
 
 #' @export
