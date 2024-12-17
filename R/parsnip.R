@@ -4,14 +4,10 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 	check_mode(mode)
 	check_type(type, mode)
 
-	if (mode == "classification") {
-		res <- try(
-			orbital(x$fit, mode = mode, type = type, lvl = x$lvl),
-			silent = TRUE
-		)
-	} else {
-		res <- try(orbital(x$fit, mode = mode, type = type), silent = TRUE)
-	}
+	res <- try(
+		orbital(x$fit, mode = mode, type = type, lvl = x$lvl),
+		silent = TRUE
+	)
 
 	if (inherits(res, "try-error")) {
 		res <- tryCatch(
