@@ -41,12 +41,10 @@ Suggests:
     testthat (>= 3.0.0),
     themis,
     tibble,
-    tidypredict,
+    tidypredict (>= 0.5.1),
     workflows
 VignetteBuilder: 
     knitr
-Remotes:
-    tidymodels/tidypredict
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown, gt
 Config/testthat/edition: 3
 Encoding: UTF-8
