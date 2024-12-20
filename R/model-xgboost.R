@@ -35,7 +35,6 @@ xgboost_multisoft <- function(x, type, lvl) {
 	trees_split <- split(trees, rep(seq_along(lvl), x$niter))
 	trees_split <- lapply(trees_split, collapse_stumps)
 	trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
-	trees_split <- namespace_case_when(trees_split)
 
 	res <- stats::setNames(trees_split, lvl)
 
@@ -75,7 +74,6 @@ xgboost_logistic <- function(x, type, lvl) {
 	eq <- tidypredict::tidypredict_fit(x)
 
 	eq <- deparse1(eq)
-	eq <- namespace_case_when(eq)
 
 	res <- NULL
 	if ("class" %in% type) {
@@ -96,12 +94,6 @@ xgboost_logistic <- function(x, type, lvl) {
 		)
 	}
 	res
-}
-
-namespace_case_when <- function(x) {
-	x <- gsub("dplyr::case_when", "case_when", x)
-	x <- gsub("case_when", "dplyr::case_when", x)
-	x
 }
 
 softmax <- function(lvl) {
