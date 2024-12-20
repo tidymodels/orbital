@@ -24,6 +24,7 @@ if (!rlang::is_installed(c("gt", "tibble"))) {
 ```{r}
 #| echo: false
 #| message: false
+#| error: false
 library(gt)
 library(dplyr)
 
@@ -80,6 +81,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+#| echo: false
 library(orbital)
 ```
 
