@@ -33,6 +33,7 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 		res <- deparse1(res)
 	}
 
+	res <- namespace_case_when(res)
 	res <- set_pred_names(res, x, mode, type, prefix)
 
 	new_orbital_class(res)

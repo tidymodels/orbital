@@ -21,5 +21,7 @@ orbital.workflow <- function(x, ..., prefix = ".pred", type = NULL) {
 		attr(out, "pred_names") <- pred_names
 	}
 
+	out <- namespace_case_when(out)
+
 	new_orbital_class(out)
 }
