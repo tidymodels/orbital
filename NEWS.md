@@ -10,6 +10,7 @@
 
 * `orbital()` now works with `boost_tree(engine = "xgboost")` models for class prediction and probability predictions. (#71)
 
+* `orbital()` now works with `decision_tree(engine = "partykit")` models for class prediction and probability predictions. (#77)
 
 # orbital 0.2.0
 
