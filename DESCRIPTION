@@ -33,6 +33,7 @@ Suggests:
     knitr,
     modeldata,
     parsnip,
+    partykit,
     R6,
     recipes,
     rmarkdown,
