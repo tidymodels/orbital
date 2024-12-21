@@ -80,6 +80,7 @@ test_that("SQLite - step_indicate_na works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_indicate_na <- dplyr::as_tibble(mtcars)
 	mtcars_indicate_na[2:4, ] <- NA

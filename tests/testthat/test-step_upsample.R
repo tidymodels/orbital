@@ -80,6 +80,7 @@ test_that("SQLite - step_upsample works", {
 	skip_if_not_installed("themis")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_upsample <- dplyr::as_tibble(mtcars)
 	mtcars_upsample$vs <- as.factor(mtcars$vs)

@@ -78,6 +78,7 @@ test_that("SQLite - step_impute_median works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_impute_median <- dplyr::as_tibble(mtcars)
 	mtcars_impute_median[2:4, ] <- NA

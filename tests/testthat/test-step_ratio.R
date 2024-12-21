@@ -85,6 +85,7 @@ test_that("SQLite - step_ratio works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars <- dplyr::as_tibble(mtcars)
 

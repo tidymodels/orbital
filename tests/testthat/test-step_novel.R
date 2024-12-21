@@ -96,6 +96,7 @@ test_that("SQLite - step_novel works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_novel <- dplyr::as_tibble(mtcars)
 	mtcars_novel$gear <- letters[mtcars$gear]
