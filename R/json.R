@@ -40,7 +40,12 @@
 orbital_json_write <- function(x, path) {
 	actions <- as.list(unclass(x))
 
-	res <- list(actions = actions, version = 1)
+	res <- list(
+		actions = actions,
+		pred_names = attr(x, "pred_names"),
+		version = 2
+	)
+
 	res <- jsonlite::toJSON(res, pretty = TRUE, auto_unbox = TRUE)
 
 	writeLines(res, path)
@@ -85,9 +90,17 @@ orbital_json_write <- function(x, path) {
 orbital_json_read <- function(path) {
 	rlang::check_installed("jsonlite")
 
-	res <- jsonlite::read_json(path)
+	json <- jsonlite::read_json(path)
 
-	res <- unlist(res$actions)
+	version <- json$version
+
+	if (version == 1) {
+		res <- unlist(json$actions)
+		attr(res, "pred_names") <- utils::tail(names(res), 1)
+	} else if (version == 2) {
+		res <- unlist(json$actions)
+		attr(res, "pred_names") <- json$pred_names
+	}
 
 	new_orbital_class(res)
 }
