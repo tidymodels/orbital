@@ -41,7 +41,7 @@ orbital_json_write <- function(x, path) {
 	actions <- as.list(unclass(x))
 
 	res <- list(
-		actions = actions, 
+		actions = actions,
 		pred_names = attr(x, "pred_names"),
 		version = 2
 	)
@@ -93,14 +93,13 @@ orbital_json_read <- function(path) {
 	json <- jsonlite::read_json(path)
 
 	version <- json$version
-	
+
 	if (version == 1) {
 		res <- unlist(json$actions)
 		attr(res, "pred_names") <- utils::tail(names(res), 1)
 	} else if (version == 2) {
 		res <- unlist(json$actions)
 		attr(res, "pred_names") <- json$pred_names
-
 	}
 
 	new_orbital_class(res)

@@ -40,7 +40,7 @@ test_that("read and write json works - backwards from version 1", {
 	orbital_obj <- orbital(wf_fit)
 
 	tmp_file <- tempfile()
-	
+
 	orbital_json_write(orbital_obj, tmp_file)
 
 	# Fake version 1
