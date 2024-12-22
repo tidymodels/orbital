@@ -1,6 +1,7 @@
 test_that("step_lencode_mixed works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("embed")
+	skip_if_not_installed("lme4")
 
 	mtcars <- dplyr::as_tibble(mtcars)
 	mtcars$gear <- as.factor(mtcars$gear)
@@ -23,6 +24,7 @@ test_that("step_lencode_mixed works", {
 test_that("step_lencode_mixed only calculates what is sufficient", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("embed")
+	skip_if_not_installed("lme4")
 
 	mtcars <- dplyr::as_tibble(mtcars)
 	mtcars$gear <- as.factor(mtcars$gear)
@@ -44,6 +46,7 @@ test_that("step_lencode_mixed only calculates what is sufficient", {
 test_that("step_lencode_mixed works with empty selections", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("embed")
+	skip_if_not_installed("lme4")
 
 	mtcars <- dplyr::as_tibble(mtcars)
 	mtcars$gear <- as.factor(mtcars$gear)
@@ -65,7 +68,10 @@ test_that("step_lencode_mixed works with empty selections", {
 
 test_that("spark - step_lencode_mixed works", {
 	skip_if_not_installed("recipes")
+	skip_if_not_installed("embed")
+	skip_if_not_installed("lme4")
 	skip_if_not_installed("sparklyr")
+
 	skip_if(is.na(testthat_spark_env_version()))
 
 	mtcars_lencode_mixed <- dplyr::as_tibble(mtcars)
@@ -91,8 +97,11 @@ test_that("spark - step_lencode_mixed works", {
 
 test_that("SQLite - step_lencode_mixed works", {
 	skip_if_not_installed("recipes")
+	skip_if_not_installed("embed")
+	skip_if_not_installed("lme4")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_lencode_mixed <- dplyr::as_tibble(mtcars)
 	mtcars_lencode_mixed$gear <- as.factor(mtcars_lencode_mixed$gear)
@@ -119,6 +128,8 @@ test_that("SQLite - step_lencode_mixed works", {
 
 test_that("duckdb - step_lencode_mixed works", {
 	skip_if_not_installed("recipes")
+	skip_if_not_installed("embed")
+	skip_if_not_installed("lme4")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("duckdb")
 
@@ -147,6 +158,8 @@ test_that("duckdb - step_lencode_mixed works", {
 
 test_that("arrow - step_lencode_mixed works", {
 	skip_if_not_installed("recipes")
+	skip_if_not_installed("embed")
+	skip_if_not_installed("lme4")
 	skip_if_not_installed("arrow")
 
 	mtcars_lencode_mixed <- dplyr::as_tibble(mtcars)

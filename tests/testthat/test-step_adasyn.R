@@ -80,6 +80,7 @@ test_that("SQLite - step_adasyn works", {
 	skip_if_not_installed("themis")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_adasyn <- dplyr::as_tibble(mtcars)
 	mtcars_adasyn$vs <- as.factor(mtcars$vs)
@@ -107,6 +108,7 @@ test_that("duckdb - step_adasyn works", {
 	skip_if_not_installed("themis")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_adasyn <- dplyr::as_tibble(mtcars)
 	mtcars_adasyn$vs <- as.factor(mtcars$vs)

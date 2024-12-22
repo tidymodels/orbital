@@ -98,6 +98,7 @@ test_that("SQLite - step_lencode_bayes works", {
 	skip_if_not_installed("rstanarm")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_lencode_bayes <- dplyr::as_tibble(mtcars)
 	mtcars_lencode_bayes$gear <- as.factor(mtcars_lencode_bayes$gear)

@@ -38,6 +38,7 @@ test_that("SQLite - augment() works", {
 	skip_if_not_installed("workflows")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars <- dplyr::as_tibble(mtcars)
 

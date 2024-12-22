@@ -125,6 +125,7 @@ test_that("SQLite - step_discretize works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_discretize <- dplyr::as_tibble(mtcars)
 	mtcars_discretize[1, ] <- NA

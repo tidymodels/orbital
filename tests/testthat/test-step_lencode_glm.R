@@ -93,6 +93,7 @@ test_that("SQLite - step_lencode_glm works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_lencode_glm <- dplyr::as_tibble(mtcars)
 	mtcars_lencode_glm$gear <- as.factor(mtcars_lencode_glm$gear)

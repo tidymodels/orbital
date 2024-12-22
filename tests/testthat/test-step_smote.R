@@ -80,6 +80,7 @@ test_that("SQLite - step_smote works", {
 	skip_if_not_installed("themis")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_smote <- dplyr::as_tibble(mtcars)
 	mtcars_smote$vs <- as.factor(mtcars$vs)

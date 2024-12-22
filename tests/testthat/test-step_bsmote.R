@@ -80,6 +80,7 @@ test_that("SQLite - step_bsmote works", {
 	skip_if_not_installed("themis")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_bsmote <- dplyr::as_tibble(mtcars)
 	mtcars_bsmote$vs <- as.factor(mtcars$vs)

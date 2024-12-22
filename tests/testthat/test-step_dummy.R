@@ -105,6 +105,7 @@ test_that("SQLite - step_dummy works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars1 <- dplyr::as_tibble(mtcars)
 

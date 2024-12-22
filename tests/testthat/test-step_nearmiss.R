@@ -80,6 +80,7 @@ test_that("SQLite - step_nearmiss works", {
 	skip_if_not_installed("themis")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_nearmiss <- dplyr::as_tibble(mtcars)
 	mtcars_nearmiss$vs <- as.factor(mtcars$vs)

@@ -86,6 +86,7 @@ test_that("SQLite - step_impute_mode works", {
 	skip_if_not_installed("recipes")
 	skip_if_not_installed("DBI")
 	skip_if_not_installed("RSQLite")
+	skip_on_cran()
 
 	mtcars_impute_mode <- dplyr::as_tibble(mtcars)
 	mtcars_impute_mode$gear <- letters[mtcars$gear]
