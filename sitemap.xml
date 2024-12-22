@@ -11,6 +11,7 @@
 <url><loc>https://orbital.tidymodels.org/authors.html</loc></url>
 <url><loc>https://orbital.tidymodels.org/index.html</loc></url>
 <url><loc>https://orbital.tidymodels.org/news/index.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/reference/augment.orbital_class.html</loc></url>
 <url><loc>https://orbital.tidymodels.org/reference/index.html</loc></url>
 <url><loc>https://orbital.tidymodels.org/reference/orbital.html</loc></url>
 <url><loc>https://orbital.tidymodels.org/reference/orbital_dt.html</loc></url>
@@ -20,5 +21,6 @@
 <url><loc>https://orbital.tidymodels.org/reference/orbital_r_fun.html</loc></url>
 <url><loc>https://orbital.tidymodels.org/reference/orbital_sql.html</loc></url>
 <url><loc>https://orbital.tidymodels.org/reference/predict.orbital_class.html</loc></url>
+<url><loc>https://orbital.tidymodels.org/reference/reexports.html</loc></url>
 </urlset>
 
