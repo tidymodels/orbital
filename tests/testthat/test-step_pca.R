@@ -33,6 +33,25 @@ test_that("step_pca works with more than 9 PCs", {
 	expect_equal(res, exp)
 })
 
+test_that("step_pca works with more than 100 PCs", {
+	skip_if_not_installed("recipes")
+
+	data <- lapply(1:1000, function(x) sample(0:1, 100, TRUE))
+	names(data) <- paste0("V", 1:1000)
+	data <- dplyr::as_tibble(data)
+
+	rec <- recipes::recipe(~ ., data = data) %>%
+		recipes::step_pca(recipes::all_predictors()) %>%
+		recipes::prep()
+
+	exp <- recipes::bake(rec, new_data = data)
+
+	res <- dplyr::mutate(data, !!!orbital_inline(orbital(rec)))
+	res <- res[names(exp)]
+
+	expect_equal(res, exp)
+})
+
 test_that("step_pca only calculates what is sufficient", {
 	skip_if_not_installed("recipes")
 
