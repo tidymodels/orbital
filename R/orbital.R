@@ -64,57 +64,57 @@
 #'
 #' @export
 orbital <- function(x, ..., prefix = ".pred", type = NULL) {
-	UseMethod("orbital")
+  UseMethod("orbital")
 }
 
 #' @export
 orbital.default <- function(x, ...) {
-	cli::cli_abort(
-		"Is not implemented for {.obj_type_friendly {x}}."
-	)
+  cli::cli_abort(
+    "Is not implemented for {.obj_type_friendly {x}}."
+  )
 }
 
 new_orbital_class <- function(x) {
-	class(x) <- "orbital_class"
-	x
+  class(x) <- "orbital_class"
+  x
 }
 
 #' @export
 print.orbital_class <- function(x, ..., digits = 7, truncate = TRUE) {
-	x <- unclass(x)
-	x <- pretty_print(x, digits)
+  x <- unclass(x)
+  x <- pretty_print(x, digits)
 
-	eqs <- glue::glue("{names(x)} = {x}")
+  eqs <- glue::glue("{names(x)} = {x}")
 
-	if (truncate) {
-		eqs_lens <- nchar(eqs)
-		max_width <- cli::console_width() - 9
-		clipped <- eqs_lens > max_width
+  if (truncate) {
+    eqs_lens <- nchar(eqs)
+    max_width <- cli::console_width() - 9
+    clipped <- eqs_lens > max_width
 
-		eqs[clipped] <- substr(eqs[clipped], 1, max_width)
-		eqs[clipped] <- paste(eqs[clipped], "...")
-	}
+    eqs[clipped] <- substr(eqs[clipped], 1, max_width)
+    eqs[clipped] <- paste(eqs[clipped], "...")
+  }
 
-	cli::cli({
-		cli::cli_h1("orbital Object")
-		cli::cli_ul(eqs)
-		cli::cli_rule()
-		cli::cli_text("{length(x)} equations in total.")
-	})
+  cli::cli({
+    cli::cli_h1("orbital Object")
+    cli::cli_ul(eqs)
+    cli::cli_rule()
+    cli::cli_text("{length(x)} equations in total.")
+  })
 
-	invisible(NULL)
+  invisible(NULL)
 }
 
 pretty_print <- function(x, digits = 7) {
-	old_values <- regmatches(x, gregexpr("[0-9]+\\.?[0-9]+", x))
-	new_values <- lapply(old_values, function(x) signif(as.numeric(x), digits))
+  old_values <- regmatches(x, gregexpr("[0-9]+\\.?[0-9]+", x))
+  new_values <- lapply(old_values, function(x) signif(as.numeric(x), digits))
 
-	old_values <- unlist(old_values, use.names = FALSE)
-	new_values <- unlist(new_values, use.names = FALSE)
+  old_values <- unlist(old_values, use.names = FALSE)
+  new_values <- unlist(new_values, use.names = FALSE)
 
-	for (i in seq_along(old_values)) {
-		x <- gsub(old_values[i], new_values[i], x)
-	}
+  for (i in seq_along(old_values)) {
+    x <- gsub(old_values[i], new_values[i], x)
+  }
 
-	x
+  x
 }

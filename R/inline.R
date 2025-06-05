@@ -43,5 +43,5 @@
 #'   mutate(!!!orbital_inline(orbital_obj))
 #' @export
 orbital_inline <- function(x) {
-	rlang::parse_quos(x, env = rlang::global_env())
+  rlang::parse_quos(x, env = rlang::global_env())
 }

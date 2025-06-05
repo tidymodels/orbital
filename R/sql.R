@@ -33,5 +33,5 @@
 #' orbital_sql(orbital_obj, con)
 #' @export
 orbital_sql <- function(x, con) {
-	dbplyr::translate_sql(!!!orbital_inline(x), con = con)
+  dbplyr::translate_sql(!!!orbital_inline(x), con = con)
 }

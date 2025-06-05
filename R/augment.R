@@ -43,13 +43,13 @@
 #' augment(orbital_obj, mtcars)
 #' @export
 augment.orbital_class <- function(x, new_data, ...) {
-	index_name <- utils::tail(make.unique(c(colnames(new_data), "..index")), 1)
+  index_name <- utils::tail(make.unique(c(colnames(new_data), "..index")), 1)
 
-	preds <- stats::predict(x, new_data)
-	preds <- dplyr::mutate(preds, !!index_name := dplyr::row_number())
+  preds <- stats::predict(x, new_data)
+  preds <- dplyr::mutate(preds, !!index_name := dplyr::row_number())
 
-	new_data <- dplyr::mutate(new_data, !!index_name := dplyr::row_number())
+  new_data <- dplyr::mutate(new_data, !!index_name := dplyr::row_number())
 
-	res <- dplyr::left_join(preds, new_data, by = index_name)
-	dplyr::select(res, -dplyr::all_of(index_name))
+  res <- dplyr::left_join(preds, new_data, by = index_name)
+  dplyr::select(res, -dplyr::all_of(index_name))
 }

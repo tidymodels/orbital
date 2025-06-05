@@ -31,11 +31,11 @@
 #' orbital_dt(orbital_obj)
 #' @export
 orbital_dt <- function(x) {
-	rlang::check_installed("dtplyr")
+  rlang::check_installed("dtplyr")
 
-	dt <- dtplyr::lazy_dt(data.frame())
+  dt <- dtplyr::lazy_dt(data.frame())
 
-	res <- dplyr::mutate(dt, !!!orbital_inline(x))
+  res <- dplyr::mutate(dt, !!!orbital_inline(x))
 
-	dplyr::show_query(res)
+  dplyr::show_query(res)
 }
