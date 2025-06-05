@@ -6,8 +6,8 @@ test_that("step_novel works", {
   mtcars$gear <- letters[mtcars$gear]
   mtcars$carb <- letters[mtcars$carb]
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_novel(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_novel(recipes::all_nominal_predictors()) |>
     recipes::prep(strings_as_factors = FALSE)
 
   mtcars[1, 10] <- "aaaaa"
@@ -30,9 +30,9 @@ test_that("step_novel only calculates what is sufficient", {
   mtcars$gear <- letters[mtcars$gear]
   mtcars$carb <- letters[mtcars$carb]
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_novel(recipes::all_nominal_predictors()) %>%
-    recipes::step_rm(gear) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_novel(recipes::all_nominal_predictors()) |>
+    recipes::step_rm(gear) |>
     recipes::prep(strings_as_factors = FALSE)
 
   expect_identical(
@@ -49,8 +49,8 @@ test_that("step_novel works with empty selections", {
   mtcars$gear <- letters[mtcars$gear]
   mtcars$carb <- letters[mtcars$carb]
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_novel() %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_novel() |>
     recipes::prep(strings_as_factors = FALSE)
 
   mtcars[1, 10] <- "aaaaa"
@@ -75,8 +75,8 @@ test_that("spark - step_novel works", {
   mtcars_novel$carb <- letters[mtcars$carb]
   mtcars_novel[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) %>%
-    recipes::step_novel(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) |>
+    recipes::step_novel(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   mtcars_novel[1, 10] <- "aaaaa"
@@ -86,7 +86,7 @@ test_that("spark - step_novel works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_novel")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -103,8 +103,8 @@ test_that("SQLite - step_novel works", {
   mtcars_novel$carb <- letters[mtcars$carb]
   mtcars_novel[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) %>%
-    recipes::step_novel(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) |>
+    recipes::step_novel(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   mtcars_novel[1, 10] <- "aaaaa"
@@ -114,7 +114,7 @@ test_that("SQLite - step_novel works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_novel)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -132,8 +132,8 @@ test_that("duckdb - step_novel works", {
   mtcars_novel$carb <- letters[mtcars$carb]
   mtcars_novel[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) %>%
-    recipes::step_novel(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) |>
+    recipes::step_novel(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   mtcars_novel[1, 10] <- "aaaaa"
@@ -143,7 +143,7 @@ test_that("duckdb - step_novel works", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars_novel)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -160,8 +160,8 @@ test_that("arrow - step_novel works", {
   mtcars_novel$carb <- letters[mtcars$carb]
   mtcars_novel[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) %>%
-    recipes::step_novel(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_novel) |>
+    recipes::step_novel(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   mtcars_novel[1, 10] <- "aaaaa"
@@ -170,7 +170,7 @@ test_that("arrow - step_novel works", {
 
   mtcars_tbl <- arrow::as_arrow_table(mtcars_novel)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)

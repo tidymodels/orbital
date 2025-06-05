@@ -5,8 +5,8 @@ test_that("step_tomek works", {
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars$vs <- as.factor(mtcars$vs)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    themis::step_tomek(vs, skip = TRUE) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    themis::step_tomek(vs, skip = TRUE) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -24,8 +24,8 @@ test_that("step_tomek errors with skip = FALSE", {
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars$vs <- as.factor(mtcars$vs)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    themis::step_tomek(vs, skip = FALSE) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    themis::step_tomek(vs, skip = FALSE) |>
     recipes::prep()
 
   expect_snapshot(
@@ -59,8 +59,8 @@ test_that("spark - step_tomek works", {
   mtcars_tomek <- dplyr::as_tibble(mtcars)
   mtcars_tomek$vs <- as.factor(mtcars$vs)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) %>%
-    themis::step_tomek(vs, skip = TRUE) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) |>
+    themis::step_tomek(vs, skip = TRUE) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars_tomek, !!!orbital_inline(orbital(rec)))
@@ -69,7 +69,7 @@ test_that("spark - step_tomek works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_tomek")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -85,8 +85,8 @@ test_that("SQLite - step_tomek works", {
   mtcars_tomek <- dplyr::as_tibble(mtcars)
   mtcars_tomek$vs <- as.factor(mtcars$vs)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) %>%
-    themis::step_tomek(vs, skip = TRUE) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) |>
+    themis::step_tomek(vs, skip = TRUE) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars_tomek, !!!orbital_inline(orbital(rec)))
@@ -95,7 +95,7 @@ test_that("SQLite - step_tomek works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_tomek)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -112,8 +112,8 @@ test_that("duckdb - step_tomek works", {
   mtcars_tomek <- dplyr::as_tibble(mtcars)
   mtcars_tomek$vs <- as.factor(mtcars$vs)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) %>%
-    themis::step_tomek(vs, skip = TRUE) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) |>
+    themis::step_tomek(vs, skip = TRUE) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars_tomek, !!!orbital_inline(orbital(rec)))
@@ -121,7 +121,7 @@ test_that("duckdb - step_tomek works", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars_tomek)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -137,15 +137,15 @@ test_that("arrow - step_tomek works", {
   mtcars_tomek <- dplyr::as_tibble(mtcars)
   mtcars_tomek$vs <- as.factor(mtcars$vs)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) %>%
-    themis::step_tomek(vs, skip = TRUE) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_tomek) |>
+    themis::step_tomek(vs, skip = TRUE) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars_tomek, !!!orbital_inline(orbital(rec)))
 
   mtcars_tbl <- arrow::as_arrow_table(mtcars_tomek)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)

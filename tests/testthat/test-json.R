@@ -3,7 +3,7 @@ test_that("read and write json works", {
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("jsonlite")
   skip_if_not_installed("workflows")
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
@@ -28,7 +28,7 @@ test_that("read and write json works - backwards from version 1", {
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("jsonlite")
   skip_if_not_installed("workflows")
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()

@@ -20,7 +20,7 @@
 #' library(recipes)
 #' library(parsnip)
 #'
-#' rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+#' rec_spec <- recipe(mpg ~ ., data = mtcars) |>
 #'   step_normalize(all_numeric_predictors())
 #'
 #' lm_spec <- linear_reg()
@@ -70,7 +70,7 @@ orbital_json_write <- function(x, path) {
 #' library(recipes)
 #' library(parsnip)
 #'
-#' rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+#' rec_spec <- recipe(mpg ~ ., data = mtcars) |>
 #'   step_normalize(all_numeric_predictors())
 #'
 #' lm_spec <- linear_reg()

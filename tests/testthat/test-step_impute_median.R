@@ -4,8 +4,8 @@ test_that("step_impute_median works", {
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_impute_median(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_impute_median(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -22,9 +22,9 @@ test_that("step_impute_median only calculates what is sufficient", {
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_impute_median(recipes::all_predictors()) %>%
-    recipes::step_rm(disp) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_impute_median(recipes::all_predictors()) |>
+    recipes::step_rm(disp) |>
     recipes::prep()
 
   expect_identical(
@@ -39,8 +39,8 @@ test_that("step_impute_median works with empty selections", {
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_impute_median() %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_impute_median() |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -59,8 +59,8 @@ test_that("spark - step_impute_median works", {
   mtcars_impute_median <- dplyr::as_tibble(mtcars)
   mtcars_impute_median[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) %>%
-    recipes::step_impute_median(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) |>
+    recipes::step_impute_median(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars_impute_median, !!!orbital_inline(orbital(rec)))
@@ -68,7 +68,7 @@ test_that("spark - step_impute_median works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_impute_median")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -83,8 +83,8 @@ test_that("SQLite - step_impute_median works", {
   mtcars_impute_median <- dplyr::as_tibble(mtcars)
   mtcars_impute_median[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) %>%
-    recipes::step_impute_median(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) |>
+    recipes::step_impute_median(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars_impute_median, !!!orbital_inline(orbital(rec)))
@@ -92,7 +92,7 @@ test_that("SQLite - step_impute_median works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_median)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -108,8 +108,8 @@ test_that("duckdb - step_impute_median works", {
   mtcars_impute_median <- dplyr::as_tibble(mtcars)
   mtcars_impute_median[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) %>%
-    recipes::step_impute_median(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) |>
+    recipes::step_impute_median(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars_impute_median, !!!orbital_inline(orbital(rec)))
@@ -117,7 +117,7 @@ test_that("duckdb - step_impute_median works", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_median)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -132,15 +132,15 @@ test_that("arrow - step_impute_median works", {
   mtcars_impute_median <- dplyr::as_tibble(mtcars)
   mtcars_impute_median[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) %>%
-    recipes::step_impute_median(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_median) |>
+    recipes::step_impute_median(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars_impute_median, !!!orbital_inline(orbital(rec)))
 
   mtcars_tbl <- arrow::as_arrow_table(mtcars_impute_median)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)

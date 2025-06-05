@@ -7,8 +7,8 @@ test_that("step_lencode_glm works", {
   mtcars$vs <- as.factor(mtcars$vs)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) |>
       recipes::prep()
   )
 
@@ -29,9 +29,9 @@ test_that("step_lencode_glm only calculates what is sufficient", {
   mtcars$vs <- as.factor(mtcars$vs)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
-      recipes::step_rm(gear) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) |>
+      recipes::step_rm(gear) |>
       recipes::prep()
   )
 
@@ -50,8 +50,8 @@ test_that("step_lencode_glm works with empty selections", {
   mtcars$vs <- as.factor(mtcars$vs)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      embed::step_lencode_glm(outcome = dplyr::vars(mpg)) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      embed::step_lencode_glm(outcome = dplyr::vars(mpg)) |>
       recipes::prep()
   )
 
@@ -73,8 +73,8 @@ test_that("spark - step_lencode_glm works", {
   mtcars_lencode_glm$vs <- as.factor(mtcars_lencode_glm$vs)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) %>%
-      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) |>
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) |>
       recipes::prep()
   )
 
@@ -83,7 +83,7 @@ test_that("spark - step_lencode_glm works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_lencode_glm")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -100,8 +100,8 @@ test_that("SQLite - step_lencode_glm works", {
   mtcars_lencode_glm$vs <- as.factor(mtcars_lencode_glm$vs)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) %>%
-      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) |>
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) |>
       recipes::prep()
   )
 
@@ -110,7 +110,7 @@ test_that("SQLite - step_lencode_glm works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_lencode_glm)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -128,8 +128,8 @@ test_that("duckdb - step_lencode_glm works", {
   mtcars_lencode_glm$vs <- as.factor(mtcars_lencode_glm$vs)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) %>%
-      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) |>
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) |>
       recipes::prep()
   )
 
@@ -138,7 +138,7 @@ test_that("duckdb - step_lencode_glm works", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars_lencode_glm)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -155,8 +155,8 @@ test_that("arrow - step_lencode_glm works", {
   mtcars_lencode_glm$vs <- as.factor(mtcars_lencode_glm$vs)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) %>%
-      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_lencode_glm) |>
+      embed::step_lencode_glm(gear, vs, outcome = dplyr::vars(mpg)) |>
       recipes::prep()
   )
 
@@ -164,7 +164,7 @@ test_that("arrow - step_lencode_glm works", {
 
   mtcars_tbl <- arrow::as_arrow_table(mtcars_lencode_glm)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)

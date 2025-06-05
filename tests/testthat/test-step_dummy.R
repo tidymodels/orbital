@@ -6,8 +6,8 @@ test_that("step_dummy works", {
   mtcars1$gear <- as.character(mtcars1$gear)
   mtcars1$carb <- as.character(mtcars1$carb)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) |>
+    recipes::step_dummy(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   exp <- recipes::bake(rec, new_data = mtcars1)
@@ -26,8 +26,8 @@ test_that("step_dummy works with `one_hot = TRUE`", {
   mtcars1$gear <- as.character(mtcars1$gear)
   mtcars1$carb <- as.character(mtcars1$carb)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors(), one_hot = TRUE) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) |>
+    recipes::step_dummy(recipes::all_nominal_predictors(), one_hot = TRUE) |>
     recipes::prep()
 
   exp <- recipes::bake(rec, new_data = mtcars1)
@@ -46,9 +46,9 @@ test_that("step_dummy only calculates what is sufficient", {
   mtcars1$gear <- as.character(mtcars1$gear)
   mtcars1$carb <- as.character(mtcars1$carb)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
-    recipes::step_rm(dplyr::ends_with("4")) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) |>
+    recipes::step_dummy(recipes::all_nominal_predictors()) |>
+    recipes::step_rm(dplyr::ends_with("4")) |>
     recipes::prep()
 
   exp <- recipes::bake(rec, new_data = mtcars1)
@@ -64,8 +64,8 @@ test_that("step_dummy works with empty selections", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_dummy() %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_dummy() |>
     recipes::prep()
 
   exp <- recipes::bake(rec, new_data = mtcars)
@@ -86,8 +86,8 @@ test_that("spark - step_dummy works", {
   mtcars1$gear <- as.character(mtcars1$gear)
   mtcars1$carb <- as.character(mtcars1$carb)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) |>
+    recipes::step_dummy(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   exp <- dplyr::mutate(mtcars1, !!!orbital_inline(orbital(rec)))
@@ -95,7 +95,7 @@ test_that("spark - step_dummy works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars1")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, exp)
@@ -112,8 +112,8 @@ test_that("SQLite - step_dummy works", {
   mtcars1$gear <- as.character(mtcars1$gear)
   mtcars1$carb <- as.character(mtcars1$carb)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) |>
+    recipes::step_dummy(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   exp <- dplyr::mutate(mtcars1, !!!orbital_inline(orbital(rec)))
@@ -121,7 +121,7 @@ test_that("SQLite - step_dummy works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars1)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, exp)
@@ -139,8 +139,8 @@ test_that("duckdb - step_dummy works", {
   mtcars1$gear <- as.character(mtcars1$gear)
   mtcars1$carb <- as.character(mtcars1$carb)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) |>
+    recipes::step_dummy(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   exp <- dplyr::mutate(mtcars1, !!!orbital_inline(orbital(rec)))
@@ -148,7 +148,7 @@ test_that("duckdb - step_dummy works", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars1)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, exp)
@@ -165,15 +165,15 @@ test_that("arrow - step_dummy works", {
   mtcars1$gear <- as.character(mtcars1$gear)
   mtcars1$carb <- as.character(mtcars1$carb)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars1) %>%
-    recipes::step_dummy(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) |>
+    recipes::step_dummy(recipes::all_nominal_predictors()) |>
     recipes::prep()
 
   exp <- dplyr::mutate(mtcars1, !!!orbital_inline(orbital(rec)))
 
   mtcars_tbl <- arrow::as_arrow_table(mtcars1)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, exp)

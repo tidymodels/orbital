@@ -6,8 +6,8 @@ test_that("step_impute_mode works", {
   mtcars$carb <- letters[mtcars$carb]
   mtcars[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) |>
     recipes::prep(strings_as_factors = FALSE)
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -26,9 +26,9 @@ test_that("step_impute_mode only calculates what is sufficient", {
   mtcars$carb <- letters[mtcars$carb]
   mtcars[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
-    recipes::step_rm(gear) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) |>
+    recipes::step_rm(gear) |>
     recipes::prep(strings_as_factors = FALSE)
 
   expect_identical(
@@ -45,8 +45,8 @@ test_that("step_impute_mode works with empty selections", {
   mtcars$carb <- letters[mtcars$carb]
   mtcars[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_impute_mode() %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_impute_mode() |>
     recipes::prep(strings_as_factors = FALSE)
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -67,8 +67,8 @@ test_that("spark - step_impute_mode works", {
   mtcars_impute_mode$carb <- letters[mtcars$carb]
   mtcars_impute_mode[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) %>%
-    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) |>
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) |>
     recipes::prep(strings_as_factors = FALSE)
 
   res <- dplyr::mutate(mtcars_impute_mode, !!!orbital_inline(orbital(rec)))
@@ -76,7 +76,7 @@ test_that("spark - step_impute_mode works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_impute_mode")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -93,8 +93,8 @@ test_that("SQLite - step_impute_mode works", {
   mtcars_impute_mode$carb <- letters[mtcars$carb]
   mtcars_impute_mode[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) %>%
-    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) |>
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) |>
     recipes::prep(strings_as_factors = FALSE)
 
   res <- dplyr::mutate(mtcars_impute_mode, !!!orbital_inline(orbital(rec)))
@@ -102,7 +102,7 @@ test_that("SQLite - step_impute_mode works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_mode)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -120,8 +120,8 @@ test_that("duckdb - step_impute_mode works", {
   mtcars_impute_mode$carb <- letters[mtcars$carb]
   mtcars_impute_mode[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) %>%
-    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) |>
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) |>
     recipes::prep(strings_as_factors = FALSE)
 
   res <- dplyr::mutate(mtcars_impute_mode, !!!orbital_inline(orbital(rec)))
@@ -129,7 +129,7 @@ test_that("duckdb - step_impute_mode works", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars_impute_mode)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -146,15 +146,15 @@ test_that("arrow - step_impute_mode works", {
   mtcars_impute_mode$carb <- letters[mtcars$carb]
   mtcars_impute_mode[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) %>%
-    recipes::step_impute_mode(recipes::all_nominal_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars_impute_mode) |>
+    recipes::step_impute_mode(recipes::all_nominal_predictors()) |>
     recipes::prep(strings_as_factors = FALSE)
 
   res <- dplyr::mutate(mtcars_impute_mode, !!!orbital_inline(orbital(rec)))
 
   mtcars_tbl <- arrow::as_arrow_table(mtcars_impute_mode)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)

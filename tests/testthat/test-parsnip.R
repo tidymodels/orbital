@@ -5,7 +5,7 @@ test_that("normal usage works works", {
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("kknn")
 
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::nearest_neighbor(mode = "regression")

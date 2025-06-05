@@ -6,8 +6,8 @@ test_that("step_pca_truncated works", {
   mtcars$hp <- NULL
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      embed::step_pca_truncated(recipes::all_predictors()) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      embed::step_pca_truncated(recipes::all_predictors()) |>
       recipes::prep()
   )
 
@@ -26,8 +26,8 @@ test_that("step_pca_truncated works with more than 9 PCs", {
   mtcars <- dplyr::as_tibble(mtcars)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      embed::step_pca_truncated(recipes::all_predictors()) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      embed::step_pca_truncated(recipes::all_predictors()) |>
       recipes::prep()
   )
 
@@ -46,9 +46,9 @@ test_that("step_pca_truncated only calculates what is sufficient", {
   mtcars$hp <- NULL
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      embed::step_pca_truncated(recipes::all_predictors()) %>%
-      recipes::step_rm(PC1, PC3, PC5) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      embed::step_pca_truncated(recipes::all_predictors()) |>
+      recipes::step_rm(PC1, PC3, PC5) |>
       recipes::prep()
   )
 
@@ -65,8 +65,8 @@ test_that("step_pca_truncated works with empty selections", {
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars$hp <- NULL
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    embed::step_pca_truncated() %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    embed::step_pca_truncated() |>
     recipes::prep()
 
   exp <- recipes::bake(rec, new_data = mtcars)
@@ -87,8 +87,8 @@ test_that("spark - step_pca_truncated works", {
   mtcars0$hp <- NULL
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
-      embed::step_pca_truncated(recipes::all_predictors()) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars0) |>
+      embed::step_pca_truncated(recipes::all_predictors()) |>
       recipes::prep()
   )
 
@@ -97,7 +97,7 @@ test_that("spark - step_pca_truncated works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars0")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, exp)
@@ -114,8 +114,8 @@ test_that("SQLite - step_pca_truncated works", {
   mtcars0$hp <- NULL
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
-      embed::step_pca_truncated(recipes::all_predictors()) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars0) |>
+      embed::step_pca_truncated(recipes::all_predictors()) |>
       recipes::prep()
   )
 
@@ -124,7 +124,7 @@ test_that("SQLite - step_pca_truncated works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars0)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, exp)
@@ -142,8 +142,8 @@ test_that("duckdb - step_pca_truncated works", {
   mtcars0$hp <- NULL
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
-      embed::step_pca_truncated(recipes::all_predictors()) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars0) |>
+      embed::step_pca_truncated(recipes::all_predictors()) |>
       recipes::prep()
   )
 
@@ -152,7 +152,7 @@ test_that("duckdb - step_pca_truncated works", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars0)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, exp)
@@ -169,8 +169,8 @@ test_that("arrow - step_pca_truncated works", {
   mtcars0$hp <- NULL
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars0) %>%
-      embed::step_pca_truncated(recipes::all_predictors()) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars0) |>
+      embed::step_pca_truncated(recipes::all_predictors()) |>
       recipes::prep()
   )
 
@@ -178,7 +178,7 @@ test_that("arrow - step_pca_truncated works", {
 
   mtcars_tbl <- arrow::as_arrow_table(mtcars0)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, exp)

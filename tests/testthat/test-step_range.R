@@ -3,8 +3,8 @@ test_that("step_range works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_range(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_range(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -20,8 +20,8 @@ test_that("step_range works with clipping argument", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_range(recipes::all_predictors(), clipping = FALSE) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_range(recipes::all_predictors(), clipping = FALSE) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -37,9 +37,9 @@ test_that("step_range only calculates what is sufficient", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_range(recipes::all_predictors()) %>%
-    recipes::step_rm(disp) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_range(recipes::all_predictors()) |>
+    recipes::step_rm(disp) |>
     recipes::prep()
 
   expect_identical(
@@ -53,8 +53,8 @@ test_that("step_range works with empty selections", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_range() %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_range() |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -72,8 +72,8 @@ test_that("spark - step_range works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_range(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_range(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -81,7 +81,7 @@ test_that("spark - step_range works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -95,8 +95,8 @@ test_that("SQLite - step_range works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_range(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_range(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -105,7 +105,7 @@ test_that("SQLite - step_range works", {
   mtcars_tbl <- dplyr::copy_to(con, mtcars)
 
   suppressWarnings(
-    res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
       dplyr::collect()
   )
 
@@ -121,8 +121,8 @@ test_that("duckdb - step_range works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_range(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_range(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -131,7 +131,7 @@ test_that("duckdb - step_range works", {
   mtcars_tbl <- dplyr::copy_to(con, mtcars)
 
   suppressWarnings(
-    res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
       dplyr::collect()
   )
 
@@ -146,8 +146,8 @@ test_that("arrow - step_range works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_range(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_range(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -155,7 +155,7 @@ test_that("arrow - step_range works", {
   mtcars_tbl <- arrow::as_arrow_table(mtcars)
 
   suppressWarnings(
-    res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+    res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
       dplyr::collect()
   )
 

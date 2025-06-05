@@ -5,13 +5,13 @@ test_that("augment() works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_recipe(rec_spec) %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_recipe(rec_spec) |>
     workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
@@ -42,13 +42,13 @@ test_that("SQLite - augment() works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_recipe(rec_spec) %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_recipe(rec_spec) |>
     workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
@@ -80,13 +80,13 @@ test_that("duckdb - augment() works", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_recipe(rec_spec) %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_recipe(rec_spec) |>
     workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)

@@ -4,7 +4,7 @@ test_that("recipe works", {
   skip_if_not_installed("workflows")
   skip_if_not_installed("tidypredict")
 
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_impute_knn(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
@@ -27,9 +27,9 @@ test_that("recipe works with skip argument", {
 
   mtcars <- dplyr::as_tibble(mtcars)
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_center(recipes::all_predictors(), skip = TRUE) %>%
-    recipes::step_scale(recipes::all_predictors()) %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_center(recipes::all_predictors(), skip = TRUE) |>
+    recipes::step_scale(recipes::all_predictors()) |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -43,7 +43,7 @@ test_that("recipe works with skip argument", {
 test_that("prefix argument works", {
   skip_if_not_installed("recipes")
 
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   rec_fit <- recipes::prep(rec_spec)

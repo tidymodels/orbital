@@ -3,8 +3,8 @@ test_that("type argument checking works", {
   skip_if_not_installed("workflows")
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_variables(outcomes = "mpg", predictors = everything()) %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_variables(outcomes = "mpg", predictors = everything()) |>
     workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
@@ -30,8 +30,8 @@ test_that("type argument checking works", {
 
   mtcars$vs <- factor(mtcars$vs)
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_variables(outcomes = "vs", predictors = "disp") %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_variables(outcomes = "vs", predictors = "disp") |>
     workflows::add_model(lr_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
@@ -68,7 +68,7 @@ test_that("pred_names) works with type = c(class, prob) and recipes", {
 
   lr_spec <- parsnip::logistic_reg()
 
-  rec_spec <- recipes::recipe(vs ~ disp + mpg + hp, mtcars) %>%
+  rec_spec <- recipes::recipe(vs ~ disp + mpg + hp, mtcars) |>
     recipes::step_center(disp, mpg, hp)
 
   wf_spec <- workflows::workflow(rec_spec, lr_spec)

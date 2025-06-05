@@ -2,13 +2,13 @@ test_that("orbital works with workflows - recipe", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("workflows")
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_recipe(rec_spec) %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_recipe(rec_spec) |>
     workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
@@ -26,8 +26,8 @@ test_that("orbital works with workflows - formula", {
   skip_if_not_installed("workflows")
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_formula(mpg ~ .) %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_formula(mpg ~ .) |>
     workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
@@ -45,8 +45,8 @@ test_that("orbital works with workflows - variables", {
   skip_if_not_installed("workflows")
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_variables(outcomes = "mpg", predictors = everything()) %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_variables(outcomes = "mpg", predictors = everything()) |>
     workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
@@ -62,7 +62,7 @@ test_that("orbital works with workflows - variables", {
 test_that("orbital errors on non-trained workflow", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("workflows")
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
@@ -78,7 +78,7 @@ test_that("orbital errors on non-trained workflow", {
 test_that("orbital works with recipe", {
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("recipes")
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   rec_prep <- recipes::prep(rec_spec)
@@ -92,7 +92,7 @@ test_that("orbital works with recipe", {
 
 test_that("orbital errors untrained recipe", {
   skip_if_not_installed("recipes")
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   expect_snapshot(
@@ -128,8 +128,8 @@ test_that("orbital errors nicely on post-processing", {
   skip_if_not_installed("workflows")
   lm_spec <- parsnip::linear_reg()
 
-  wf_spec <- workflows::workflow() %>%
-    workflows::add_formula(mpg ~ .) %>%
+  wf_spec <- workflows::workflow() |>
+    workflows::add_formula(mpg ~ .) |>
     workflows::add_model(lm_spec)
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
@@ -154,7 +154,7 @@ test_that("orbital printing works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("workflows")
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()
@@ -182,7 +182,7 @@ test_that("prefix argument works", {
   skip_if_not_installed("workflows")
   skip_if_not_installed("tidypredict")
 
-  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
+  rec_spec <- recipes::recipe(mpg ~ ., data = mtcars) |>
     recipes::step_normalize(recipes::all_numeric_predictors())
 
   lm_spec <- parsnip::linear_reg()

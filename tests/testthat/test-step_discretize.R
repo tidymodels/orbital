@@ -5,8 +5,8 @@ test_that("step_discretize works", {
   mtcars[1, ] <- NA
 
   suppressWarnings(
-    rec <- recipes::recipe(~., data = mtcars) %>%
-      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
+    rec <- recipes::recipe(~., data = mtcars) |>
+      recipes::step_discretize(mpg, disp, min_unique = 4) |>
       recipes::prep()
   )
 
@@ -27,8 +27,8 @@ test_that("step_discretize works num_breaks = 2", {
   mtcars[1, ] <- NA
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      recipes::step_discretize(vs, am, num_breaks = 2) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      recipes::step_discretize(vs, am, num_breaks = 2) |>
       recipes::prep()
   )
 
@@ -47,8 +47,8 @@ test_that("step_discretize works when min_unique is too high", {
   mtcars[1, ] <- NA
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      recipes::step_discretize(mpg, disp, min_unique = 100) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      recipes::step_discretize(mpg, disp, min_unique = 100) |>
       recipes::prep()
   )
 
@@ -66,9 +66,9 @@ test_that("step_discretize only calculates what is sufficient", {
   mtcars <- dplyr::as_tibble(mtcars)
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
-      recipes::step_rm(mpg) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      recipes::step_discretize(mpg, disp, min_unique = 4) |>
+      recipes::step_rm(mpg) |>
       recipes::prep()
   )
 
@@ -84,8 +84,8 @@ test_that("step_discretize works with empty selections", {
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars[1, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) %>%
-    recipes::step_discretize() %>%
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_discretize() |>
     recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
@@ -105,8 +105,8 @@ test_that("spark - step_discretize works", {
   mtcars_discretize[1, ] <- NA
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) %>%
-      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) |>
+      recipes::step_discretize(mpg, disp, min_unique = 4) |>
       recipes::prep()
   )
 
@@ -115,7 +115,7 @@ test_that("spark - step_discretize works", {
   sc <- testthat_spark_connection()
   mtcars_tbl <- testthat_tbl("mtcars_discretize")
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -131,8 +131,8 @@ test_that("SQLite - step_discretize works", {
   mtcars_discretize[1, ] <- NA
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) %>%
-      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) |>
+      recipes::step_discretize(mpg, disp, min_unique = 4) |>
       recipes::prep()
   )
 
@@ -141,7 +141,7 @@ test_that("SQLite - step_discretize works", {
   con <- DBI::dbConnect(RSQLite::SQLite(), path = ":memory:")
   mtcars_tbl <- dplyr::copy_to(con, mtcars_discretize)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -158,8 +158,8 @@ test_that("duckdb - step_discretize works", {
   mtcars_discretize[1, ] <- NA
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) %>%
-      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) |>
+      recipes::step_discretize(mpg, disp, min_unique = 4) |>
       recipes::prep()
   )
 
@@ -168,7 +168,7 @@ test_that("duckdb - step_discretize works", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   mtcars_tbl <- dplyr::copy_to(con, mtcars_discretize)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
@@ -184,8 +184,8 @@ test_that("arrow - step_discretize works", {
   mtcars_discretize[1, ] <- NA
 
   suppressWarnings(
-    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) %>%
-      recipes::step_discretize(mpg, disp, min_unique = 4) %>%
+    rec <- recipes::recipe(mpg ~ ., data = mtcars_discretize) |>
+      recipes::step_discretize(mpg, disp, min_unique = 4) |>
       recipes::prep()
   )
 
@@ -193,7 +193,7 @@ test_that("arrow - step_discretize works", {
 
   mtcars_tbl <- arrow::as_arrow_table(mtcars_discretize)
 
-  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) %>%
+  res_new <- dplyr::mutate(mtcars_tbl, !!!orbital_inline(orbital(rec))) |>
     dplyr::collect()
 
   expect_equal(res_new, res)
