@@ -93,6 +93,7 @@ predict(orbital_obj, db_mtcars)
 and spark databases
 
 ```{r}
+#| message: false
 library(sparklyr)
 sc <- spark_connect(master = "local")
 
