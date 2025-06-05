@@ -18,6 +18,7 @@ The orbital package allows you to turn a fitted workflow into a new object, that
 
 ```{r}
 #| label: setup
+#| message: false
 library(orbital)
 library(recipes)
 library(parsnip)
