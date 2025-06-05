@@ -24,7 +24,7 @@
 #' library(recipes)
 #' library(parsnip)
 #'
-#' rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+#' rec_spec <- recipe(mpg ~ ., data = mtcars) |>
 #'   step_normalize(all_numeric_predictors())
 #'
 #' lm_spec <- linear_reg()
@@ -39,9 +39,9 @@
 #'
 #' library(dplyr)
 #'
-#' mtcars %>%
+#' mtcars |>
 #'   mutate(!!!orbital_inline(orbital_obj))
 #' @export
 orbital_inline <- function(x) {
-	rlang::parse_quos(x, env = rlang::global_env())
+  rlang::parse_quos(x, env = rlang::global_env())
 }

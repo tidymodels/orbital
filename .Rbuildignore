@@ -11,3 +11,5 @@
 ^pkgdown$
 ^vignettes/articles$
 ^codecov\.yml$
+^[\.]?air\.toml$
+^\.vscode$

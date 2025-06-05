@@ -2,7 +2,8 @@
 title: "Using Databases"
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -14,7 +15,8 @@ knitr::opts_chunk$set(
 
 We start by loading our packages and creating a simple fitted workflow using `mtcars`.
 
-```{r setup}
+```{r}
+#| label: setup
 library(orbital)
 library(recipes)
 library(parsnip)

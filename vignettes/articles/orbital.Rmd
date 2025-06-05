@@ -2,7 +2,8 @@
 title: "Introduction to orbital"
 ---
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -15,7 +16,8 @@ The orbital package allows you to turn a fitted workflow into a new object, that
 
 ## Creating a fitted model
 
-```{r setup}
+```{r}
+#| label: setup
 library(orbital)
 library(recipes)
 library(parsnip)

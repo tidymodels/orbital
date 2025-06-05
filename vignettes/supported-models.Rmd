@@ -73,14 +73,16 @@ tibble::tribble(
 
 ## Recipes steps
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
+```{r}
+#| label: setup
 #| echo: false
 library(orbital)
 ```
@@ -95,7 +97,8 @@ steps <- gsub("orbital.", "", steps)
 
 The following `r length(steps)` recipes steps are supported
 
-```{r, results='asis'}
+```{r}
+#| results: asis
 #| echo: false
 cat(paste0("- `", steps, "()`\n"))
 ```

@@ -56,7 +56,7 @@ library(workflows)
 library(recipes)
 library(parsnip)
 
-rec_spec <- recipe(mpg ~ ., data = mtcars) \%>\%
+rec_spec <- recipe(mpg ~ ., data = mtcars) |>
   step_normalize(all_numeric_predictors())
 
 lm_spec <- linear_reg()
@@ -68,11 +68,11 @@ wf_fit <- fit(wf_spec, mtcars)
 orbital(wf_fit)
 
 # Also works on parsnip object by itself
-fit(lm_spec, mpg ~ disp, data = mtcars) \%>\%
+fit(lm_spec, mpg ~ disp, data = mtcars) |>
   orbital()
 
 # And prepped recipes
-prep(rec_spec) \%>\%
+prep(rec_spec) |>
   orbital()
 \dontshow{\}) # examplesIf}
 }
