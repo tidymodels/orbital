@@ -25,6 +25,7 @@ if (!rlang::is_installed(c("gt", "tibble"))) {
 #| echo: false
 #| message: false
 #| error: false
+#| output: false
 library(gt)
 library(dplyr)
 
