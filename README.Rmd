@@ -19,8 +19,8 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/tidymodels/orbital/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/tidymodels/orbital/actions/workflows/R-CMD-check.yaml)
 [![CRAN status](https://www.r-pkg.org/badges/version/orbital)](https://CRAN.R-project.org/package=orbital)
-[![Codecov test coverage](https://codecov.io/gh/tidymodels/orbital/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/orbital?branch=main)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+[![Codecov test coverage](https://codecov.io/gh/tidymodels/orbital/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/orbital)
 <!-- badges: end -->
 
 The goal of orbital is to enable running predictions of tidymodels [workflows](https://workflows.tidymodels.org/) inside databases.

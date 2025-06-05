@@ -4,12 +4,11 @@ on:
   push:
     branches: [main, master]
   pull_request:
-    branches: [main, master]
   release:
     types: [published]
   workflow_dispatch:
 
-name: pkgdown
+name: pkgdown.yaml
 
 permissions: read-all
 
@@ -36,22 +35,6 @@ jobs:
         with:
           extra-packages: any::pkgdown, local::.
           needs: website
-
-      - name: Cache Spark
-        id: cache-spark
-        uses: actions/cache@v2
-        with:
-          path: /home/runner/spark/spark-3.3.4-bin-hadoop3
-          key: sparklyr-spark-3.3.4-bin-hadoop3-3
-
-      - name: Install Spark (via sparklyr)
-        if: steps.cache-spark.outputs.cache-hit != 'true'
-        run: |
-          sparklyr::spark_install(
-            version = "3.3.4",
-            hadoop_version = "3"
-          )
-        shell: Rscript {0}
 
       - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
