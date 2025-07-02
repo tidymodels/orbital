@@ -9,9 +9,9 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/orbital)](https://CRAN.R-project.org/package=orbital)
 [![Codecov test
-coverage](https://codecov.io/gh/tidymodels/orbital/branch/main/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/orbital?branch=main)
+coverage](https://codecov.io/gh/tidymodels/orbital/graph/badge.svg)](https://app.codecov.io/gh/tidymodels/orbital)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 The goal of orbital is to enable running predictions of tidymodels
@@ -144,14 +144,6 @@ and spark databases
 
 ``` r
 library(sparklyr)
-#> 
-#> Attaching package: 'sparklyr'
-#> The following object is masked from 'package:purrr':
-#> 
-#>     invoke
-#> The following object is masked from 'package:stats':
-#> 
-#>     filter
 sc <- spark_connect(master = "local")
 
 sc_mtcars <- copy_to(sc, mtcars, overwrite = TRUE)
