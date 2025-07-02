@@ -41,17 +41,39 @@ pca_helper <- function(rot, prefix, all_vars) {
 
   row_nms <- rownames(rot)
 
-  out <- character(sum(used_vars))
+  out_names <- pca_naming(colnames(rot), prefix)
+
+  out <- list(length(out_names))
+
+  # when should we wrap longer sequences
+  n_wrap <- 50
+
   for (i in seq_len(sum(used_vars))) {
     non_zero <- rot[, i] != 0
-    out[i] <- paste(
-      glue::glue("{row_nms[non_zero]} * {rot[, i][non_zero]}"),
-      collapse = " + "
-    )
+    terms <- glue::glue("{row_nms[non_zero]} * {rot[, i][non_zero]}")
+    if (length(terms) > n_wrap) {
+      split_ind <- rep(
+        seq(1, ceiling(length(terms) / n_wrap)),
+        each = n_wrap,
+        length.out = length(terms)
+      )
+
+      terms <- split(terms, split_ind)
+      not_first <- seq(2, length(terms))
+      terms[not_first] <- lapply(terms[not_first], function(x) {
+        c(out_names[[i]], x)
+      })
+
+      terms <- lapply(terms, paste, collapse = " + ")
+      names(terms) <- rep(out_names[[i]], length(terms))
+    } else {
+      terms <- paste(terms, collapse = " + ")
+      names(terms) <- out_names[[i]]
+    }
+    out[[i]] <- terms
   }
 
-  names(out) <- pca_naming(colnames(rot), prefix)
-  out
+  unlist(out)
 }
 
 pca_naming <- function(x, prefix) {
