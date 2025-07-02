@@ -41,8 +41,8 @@ pca_helper <- function(rot, prefix, all_vars) {
 
   row_nms <- rownames(rot)
 
-  out <- character(length(all_vars))
-  for (i in seq_along(all_vars)) {
+  out <- character(sum(used_vars))
+  for (i in seq_len(sum(used_vars))) {
     non_zero <- rot[, i] != 0
     out[i] <- paste(
       glue::glue("{row_nms[non_zero]} * {rot[, i][non_zero]}"),
@@ -50,10 +50,10 @@ pca_helper <- function(rot, prefix, all_vars) {
     )
   }
 
-  names(out) <- all_vars
+  names(out) <- pca_naming(colnames(rot), prefix)
   out
 }
 
 pca_naming <- function(x, prefix) {
-	gsub(paste0(prefix, "0+"), prefix, x)
+  gsub(paste0(prefix, "0+"), prefix, x)
 }

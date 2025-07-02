@@ -1,10 +1,10 @@
 # orbital (development version)
 
-
 * Fixed bug where PCA steps didn't work if they were trained with more than 99 predictors. (#82)
 
 * `step_pca_sparse()` no longer generate code with terms with 0 in them. (#51)
 
+* Fixed bugs in all PCA steps where an error occurred depending on which predictors were selected. (#52)
 
 # orbital 0.3.0
 

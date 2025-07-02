@@ -34,22 +34,22 @@ test_that("step_pca works with more than 9 PCs", {
 })
 
 test_that("step_pca works with more than 100 PCs", {
-	skip_if_not_installed("recipes")
+  skip_if_not_installed("recipes")
 
-	data <- lapply(1:1000, function(x) sample(0:1, 100, TRUE))
-	names(data) <- paste0("V", 1:1000)
-	data <- dplyr::as_tibble(data)
+  data <- lapply(1:1000, function(x) sample(0:1, 100, TRUE))
+  names(data) <- paste0("V", 1:1000)
+  data <- dplyr::as_tibble(data)
 
-	rec <- recipes::recipe(~ ., data = data) %>%
-		recipes::step_pca(recipes::all_predictors()) %>%
-		recipes::prep()
+  rec <- recipes::recipe(~., data = data) %>%
+    recipes::step_pca(recipes::all_predictors()) %>%
+    recipes::prep()
 
-	exp <- recipes::bake(rec, new_data = data)
+  exp <- recipes::bake(rec, new_data = data)
 
-	res <- dplyr::mutate(data, !!!orbital_inline(orbital(rec)))
-	res <- res[names(exp)]
+  res <- dplyr::mutate(data, !!!orbital_inline(orbital(rec)))
+  res <- res[names(exp)]
 
-	expect_equal(res, exp)
+  expect_equal(res, exp)
 })
 
 test_that("step_pca only calculates what is sufficient", {
@@ -66,6 +66,22 @@ test_that("step_pca only calculates what is sufficient", {
   expect_identical(
     names(orbital(rec)),
     c("PC2", "PC4")
+  )
+})
+
+test_that("step_pca works when not all variables have PCA applied to them", {
+  skip_if_not_installed("recipes")
+
+  rec1 <- recipes::recipe(~ vs + am + cyl, data = mtcars) |>
+    recipes::step_pca(recipes::all_numeric_predictors(), -cyl) |>
+    recipes::prep()
+  rec2 <- recipes::recipe(~ vs + am, data = mtcars) |>
+    recipes::step_pca(recipes::all_numeric_predictors()) |>
+    recipes::prep()
+
+  expect_identical(
+    orbital::orbital(rec1),
+    orbital::orbital(rec2)
   )
 })
 
