@@ -8,11 +8,12 @@
 <title>Introduction to orbital • orbital</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.9/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to orbital">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
+<meta property="og:title" content="Introduction to orbital">
 <meta name="robots" content="noindex">
 <script defer data-domain="orbital.tidymodels.org,all.tidymodels.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
@@ -86,22 +87,6 @@ dependencies needed.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/orbital" class="external-link">orbital</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; Loading required package: dplyr</span></span>
-<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
-<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'dplyr'</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter, lag</span></span>
-<span><span class="co">#&gt; The following objects are masked from 'package:base':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'recipes'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     step</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://modeldata.tidymodels.org" class="external-link">modeldata</a></span><span class="op">)</span></span></code></pre></div>
@@ -109,18 +94,18 @@ dependencies needed.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ames</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># A tibble: 2,930 × 74</span></span></span>
-<span><span class="co">#&gt;    MS_SubClass      MS_Zoning Lot_Frontage Lot_Area Street Alley Lot_Shape</span></span>
-<span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> One_Story_1946_… Resident…          141    <span style="text-decoration: underline;">31</span>770 Pave   No_A… Slightly…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> One_Story_1946_… Resident…           80    <span style="text-decoration: underline;">11</span>622 Pave   No_A… Regular  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> One_Story_1946_… Resident…           81    <span style="text-decoration: underline;">14</span>267 Pave   No_A… Slightly…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> One_Story_1946_… Resident…           93    <span style="text-decoration: underline;">11</span>160 Pave   No_A… Regular  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Two_Story_1946_… Resident…           74    <span style="text-decoration: underline;">13</span>830 Pave   No_A… Slightly…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Two_Story_1946_… Resident…           78     <span style="text-decoration: underline;">9</span>978 Pave   No_A… Slightly…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> One_Story_PUD_1… Resident…           41     <span style="text-decoration: underline;">4</span>920 Pave   No_A… Regular  </span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> One_Story_PUD_1… Resident…           43     <span style="text-decoration: underline;">5</span>005 Pave   No_A… Slightly…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> One_Story_PUD_1… Resident…           39     <span style="text-decoration: underline;">5</span>389 Pave   No_A… Slightly…</span></span>
-<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Two_Story_1946_… Resident…           60     <span style="text-decoration: underline;">7</span>500 Pave   No_A… Regular  </span></span>
+<span><span class="co">#&gt;    MS_SubClass   MS_Zoning Lot_Frontage Lot_Area Street Alley Lot_Shape</span></span>
+<span><span class="co">#&gt;  <span style="color: #BCBCBC;">*</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;int&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span> <span style="color: #949494; font-style: italic;">&lt;fct&gt;</span>    </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> One_Story_19… Resident…          141    <span style="text-decoration: underline;">31</span>770 Pave   No_A… Slightly…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 2</span> One_Story_19… Resident…           80    <span style="text-decoration: underline;">11</span>622 Pave   No_A… Regular  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 3</span> One_Story_19… Resident…           81    <span style="text-decoration: underline;">14</span>267 Pave   No_A… Slightly…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 4</span> One_Story_19… Resident…           93    <span style="text-decoration: underline;">11</span>160 Pave   No_A… Regular  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 5</span> Two_Story_19… Resident…           74    <span style="text-decoration: underline;">13</span>830 Pave   No_A… Slightly…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 6</span> Two_Story_19… Resident…           78     <span style="text-decoration: underline;">9</span>978 Pave   No_A… Slightly…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 7</span> One_Story_PU… Resident…           41     <span style="text-decoration: underline;">4</span>920 Pave   No_A… Regular  </span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 8</span> One_Story_PU… Resident…           43     <span style="text-decoration: underline;">5</span>005 Pave   No_A… Slightly…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;"> 9</span> One_Story_PU… Resident…           39     <span style="text-decoration: underline;">5</span>389 Pave   No_A… Slightly…</span></span>
+<span><span class="co">#&gt; <span style="color: #BCBCBC;">10</span> Two_Story_19… Resident…           60     <span style="text-decoration: underline;">7</span>500 Pave   No_A… Regular  </span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 2,920 more rows</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># ℹ 67 more variables: Land_Contour &lt;fct&gt;, Utilities &lt;fct&gt;,</span></span></span>
 <span><span class="co">#&gt; <span style="color: #949494;">#   Lot_Config &lt;fct&gt;, Land_Slope &lt;fct&gt;, Neighborhood &lt;fct&gt;,</span></span></span>
@@ -151,11 +136,11 @@ the preprocessing, then specify a parsnip model to go along with it.</p>
 <code class="sourceCode R"><span><span class="va">wf_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="va">rec_spec</span>, <span class="va">lm_spec</span><span class="op">)</span></span>
 <span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, data <span class="op">=</span> <span class="va">ames</span><span class="op">)</span></span>
 <span><span class="va">wf_fit</span></span>
-<span><span class="co">#&gt; ══ Workflow [trained] ════════════════════════════════════════════════════</span></span>
+<span><span class="co">#&gt; ══ Workflow [trained] ═════════════════════════════════════════════════</span></span>
 <span><span class="co">#&gt; <span style="font-style: italic;">Preprocessor:</span> Recipe</span></span>
 <span><span class="co">#&gt; <span style="font-style: italic;">Model:</span> linear_reg()</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Preprocessor ──────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Preprocessor ───────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; 7 Recipe Steps</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; • step_impute_median()</span></span>
@@ -166,7 +151,7 @@ the preprocessing, then specify a parsnip model to go along with it.</p>
 <span><span class="co">#&gt; • step_normalize()</span></span>
 <span><span class="co">#&gt; • step_corr()</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; ── Model ─────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ── Model ──────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Call:</span></span>
 <span><span class="co">#&gt; stats::lm(formula = ..y ~ ., data = data)</span></span>
@@ -231,112 +216,112 @@ an orbital object that we will use from here on out.</p>
 <code class="sourceCode R"><span><span class="va">orbital_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/orbital.html">orbital</a></span><span class="op">(</span><span class="va">wf_fit</span><span class="op">)</span></span>
 <span><span class="va">orbital_obj</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">orbital Object</span> <span style="color: #00BBBB;">────────────────────────────────────────────────────────</span></span></span>
-<span><span class="co">#&gt; • Lot_Frontage = dplyr::if_else(is.na(Lot_Frontage), 63, Lot_Fronta ...</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">orbital Object</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">#&gt; • Lot_Frontage = dplyr::if_else(is.na(Lot_Frontage), 63, Lot_Fro ...</span></span>
 <span><span class="co">#&gt; • Lot_Area = dplyr::if_else(is.na(Lot_Area), 9436, Lot_Area)</span></span>
-<span><span class="co">#&gt; • Year_Built = dplyr::if_else(is.na(Year_Built), 1973, Year_Built)</span></span>
-<span><span class="co">#&gt; • Year_Remod_Add = dplyr::if_else(is.na(Year_Remod_Add), 1993, Year ...</span></span>
-<span><span class="co">#&gt; • Mas_Vnr_Area = dplyr::if_else(is.na(Mas_Vnr_Area), 0, Mas_Vnr_Are ...</span></span>
-<span><span class="co">#&gt; • BsmtFin_SF_1 = dplyr::if_else(is.na(BsmtFin_SF_1), 3, BsmtFin_SF_ ...</span></span>
-<span><span class="co">#&gt; • Bsmt_Unf_SF = dplyr::if_else(is.na(Bsmt_Unf_SF), 465.5, Bsmt_Unf_ ...</span></span>
-<span><span class="co">#&gt; • Total_Bsmt_SF = dplyr::if_else(is.na(Total_Bsmt_SF), 990, Total_B ...</span></span>
-<span><span class="co">#&gt; • First_Flr_SF = dplyr::if_else(is.na(First_Flr_SF), 1084, First_Fl ...</span></span>
-<span><span class="co">#&gt; • Second_Flr_SF = dplyr::if_else(is.na(Second_Flr_SF), 0, Second_Fl ...</span></span>
-<span><span class="co">#&gt; • Gr_Liv_Area = dplyr::if_else(is.na(Gr_Liv_Area), 1442, Gr_Liv_Are ...</span></span>
-<span><span class="co">#&gt; • Bsmt_Full_Bath = dplyr::if_else(is.na(Bsmt_Full_Bath), 0, Bsmt_Fu ...</span></span>
-<span><span class="co">#&gt; • Bsmt_Half_Bath = dplyr::if_else(is.na(Bsmt_Half_Bath), 0, Bsmt_Ha ...</span></span>
+<span><span class="co">#&gt; • Year_Built = dplyr::if_else(is.na(Year_Built), 1973, Year_Buil ...</span></span>
+<span><span class="co">#&gt; • Year_Remod_Add = dplyr::if_else(is.na(Year_Remod_Add), 1993, Y ...</span></span>
+<span><span class="co">#&gt; • Mas_Vnr_Area = dplyr::if_else(is.na(Mas_Vnr_Area), 0, Mas_Vnr_ ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_SF_1 = dplyr::if_else(is.na(BsmtFin_SF_1), 3, BsmtFin_ ...</span></span>
+<span><span class="co">#&gt; • Bsmt_Unf_SF = dplyr::if_else(is.na(Bsmt_Unf_SF), 465.5, Bsmt_U ...</span></span>
+<span><span class="co">#&gt; • Total_Bsmt_SF = dplyr::if_else(is.na(Total_Bsmt_SF), 990, Tota ...</span></span>
+<span><span class="co">#&gt; • First_Flr_SF = dplyr::if_else(is.na(First_Flr_SF), 1084, First ...</span></span>
+<span><span class="co">#&gt; • Second_Flr_SF = dplyr::if_else(is.na(Second_Flr_SF), 0, Second ...</span></span>
+<span><span class="co">#&gt; • Gr_Liv_Area = dplyr::if_else(is.na(Gr_Liv_Area), 1442, Gr_Liv_ ...</span></span>
+<span><span class="co">#&gt; • Bsmt_Full_Bath = dplyr::if_else(is.na(Bsmt_Full_Bath), 0, Bsmt ...</span></span>
+<span><span class="co">#&gt; • Bsmt_Half_Bath = dplyr::if_else(is.na(Bsmt_Half_Bath), 0, Bsmt ...</span></span>
 <span><span class="co">#&gt; • Full_Bath = dplyr::if_else(is.na(Full_Bath), 2, Full_Bath)</span></span>
 <span><span class="co">#&gt; • Half_Bath = dplyr::if_else(is.na(Half_Bath), 0, Half_Bath)</span></span>
-<span><span class="co">#&gt; • Bedroom_AbvGr = dplyr::if_else(is.na(Bedroom_AbvGr), 3, Bedroom_A ...</span></span>
-<span><span class="co">#&gt; • TotRms_AbvGrd = dplyr::if_else(is.na(TotRms_AbvGrd), 6, TotRms_Ab ...</span></span>
+<span><span class="co">#&gt; • Bedroom_AbvGr = dplyr::if_else(is.na(Bedroom_AbvGr), 3, Bedroo ...</span></span>
+<span><span class="co">#&gt; • TotRms_AbvGrd = dplyr::if_else(is.na(TotRms_AbvGrd), 6, TotRms ...</span></span>
 <span><span class="co">#&gt; • Fireplaces = dplyr::if_else(is.na(Fireplaces), 1, Fireplaces)</span></span>
-<span><span class="co">#&gt; • Garage_Cars = dplyr::if_else(is.na(Garage_Cars), 2, Garage_Cars)</span></span>
-<span><span class="co">#&gt; • Garage_Area = dplyr::if_else(is.na(Garage_Area), 480, Garage_Area ...</span></span>
-<span><span class="co">#&gt; • Wood_Deck_SF = dplyr::if_else(is.na(Wood_Deck_SF), 0, Wood_Deck_S ...</span></span>
+<span><span class="co">#&gt; • Garage_Cars = dplyr::if_else(is.na(Garage_Cars), 2, Garage_Car ...</span></span>
+<span><span class="co">#&gt; • Garage_Area = dplyr::if_else(is.na(Garage_Area), 480, Garage_A ...</span></span>
+<span><span class="co">#&gt; • Wood_Deck_SF = dplyr::if_else(is.na(Wood_Deck_SF), 0, Wood_Dec ...</span></span>
 <span><span class="co">#&gt; • Mo_Sold = dplyr::if_else(is.na(Mo_Sold), 6, Mo_Sold)</span></span>
 <span><span class="co">#&gt; • Year_Sold = dplyr::if_else(is.na(Year_Sold), 2008, Year_Sold)</span></span>
-<span><span class="co">#&gt; • Longitude = dplyr::if_else(is.na(Longitude), -93.64181, Longitude ...</span></span>
+<span><span class="co">#&gt; • Longitude = dplyr::if_else(is.na(Longitude), -93.64181, Longit ...</span></span>
 <span><span class="co">#&gt; • Latitude = dplyr::if_else(is.na(Latitude), 42.03466, Latitude)</span></span>
-<span><span class="co">#&gt; • MS_SubClass = dplyr::if_else(is.na(MS_SubClass), "unknown", MS_Su ...</span></span>
-<span><span class="co">#&gt; • MS_Zoning = dplyr::if_else(is.na(MS_Zoning), "unknown", MS_Zoning ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass = dplyr::if_else(is.na(MS_SubClass), "unknown", MS ...</span></span>
+<span><span class="co">#&gt; • MS_Zoning = dplyr::if_else(is.na(MS_Zoning), "unknown", MS_Zon ...</span></span>
 <span><span class="co">#&gt; • Alley = dplyr::if_else(is.na(Alley), "unknown", Alley)</span></span>
-<span><span class="co">#&gt; • Lot_Shape = dplyr::if_else(is.na(Lot_Shape), "unknown", Lot_Shape ...</span></span>
-<span><span class="co">#&gt; • Land_Contour = dplyr::if_else(is.na(Land_Contour), "unknown", Lan ...</span></span>
-<span><span class="co">#&gt; • Lot_Config = dplyr::if_else(is.na(Lot_Config), "unknown", Lot_Con ...</span></span>
-<span><span class="co">#&gt; • Neighborhood = dplyr::if_else(is.na(Neighborhood), "unknown", Nei ...</span></span>
-<span><span class="co">#&gt; • Condition_1 = dplyr::if_else(is.na(Condition_1), "unknown", Condi ...</span></span>
-<span><span class="co">#&gt; • Bldg_Type = dplyr::if_else(is.na(Bldg_Type), "unknown", Bldg_Type ...</span></span>
-<span><span class="co">#&gt; • House_Style = dplyr::if_else(is.na(House_Style), "unknown", House ...</span></span>
-<span><span class="co">#&gt; • Overall_Cond = dplyr::if_else(is.na(Overall_Cond), "unknown", Ove ...</span></span>
-<span><span class="co">#&gt; • Roof_Style = dplyr::if_else(is.na(Roof_Style), "unknown", Roof_St ...</span></span>
-<span><span class="co">#&gt; • Exterior_1st = dplyr::if_else(is.na(Exterior_1st), "unknown", Ext ...</span></span>
-<span><span class="co">#&gt; • Exterior_2nd = dplyr::if_else(is.na(Exterior_2nd), "unknown", Ext ...</span></span>
-<span><span class="co">#&gt; • Mas_Vnr_Type = dplyr::if_else(is.na(Mas_Vnr_Type), "unknown", Mas ...</span></span>
-<span><span class="co">#&gt; • Exter_Cond = dplyr::if_else(is.na(Exter_Cond), "unknown", Exter_C ...</span></span>
-<span><span class="co">#&gt; • Foundation = dplyr::if_else(is.na(Foundation), "unknown", Foundat ...</span></span>
-<span><span class="co">#&gt; • Bsmt_Cond = dplyr::if_else(is.na(Bsmt_Cond), "unknown", Bsmt_Cond ...</span></span>
-<span><span class="co">#&gt; • Bsmt_Exposure = dplyr::if_else(is.na(Bsmt_Exposure), "unknown", B ...</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1 = dplyr::if_else(is.na(BsmtFin_Type_1), "unknown", ...</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_2 = dplyr::if_else(is.na(BsmtFin_Type_2), "unknown", ...</span></span>
-<span><span class="co">#&gt; • Heating_QC = dplyr::if_else(is.na(Heating_QC), "unknown", Heating ...</span></span>
-<span><span class="co">#&gt; • Central_Air = dplyr::if_else(is.na(Central_Air), "unknown", Centr ...</span></span>
-<span><span class="co">#&gt; • Electrical = dplyr::if_else(is.na(Electrical), "unknown", Electri ...</span></span>
-<span><span class="co">#&gt; • Functional = dplyr::if_else(is.na(Functional), "unknown", Functio ...</span></span>
-<span><span class="co">#&gt; • Garage_Type = dplyr::if_else(is.na(Garage_Type), "unknown", Garag ...</span></span>
-<span><span class="co">#&gt; • Garage_Finish = dplyr::if_else(is.na(Garage_Finish), "unknown", G ...</span></span>
-<span><span class="co">#&gt; • Garage_Cond = dplyr::if_else(is.na(Garage_Cond), "unknown", Garag ...</span></span>
-<span><span class="co">#&gt; • Paved_Drive = dplyr::if_else(is.na(Paved_Drive), "unknown", Paved ...</span></span>
+<span><span class="co">#&gt; • Lot_Shape = dplyr::if_else(is.na(Lot_Shape), "unknown", Lot_Sh ...</span></span>
+<span><span class="co">#&gt; • Land_Contour = dplyr::if_else(is.na(Land_Contour), "unknown", ...</span></span>
+<span><span class="co">#&gt; • Lot_Config = dplyr::if_else(is.na(Lot_Config), "unknown", Lot_ ...</span></span>
+<span><span class="co">#&gt; • Neighborhood = dplyr::if_else(is.na(Neighborhood), "unknown", ...</span></span>
+<span><span class="co">#&gt; • Condition_1 = dplyr::if_else(is.na(Condition_1), "unknown", Co ...</span></span>
+<span><span class="co">#&gt; • Bldg_Type = dplyr::if_else(is.na(Bldg_Type), "unknown", Bldg_T ...</span></span>
+<span><span class="co">#&gt; • House_Style = dplyr::if_else(is.na(House_Style), "unknown", Ho ...</span></span>
+<span><span class="co">#&gt; • Overall_Cond = dplyr::if_else(is.na(Overall_Cond), "unknown", ...</span></span>
+<span><span class="co">#&gt; • Roof_Style = dplyr::if_else(is.na(Roof_Style), "unknown", Roof ...</span></span>
+<span><span class="co">#&gt; • Exterior_1st = dplyr::if_else(is.na(Exterior_1st), "unknown", ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd = dplyr::if_else(is.na(Exterior_2nd), "unknown", ...</span></span>
+<span><span class="co">#&gt; • Mas_Vnr_Type = dplyr::if_else(is.na(Mas_Vnr_Type), "unknown", ...</span></span>
+<span><span class="co">#&gt; • Exter_Cond = dplyr::if_else(is.na(Exter_Cond), "unknown", Exte ...</span></span>
+<span><span class="co">#&gt; • Foundation = dplyr::if_else(is.na(Foundation), "unknown", Foun ...</span></span>
+<span><span class="co">#&gt; • Bsmt_Cond = dplyr::if_else(is.na(Bsmt_Cond), "unknown", Bsmt_C ...</span></span>
+<span><span class="co">#&gt; • Bsmt_Exposure = dplyr::if_else(is.na(Bsmt_Exposure), "unknown" ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1 = dplyr::if_else(is.na(BsmtFin_Type_1), "unknow ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_2 = dplyr::if_else(is.na(BsmtFin_Type_2), "unknow ...</span></span>
+<span><span class="co">#&gt; • Heating_QC = dplyr::if_else(is.na(Heating_QC), "unknown", Heat ...</span></span>
+<span><span class="co">#&gt; • Central_Air = dplyr::if_else(is.na(Central_Air), "unknown", Ce ...</span></span>
+<span><span class="co">#&gt; • Electrical = dplyr::if_else(is.na(Electrical), "unknown", Elec ...</span></span>
+<span><span class="co">#&gt; • Functional = dplyr::if_else(is.na(Functional), "unknown", Func ...</span></span>
+<span><span class="co">#&gt; • Garage_Type = dplyr::if_else(is.na(Garage_Type), "unknown", Ga ...</span></span>
+<span><span class="co">#&gt; • Garage_Finish = dplyr::if_else(is.na(Garage_Finish), "unknown" ...</span></span>
+<span><span class="co">#&gt; • Garage_Cond = dplyr::if_else(is.na(Garage_Cond), "unknown", Ga ...</span></span>
+<span><span class="co">#&gt; • Paved_Drive = dplyr::if_else(is.na(Paved_Drive), "unknown", Pa ...</span></span>
 <span><span class="co">#&gt; • Fence = dplyr::if_else(is.na(Fence), "unknown", Fence)</span></span>
-<span><span class="co">#&gt; • Sale_Type = dplyr::if_else(is.na(Sale_Type), "unknown", Sale_Type ...</span></span>
-<span><span class="co">#&gt; • Sale_Condition = dplyr::if_else(is.na(Sale_Condition), "unknown", ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass = dplyr::if_else(is.na(MS_SubClass), NA, dplyr::if_el ...</span></span>
-<span><span class="co">#&gt; • MS_Zoning = dplyr::if_else(is.na(MS_Zoning), NA, dplyr::if_else(M ...</span></span>
-<span><span class="co">#&gt; • Alley = dplyr::if_else(is.na(Alley), NA, dplyr::if_else(Alley %in ...</span></span>
-<span><span class="co">#&gt; • Lot_Shape = dplyr::if_else(is.na(Lot_Shape), NA, dplyr::if_else(L ...</span></span>
-<span><span class="co">#&gt; • Land_Contour = dplyr::if_else(is.na(Land_Contour), NA, dplyr::if_ ...</span></span>
-<span><span class="co">#&gt; • Lot_Config = dplyr::if_else(is.na(Lot_Config), NA, dplyr::if_else ...</span></span>
-<span><span class="co">#&gt; • Neighborhood = dplyr::if_else(is.na(Neighborhood), NA, dplyr::if_ ...</span></span>
-<span><span class="co">#&gt; • Condition_1 = dplyr::if_else(is.na(Condition_1), NA, dplyr::if_el ...</span></span>
-<span><span class="co">#&gt; • Bldg_Type = dplyr::if_else(is.na(Bldg_Type), NA, dplyr::if_else(B ...</span></span>
-<span><span class="co">#&gt; • House_Style = dplyr::if_else(is.na(House_Style), NA, dplyr::if_el ...</span></span>
-<span><span class="co">#&gt; • Overall_Cond = dplyr::if_else(is.na(Overall_Cond), NA, dplyr::if_ ...</span></span>
-<span><span class="co">#&gt; • Roof_Style = dplyr::if_else(is.na(Roof_Style), NA, dplyr::if_else ...</span></span>
-<span><span class="co">#&gt; • Exterior_1st = dplyr::if_else(is.na(Exterior_1st), NA, dplyr::if_ ...</span></span>
-<span><span class="co">#&gt; • Exterior_2nd = dplyr::if_else(is.na(Exterior_2nd), NA, dplyr::if_ ...</span></span>
-<span><span class="co">#&gt; • Mas_Vnr_Type = dplyr::if_else(is.na(Mas_Vnr_Type), NA, dplyr::if_ ...</span></span>
-<span><span class="co">#&gt; • Exter_Cond = dplyr::if_else(is.na(Exter_Cond), NA, dplyr::if_else ...</span></span>
-<span><span class="co">#&gt; • Foundation = dplyr::if_else(is.na(Foundation), NA, dplyr::if_else ...</span></span>
-<span><span class="co">#&gt; • Bsmt_Cond = dplyr::if_else(is.na(Bsmt_Cond), NA, dplyr::if_else(B ...</span></span>
-<span><span class="co">#&gt; • Bsmt_Exposure = dplyr::if_else(is.na(Bsmt_Exposure), NA, dplyr::i ...</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1 = dplyr::if_else(is.na(BsmtFin_Type_1), NA, dplyr: ...</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_2 = dplyr::if_else(is.na(BsmtFin_Type_2), NA, dplyr: ...</span></span>
-<span><span class="co">#&gt; • Heating_QC = dplyr::if_else(is.na(Heating_QC), NA, dplyr::if_else ...</span></span>
-<span><span class="co">#&gt; • Central_Air = dplyr::if_else(is.na(Central_Air), NA, dplyr::if_el ...</span></span>
-<span><span class="co">#&gt; • Electrical = dplyr::if_else(is.na(Electrical), NA, dplyr::if_else ...</span></span>
-<span><span class="co">#&gt; • Functional = dplyr::if_else(is.na(Functional), NA, dplyr::if_else ...</span></span>
-<span><span class="co">#&gt; • Garage_Type = dplyr::if_else(is.na(Garage_Type), NA, dplyr::if_el ...</span></span>
-<span><span class="co">#&gt; • Garage_Finish = dplyr::if_else(is.na(Garage_Finish), NA, dplyr::i ...</span></span>
-<span><span class="co">#&gt; • Garage_Cond = dplyr::if_else(is.na(Garage_Cond), NA, dplyr::if_el ...</span></span>
-<span><span class="co">#&gt; • Paved_Drive = dplyr::if_else(is.na(Paved_Drive), NA, dplyr::if_el ...</span></span>
-<span><span class="co">#&gt; • Fence = dplyr::if_else(is.na(Fence), NA, dplyr::if_else(Fence %in ...</span></span>
-<span><span class="co">#&gt; • Sale_Type = dplyr::if_else(is.na(Sale_Type), NA, dplyr::if_else(S ...</span></span>
-<span><span class="co">#&gt; • Sale_Condition = dplyr::if_else(is.na(Sale_Condition), NA, dplyr: ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_One_and_Half_Story_Finished_All_Ages = as.numeric(MS_ ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_Two_Story_1946_and_Newer = as.numeric(MS_SubClass == ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_One_Story_PUD_1946_and_Newer = as.numeric(MS_SubClass ...</span></span>
+<span><span class="co">#&gt; • Sale_Type = dplyr::if_else(is.na(Sale_Type), "unknown", Sale_T ...</span></span>
+<span><span class="co">#&gt; • Sale_Condition = dplyr::if_else(is.na(Sale_Condition), "unknow ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass = dplyr::if_else(is.na(MS_SubClass), NA, dplyr::if ...</span></span>
+<span><span class="co">#&gt; • MS_Zoning = dplyr::if_else(is.na(MS_Zoning), NA, dplyr::if_els ...</span></span>
+<span><span class="co">#&gt; • Alley = dplyr::if_else(is.na(Alley), NA, dplyr::if_else(Alley ...</span></span>
+<span><span class="co">#&gt; • Lot_Shape = dplyr::if_else(is.na(Lot_Shape), NA, dplyr::if_els ...</span></span>
+<span><span class="co">#&gt; • Land_Contour = dplyr::if_else(is.na(Land_Contour), NA, dplyr:: ...</span></span>
+<span><span class="co">#&gt; • Lot_Config = dplyr::if_else(is.na(Lot_Config), NA, dplyr::if_e ...</span></span>
+<span><span class="co">#&gt; • Neighborhood = dplyr::if_else(is.na(Neighborhood), NA, dplyr:: ...</span></span>
+<span><span class="co">#&gt; • Condition_1 = dplyr::if_else(is.na(Condition_1), NA, dplyr::if ...</span></span>
+<span><span class="co">#&gt; • Bldg_Type = dplyr::if_else(is.na(Bldg_Type), NA, dplyr::if_els ...</span></span>
+<span><span class="co">#&gt; • House_Style = dplyr::if_else(is.na(House_Style), NA, dplyr::if ...</span></span>
+<span><span class="co">#&gt; • Overall_Cond = dplyr::if_else(is.na(Overall_Cond), NA, dplyr:: ...</span></span>
+<span><span class="co">#&gt; • Roof_Style = dplyr::if_else(is.na(Roof_Style), NA, dplyr::if_e ...</span></span>
+<span><span class="co">#&gt; • Exterior_1st = dplyr::if_else(is.na(Exterior_1st), NA, dplyr:: ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd = dplyr::if_else(is.na(Exterior_2nd), NA, dplyr:: ...</span></span>
+<span><span class="co">#&gt; • Mas_Vnr_Type = dplyr::if_else(is.na(Mas_Vnr_Type), NA, dplyr:: ...</span></span>
+<span><span class="co">#&gt; • Exter_Cond = dplyr::if_else(is.na(Exter_Cond), NA, dplyr::if_e ...</span></span>
+<span><span class="co">#&gt; • Foundation = dplyr::if_else(is.na(Foundation), NA, dplyr::if_e ...</span></span>
+<span><span class="co">#&gt; • Bsmt_Cond = dplyr::if_else(is.na(Bsmt_Cond), NA, dplyr::if_els ...</span></span>
+<span><span class="co">#&gt; • Bsmt_Exposure = dplyr::if_else(is.na(Bsmt_Exposure), NA, dplyr ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1 = dplyr::if_else(is.na(BsmtFin_Type_1), NA, dpl ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_2 = dplyr::if_else(is.na(BsmtFin_Type_2), NA, dpl ...</span></span>
+<span><span class="co">#&gt; • Heating_QC = dplyr::if_else(is.na(Heating_QC), NA, dplyr::if_e ...</span></span>
+<span><span class="co">#&gt; • Central_Air = dplyr::if_else(is.na(Central_Air), NA, dplyr::if ...</span></span>
+<span><span class="co">#&gt; • Electrical = dplyr::if_else(is.na(Electrical), NA, dplyr::if_e ...</span></span>
+<span><span class="co">#&gt; • Functional = dplyr::if_else(is.na(Functional), NA, dplyr::if_e ...</span></span>
+<span><span class="co">#&gt; • Garage_Type = dplyr::if_else(is.na(Garage_Type), NA, dplyr::if ...</span></span>
+<span><span class="co">#&gt; • Garage_Finish = dplyr::if_else(is.na(Garage_Finish), NA, dplyr ...</span></span>
+<span><span class="co">#&gt; • Garage_Cond = dplyr::if_else(is.na(Garage_Cond), NA, dplyr::if ...</span></span>
+<span><span class="co">#&gt; • Paved_Drive = dplyr::if_else(is.na(Paved_Drive), NA, dplyr::if ...</span></span>
+<span><span class="co">#&gt; • Fence = dplyr::if_else(is.na(Fence), NA, dplyr::if_else(Fence ...</span></span>
+<span><span class="co">#&gt; • Sale_Type = dplyr::if_else(is.na(Sale_Type), NA, dplyr::if_els ...</span></span>
+<span><span class="co">#&gt; • Sale_Condition = dplyr::if_else(is.na(Sale_Condition), NA, dpl ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_One_and_Half_Story_Finished_All_Ages = as.numeric( ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_Two_Story_1946_and_Newer = as.numeric(MS_SubClass ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_One_Story_PUD_1946_and_Newer = as.numeric(MS_SubCl ...</span></span>
 <span><span class="co">#&gt; • MS_SubClass_other = as.numeric(MS_SubClass == "other")</span></span>
-<span><span class="co">#&gt; • MS_Zoning_Residential_Medium_Density = as.numeric(MS_Zoning == "R ...</span></span>
+<span><span class="co">#&gt; • MS_Zoning_Residential_Medium_Density = as.numeric(MS_Zoning == ...</span></span>
 <span><span class="co">#&gt; • MS_Zoning_other = as.numeric(MS_Zoning == "other")</span></span>
 <span><span class="co">#&gt; • Alley_other = as.numeric(Alley == "other")</span></span>
-<span><span class="co">#&gt; • Lot_Shape_Slightly_Irregular = as.numeric(Lot_Shape == "Slightly_ ...</span></span>
+<span><span class="co">#&gt; • Lot_Shape_Slightly_Irregular = as.numeric(Lot_Shape == "Slight ...</span></span>
 <span><span class="co">#&gt; • Land_Contour_other = as.numeric(Land_Contour == "other")</span></span>
 <span><span class="co">#&gt; • Lot_Config_CulDSac = as.numeric(Lot_Config == "CulDSac")</span></span>
 <span><span class="co">#&gt; • Lot_Config_Inside = as.numeric(Lot_Config == "Inside")</span></span>
-<span><span class="co">#&gt; • Neighborhood_College_Creek = as.numeric(Neighborhood == "College_ ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_College_Creek = as.numeric(Neighborhood == "Colle ...</span></span>
 <span><span class="co">#&gt; • Neighborhood_Old_Town = as.numeric(Neighborhood == "Old_Town")</span></span>
 <span><span class="co">#&gt; • Neighborhood_Edwards = as.numeric(Neighborhood == "Edwards")</span></span>
 <span><span class="co">#&gt; • Neighborhood_Somerset = as.numeric(Neighborhood == "Somerset")</span></span>
-<span><span class="co">#&gt; • Neighborhood_Northridge_Heights = as.numeric(Neighborhood == "Nor ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Northridge_Heights = as.numeric(Neighborhood == " ...</span></span>
 <span><span class="co">#&gt; • Neighborhood_Gilbert = as.numeric(Neighborhood == "Gilbert")</span></span>
 <span><span class="co">#&gt; • Neighborhood_Sawyer = as.numeric(Neighborhood == "Sawyer")</span></span>
 <span><span class="co">#&gt; • Neighborhood_other = as.numeric(Neighborhood == "other")</span></span>
@@ -347,7 +332,7 @@ an orbital object that we will use from here on out.</p>
 <span><span class="co">#&gt; • House_Style_One_Story = as.numeric(House_Style == "One_Story")</span></span>
 <span><span class="co">#&gt; • House_Style_Two_Story = as.numeric(House_Style == "Two_Story")</span></span>
 <span><span class="co">#&gt; • House_Style_other = as.numeric(House_Style == "other")</span></span>
-<span><span class="co">#&gt; • Overall_Cond_Above_Average = as.numeric(Overall_Cond == "Above_Av ...</span></span>
+<span><span class="co">#&gt; • Overall_Cond_Above_Average = as.numeric(Overall_Cond == "Above ...</span></span>
 <span><span class="co">#&gt; • Overall_Cond_Good = as.numeric(Overall_Cond == "Good")</span></span>
 <span><span class="co">#&gt; • Overall_Cond_other = as.numeric(Overall_Cond == "other")</span></span>
 <span><span class="co">#&gt; • Roof_Style_Hip = as.numeric(Roof_Style == "Hip")</span></span>
@@ -391,7 +376,7 @@ an orbital object that we will use from here on out.</p>
 <span><span class="co">#&gt; • Sale_Type_WD. = as.numeric(Sale_Type == "WD ")</span></span>
 <span><span class="co">#&gt; • Sale_Type_other = as.numeric(Sale_Type == "other")</span></span>
 <span><span class="co">#&gt; • Sale_Condition_Normal = as.numeric(Sale_Condition == "Normal")</span></span>
-<span><span class="co">#&gt; • Sale_Condition_Partial = as.numeric(Sale_Condition == "Partial")</span></span>
+<span><span class="co">#&gt; • Sale_Condition_Partial = as.numeric(Sale_Condition == "Partial ...</span></span>
 <span><span class="co">#&gt; • Lot_Frontage = (Lot_Frontage - 57.64778) / 33.49944</span></span>
 <span><span class="co">#&gt; • Lot_Area = (Lot_Area - 10147.92) / 7880.018</span></span>
 <span><span class="co">#&gt; • Year_Built = (Year_Built - 1971.356) / 30.24536</span></span>
@@ -417,79 +402,79 @@ an orbital object that we will use from here on out.</p>
 <span><span class="co">#&gt; • Year_Sold = (Year_Sold - 2007.79) / 1.316613</span></span>
 <span><span class="co">#&gt; • Longitude = (Longitude - -93.6429) / 0.02569957</span></span>
 <span><span class="co">#&gt; • Latitude = (Latitude - 42.03448) / 0.01841007</span></span>
-<span><span class="co">#&gt; • MS_SubClass_One_and_Half_Story_Finished_All_Ages = (MS_SubClass_O ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_Two_Story_1946_and_Newer = (MS_SubClass_Two_Story_194 ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_One_Story_PUD_1946_and_Newer = (MS_SubClass_One_Story ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_other = (MS_SubClass_other - 0.2720137) / 0.4450728</span></span>
-<span><span class="co">#&gt; • MS_Zoning_Residential_Medium_Density = (MS_Zoning_Residential_Med ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_One_and_Half_Story_Finished_All_Ages = (MS_SubClas ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_Two_Story_1946_and_Newer = (MS_SubClass_Two_Story_ ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_One_Story_PUD_1946_and_Newer = (MS_SubClass_One_St ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_other = (MS_SubClass_other - 0.2720137) / 0.445072 ...</span></span>
+<span><span class="co">#&gt; • MS_Zoning_Residential_Medium_Density = (MS_Zoning_Residential_ ...</span></span>
 <span><span class="co">#&gt; • MS_Zoning_other = (MS_Zoning_other - 0.0665529) / 0.2492886</span></span>
 <span><span class="co">#&gt; • Alley_other = (Alley_other - 0.06757679) / 0.2510611</span></span>
-<span><span class="co">#&gt; • Lot_Shape_Slightly_Irregular = (Lot_Shape_Slightly_Irregular - 0. ...</span></span>
-<span><span class="co">#&gt; • Land_Contour_other = (Land_Contour_other - 0.1013652) / 0.3018632</span></span>
-<span><span class="co">#&gt; • Lot_Config_CulDSac = (Lot_Config_CulDSac - 0.06143345) / 0.240164 ...</span></span>
-<span><span class="co">#&gt; • Lot_Config_Inside = (Lot_Config_Inside - 0.7303754) / 0.4438405</span></span>
-<span><span class="co">#&gt; • Neighborhood_College_Creek = (Neighborhood_College_Creek - 0.0911 ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_Old_Town = (Neighborhood_Old_Town - 0.08156997) / 0. ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_Edwards = (Neighborhood_Edwards - 0.0662116) / 0.248 ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_Somerset = (Neighborhood_Somerset - 0.06211604) / 0. ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_Northridge_Heights = (Neighborhood_Northridge_Height ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_Gilbert = (Neighborhood_Gilbert - 0.05631399) / 0.23 ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_Sawyer = (Neighborhood_Sawyer - 0.05153584) / 0.2211 ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_other = (Neighborhood_other - 0.3832765) / 0.4862677</span></span>
+<span><span class="co">#&gt; • Lot_Shape_Slightly_Irregular = (Lot_Shape_Slightly_Irregular - ...</span></span>
+<span><span class="co">#&gt; • Land_Contour_other = (Land_Contour_other - 0.1013652) / 0.3018 ...</span></span>
+<span><span class="co">#&gt; • Lot_Config_CulDSac = (Lot_Config_CulDSac - 0.06143345) / 0.240 ...</span></span>
+<span><span class="co">#&gt; • Lot_Config_Inside = (Lot_Config_Inside - 0.7303754) / 0.443840 ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_College_Creek = (Neighborhood_College_Creek - 0.0 ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Old_Town = (Neighborhood_Old_Town - 0.08156997) / ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Edwards = (Neighborhood_Edwards - 0.0662116) / 0. ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Somerset = (Neighborhood_Somerset - 0.06211604) / ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Northridge_Heights = (Neighborhood_Northridge_Hei ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Gilbert = (Neighborhood_Gilbert - 0.05631399) / 0 ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Sawyer = (Neighborhood_Sawyer - 0.05153584) / 0.2 ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_other = (Neighborhood_other - 0.3832765) / 0.4862 ...</span></span>
 <span><span class="co">#&gt; • Condition_1_Norm = (Condition_1_Norm - 0.8607509) / 0.3462654</span></span>
-<span><span class="co">#&gt; • Condition_1_other = (Condition_1_other - 0.08327645) / 0.2763468</span></span>
+<span><span class="co">#&gt; • Condition_1_other = (Condition_1_other - 0.08327645) / 0.27634 ...</span></span>
 <span><span class="co">#&gt; • Bldg_Type_TwnhsE = (Bldg_Type_TwnhsE - 0.07952218) / 0.2705982</span></span>
 <span><span class="co">#&gt; • Bldg_Type_other = (Bldg_Type_other - 0.09283276) / 0.2902475</span></span>
-<span><span class="co">#&gt; • House_Style_One_Story = (House_Style_One_Story - 0.5054608) / 0.5 ...</span></span>
-<span><span class="co">#&gt; • House_Style_Two_Story = (House_Style_Two_Story - 0.2979522) / 0.4 ...</span></span>
-<span><span class="co">#&gt; • House_Style_other = (House_Style_other - 0.0894198) / 0.2853974</span></span>
-<span><span class="co">#&gt; • Overall_Cond_Above_Average = (Overall_Cond_Above_Average - 0.1819 ...</span></span>
+<span><span class="co">#&gt; • House_Style_One_Story = (House_Style_One_Story - 0.5054608) / ...</span></span>
+<span><span class="co">#&gt; • House_Style_Two_Story = (House_Style_Two_Story - 0.2979522) / ...</span></span>
+<span><span class="co">#&gt; • House_Style_other = (House_Style_other - 0.0894198) / 0.285397 ...</span></span>
+<span><span class="co">#&gt; • Overall_Cond_Above_Average = (Overall_Cond_Above_Average - 0.1 ...</span></span>
 <span><span class="co">#&gt; • Overall_Cond_Good = (Overall_Cond_Good - 0.1331058) / 0.339747</span></span>
-<span><span class="co">#&gt; • Overall_Cond_other = (Overall_Cond_other - 0.1204778) / 0.325575</span></span>
+<span><span class="co">#&gt; • Overall_Cond_other = (Overall_Cond_other - 0.1204778) / 0.3255 ...</span></span>
 <span><span class="co">#&gt; • Roof_Style_Hip = (Roof_Style_Hip - 0.1880546) / 0.3908225</span></span>
-<span><span class="co">#&gt; • Exterior_1st_Plywood = (Exterior_1st_Plywood - 0.07542662) / 0.26 ...</span></span>
-<span><span class="co">#&gt; • Exterior_1st_Wd.Sdng = (Exterior_1st_Wd.Sdng - 0.1433447) / 0.350 ...</span></span>
-<span><span class="co">#&gt; • Exterior_1st_other = (Exterior_1st_other - 0.1266212) / 0.3326049</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_MetalSd = (Exterior_2nd_MetalSd - 0.1525597) / 0.359 ...</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_Plywood = (Exterior_2nd_Plywood - 0.09351536) / 0.29 ...</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_VinylSd = (Exterior_2nd_VinylSd - 0.3464164) / 0.475 ...</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_Wd.Sdng = (Exterior_2nd_Wd.Sdng - 0.1354949) / 0.342 ...</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_other = (Exterior_2nd_other - 0.1334471) / 0.3401154</span></span>
+<span><span class="co">#&gt; • Exterior_1st_Plywood = (Exterior_1st_Plywood - 0.07542662) / 0 ...</span></span>
+<span><span class="co">#&gt; • Exterior_1st_Wd.Sdng = (Exterior_1st_Wd.Sdng - 0.1433447) / 0. ...</span></span>
+<span><span class="co">#&gt; • Exterior_1st_other = (Exterior_1st_other - 0.1266212) / 0.3326 ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_MetalSd = (Exterior_2nd_MetalSd - 0.1525597) / 0. ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_Plywood = (Exterior_2nd_Plywood - 0.09351536) / 0 ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_VinylSd = (Exterior_2nd_VinylSd - 0.3464164) / 0. ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_Wd.Sdng = (Exterior_2nd_Wd.Sdng - 0.1354949) / 0. ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_other = (Exterior_2nd_other - 0.1334471) / 0.3401 ...</span></span>
 <span><span class="co">#&gt; • Mas_Vnr_Type_None = (Mas_Vnr_Type_None - 0.605802) / 0.4887611</span></span>
-<span><span class="co">#&gt; • Mas_Vnr_Type_Stone = (Mas_Vnr_Type_Stone - 0.08498294) / 0.278903 ...</span></span>
-<span><span class="co">#&gt; • Exter_Cond_Typical = (Exter_Cond_Typical - 0.8699659) / 0.3363984</span></span>
-<span><span class="co">#&gt; • Foundation_CBlock = (Foundation_CBlock - 0.4245734) / 0.4943625</span></span>
+<span><span class="co">#&gt; • Mas_Vnr_Type_Stone = (Mas_Vnr_Type_Stone - 0.08498294) / 0.278 ...</span></span>
+<span><span class="co">#&gt; • Exter_Cond_Typical = (Exter_Cond_Typical - 0.8699659) / 0.3363 ...</span></span>
+<span><span class="co">#&gt; • Foundation_CBlock = (Foundation_CBlock - 0.4245734) / 0.494362 ...</span></span>
 <span><span class="co">#&gt; • Foundation_PConc = (Foundation_PConc - 0.447099) / 0.4972785</span></span>
 <span><span class="co">#&gt; • Bsmt_Cond_other = (Bsmt_Cond_other - 0.1071672) / 0.3093785</span></span>
 <span><span class="co">#&gt; • Bsmt_Exposure_Gd = (Bsmt_Exposure_Gd - 0.09692833) / 0.2959106</span></span>
 <span><span class="co">#&gt; • Bsmt_Exposure_Mn = (Bsmt_Exposure_Mn - 0.08156997) / 0.2737552</span></span>
 <span><span class="co">#&gt; • Bsmt_Exposure_No = (Bsmt_Exposure_No - 0.6505119) / 0.4768897</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_BLQ = (BsmtFin_Type_1_BLQ - 0.09180887) / 0.288805 ...</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_GLQ = (BsmtFin_Type_1_GLQ - 0.2931741) / 0.4552953</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_LwQ = (BsmtFin_Type_1_LwQ - 0.05255973) / 0.223191</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_Rec = (BsmtFin_Type_1_Rec - 0.09829352) / 0.297761 ...</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_Unf = (BsmtFin_Type_1_Unf - 0.2904437) / 0.4540446</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_2_other = (BsmtFin_Type_2_other - 0.147099) / 0.3542 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_BLQ = (BsmtFin_Type_1_BLQ - 0.09180887) / 0.288 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_GLQ = (BsmtFin_Type_1_GLQ - 0.2931741) / 0.4552 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_LwQ = (BsmtFin_Type_1_LwQ - 0.05255973) / 0.223 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_Rec = (BsmtFin_Type_1_Rec - 0.09829352) / 0.297 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_Unf = (BsmtFin_Type_1_Unf - 0.2904437) / 0.4540 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_2_other = (BsmtFin_Type_2_other - 0.147099) / 0.3 ...</span></span>
 <span><span class="co">#&gt; • Heating_QC_Good = (Heating_QC_Good - 0.1624573) / 0.3689328</span></span>
-<span><span class="co">#&gt; • Heating_QC_Typical = (Heating_QC_Typical - 0.2948805) / 0.4560669</span></span>
+<span><span class="co">#&gt; • Heating_QC_Typical = (Heating_QC_Typical - 0.2948805) / 0.4560 ...</span></span>
 <span><span class="co">#&gt; • Central_Air_Y = (Central_Air_Y - 0.9331058) / 0.2498813</span></span>
 <span><span class="co">#&gt; • Electrical_SBrkr = (Electrical_SBrkr - 0.9153584) / 0.2783952</span></span>
 <span><span class="co">#&gt; • Functional_other = (Functional_other - 0.06894198) / 0.2533987</span></span>
-<span><span class="co">#&gt; • Garage_Type_BuiltIn = (Garage_Type_BuiltIn - 0.06348123) / 0.2438 ...</span></span>
-<span><span class="co">#&gt; • Garage_Type_Detchd = (Garage_Type_Detchd - 0.2668942) / 0.4424121</span></span>
-<span><span class="co">#&gt; • Garage_Type_No_Garage = (Garage_Type_No_Garage - 0.05358362) / 0. ...</span></span>
-<span><span class="co">#&gt; • Garage_Finish_RFn = (Garage_Finish_RFn - 0.2771331) / 0.4476592</span></span>
-<span><span class="co">#&gt; • Garage_Finish_Unf = (Garage_Finish_Unf - 0.4201365) / 0.4936649</span></span>
-<span><span class="co">#&gt; • Garage_Cond_Typical = (Garage_Cond_Typical - 0.9095563) / 0.28686 ...</span></span>
-<span><span class="co">#&gt; • Paved_Drive_Paved = (Paved_Drive_Paved - 0.9051195) / 0.2930999</span></span>
+<span><span class="co">#&gt; • Garage_Type_BuiltIn = (Garage_Type_BuiltIn - 0.06348123) / 0.2 ...</span></span>
+<span><span class="co">#&gt; • Garage_Type_Detchd = (Garage_Type_Detchd - 0.2668942) / 0.4424 ...</span></span>
+<span><span class="co">#&gt; • Garage_Type_No_Garage = (Garage_Type_No_Garage - 0.05358362) / ...</span></span>
+<span><span class="co">#&gt; • Garage_Finish_RFn = (Garage_Finish_RFn - 0.2771331) / 0.447659 ...</span></span>
+<span><span class="co">#&gt; • Garage_Finish_Unf = (Garage_Finish_Unf - 0.4201365) / 0.493664 ...</span></span>
+<span><span class="co">#&gt; • Garage_Cond_Typical = (Garage_Cond_Typical - 0.9095563) / 0.28 ...</span></span>
+<span><span class="co">#&gt; • Paved_Drive_Paved = (Paved_Drive_Paved - 0.9051195) / 0.293099 ...</span></span>
 <span><span class="co">#&gt; • Fence_No_Fence = (Fence_No_Fence - 0.8047782) / 0.396439</span></span>
 <span><span class="co">#&gt; • Fence_other = (Fence_other - 0.08259386) / 0.2753143</span></span>
 <span><span class="co">#&gt; • Sale_Type_WD. = (Sale_Type_WD. - 0.865529) / 0.3412159</span></span>
 <span><span class="co">#&gt; • Sale_Type_other = (Sale_Type_other - 0.05290102) / 0.2238741</span></span>
-<span><span class="co">#&gt; • Sale_Condition_Normal = (Sale_Condition_Normal - 0.8235495) / 0.3 ...</span></span>
-<span><span class="co">#&gt; • Sale_Condition_Partial = (Sale_Condition_Partial - 0.08361775) / ...</span></span>
-<span><span class="co">#&gt; • .pred = 180796.1 + (Lot_Frontage * 955.6351) + (Lot_Area * 1516.7 ...</span></span>
-<span><span class="co">#&gt; ──────────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; • Sale_Condition_Normal = (Sale_Condition_Normal - 0.8235495) / ...</span></span>
+<span><span class="co">#&gt; • Sale_Condition_Partial = (Sale_Condition_Partial - 0.08361775) ...</span></span>
+<span><span class="co">#&gt; • .pred = 180796.1 + (Lot_Frontage * 955.6351) + (Lot_Area * 151 ...</span></span>
+<span><span class="co">#&gt; ───────────────────────────────────────────────────────────────────────</span></span>
 <span><span class="co">#&gt; 257 equations in total.</span></span></code></pre></div>
 <p>One of the neat things about orbital objects is that they only
 require the orbital package to be loaded, compared to the workflow
@@ -499,7 +484,7 @@ be loaded. It is also substantially smaller in size.</p>
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">orbital_obj</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 48992 bytes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">wf_fit</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 9638608 bytes</span></span></code></pre></div>
+<span><span class="co">#&gt; 9637112 bytes</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="predicting">Predicting<a class="anchor" aria-label="anchor" href="#predicting"></a>
@@ -553,7 +538,7 @@ in-memory RSQLite database.</p>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orbital_obj</span>, <span class="va">ames_sqlite</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [?? x 1]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: sqlite 3.47.1 []</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: sqlite 3.50.1 []</span></span></span>
 <span><span class="co">#&gt;      .pred</span></span>
 <span><span class="co">#&gt;      <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span> <span style="text-decoration: underline;">241</span>950.</span></span>
@@ -846,7 +831,7 @@ the code needed to run the query.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
   </div></footer>

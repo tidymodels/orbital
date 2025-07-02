@@ -8,11 +8,12 @@
 <title>Predict with tidymodels Workflows in Databases • orbital</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.9/font.css" rel="stylesheet">
-<link href="deps/Source_Code_Pro-0.4.9/font.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Predict with tidymodels Workflows in Databases">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><link href="extra.css" rel="stylesheet">
+<meta property="og:title" content="Predict with tidymodels Workflows in Databases">
 <meta name="description" content="Turn tidymodels workflows into objects containing the sufficient sequential equations to perform predictions. These smaller objects allow for low dependency prediction locally or directly in databases.">
 <meta property="og:description" content="Turn tidymodels workflows into objects containing the sufficient sequential equations to perform predictions. These smaller objects allow for low dependency prediction locally or directly in databases.">
 <meta property="og:image" content="https://orbital.tidymodels.org/logo.png">
@@ -159,7 +160,7 @@
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orbital_obj</span>, <span class="va">db_mtcars</span><span class="op">)</span></span>
 <span><span class="co">#&gt; # Source:   SQL [?? x 1]</span></span>
-<span><span class="co">#&gt; # Database: sqlite 3.47.0 []</span></span>
+<span><span class="co">#&gt; # Database: sqlite 3.47.1 []</span></span>
 <span><span class="co">#&gt;    .pred</span></span>
 <span><span class="co">#&gt;    &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt;  1  22.6</span></span>
@@ -176,14 +177,6 @@
 <p>and spark databases</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://spark.posit.co/" class="external-link">sparklyr</a></span><span class="op">)</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Attaching package: 'sparklyr'</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:purrr':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     invoke</span></span>
-<span><span class="co">#&gt; The following object is masked from 'package:stats':</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     filter</span></span>
 <span><span class="va">sc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/sparklyr/man/spark-connections.html" class="external-link">spark_connect</a></span><span class="op">(</span>master <span class="op">=</span> <span class="st">"local"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sc_mtcars</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/copy_to.html" class="external-link">copy_to</a></span><span class="op">(</span><span class="va">sc</span>, <span class="va">mtcars</span>, overwrite <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
@@ -257,9 +250,9 @@
 <div class="developers">
 <h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
-<li>Emil Hvitfeldt <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Emil Hvitfeldt <br><small class="roles"> Author, maintainer </small>   </li>
 <li>
-<a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a> <br><small class="roles"> Copyright holder, funder </small>  </li>
+<a href="https://www.posit.co" class="external-link"><img src="https://www.tidyverse.org/posit-logo.svg" alt="Posit" height="16" width="62" style="margin-bottom: 3px;"></a> <br><small class="roles"> Copyright holder, funder </small>  <a href="https://ror.org/03wc8by49" class="external-link"><img src="https://raw.githubusercontent.com/ror-community/ror-logos/main/ror-icon-rgb.svg" class="ror" alt="ROR"></a> </li>
 </ul>
 </div>
 
@@ -268,8 +261,8 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/tidymodels/orbital/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/tidymodels/orbital/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://CRAN.R-project.org/package=orbital" class="external-link"><img src="https://www.r-pkg.org/badges/version/orbital" alt="CRAN status"></a></li>
-<li><a href="https://app.codecov.io/gh/tidymodels/orbital?branch=main" class="external-link"><img src="https://codecov.io/gh/tidymodels/orbital/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
+<li><a href="https://app.codecov.io/gh/tidymodels/orbital" class="external-link"><img src="https://codecov.io/gh/tidymodels/orbital/graph/badge.svg" alt="Codecov test coverage"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 </ul>
 </div>
 
@@ -284,7 +277,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
   </div></footer>
