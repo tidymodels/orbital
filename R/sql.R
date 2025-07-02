@@ -16,7 +16,7 @@
 #' library(recipes)
 #' library(parsnip)
 #'
-#' rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+#' rec_spec <- recipe(mpg ~ ., data = mtcars) |>
 #'   step_normalize(all_numeric_predictors())
 #'
 #' lm_spec <- linear_reg()
@@ -33,5 +33,5 @@
 #' orbital_sql(orbital_obj, con)
 #' @export
 orbital_sql <- function(x, con) {
-	dbplyr::translate_sql(!!!orbital_inline(x), con = con)
+  dbplyr::translate_sql(!!!orbital_inline(x), con = con)
 }

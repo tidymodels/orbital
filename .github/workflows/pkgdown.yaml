@@ -4,7 +4,6 @@ on:
   push:
     branches: [main, master]
   pull_request:
-    branches: [main, master]
   release:
     types: [published]
   workflow_dispatch:
@@ -39,7 +38,7 @@ jobs:
 
       - name: Cache Spark
         id: cache-spark
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: /home/runner/spark/spark-3.3.4-bin-hadoop3
           key: sparklyr-spark-3.3.4-bin-hadoop3-3

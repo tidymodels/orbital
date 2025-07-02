@@ -20,7 +20,7 @@
 #' library(recipes)
 #' library(parsnip)
 #'
-#' rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+#' rec_spec <- recipe(mpg ~ ., data = mtcars) |>
 #'   step_normalize(all_numeric_predictors())
 #'
 #' lm_spec <- linear_reg()
@@ -38,14 +38,14 @@
 #' readLines(file_name)
 #' @export
 orbital_r_fun <- function(x, name = "orbital_predict", file) {
-	fun <- c(
-		paste(name, "<- function(x) {"),
-		"with(x, {",
-		paste("  ", names(x), "=", x),
-		"  .pred",
-		"  })",
-		"}"
-	)
+  fun <- c(
+    paste(name, "<- function(x) {"),
+    "with(x, {",
+    paste("  ", names(x), "=", x),
+    "  .pred",
+    "  })",
+    "}"
+  )
 
-	writeLines(fun, con = file)
+  writeLines(fun, con = file)
 }

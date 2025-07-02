@@ -21,7 +21,7 @@
 #' library(recipes)
 #' library(parsnip)
 #'
-#' rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+#' rec_spec <- recipe(mpg ~ ., data = mtcars) |>
 #'   step_normalize(all_numeric_predictors())
 #'
 #' lm_spec <- linear_reg()
@@ -35,13 +35,13 @@
 #' predict(orbital_obj, mtcars)
 #' @export
 predict.orbital_class <- function(object, new_data, ...) {
-	rlang::check_dots_empty()
-	res <- dplyr::mutate(new_data, !!!orbital_inline(object))
+  rlang::check_dots_empty()
+  res <- dplyr::mutate(new_data, !!!orbital_inline(object))
 
-	pred_name <- attr(object, "pred_names")
-	if (!is.null(pred_name)) {
-		res <- dplyr::select(res, dplyr::any_of(pred_name))
-	}
+  pred_name <- attr(object, "pred_names")
+  if (!is.null(pred_name)) {
+    res <- dplyr::select(res, dplyr::any_of(pred_name))
+  }
 
-	res
+  res
 }

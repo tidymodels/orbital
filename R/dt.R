@@ -17,7 +17,7 @@
 #' library(recipes)
 #' library(parsnip)
 #'
-#' rec_spec <- recipe(mpg ~ ., data = mtcars) %>%
+#' rec_spec <- recipe(mpg ~ ., data = mtcars) |>
 #'   step_normalize(all_numeric_predictors())
 #'
 #' lm_spec <- linear_reg()
@@ -31,11 +31,11 @@
 #' orbital_dt(orbital_obj)
 #' @export
 orbital_dt <- function(x) {
-	rlang::check_installed("dtplyr")
+  rlang::check_installed("dtplyr")
 
-	dt <- dtplyr::lazy_dt(data.frame())
+  dt <- dtplyr::lazy_dt(data.frame())
 
-	res <- dplyr::mutate(dt, !!!orbital_inline(x))
+  res <- dplyr::mutate(dt, !!!orbital_inline(x))
 
-	dplyr::show_query(res)
+  dplyr::show_query(res)
 }

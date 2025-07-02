@@ -3,9 +3,9 @@
 # Global vars ------------------------------------------------------------------
 
 utils::globalVariables(
-	c(
-		":=" # augment.R
-	)
+  c(
+    ":=" # augment.R
+  )
 )
 
 # nocov end

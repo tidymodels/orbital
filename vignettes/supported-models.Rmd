@@ -25,6 +25,7 @@ if (!rlang::is_installed(c("gt", "tibble"))) {
 #| echo: false
 #| message: false
 #| error: false
+#| output: false
 library(gt)
 library(dplyr)
 
@@ -73,14 +74,16 @@ tibble::tribble(
 
 ## Recipes steps
 
-```{r, include = FALSE}
+```{r}
+#| include: false
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
 ```
 
-```{r setup}
+```{r}
+#| label: setup
 #| echo: false
 library(orbital)
 ```
@@ -95,7 +98,8 @@ steps <- gsub("orbital.", "", steps)
 
 The following `r length(steps)` recipes steps are supported
 
-```{r, results='asis'}
+```{r}
+#| results: asis
 #| echo: false
 cat(paste0("- `", steps, "()`\n"))
 ```

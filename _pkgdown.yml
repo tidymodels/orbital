@@ -15,20 +15,21 @@ development:
 reference:
   - title: Create orbital objects
     desc: >
-      Turn a fitted workflow, parsnip or recipes object into an orbital object. This will almost
-      always be the first function you use.
+      Turn a fitted workflow, parsnip, or recipes object into an orbital 
+      object. This will almost always be the first function you use.
     contents:
       - orbital
   - title: Prediction
     desc: >
-      An orbital object can be predicted with, using data.frames or connections to data bases.
+      An orbital object can be predicted with, using data.frames or 
+      connections to data bases.
     contents:
       - predict.orbital_class
       - augment.orbital_class
   - title: Code generation
     desc: >
-      An orbital object can be turned into code itself that produces the same output as 
-      predicting would.
+      An orbital object can be turned into code itself that produces the same
+      output as predicting would.
     contents:
       - orbital_dt
       - orbital_inline
