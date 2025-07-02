@@ -55,5 +55,5 @@ pca_helper <- function(rot, prefix, all_vars) {
 }
 
 pca_naming <- function(x, prefix) {
-  gsub(paste0(prefix, "0"), prefix, x)
+	gsub(paste0(prefix, "0+"), prefix, x)
 }
