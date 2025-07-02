@@ -58,6 +58,26 @@ test_that("step_pca_sparse only calculates what is sufficient", {
   )
 })
 
+test_that("step_pca_sparse removes 0 multiples", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("embed")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+  mtcars$hp <- NULL
+
+  suppressWarnings(
+    rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+      embed::step_pca_sparse(recipes::all_predictors()) |>
+      recipes::prep()
+  )
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+
+  expect_true(
+    all(!grepl("* 0 ", orbital(rec)))
+  )
+})
+
 test_that("step_pca_sparse works with empty selections", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("embed")

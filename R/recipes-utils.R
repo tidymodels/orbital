@@ -43,7 +43,11 @@ pca_helper <- function(rot, prefix, all_vars) {
 
   out <- character(length(all_vars))
   for (i in seq_along(all_vars)) {
-    out[i] <- paste(glue::glue("{row_nms} * {rot[, i]}"), collapse = " + ")
+    non_zero <- rot[, i] != 0
+    out[i] <- paste(
+      glue::glue("{row_nms[non_zero]} * {rot[, i][non_zero]}"),
+      collapse = " + "
+    )
   }
 
   names(out) <- all_vars

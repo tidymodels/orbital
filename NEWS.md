@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* `step_pca_sparse()` no longer generate code with terms with 0 in them. (#51)
+
 # orbital 0.3.0
 
 * `orbital()` has gained `type` argument to change prediction type. (#66)
