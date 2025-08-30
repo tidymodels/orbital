@@ -1,4 +1,4 @@
-# orbital (development version)
+# orbital 0.3.1
 
 * Fixed bug where PCA steps didn't work if they were trained with more than 99 predictors. (#82)
 
