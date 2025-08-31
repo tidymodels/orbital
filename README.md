@@ -124,7 +124,7 @@ db_mtcars <- copy_to(con, mtcars)
 
 predict(orbital_obj, db_mtcars)
 #> # Source:   SQL [?? x 1]
-#> # Database: sqlite 3.47.1 []
+#> # Database: sqlite 3.50.1 []
 #>    .pred
 #>    <dbl>
 #>  1  22.6
