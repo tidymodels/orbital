@@ -24,7 +24,7 @@ and langauges. The file is versioned by the \code{version} field to allow for
 changes why being backwards combatible with older file versions.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("jsonlite", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("jsonlite", "recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)

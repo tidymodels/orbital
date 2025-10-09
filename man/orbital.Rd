@@ -51,7 +51,7 @@ These objects will not be useful by themselves. They can be used to
 such as \code{\link[=orbital_sql]{orbital_sql()}} or \code{\link[=orbital_dt]{orbital_dt()}}.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)

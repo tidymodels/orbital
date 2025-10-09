@@ -35,7 +35,7 @@ This function is confirmed to not work work in spark data bases or arrow
 tables.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)

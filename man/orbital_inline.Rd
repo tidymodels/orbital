@@ -28,7 +28,7 @@ creates new variables, unlike \link[=predict.orbital_class]{predict()} which onl
 returns predictions.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)

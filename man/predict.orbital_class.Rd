@@ -28,7 +28,7 @@ The prediction done will only return prediction colunms, a opposed to
 returning all modified functions as done with \code{\link[=orbital_inline]{orbital_inline()}}.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)

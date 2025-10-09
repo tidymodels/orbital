@@ -20,7 +20,7 @@ This function is aware of the \code{version} field of the orbital object, and wi
 read it in correctly, according to its specification.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("jsonlite", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("jsonlite", "recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)

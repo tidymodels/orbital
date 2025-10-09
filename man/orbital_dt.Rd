@@ -21,7 +21,7 @@ Returns \href{https://rdatatable.gitlab.io/data.table/}{data.table} code that
 is equivilant to prediction code.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("dbplyr", "dtplyr", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("dbplyr", "dtplyr", "recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 
 library(workflows)
 library(recipes)

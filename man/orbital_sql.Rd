@@ -22,7 +22,7 @@ This function requires a database connection object, as the resulting code
 SQL code can differ depending on the type of database.
 }
 \examples{
-\dontshow{if (rlang::is_installed(c("dbplyr", "recipes", "tidypredict", "workflows"))) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (rlang::is_installed(c("dbplyr", "recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 library(workflows)
 library(recipes)
 library(parsnip)
