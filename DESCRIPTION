@@ -43,6 +43,7 @@ Suggests:
     RSQLite,
     rstanarm,
     sparklyr,
+    tailor,
     testthat (>= 3.0.0),
     themis,
     tibble,

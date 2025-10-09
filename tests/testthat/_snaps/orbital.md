@@ -22,14 +22,6 @@
       Error in `orbital()`:
       ! `x` must be fitted model.
 
-# orbital errors nicely on post-processing
-
-    Code
-      orbital(wf_fit)
-    Condition
-      Error in `orbital()`:
-      ! post-processing is not yet supported in orbital.
-
 # orbital errors on wrong input
 
     Code
