@@ -1,6 +1,6 @@
 #' @export
 orbital.tailor <- function(x, ...) {
-  out <- c()
+  out <- character()
 
   for (adj in x$adjustments) {
     new <- orbital(adj)

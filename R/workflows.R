@@ -14,6 +14,7 @@ orbital.workflow <- function(x, ..., prefix = ".pred", type = NULL) {
   model_fit <- workflows::extract_fit_parsnip(x)
   mod <- orbital(model_fit, prefix = prefix, type = type)
   mod_atr <- attributes(mod)
+  mod_atr$names <- c(mod_atr$names, names(out))
   mod_cls <- class(mod)
   out <- c(mod, out)
   attributes(out) <- mod_atr
