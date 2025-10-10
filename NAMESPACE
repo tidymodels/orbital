@@ -3,6 +3,7 @@
 S3method(augment,orbital_class)
 S3method(orbital,constparty)
 S3method(orbital,default)
+S3method(orbital,equivocal_zone)
 S3method(orbital,glm)
 S3method(orbital,last_fit)
 S3method(orbital,model_fit)
