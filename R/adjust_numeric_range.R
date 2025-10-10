@@ -18,7 +18,7 @@ orbital.numeric_range <- function(x, tailor, ...) {
     out <- paste0(out, "{estimate} > {upper} ~ {upper},")
   }
 
-  out <- paste0(out, ".default = {estimate})")
+  out <- paste0(out, "TRUE ~ {estimate})")
   out <- glue::glue(out)
   names(out) <- estimate
   out

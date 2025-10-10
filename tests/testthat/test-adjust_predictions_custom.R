@@ -151,3 +151,30 @@ test_that("duckdb - adjust_predictions_custom works", {
   )
   DBI::dbDisconnect(con)
 })
+
+test_that("arrow - adjust_predictions_custom works", {
+  skip_if_not_installed("tailor")
+  skip_if_not_installed("arrow")
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_predictions_custom(
+      double = mpg * 2,
+      half = mpg / 2
+    )
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- orbital(tlr_fit)
+
+  mtcars_tbl <- arrow::as_arrow_table(mtcars)
+
+  expect_identical(
+    dplyr::collect(predict(res, mtcars_tbl)),
+    predict(tlr_fit, mtcars)
+  )
+})
