@@ -61,3 +61,32 @@ test_that("empty selections work", {
     orbital(tlr_1_fit)
   )
 })
+
+test_that("spark - adjust_predictions_custom works", {
+  skip_if_not_installed("tailor")
+  skip_if_not_installed("sparklyr")
+  skip_if(is.na(testthat_spark_env_version()))
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_predictions_custom(
+      double = mpg * 2,
+      half = mpg / 2
+    )
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- orbital(tlr_fit)
+
+  sc <- testthat_spark_connection()
+  mtcars_tbl <- testthat_tbl("mtcars")
+
+  expect_identical(
+    dplyr::collect(predict(res, mtcars_tbl)),
+    predict(tlr_fit, mtcars)
+  )
+})

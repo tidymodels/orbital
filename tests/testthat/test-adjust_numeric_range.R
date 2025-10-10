@@ -89,3 +89,29 @@ test_that("adjust_predictions_custom works - both", {
     predict(res, tibble::as_tibble(mtcars))
   )
 })
+
+test_that("spark - adjust_predictions_custom works", {
+  skip_if_not_installed("tailor")
+  skip_if_not_installed("sparklyr")
+  skip_if(is.na(testthat_spark_env_version()))
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_numeric_range(lower_limit = 15, upper_limit = 25)
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- orbital(tlr_fit)
+
+  sc <- testthat_spark_connection()
+  mtcars_tbl <- testthat_tbl("mtcars")
+
+  expect_identical(
+    dplyr::collect(predict(res, mtcars_tbl)),
+    predict(tlr_fit, mtcars)
+  )
+})
