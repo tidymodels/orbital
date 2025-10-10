@@ -7,7 +7,7 @@ orbital.workflow <- function(x, ..., prefix = ".pred", type = NULL) {
   out <- character()
   if ("tailor" %in% names(x$post$actions)) {
     tailor_fit <- workflows::extract_tailor(x)
-    post <- orbital(tailor_fit)
+    post <- orbital(tailor_fit, prefix = prefix, type = type)
     out <- post
   }
 
