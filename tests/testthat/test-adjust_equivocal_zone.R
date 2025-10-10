@@ -187,3 +187,45 @@ test_that("SQLite - adjust_equivocal_zone works", {
   )
   DBI::dbDisconnect(con)
 })
+
+test_that("duckdb - adjust_equivocal_zone works", {
+  skip_if_not_installed("tailor")
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("workflows")
+  skip_if_not_installed("probably")
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  mtcars_eq <- mtcars
+  mtcars_eq$vs <- factor(mtcars_eq$vs)
+
+  mod <- parsnip::logistic_reg()
+
+  workflow <- workflows::workflow()
+  workflow <- workflows::add_formula(workflow, vs ~ disp)
+  workflow <- workflows::add_model(workflow, mod)
+
+  tailor <- tailor::tailor()
+  tailor <- tailor::adjust_equivocal_zone(
+    tailor,
+    value = 1 / 4,
+    threshold = 0.3
+  )
+  workflow <- workflows::add_tailor(workflow, tailor)
+
+  wf_fit <- workflows::fit(workflow, mtcars_eq)
+
+  orb_fit <- orbital(wf_fit, type = c("prob", "class"))
+
+  exp <- as.character(predict(wf_fit, mtcars_eq)$.pred_class)
+  exp[is.na(exp)] <- "[EQ]"
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  mtcars_tbl <- dplyr::copy_to(con, mtcars_eq)
+
+  expect_identical(
+    dplyr::pull(predict(orb_fit, mtcars_tbl), .pred_class),
+    exp
+  )
+  DBI::dbDisconnect(con)
+})
