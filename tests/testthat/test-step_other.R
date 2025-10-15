@@ -8,9 +8,9 @@ test_that("step_other works", {
   mtcars$gear[1] <- "aa"
   mtcars$carb[1] <- "aa"
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+  rec <- recipes::recipe(mpg ~ ., data = mtcars, strings_as_factors = FALSE) |>
     recipes::step_other(recipes::all_nominal_predictors()) |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
 
@@ -32,10 +32,10 @@ test_that("step_other only calculates what is sufficient", {
   mtcars$gear[1] <- "aa"
   mtcars$carb[1] <- "aa"
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+  rec <- recipes::recipe(mpg ~ ., data = mtcars, strings_as_factors = FALSE) |>
     recipes::step_other(recipes::all_nominal_predictors()) |>
     recipes::step_rm(gear) |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   expect_identical(
     names(orbital(rec)),
@@ -53,9 +53,9 @@ test_that("step_other works with empty selections", {
   mtcars$gear[1] <- "aa"
   mtcars$carb[1] <- "aa"
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+  rec <- recipes::recipe(mpg ~ ., data = mtcars, strings_as_factors = FALSE) |>
     recipes::step_other() |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
 
