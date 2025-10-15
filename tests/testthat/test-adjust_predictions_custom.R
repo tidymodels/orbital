@@ -174,7 +174,7 @@ test_that("arrow - adjust_predictions_custom works", {
   mtcars_tbl <- arrow::as_arrow_table(mtcars)
 
   expect_identical(
-    dplyr::collect(predict(res, mtcars_tbl)),
-    predict(tlr_fit, mtcars)
+    dplyr::as_tibble(dplyr::collect(predict(res, mtcars_tbl))),
+    dplyr::as_tibble(predict(tlr_fit, mtcars))
   )
 })
