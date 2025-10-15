@@ -4,12 +4,21 @@ orbital.workflow <- function(x, ..., prefix = ".pred", type = NULL) {
     cli::cli_abort("{.arg x} must be a fully trained {.cls workflow}.")
   }
 
-  if (length(x$post$actions) != 0) {
-    cli::cli_abort("post-processing is not yet supported in orbital.")
+  out <- character()
+  if ("tailor" %in% names(x$post$actions)) {
+    tailor_fit <- workflows::extract_tailor(x)
+    post <- orbital(tailor_fit, prefix = prefix, type = type)
+    out <- post
   }
 
   model_fit <- workflows::extract_fit_parsnip(x)
-  out <- orbital(model_fit, prefix = prefix, type = type)
+  mod <- orbital(model_fit, prefix = prefix, type = type)
+  mod_atr <- attributes(mod)
+  mod_atr$names <- c(mod_atr$names, names(out))
+  mod_cls <- class(mod)
+  out <- c(mod, out)
+  attributes(out) <- mod_atr
+  class(out) <- mod_cls
 
   preprocessor <- workflows::extract_preprocessor(x)
 

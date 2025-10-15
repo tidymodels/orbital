@@ -1,5 +1,11 @@
 # orbital (development version)
 
+* Added support for tailor package and its integration into workflows. The following adjustments have gained `orbital()` support. (#103)
+    - `adjust_equivocal_zone()`
+    - `adjust_numeric_range()`
+    - `adjust_predictions_custom()`
+    - `adjust_probability_threshold()`
+
 # orbital 0.3.1
 
 * Fixed bug where PCA steps didn't work if they were trained with more than 99 predictors. (#82)
