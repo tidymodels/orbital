@@ -264,7 +264,7 @@ test_that("arrow - adjust_equivocal_zone works", {
   mtcars_tbl <- arrow::as_arrow_table(mtcars_eq)
 
   expect_identical(
-    dplyr::pull(predict(orb_fit, mtcars_tbl), .pred_class, as_vector = TRUE),
+    dplyr::collect(predict(orb_fit, mtcars_tbl))$.pred_class,
     exp
   )
 })
