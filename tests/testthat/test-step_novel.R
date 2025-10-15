@@ -6,9 +6,9 @@ test_that("step_novel works", {
   mtcars$gear <- letters[mtcars$gear]
   mtcars$carb <- letters[mtcars$carb]
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+  rec <- recipes::recipe(mpg ~ ., data = mtcars, strings_as_factors = FALSE) |>
     recipes::step_novel(recipes::all_nominal_predictors()) |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   mtcars[1, 10] <- "aaaaa"
 
@@ -30,10 +30,10 @@ test_that("step_novel only calculates what is sufficient", {
   mtcars$gear <- letters[mtcars$gear]
   mtcars$carb <- letters[mtcars$carb]
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+  rec <- recipes::recipe(mpg ~ ., data = mtcars, strings_as_factors = FALSE) |>
     recipes::step_novel(recipes::all_nominal_predictors()) |>
     recipes::step_rm(gear) |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   expect_identical(
     names(orbital(rec)),
@@ -49,9 +49,9 @@ test_that("step_novel works with empty selections", {
   mtcars$gear <- letters[mtcars$gear]
   mtcars$carb <- letters[mtcars$carb]
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+  rec <- recipes::recipe(mpg ~ ., data = mtcars, strings_as_factors = FALSE) |>
     recipes::step_novel() |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   mtcars[1, 10] <- "aaaaa"
 

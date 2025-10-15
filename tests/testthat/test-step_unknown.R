@@ -71,9 +71,13 @@ test_that("spark - step_unknown works", {
   mtcars_unknown$carb <- letters[mtcars$carb]
   mtcars_unknown[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_unknown) |>
+  rec <- recipes::recipe(
+    mpg ~ .,
+    data = mtcars_unknown,
+    strings_as_factors = FALSE
+  ) |>
     recipes::step_unknown(recipes::all_nominal_predictors()) |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   res <- dplyr::mutate(mtcars_unknown, !!!orbital_inline(orbital(rec)))
 
@@ -97,9 +101,13 @@ test_that("SQLite - step_unknown works", {
   mtcars_unknown$carb <- letters[mtcars$carb]
   mtcars_unknown[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_unknown) |>
+  rec <- recipes::recipe(
+    mpg ~ .,
+    data = mtcars_unknown,
+    strings_as_factors = FALSE
+  ) |>
     recipes::step_unknown(recipes::all_nominal_predictors()) |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   res <- dplyr::mutate(mtcars_unknown, !!!orbital_inline(orbital(rec)))
 
@@ -124,9 +132,13 @@ test_that("duckdb - step_unknown works", {
   mtcars_unknown$carb <- letters[mtcars$carb]
   mtcars_unknown[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_unknown) |>
+  rec <- recipes::recipe(
+    mpg ~ .,
+    data = mtcars_unknown,
+    strings_as_factors = FALSE
+  ) |>
     recipes::step_unknown(recipes::all_nominal_predictors()) |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   res <- dplyr::mutate(mtcars_unknown, !!!orbital_inline(orbital(rec)))
 
@@ -150,9 +162,13 @@ test_that("arrow - step_unknown works", {
   mtcars_unknown$carb <- letters[mtcars$carb]
   mtcars_unknown[2:4, ] <- NA
 
-  rec <- recipes::recipe(mpg ~ ., data = mtcars_unknown) |>
+  rec <- recipes::recipe(
+    mpg ~ .,
+    data = mtcars_unknown,
+    strings_as_factors = FALSE
+  ) |>
     recipes::step_unknown(recipes::all_nominal_predictors()) |>
-    recipes::prep(strings_as_factors = FALSE)
+    recipes::prep()
 
   res <- dplyr::mutate(mtcars_unknown, !!!orbital_inline(orbital(rec)))
 
