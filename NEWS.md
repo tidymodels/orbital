@@ -6,6 +6,8 @@
     - `adjust_predictions_custom()`
     - `adjust_probability_threshold()`
 
+* Added `show_query()` method for orbital objects. (#106)
+
 # orbital 0.3.1
 
 * Fixed bug where PCA steps didn't work if they were trained with more than 99 predictors. (#82)
