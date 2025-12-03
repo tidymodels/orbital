@@ -20,7 +20,7 @@
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Supported Models and recipes steps">
 <meta name="robots" content="noindex">
-<script defer data-domain="orbital.tidymodels.org,all.tidymodels.org" src="https://plausible.io/js/plausible.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="orbital.tidymodels.org,all.tidymodels.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
 <body>
     <a href="#container" class="visually-hidden-focusable">Skip to content</a>
@@ -644,14 +644,14 @@ to add model to table.</p>
 <td headers="prob" class="gt_row gt_center">⚪</td>
 </tr>
 </tbody>
-<tfoot class="gt_footnotes">
-<tr>
+<tfoot>
+<tr class="gt_footnotes">
 <td class="gt_footnote" colspan="5"> ✅: Supported</td>
     </tr>
-<tr>
+<tr class="gt_footnotes">
 <td class="gt_footnote" colspan="5"> ❌: Cannot be supported</td>
     </tr>
-<tr>
+<tr class="gt_footnotes">
 <td class="gt_footnote" colspan="5"> ⚪: Not yet supported</td>
     </tr>
 </tfoot>
@@ -715,6 +715,17 @@ taken with regard to hyperparameters and the data.</p>
 <li><code><a href="https://recipes.tidymodels.org/reference/step_zv.html" class="external-link">step_zv()</a></code></li>
 </ul>
 </div>
+<div class="section level2">
+<h2 id="tailor-adjustments">tailor adjustments<a class="anchor" aria-label="anchor" href="#tailor-adjustments"></a>
+</h2>
+<p>The following 4 tailor methods are supported</p>
+<ul>
+<li><code><a href="https://tailor.tidymodels.org/reference/adjust_equivocal_zone.html" class="external-link">tailor::adjust_equivocal_zone()</a></code></li>
+<li><code><a href="https://tailor.tidymodels.org/reference/adjust_numeric_range.html" class="external-link">tailor::adjust_numeric_range()</a></code></li>
+<li><code><a href="https://tailor.tidymodels.org/reference/adjust_predictions_custom.html" class="external-link">tailor::adjust_predictions_custom()</a></code></li>
+<li><code><a href="https://tailor.tidymodels.org/reference/adjust_probability_threshold.html" class="external-link">tailor::adjust_probability_threshold()</a></code></li>
+</ul>
+</div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
 </div>
@@ -728,7 +739,7 @@ taken with regard to hyperparameters and the data.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
   </div></footer>
