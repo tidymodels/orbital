@@ -113,7 +113,7 @@ pretty_print <- function(x, digits = 7) {
   new_values <- unlist(new_values, use.names = FALSE)
 
   for (i in seq_along(old_values)) {
-    x <- gsub(old_values[i], new_values[i], x)
+    x <- sub(old_values[i], new_values[i], x)
   }
 
   x

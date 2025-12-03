@@ -8,6 +8,8 @@
 
 * Added `show_query()` method for orbital objects. (#106)
 
+* Fixed printing bug where output would get malformed if coefficients had similarities. (#115)
+
 # orbital 0.3.1
 
 * Fixed bug where PCA steps didn't work if they were trained with more than 99 predictors. (#82)
