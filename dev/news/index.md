@@ -6,14 +6,20 @@
   The following adjustments have gained
   [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   support. ([\#103](https://github.com/tidymodels/orbital/issues/103))
+
   - `adjust_equivocal_zone()`
   - `adjust_numeric_range()`
   - `adjust_predictions_custom()`
   - `adjust_probability_threshold()`
+
 - Added
   [`show_query()`](https://dplyr.tidyverse.org/reference/explain.html)
   method for orbital objects.
   ([\#106](https://github.com/tidymodels/orbital/issues/106))
+
+- Fixed printing bug where output would get malformed if coefficients
+  had similarities.
+  ([\#115](https://github.com/tidymodels/orbital/issues/115))
 
 ## orbital 0.3.1
 
