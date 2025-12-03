@@ -39,6 +39,8 @@ Given a fitted workflow
 
 ``` r
 library(tidymodels)
+#> Warning: package 'ggplot2' was built under R version 4.5.2
+#> Warning: package 'parsnip' was built under R version 4.5.2
 
 rec_spec <- recipe(mpg ~ ., data = mtcars) |>
   step_normalize(all_numeric_predictors())
@@ -118,13 +120,14 @@ you can also predict in most SQL databases
 ``` r
 library(DBI)
 library(RSQLite)
+#> Warning: package 'RSQLite' was built under R version 4.5.2
 
 con <- dbConnect(SQLite(), path = ":memory:")
 db_mtcars <- copy_to(con, mtcars)
 
 predict(orbital_obj, db_mtcars)
 #> # Source:   SQL [?? x 1]
-#> # Database: sqlite 3.50.1 []
+#> # Database: sqlite 3.51.1 []
 #>    .pred
 #>    <dbl>
 #>  1  22.6
@@ -166,10 +169,16 @@ predict(orbital_obj, sc_mtcars)
 #> # ℹ more rows
 ```
 
-# Supported models and recipes steps
+## Supported models and recipes steps
 
 Full list of supported models and recipes steps can be found here:
 `vignette("supported-models")`.
+
+## Python Version
+
+We have created a [python version of
+orbital](https://posit-dev.github.io/orbital/) that works on on fitted
+scikit learn models.
 
 ## contributing
 
