@@ -35,7 +35,7 @@ tibble::tribble(
   "`cubist_rules()`",     "`\"Cubist\"`",       "✅",     "❌",    "❌",
   "`decision_tree()`",    "`\"partykit\"`",     "✅",     "✅",    "✅",
   "`linear_reg()`",       "`\"lm\"`",           "✅",     "❌",    "❌",
-  "`linear_reg()`",       "`\"glmnet\"`",       "⚪",     "❌",    "❌",
+  "`linear_reg()`",       "`\"glmnet\"`",       "✅",     "❌",    "❌",
   "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "✅",
   "`logistic_reg()`",     "`\"glmnet\"`",       "❌",     "⚪",    "⚪",
   "`mars()`",             "`\"earth\"`",        "✅",     "⚪",    "⚪",
