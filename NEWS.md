@@ -1,5 +1,7 @@
 # orbital (development version)
 
+# orbital 0.4.0
+
 * Added support for tailor package and its integration into workflows. The following adjustments have gained `orbital()` support. (#103)
     - `adjust_equivocal_zone()`
     - `adjust_numeric_range()`
