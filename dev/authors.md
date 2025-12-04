@@ -14,13 +14,13 @@ Source:
 [`DESCRIPTION`](https://github.com/tidymodels/orbital/blob/main/DESCRIPTION)
 
 Hvitfeldt E (2025). *orbital: Predict with 'tidymodels' Workflows in
-Databases*. R package version 0.3.1.9000,
+Databases*. R package version 0.4.0.9000,
 <https://github.com/tidymodels/orbital>.
 
     @Manual{,
       title = {orbital: Predict with 'tidymodels' Workflows in Databases},
       author = {Emil Hvitfeldt},
       year = {2025},
-      note = {R package version 0.3.1.9000},
+      note = {R package version 0.4.0.9000},
       url = {https://github.com/tidymodels/orbital},
     }
