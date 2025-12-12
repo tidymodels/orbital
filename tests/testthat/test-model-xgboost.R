@@ -1,3 +1,35 @@
+test_that("boost_tree(), objective = reg:squarederror, works with type = numeric", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("xgboost")
+
+  bt_spec <- parsnip::boost_tree(mode = "regression", engine = "xgboost")
+
+  bt_fit <- parsnip::fit(bt_spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(bt_fit)
+
+  # to avoid exact split values
+  mtcars <- mtcars + 0.1
+
+  preds <- predict(orb_obj, mtcars)
+  exps <- predict(bt_fit, mtcars)
+
+  expect_named(preds, ".pred")
+  expect_type(preds$.pred, "double")
+
+  exps <- as.data.frame(exps)
+
+  rownames(preds) <- NULL
+  rownames(exps) <- NULL
+
+  expect_equal(
+    preds,
+    exps,
+    tolerance = 0.0000001
+  )
+})
+
 test_that("boost_tree(), objective = binary:logistic, works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
