@@ -10,7 +10,7 @@ orbital.xgb.Booster <- function(
   type <- default_type(type)
 
   if (mode == "classification") {
-    objective <- x$params$objective
+    objective <- x$params$objective %||% attr(x, "params")$objective
     objective <- rlang::arg_match0(
       objective,
       c("multi:softprob", "binary:logistic")
@@ -32,7 +32,10 @@ orbital.xgb.Booster <- function(
 xgboost_multisoft <- function(x, type, lvl) {
   trees <- tidypredict::.extract_xgb_trees(x)
 
-  trees_split <- split(trees, rep(seq_along(lvl), x$niter))
+  trees_split <- split(
+    trees,
+    rep(seq_along(lvl), x$niter %||% nrow(attr(x, "evaluation_log")))
+  )
   trees_split <- lapply(trees_split, collapse_stumps)
   trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
 
