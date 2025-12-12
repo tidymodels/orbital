@@ -11,6 +11,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = class", 
 
   orb_obj <- orbital(bt_fit, type = "class")
 
+  # to avoid exact split values
+  mtcars[, -8] <- mtcars[, -8] + 0.1
+
   preds <- predict(orb_obj, mtcars)
   exps <- predict(bt_fit, mtcars)
 
@@ -33,6 +36,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = class", 
   bt_fit <- parsnip::fit(bt_spec, Species ~ ., iris)
 
   orb_obj <- orbital(bt_fit, type = "class")
+
+  # to avoid exact split values
+  iris[, -5] <- iris[, -5] + 0.05
 
   preds <- predict(orb_obj, iris)
   exps <- predict(bt_fit, iris)
@@ -58,6 +64,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
   bt_fit <- parsnip::fit(bt_spec, vs ~ disp + mpg + hp, mtcars)
 
   orb_obj <- orbital(bt_fit, type = "prob")
+
+  # to avoid exact split values
+  mtcars[, -8] <- mtcars[, -8] + 0.1
 
   preds <- predict(orb_obj, mtcars)
   exps <- predict(bt_fit, mtcars, type = "prob")
@@ -88,6 +97,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
   bt_fit <- parsnip::fit(bt_spec, Species ~ ., iris)
 
   orb_obj <- orbital(bt_fit, type = "prob")
+
+  # to avoid exact split values
+  iris[, -5] <- iris[, -5] + 0.05
 
   preds <- predict(orb_obj, iris)
   exps <- predict(bt_fit, iris, type = "prob")
@@ -121,6 +133,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = c(class,
   bt_fit <- parsnip::fit(bt_spec, vs ~ disp + mpg + hp, mtcars)
 
   orb_obj <- orbital(bt_fit, type = c("class", "prob"))
+
+  # to avoid exact split values
+  mtcars[, -8] <- mtcars[, -8] + 0.1
 
   preds <- predict(orb_obj, mtcars)
   exps <- dplyr::bind_cols(
@@ -156,6 +171,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = c(class,
   bt_fit <- parsnip::fit(bt_spec, Species ~ ., iris)
 
   orb_obj <- orbital(bt_fit, type = c("class", "prob"))
+
+  # to avoid exact split values
+  iris[, -5] <- iris[, -5] + 0.05
 
   preds <- predict(orb_obj, iris)
   exps <- dplyr::bind_cols(
