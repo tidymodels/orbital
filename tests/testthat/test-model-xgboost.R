@@ -1,3 +1,35 @@
+test_that("boost_tree(), objective = reg:squarederror, works with type = numeric", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("xgboost")
+
+  bt_spec <- parsnip::boost_tree(mode = "regression", engine = "xgboost")
+
+  bt_fit <- parsnip::fit(bt_spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(bt_fit)
+
+  # to avoid exact split values
+  mtcars <- mtcars + 0.1
+
+  preds <- predict(orb_obj, mtcars)
+  exps <- predict(bt_fit, mtcars)
+
+  expect_named(preds, ".pred")
+  expect_type(preds$.pred, "double")
+
+  exps <- as.data.frame(exps)
+
+  rownames(preds) <- NULL
+  rownames(exps) <- NULL
+
+  expect_equal(
+    preds,
+    exps,
+    tolerance = 0.0000001
+  )
+})
+
 test_that("boost_tree(), objective = binary:logistic, works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
@@ -11,6 +43,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = class", 
 
   orb_obj <- orbital(bt_fit, type = "class")
 
+  # to avoid exact split values
+  mtcars[, -8] <- mtcars[, -8] + 0.1
+
   preds <- predict(orb_obj, mtcars)
   exps <- predict(bt_fit, mtcars)
 
@@ -23,7 +58,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = class", 
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = class", {
+test_that("boost_tree(), objective = multi:softprob, works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -33,6 +68,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = class", 
   bt_fit <- parsnip::fit(bt_spec, Species ~ ., iris)
 
   orb_obj <- orbital(bt_fit, type = "class")
+
+  # to avoid exact split values
+  iris[, -5] <- iris[, -5] + 0.05
 
   preds <- predict(orb_obj, iris)
   exps <- predict(bt_fit, iris)
@@ -59,6 +97,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
 
   orb_obj <- orbital(bt_fit, type = "prob")
 
+  # to avoid exact split values
+  mtcars[, -8] <- mtcars[, -8] + 0.1
+
   preds <- predict(orb_obj, mtcars)
   exps <- predict(bt_fit, mtcars, type = "prob")
 
@@ -78,7 +119,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
+test_that("boost_tree(), objective = multi:softprob, works with type = prob", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -88,6 +129,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
   bt_fit <- parsnip::fit(bt_spec, Species ~ ., iris)
 
   orb_obj <- orbital(bt_fit, type = "prob")
+
+  # to avoid exact split values
+  iris[, -5] <- iris[, -5] + 0.05
 
   preds <- predict(orb_obj, iris)
   exps <- predict(bt_fit, iris, type = "prob")
@@ -122,6 +166,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = c(class,
 
   orb_obj <- orbital(bt_fit, type = c("class", "prob"))
 
+  # to avoid exact split values
+  mtcars[, -8] <- mtcars[, -8] + 0.1
+
   preds <- predict(orb_obj, mtcars)
   exps <- dplyr::bind_cols(
     predict(bt_fit, mtcars, type = c("class")),
@@ -146,7 +193,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = c(class,
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = c(class, prob)", {
+test_that("boost_tree(), objective = multi:softprob, works with type = c(class, prob)", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -156,6 +203,9 @@ test_that("boost_tree(), objective = binary:logistic, works with type = c(class,
   bt_fit <- parsnip::fit(bt_spec, Species ~ ., iris)
 
   orb_obj <- orbital(bt_fit, type = c("class", "prob"))
+
+  # to avoid exact split values
+  iris[, -5] <- iris[, -5] + 0.05
 
   preds <- predict(orb_obj, iris)
   exps <- dplyr::bind_cols(
