@@ -2,7 +2,12 @@
 
 ## orbital (development version)
 
+- Make work with new versions of xgboost.
+  ([\#119](https://github.com/tidymodels/orbital/issues/119))
+
 ## orbital 0.4.0
+
+CRAN release: 2025-12-04
 
 - Added support for tailor package and its integration into workflows.
   The following adjustments have gained
