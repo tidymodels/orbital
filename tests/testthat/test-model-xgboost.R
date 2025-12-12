@@ -26,7 +26,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = class", 
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = class", {
+test_that("boost_tree(), objective = multi:softprob, works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -87,7 +87,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
+test_that("boost_tree(), objective = multi:softprob, works with type = prob", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -161,7 +161,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = c(class,
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = c(class, prob)", {
+test_that("boost_tree(), objective = multi:softprob, works with type = c(class, prob)", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
