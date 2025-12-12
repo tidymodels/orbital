@@ -39,8 +39,6 @@ Given a fitted workflow
 
 ``` r
 library(tidymodels)
-#> Warning: package 'ggplot2' was built under R version 4.5.2
-#> Warning: package 'parsnip' was built under R version 4.5.2
 
 rec_spec <- recipe(mpg ~ ., data = mtcars) |>
   step_normalize(all_numeric_predictors())
@@ -120,7 +118,6 @@ you can also predict in most SQL databases
 ``` r
 library(DBI)
 library(RSQLite)
-#> Warning: package 'RSQLite' was built under R version 4.5.2
 
 con <- dbConnect(SQLite(), path = ":memory:")
 db_mtcars <- copy_to(con, mtcars)
