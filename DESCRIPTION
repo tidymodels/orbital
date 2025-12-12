@@ -48,7 +48,7 @@ Suggests:
     testthat (>= 3.0.0),
     themis,
     tibble,
-    tidypredict (>= 0.5.1),
+    tidypredict (>= 1.0.1),
     workflows
 VignetteBuilder: 
     knitr
