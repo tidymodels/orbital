@@ -1,5 +1,7 @@
 # orbital (development version)
 
+# orbital 0.4.1
+
 * Make work with new versions of xgboost. (#119)
 
 # orbital 0.4.0
