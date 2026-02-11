@@ -41,7 +41,7 @@ mtcars_sqlite <- copy_to(con_sqlite, mtcars, name = "mtcars_table")
 
 predict(orbital_obj, mtcars_sqlite)
 #> # Source:   SQL [?? x 1]
-#> # Database: sqlite 3.51.1 []
+#> # Database: sqlite 3.51.2 []
 #>    .pred
 #>    <dbl>
 #>  1  23.0
@@ -131,7 +131,7 @@ mtcars_duckdb <- dplyr::copy_to(con_duckdb, mtcars)
 
 predict(orbital_obj, mtcars_duckdb)
 #> # Source:   SQL [?? x 1]
-#> # Database: DuckDB 1.4.3 [unknown@Linux 6.11.0-1018-azure:R 4.5.2/:memory:]
+#> # Database: DuckDB 1.4.4 [unknown@Linux 6.11.0-1018-azure:R 4.5.2/:memory:]
 #>    .pred
 #>    <dbl>
 #>  1  23.0

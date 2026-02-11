@@ -490,7 +490,7 @@ ames_sqlite <- copy_to(con, ames)
 
 predict(orbital_obj, ames_sqlite)
 #> # Source:   SQL [?? x 1]
-#> # Database: sqlite 3.51.1 []
+#> # Database: sqlite 3.51.2 []
 #>      .pred
 #>      <dbl>
 #>  1 241950.
