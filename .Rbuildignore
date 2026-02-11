@@ -13,3 +13,4 @@
 ^codecov\.yml$
 ^[\.]?air\.toml$
 ^\.vscode$
+^\.claude$
