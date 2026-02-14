@@ -41,6 +41,14 @@ lightgbm_binary <- function(x, type, lvl) {
       )
     )
   }
+  if ("prob" %in% type) {
+    # eq returns P(class 1), so P(class 0) = 1 - eq
+    res <- c(
+      res,
+      orbital_tmp_prob_name1 = glue::glue("1 - ({eq})"),
+      orbital_tmp_prob_name2 = glue::glue("{eq}")
+    )
+  }
 
   res
 }
