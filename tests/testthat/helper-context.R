@@ -6,8 +6,12 @@ testthat_context <- new.env()
 
 testthat_spark_connection_open <- function(set_to = NULL) {
   cs <- testthat_context$spark$connection$open
-  if (is.null(cs)) cs <- FALSE
-  if (!is.null(set_to)) cs <- set_to
+  if (is.null(cs)) {
+    cs <- FALSE
+  }
+  if (!is.null(set_to)) {
+    cs <- set_to
+  }
   testthat_context$spark$connection$open <- cs
   cs
 }
@@ -15,9 +19,13 @@ testthat_spark_connection_open <- function(set_to = NULL) {
 testthat_spark_connection_object <- function(con = NULL) {
   co <- testthat_spark_connection_open()
 
-  if (co && !is.null(con)) stop("There is a connection already open")
+  if (co && !is.null(con)) {
+    stop("There is a connection already open")
+  }
 
-  if (co) return(testthat_context$spark$connection$object)
+  if (co) {
+    return(testthat_context$spark$connection$object)
+  }
 
   if (!is.null(con)) {
     testthat_spark_connection_open(TRUE)
@@ -33,10 +41,18 @@ testthat_spark_connection_type <- function() {
     db <- using_databricks()
     sy <- using_synapse()
     mt <- using_method()
-    if (lv && db) stop("Databricks and Livy cannot be tested simultaneously")
-    if (lv) ct <- "livy"
-    if (db) ct <- "databricks"
-    if (sy) ct <- "synapse"
+    if (lv && db) {
+      stop("Databricks and Livy cannot be tested simultaneously")
+    }
+    if (lv) {
+      ct <- "livy"
+    }
+    if (db) {
+      ct <- "databricks"
+    }
+    if (sy) {
+      ct <- "synapse"
+    }
     if (mt) ct <- "method"
   }
   ct
@@ -47,8 +63,12 @@ testthat_spark_env_version <- function(set_to = NULL) {
   if (is.null(cv)) {
     esv <- Sys.getenv("SPARK_VERSION")
     sv <- NULL
-    if (esv != "") sv <- esv
-    if (!is.null(cv)) sv <- cv
+    if (esv != "") {
+      sv <- esv
+    }
+    if (!is.null(cv)) {
+      sv <- cv
+    }
     if (is.null(sv)) {
       mv <- max(sparklyr::spark_installed_versions()$spark)
       sv <- mv
@@ -56,7 +76,9 @@ testthat_spark_env_version <- function(set_to = NULL) {
   } else {
     sv <- cv
   }
-  if (!is.null(set_to)) sv <- set_to
+  if (!is.null(set_to)) {
+    sv <- set_to
+  }
   testthat_context$spark$version <- sv
   if (is.null(set_to)) sv
 }
@@ -83,7 +105,9 @@ using_livy_version <- function() {
 
 using_livy <- function() {
   lt <- FALSE
-  if (using_livy_version() != "") lt <- TRUE
+  if (using_livy_version() != "") {
+    lt <- TRUE
+  }
   lt
 }
 
@@ -103,14 +127,18 @@ using_arrow_devel <- function() {
 
 using_arrow <- function() {
   lt <- FALSE
-  if (using_arrow_version() != "") lt <- TRUE
+  if (using_arrow_version() != "") {
+    lt <- TRUE
+  }
   lt
 }
 
 using_databricks <- function() {
   dcs <- FALSE
   dc <- Sys.getenv("TEST_DATABRICKS_CONNECT")
-  if (dc == 'true') dcs <- TRUE
+  if (dc == 'true') {
+    dcs <- TRUE
+  }
 
   #sc <- testthat_spark_connection()
   #if(sc$method == "databricks_connect") dcs <- TRUE
