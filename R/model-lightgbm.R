@@ -69,12 +69,9 @@ lightgbm_multiclass <- function(x, type, lvl) {
   class_assignments <- (tree_indices %% num_class) + 1
   trees_split <- split(trees, class_assignments)
 
-  # Sum trees for each class (like xgboost's paste approach)
-  trees_split <- vapply(
-    trees_split,
-    function(tree_list) paste(c("0", tree_list), collapse = " + "),
-    character(1)
-  )
+  # Collapse stumps and sum trees for each class (like xgboost)
+  trees_split <- lapply(trees_split, collapse_stumps)
+  trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
 
   res <- stats::setNames(trees_split, lvl)
 
