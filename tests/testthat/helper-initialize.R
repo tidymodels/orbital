@@ -15,11 +15,18 @@ testthat_spark_connection <- function() {
     if (!testthat_spark_connection_open()) {
       testthat_init()
       tp <- testthat_spark_connection_type()
-      if (tp == "method") sc <- testthat_method_connection()
-      if (tp == "databricks")
+      if (tp == "method") {
+        sc <- testthat_method_connection()
+      }
+      if (tp == "databricks") {
         sc <- testthat_shell_connection(method = "databricks")
-      if (tp == "synapse") sc <- testthat_shell_connection(method = "synapse")
-      if (tp == "local") sc <- testthat_shell_connection()
+      }
+      if (tp == "synapse") {
+        sc <- testthat_shell_connection(method = "synapse")
+      }
+      if (tp == "local") {
+        sc <- testthat_shell_connection()
+      }
       if (tp == "livy") sc <- testthat_livy_connection()
     } else {
       sc <- testthat_spark_connection_object()
@@ -68,7 +75,9 @@ testthat_shell_connection <- function(method = "shell") {
     config$`sparklyr.sdf_collect.persistence_level` <- "NONE"
 
     packages <- NULL
-    if (spark_version >= "2.4.2") packages <- c(packages, "delta")
+    if (spark_version >= "2.4.2") {
+      packages <- c(packages, "delta")
+    }
 
     sc <- sparklyr::spark_connect(
       master = "local",
