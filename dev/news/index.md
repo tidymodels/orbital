@@ -2,6 +2,11 @@
 
 ## orbital (development version)
 
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now works with `boost_tree(engine = "lightgbm")` models for numeric,
+  class, and probability predictions.
+  ([\#89](https://github.com/tidymodels/orbital/issues/89))
+
 ## orbital 0.4.1
 
 CRAN release: 2025-12-13
