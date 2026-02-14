@@ -16,9 +16,11 @@ orbital.lgb.Booster <- function(
 
     if (objective %in% c("binary", "cross_entropy")) {
       res <- lightgbm_binary(x, type, lvl)
+    } else if (objective %in% c("multiclass", "multiclassova")) {
+      res <- lightgbm_multiclass(x, type, lvl)
     } else {
       cli::cli_abort(
-        "Multiclass classification not yet implemented for LightGBM."
+        "Unsupported LightGBM objective: {.val {objective}}."
       )
     }
   }
@@ -47,6 +49,51 @@ lightgbm_binary <- function(x, type, lvl) {
       res,
       orbital_tmp_prob_name1 = glue::glue("1 - ({eq})"),
       orbital_tmp_prob_name2 = glue::glue("{eq}")
+    )
+  }
+
+  res
+}
+
+lightgbm_multiclass <- function(x, type, lvl) {
+  # Follow xgboost pattern: extract trees and sum by class
+  trees <- tidypredict::.extract_lgb_trees(x)
+
+  # Get actual tree indices from parse_model to handle pruned trees
+  pm <- tidypredict::parse_model(x)
+  tree_indices <- as.integer(names(pm$trees))
+
+  num_class <- length(lvl)
+
+  # Group trees by class: tree i belongs to class (i %% num_class)
+  class_assignments <- (tree_indices %% num_class) + 1
+  trees_split <- split(trees, class_assignments)
+
+  # Sum trees for each class (like xgboost's paste approach)
+  trees_split <- vapply(
+    trees_split,
+    function(tree_list) paste(c("0", tree_list), collapse = " + "),
+    character(1)
+  )
+
+  res <- stats::setNames(trees_split, lvl)
+
+  if ("class" %in% type) {
+    res <- c(
+      res,
+      orbital_tmp_class_name = softmax(lvl)
+    )
+  }
+
+  if ("prob" %in% type) {
+    # Compute softmax probabilities like xgboost
+    eqs <- glue::glue("exp({lvl}) / norm")
+    names(eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
+
+    res <- c(
+      res,
+      "norm" = glue::glue_collapse(glue::glue("exp({lvl})"), sep = " + "),
+      eqs
     )
   }
 
