@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* `orbital()` now works with `boost_tree(engine = "lightgbm")` models for numeric, class, and probability predictions.
+
 # orbital 0.4.1
 
 * Make work with new versions of xgboost. (#119)
