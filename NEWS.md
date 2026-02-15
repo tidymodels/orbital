@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* `orbital()` now works with `boost_tree(engine = "catboost")` models for numeric, class, and probability predictions. (#90)
+
 * `orbital()` now works with `boost_tree(engine = "lightgbm")` models for numeric, class, and probability predictions. (#89)
 
 # orbital 0.4.1
