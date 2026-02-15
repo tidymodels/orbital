@@ -3,6 +3,11 @@
 ## orbital (development version)
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now works with `boost_tree(engine = "catboost")` models for numeric,
+  class, and probability predictions.
+  ([\#90](https://github.com/tidymodels/orbital/issues/90))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now works with `boost_tree(engine = "lightgbm")` models for numeric,
   class, and probability predictions.
   ([\#89](https://github.com/tidymodels/orbital/issues/89))
