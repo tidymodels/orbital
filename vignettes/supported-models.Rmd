@@ -31,6 +31,7 @@ library(dplyr)
 
 tibble::tribble(
   ~parsnip,               ~engine,              ~numeric, ~class, ~prob,
+  "`boost_tree()`",       "`\"catboost\"`",     "✅",     "✅",    "✅",
   "`boost_tree()`",       "`\"lightgbm\"`",     "✅",     "✅",    "✅",
   "`boost_tree()`",       "`\"xgboost\"`",      "✅",     "✅",    "✅",
   "`cubist_rules()`",     "`\"Cubist\"`",       "✅",     "❌",    "❌",

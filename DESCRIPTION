@@ -23,6 +23,7 @@ Imports:
 Suggests:
     arrow,
     bonsai,
+    catboost,
     DBI,
     dbplyr,
     dtplyr,
