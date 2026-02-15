@@ -33,9 +33,6 @@ orbital.catboost.Model <- function(
 catboost_multiclass <- function(x, type, lvl) {
   trees <- tidypredict::.extract_catboost_trees(x)
 
-  # Deparse each tree expression to a string
-  trees <- vapply(trees, deparse1, character(1))
-
   num_class <- length(lvl)
 
   # Group trees by class: tree i belongs to class (i %% num_class)
@@ -43,7 +40,8 @@ catboost_multiclass <- function(x, type, lvl) {
   class_assignments <- (tree_indices %% num_class) + 1L
   trees_split <- split(trees, class_assignments)
 
-  # Sum trees for each class
+  # Collapse stumps and sum trees for each class
+  trees_split <- lapply(trees_split, collapse_stumps)
   trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
 
   res <- stats::setNames(trees_split, lvl)
