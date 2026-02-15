@@ -13,7 +13,57 @@ orbital.catboost.Model <- function(
   if (mode == "regression") {
     res <- tidypredict::tidypredict_fit(x)
   } else if (mode == "classification") {
-    res <- catboost_binary(x, type, lvl)
+    pm <- tidypredict::parse_model(x)
+    objective <- pm$general$params$objective %||% "Logloss"
+
+    if (objective %in% c("Logloss", "CrossEntropy")) {
+      res <- catboost_binary(x, type, lvl)
+    } else if (objective %in% c("MultiClass", "MultiClassOneVsAll")) {
+      res <- catboost_multiclass(x, type, lvl)
+    } else {
+      cli::cli_abort(
+        "Unsupported CatBoost objective: {.val {objective}}."
+      )
+    }
+  }
+
+  res
+}
+
+catboost_multiclass <- function(x, type, lvl) {
+  trees <- tidypredict::.extract_catboost_trees(x)
+
+  # Deparse each tree expression to a string
+  trees <- vapply(trees, deparse1, character(1))
+
+  num_class <- length(lvl)
+
+  # Group trees by class: tree i belongs to class (i %% num_class)
+  tree_indices <- seq_along(trees) - 1L
+  class_assignments <- (tree_indices %% num_class) + 1L
+  trees_split <- split(trees, class_assignments)
+
+  # Sum trees for each class
+  trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
+
+  res <- stats::setNames(trees_split, lvl)
+
+  if ("class" %in% type) {
+    res <- c(
+      res,
+      orbital_tmp_class_name = softmax(lvl)
+    )
+  }
+
+  if ("prob" %in% type) {
+    eqs <- glue::glue("exp({lvl}) / norm")
+    names(eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
+
+    res <- c(
+      res,
+      "norm" = glue::glue_collapse(glue::glue("exp({lvl})"), sep = " + "),
+      eqs
+    )
   }
 
   res
