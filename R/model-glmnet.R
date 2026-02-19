@@ -25,13 +25,16 @@ orbital.glmnet <- function(
 
   if (mode == "classification") {
     if (inherits(x, "multnet")) {
-      cli::cli_abort(
-        "Multiclass glmnet models are not yet supported."
-      )
+      # Multiclass classification
+      class_eqs <- tidypredict::.extract_glmnet_multiclass(x, penalty = penalty)
+      # Reorder to match lvl order
+      class_eqs <- class_eqs[lvl]
+      res <- multiclass_from_logits(unlist(class_eqs), type, lvl)
+    } else {
+      # Binary classification
+      eq <- glmnet_logistic_expr(x, penalty)
+      res <- binary_from_prob(eq, type, lvl)
     }
-    # Binary classification
-    eq <- glmnet_logistic_expr(x, penalty)
-    res <- binary_from_prob(eq, type, lvl)
   } else if (mode == "regression") {
     eq <- glmnet_linear_expr(x, penalty)
     res <- eq
