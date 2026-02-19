@@ -1,5 +1,10 @@
 # Shared helper functions for classification models
 
+# Helper to backtick variable names for use in expressions
+backtick <- function(x) {
+  paste0("`", x, "`")
+}
+
 # Binary classification from a single probability expression
 # Assumes: eq is P(second level)
 binary_from_prob <- function(eq, type, lvl) {
@@ -47,10 +52,12 @@ binary_from_prob_first <- function(eq, type, lvl) {
 }
 
 # Generate class selection from logits/scores (pick class with max value)
+# Uses >= to break ties in favor of earlier classes (matching randomForest behavior)
 softmax_class <- function(lvl) {
+  lvl_bt <- backtick(lvl)
   res <- character(0)
   for (i in seq(1, length(lvl) - 1)) {
-    line <- glue::glue("{lvl[i]} > {lvl[-i]}")
+    line <- glue::glue("{lvl_bt[i]} >= {lvl_bt[-i]}")
     line <- glue::glue_collapse(line, sep = " & ")
     line <- glue::glue("{line} ~ {glue::double_quote(lvl[i])}")
     res[i] <- line
@@ -64,13 +71,14 @@ softmax_class <- function(lvl) {
 # Multiclass from logits (linear predictors before softmax)
 multiclass_from_logits <- function(logit_eqs, type, lvl) {
   res <- stats::setNames(logit_eqs, lvl)
+  lvl_bt <- backtick(lvl)
 
   if ("class" %in% type) {
     res <- c(res, orbital_tmp_class_name = softmax_class(lvl))
   }
   if ("prob" %in% type) {
-    norm_eq <- glue::glue_collapse(glue::glue("exp({lvl})"), sep = " + ")
-    prob_eqs <- glue::glue("exp({lvl}) / norm")
+    norm_eq <- glue::glue_collapse(glue::glue("exp({lvl_bt})"), sep = " + ")
+    prob_eqs <- glue::glue("exp({lvl_bt}) / norm")
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, "norm" = norm_eq, prob_eqs)
   }
@@ -80,12 +88,13 @@ multiclass_from_logits <- function(logit_eqs, type, lvl) {
 # Multiclass from vote counts
 multiclass_from_votes <- function(vote_eqs, type, lvl, n_trees) {
   res <- stats::setNames(vote_eqs, lvl)
+  lvl_bt <- backtick(lvl)
 
   if ("class" %in% type) {
     res <- c(res, orbital_tmp_class_name = softmax_class(lvl))
   }
   if ("prob" %in% type) {
-    prob_eqs <- glue::glue("({lvl}) / {n_trees}")
+    prob_eqs <- glue::glue("({lvl_bt}) / {n_trees}")
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, prob_eqs)
   }
@@ -95,9 +104,10 @@ multiclass_from_votes <- function(vote_eqs, type, lvl, n_trees) {
 # Multiclass from probability averages
 multiclass_from_prob_avg <- function(prob_sum_eqs, type, lvl, n_trees) {
   res <- stats::setNames(prob_sum_eqs, lvl)
+  lvl_bt <- backtick(lvl)
 
   if ("prob" %in% type) {
-    prob_eqs <- glue::glue("({lvl}) / {n_trees}")
+    prob_eqs <- glue::glue("({lvl_bt}) / {n_trees}")
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, prob_eqs)
   }
