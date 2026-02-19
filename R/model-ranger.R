@@ -1,5 +1,5 @@
 #' @export
-orbital.glm <- function(
+orbital.ranger <- function(
   x,
   ...,
   mode = c("classification", "regression"),
@@ -10,15 +10,10 @@ orbital.glm <- function(
   type <- default_type(type)
 
   if (mode == "classification") {
-    if (is.null(lvl)) {
-      outcome <- names(attr(x$terms, "dataClasses"))[attr(x$terms, "response")]
-      lvl <- levels(x$data[[outcome]])
-    }
-
-    eq <- tidypredict::tidypredict_fit(x)
-    eq <- deparse1(eq)
-
-    res <- binary_from_prob(eq, type, lvl)
+    class_trees <- tidypredict::.extract_ranger_classprob(x)
+    n_trees <- x$num.trees
+    prob_sums <- sum_tree_expressions(class_trees)
+    res <- multiclass_from_prob_avg(prob_sums, type, lvl, n_trees)
   } else if (mode == "regression") {
     res <- tidypredict::tidypredict_fit(x)
   }

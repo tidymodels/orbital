@@ -99,7 +99,7 @@ orbital_json_read <- function(path) {
     attr(res, "pred_names") <- utils::tail(names(res), 1)
   } else if (version == 2) {
     res <- unlist(json$actions)
-    attr(res, "pred_names") <- json$pred_names
+    attr(res, "pred_names") <- unlist(json$pred_names)
   }
 
   new_orbital_class(res)
