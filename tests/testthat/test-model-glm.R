@@ -145,3 +145,44 @@ test_that("logistic_reg() works with custom prefix", {
 
   expect_named(preds, c("my_pred_class", "my_pred_0", "my_pred_1"))
 })
+
+test_that("orbital() errors for invalid type argument", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+
+  spec <- parsnip::linear_reg()
+  fit <- parsnip::fit(spec, mpg ~ disp + vs + hp, mtcars)
+
+  expect_snapshot(
+    error = TRUE,
+    orbital(fit, type = "invalid")
+  )
+})
+
+test_that("orbital() errors when using classification type for regression model", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+
+  spec <- parsnip::linear_reg()
+  fit <- parsnip::fit(spec, mpg ~ disp + vs + hp, mtcars)
+
+  expect_snapshot(
+    error = TRUE,
+    orbital(fit, type = "class")
+  )
+})
+
+test_that("orbital() errors when using regression type for classification model", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  spec <- parsnip::logistic_reg()
+  fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
+
+  expect_snapshot(
+    error = TRUE,
+    orbital(fit, type = "numeric")
+  )
+})
