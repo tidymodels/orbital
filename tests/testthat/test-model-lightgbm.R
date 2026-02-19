@@ -267,3 +267,24 @@ test_that("boost_tree(engine = 'lightgbm'), objective = multiclass, works with t
     tolerance = 0.0000001
   )
 })
+
+test_that("boost_tree(lightgbm) works with custom prefix", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("lightgbm")
+
+  bt_spec <- parsnip::boost_tree(
+    mode = "regression",
+    engine = "lightgbm",
+    min_n = 1
+  )
+
+  bt_fit <- parsnip::fit(bt_spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(bt_fit, prefix = "my_pred")
+
+  preds <- predict(orb_obj, mtcars)
+
+  expect_named(preds, "my_pred")
+})

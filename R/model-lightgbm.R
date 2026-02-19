@@ -59,11 +59,26 @@ lightgbm_multiclass <- function(x, type, lvl) {
   # Follow xgboost pattern: extract trees and sum by class
   trees <- tidypredict::.extract_lgb_trees(x)
 
-  # Get actual tree indices from parse_model to handle pruned trees
   pm <- tidypredict::parse_model(x)
-  tree_indices <- as.integer(names(pm$trees))
-
   num_class <- length(lvl)
+  niter <- pm$general$niter
+  total_trees <- niter * num_class
+
+  # tidypredict skips empty trees (num_leaves == 1), so we need to identify
+
+  # which tree indices were kept to correctly assign classes
+  n_extracted <- length(trees)
+
+  if (n_extracted == total_trees) {
+    # No empty trees, simple case like xgboost
+    tree_indices <- seq_len(total_trees) - 1L
+  } else {
+    # Some trees were skipped - get indices of non-empty trees from JSON dump
+    model_json <- x$dump_model()
+    model_info <- jsonlite::fromJSON(model_json)
+    non_empty <- model_info$tree_info$num_leaves > 1
+    tree_indices <- model_info$tree_info$tree_index[non_empty]
+  }
 
   # Group trees by class: tree i belongs to class (i %% num_class)
   class_assignments <- (tree_indices %% num_class) + 1

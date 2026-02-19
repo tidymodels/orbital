@@ -1,4 +1,4 @@
-test_that("boost_tree(), objective = reg:squarederror, works with type = numeric", {
+test_that("boost_tree(), objective = regression, works with type = numeric", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -30,7 +30,7 @@ test_that("boost_tree(), objective = reg:squarederror, works with type = numeric
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = class", {
+test_that("boost_tree(), objective = binary, works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -58,7 +58,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = class", 
   )
 })
 
-test_that("boost_tree(), objective = multi:softprob, works with type = class", {
+test_that("boost_tree(), objective = multiclass, works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -84,7 +84,7 @@ test_that("boost_tree(), objective = multi:softprob, works with type = class", {
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
+test_that("boost_tree(), objective = binary, works with type = prob", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -119,7 +119,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = prob", {
   )
 })
 
-test_that("boost_tree(), objective = multi:softprob, works with type = prob", {
+test_that("boost_tree(), objective = multiclass, works with type = prob", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -153,7 +153,7 @@ test_that("boost_tree(), objective = multi:softprob, works with type = prob", {
   )
 })
 
-test_that("boost_tree(), objective = binary:logistic, works with type = c(class, prob)", {
+test_that("boost_tree(), objective = binary, works with type = c(class, prob)", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -193,7 +193,7 @@ test_that("boost_tree(), objective = binary:logistic, works with type = c(class,
   )
 })
 
-test_that("boost_tree(), objective = multi:softprob, works with type = c(class, prob)", {
+test_that("boost_tree(), objective = multiclass, works with type = c(class, prob)", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
@@ -230,4 +230,20 @@ test_that("boost_tree(), objective = multi:softprob, works with type = c(class, 
     exps,
     tolerance = 0.0000001
   )
+})
+
+test_that("boost_tree(xgboost) works with custom prefix", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("xgboost")
+
+  bt_spec <- parsnip::boost_tree(mode = "regression", engine = "xgboost")
+
+  bt_fit <- parsnip::fit(bt_spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(bt_fit, prefix = "my_pred")
+
+  preds <- predict(orb_obj, mtcars)
+
+  expect_named(preds, "my_pred")
 })
