@@ -117,3 +117,19 @@ test_that("decision_tree(partykit) works with type = c(class, prob)", {
     exps
   )
 })
+
+test_that("decision_tree(partykit) works with custom prefix", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
+
+  spec <- parsnip::decision_tree("regression", "partykit")
+
+  fit <- parsnip::fit(spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(fit, prefix = "my_pred")
+
+  preds <- predict(orb_obj, mtcars)
+
+  expect_named(preds, "my_pred")
+})

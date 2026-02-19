@@ -113,3 +113,35 @@ test_that("logistic_reg() works with type = c(class, prob)", {
     exps
   )
 })
+
+test_that("linear_reg() works with custom prefix", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+
+  spec <- parsnip::linear_reg()
+
+  fit <- parsnip::fit(spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(fit, prefix = "my_pred")
+
+  preds <- predict(orb_obj, mtcars)
+
+  expect_named(preds, "my_pred")
+})
+
+test_that("logistic_reg() works with custom prefix", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  spec <- parsnip::logistic_reg()
+
+  fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
+
+  orb_obj <- orbital(fit, type = c("class", "prob"), prefix = "my_pred")
+
+  preds <- predict(orb_obj, mtcars)
+
+  expect_named(preds, c("my_pred_class", "my_pred_0", "my_pred_1"))
+})

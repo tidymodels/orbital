@@ -231,3 +231,19 @@ test_that("boost_tree(), objective = multiclass, works with type = c(class, prob
     tolerance = 0.0000001
   )
 })
+
+test_that("boost_tree(xgboost) works with custom prefix", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("xgboost")
+
+  bt_spec <- parsnip::boost_tree(mode = "regression", engine = "xgboost")
+
+  bt_fit <- parsnip::fit(bt_spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(bt_fit, prefix = "my_pred")
+
+  preds <- predict(orb_obj, mtcars)
+
+  expect_named(preds, "my_pred")
+})
