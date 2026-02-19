@@ -5,8 +5,20 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
   check_type(type, mode)
   type <- default_type(type)
 
+  extra_args <- list()
+  if (inherits(x$fit, "glmnet")) {
+    extra_args$penalty <- rlang::eval_tidy(x$spec$args$penalty)
+  }
+
   res <- try(
-    orbital(x$fit, mode = mode, type = type, lvl = x$lvl),
+    rlang::exec(
+      orbital,
+      x$fit,
+      mode = mode,
+      type = type,
+      lvl = x$lvl,
+      !!!extra_args
+    ),
     silent = TRUE
   )
 
