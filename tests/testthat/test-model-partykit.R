@@ -1,7 +1,7 @@
 test_that("decision_tree(partykit) works with type = numeric", {
   skip_if_not_installed("parsnip")
-  skip_if_not_installed("tidypredict")
   skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
   library(bonsai)
 
   spec <- parsnip::decision_tree("regression", "partykit")
@@ -29,8 +29,8 @@ test_that("decision_tree(partykit) works with type = numeric", {
 
 test_that("decision_tree(partykit) works with type = class", {
   skip_if_not_installed("parsnip")
-  skip_if_not_installed("tidypredict")
   skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
   library(bonsai)
 
   mtcars$vs <- factor(mtcars$vs)
@@ -55,8 +55,8 @@ test_that("decision_tree(partykit) works with type = class", {
 
 test_that("decision_tree(partykit) works with type = prob", {
   skip_if_not_installed("parsnip")
-  skip_if_not_installed("tidypredict")
   skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
   library(bonsai)
 
   mtcars$vs <- factor(mtcars$vs)
@@ -87,8 +87,8 @@ test_that("decision_tree(partykit) works with type = prob", {
 
 test_that("decision_tree(partykit) works with type = c(class, prob)", {
   skip_if_not_installed("parsnip")
-  skip_if_not_installed("tidypredict")
   skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
   library(bonsai)
 
   mtcars$vs <- factor(mtcars$vs)
