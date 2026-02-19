@@ -33,14 +33,14 @@ test_that("decision_tree(partykit) works with type = class", {
 
   mtcars$vs <- factor(mtcars$vs)
 
-  lr_spec <- parsnip::decision_tree("classification", "partykit")
+  spec <- parsnip::decision_tree("classification", "partykit")
 
-  lr_fit <- parsnip::fit(lr_spec, vs ~ disp + mpg + hp, mtcars)
+  fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
 
-  orb_obj <- orbital(lr_fit, type = "class")
+  orb_obj <- orbital(fit, type = "class")
 
   preds <- predict(orb_obj, mtcars)
-  exps <- predict(lr_fit, mtcars)
+  exps <- predict(fit, mtcars)
 
   expect_named(preds, ".pred_class")
   expect_type(preds$.pred_class, "character")
@@ -58,14 +58,14 @@ test_that("decision_tree(partykit) works with type = prob", {
 
   mtcars$vs <- factor(mtcars$vs)
 
-  lr_spec <- parsnip::decision_tree("classification", "partykit")
+  spec <- parsnip::decision_tree("classification", "partykit")
 
-  lr_fit <- parsnip::fit(lr_spec, vs ~ disp + mpg + hp, mtcars)
+  fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
 
-  orb_obj <- orbital(lr_fit, type = "prob")
+  orb_obj <- orbital(fit, type = "prob")
 
   preds <- predict(orb_obj, mtcars)
-  exps <- predict(lr_fit, mtcars, type = "prob")
+  exps <- predict(fit, mtcars, type = "prob")
 
   expect_named(preds, c(".pred_0", ".pred_1"))
   expect_type(preds$.pred_0, "double")
@@ -89,16 +89,16 @@ test_that("decision_tree(partykit) works with type = c(class, prob)", {
 
   mtcars$vs <- factor(mtcars$vs)
 
-  lr_spec <- parsnip::decision_tree("classification", "partykit")
+  spec <- parsnip::decision_tree("classification", "partykit")
 
-  lr_fit <- parsnip::fit(lr_spec, vs ~ disp + mpg + hp, mtcars)
+  fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
 
-  orb_obj <- orbital(lr_fit, type = c("class", "prob"))
+  orb_obj <- orbital(fit, type = c("class", "prob"))
 
   preds <- predict(orb_obj, mtcars)
   exps <- dplyr::bind_cols(
-    predict(lr_fit, mtcars, type = c("class")),
-    predict(lr_fit, mtcars, type = c("prob"))
+    predict(fit, mtcars, type = c("class")),
+    predict(fit, mtcars, type = c("prob"))
   )
 
   expect_named(preds, c(".pred_class", ".pred_0", ".pred_1"))
