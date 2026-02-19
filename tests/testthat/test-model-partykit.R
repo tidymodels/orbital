@@ -1,3 +1,32 @@
+test_that("decision_tree(partykit) works with type = numeric", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("bonsai")
+  library(bonsai)
+
+  spec <- parsnip::decision_tree("regression", "partykit")
+
+  fit <- parsnip::fit(spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(fit)
+
+  preds <- predict(orb_obj, mtcars)
+  exps <- predict(fit, mtcars)
+
+  expect_named(preds, ".pred")
+  expect_type(preds$.pred, "double")
+
+  exps <- as.data.frame(exps)
+
+  rownames(preds) <- NULL
+  rownames(exps) <- NULL
+
+  expect_equal(
+    preds,
+    exps
+  )
+})
+
 test_that("decision_tree(partykit) works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
