@@ -39,12 +39,13 @@ tibble::tribble(
   "`linear_reg()`",       "`\"lm\"`",           "✅",     "❌",    "❌",
   "`linear_reg()`",       "`\"glmnet\"`",       "✅",     "❌",    "❌",
   "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "✅",
-  "`logistic_reg()`",     "`\"glmnet\"`",       "❌",     "⚪",    "⚪",
-  "`mars()`",             "`\"earth\"`",        "✅",     "⚪",    "⚪",
+  "`logistic_reg()`",     "`\"glmnet\"`",       "❌",     "✅",    "✅",
+  "`mars()`",             "`\"earth\"`",        "✅",     "✅",    "✅",
+  "`multinom_reg()`",     "`\"glmnet\"`",       "❌",     "✅",    "✅",
   "`naive_Bayes()`",      "`\"naivebayes\"`",   "❌",     "⚪",    "⚪",
-  "`nearest_neighbor()`", "`any`",              "❌",     "❌",    "❌", 
-  "`rand_forest()`",      "`\"randomForest\"`", "✅",     "⚪",    "⚪",
-  "`rand_forest()`",      "`\"ranger\"`",       "✅",     "⚪",    "⚪"
+  "`nearest_neighbor()`", "`any`",              "❌",     "❌",    "❌",
+  "`rand_forest()`",      "`\"randomForest\"`", "✅",     "✅",    "✅",
+  "`rand_forest()`",      "`\"ranger\"`",       "✅",     "✅",    "✅"
 ) |>
   gt() |>
   tab_spanner(
@@ -74,7 +75,7 @@ tibble::tribble(
   )
 ```
 
-Creating orbital objects of **ranger** models takes around 1 second per tree. This is in part because the resulting SQL is quite large, making it hard to use on many platforms unless care is taken with regard to hyperparameters and the data.
+Creating orbital objects of **ranger** and **randomForest** models takes around 1 second per tree. This is in part because the resulting SQL is quite large, making it hard to use on many platforms unless care is taken with regard to hyperparameters and the data.
 
 ## Recipes steps
 
