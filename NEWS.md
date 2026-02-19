@@ -4,17 +4,13 @@
 
 * `orbital()` now works with `boost_tree(engine = "lightgbm")` models for numeric, class, and probability predictions. (#89)
 
-* `orbital()` now works with `logistic_reg(engine = "glmnet")` models for class and probability predictions. (#127)
-
-* `orbital()` now works with `mars(engine = "earth")` models for class and probability predictions, including multiclass classification. (#127)
+* `orbital()` now works with `mars(engine = "earth")` models for class and probability predictions. (#127)
 
 * `orbital()` now works with `multinom_reg(engine = "glmnet")` models for class and probability predictions. (#127)
 
 * `orbital()` now works with `rand_forest(engine = "randomForest")` models for class and probability predictions. (#127)
 
 * `orbital()` now works with `rand_forest(engine = "ranger")` models for class and probability predictions. (#127)
-
-added class and probability support for glmnet, earth, randomforest, ranger
 
 # orbital 0.4.1
 
