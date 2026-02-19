@@ -51,24 +51,5 @@ glmnet_linear_expr <- function(x, penalty) {
   coefs <- stats::coef(x, s = penalty)
   coef_names <- rownames(coefs)
   coef_values <- as.numeric(coefs)
-
-  # Build linear predictor
-  terms <- character(0)
-  for (i in seq_along(coef_names)) {
-    if (coef_values[i] == 0) {
-      next
-    }
-
-    if (coef_names[i] == "(Intercept)") {
-      terms <- c(terms, as.character(coef_values[i]))
-    } else {
-      terms <- c(terms, glue::glue("({coef_names[i]} * {coef_values[i]})"))
-    }
-  }
-
-  if (length(terms) == 0) {
-    return("0")
-  }
-
-  paste(terms, collapse = " + ")
+  tidypredict::.build_linear_pred(coef_names, coef_values)
 }
