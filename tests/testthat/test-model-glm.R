@@ -1,3 +1,30 @@
+test_that("linear_reg() works with type = numeric", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+
+  spec <- parsnip::linear_reg()
+
+  fit <- parsnip::fit(spec, mpg ~ disp + vs + hp, mtcars)
+
+  orb_obj <- orbital(fit)
+
+  preds <- predict(orb_obj, mtcars)
+  exps <- predict(fit, mtcars)
+
+  expect_named(preds, ".pred")
+  expect_type(preds$.pred, "double")
+
+  exps <- as.data.frame(exps)
+
+  rownames(preds) <- NULL
+  rownames(exps) <- NULL
+
+  expect_equal(
+    preds,
+    exps
+  )
+})
+
 test_that("logistic_reg() works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
