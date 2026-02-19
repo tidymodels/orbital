@@ -12,6 +12,26 @@
   class, and probability predictions.
   ([\#89](https://github.com/tidymodels/orbital/issues/89))
 
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now works with `mars(engine = "earth")` models for class and
+  probability predictions.
+  ([\#127](https://github.com/tidymodels/orbital/issues/127))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now works with `multinom_reg(engine = "glmnet")` models for class and
+  probability predictions.
+  ([\#127](https://github.com/tidymodels/orbital/issues/127))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now works with `rand_forest(engine = "randomForest")` models for class
+  and probability predictions.
+  ([\#127](https://github.com/tidymodels/orbital/issues/127))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now works with `rand_forest(engine = "ranger")` models for class and
+  probability predictions.
+  ([\#127](https://github.com/tidymodels/orbital/issues/127))
+
 ## orbital 0.4.1
 
 CRAN release: 2025-12-13

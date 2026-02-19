@@ -619,15 +619,22 @@ to add model to table.</p>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/logistic_reg.html" class="external-link">logistic_reg()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"glmnet"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">❌</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/mars.html" class="external-link">mars()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"earth"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/multinom_reg.html" class="external-link">multinom_reg()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"glmnet"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/naive_Bayes.html" class="external-link">naive_Bayes()</a></code></span></td>
@@ -647,15 +654,15 @@ to add model to table.</p>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"randomForest"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"ranger"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 </tbody>
 <tfoot>
@@ -671,10 +678,11 @@ to add model to table.</p>
 </tfoot>
 </table>
 </div>
-<p>Creating orbital objects of <strong>ranger</strong> models takes
-around 1 second per tree. This is in part because the resulting SQL is
-quite large, making it hard to use on many platforms unless care is
-taken with regard to hyperparameters and the data.</p>
+<p>Creating orbital objects of <strong>ranger</strong> and
+<strong>randomForest</strong> models takes around 1 second per tree.
+This is in part because the resulting SQL is quite large, making it hard
+to use on many platforms unless care is taken with regard to
+hyperparameters and the data.</p>
 </div>
 <div class="section level2">
 <h2 id="recipes-steps">Recipes steps<a class="anchor" aria-label="anchor" href="#recipes-steps"></a>

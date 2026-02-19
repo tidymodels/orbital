@@ -11,10 +11,10 @@ model to table.
 
 [TABLE]
 
-Creating orbital objects of **ranger** models takes around 1 second per
-tree. This is in part because the resulting SQL is quite large, making
-it hard to use on many platforms unless care is taken with regard to
-hyperparameters and the data.
+Creating orbital objects of **ranger** and **randomForest** models takes
+around 1 second per tree. This is in part because the resulting SQL is
+quite large, making it hard to use on many platforms unless care is
+taken with regard to hyperparameters and the data.
 
 ## Recipes steps
 
