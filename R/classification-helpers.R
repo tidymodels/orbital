@@ -116,3 +116,22 @@ multiclass_from_prob_avg <- function(prob_sum_eqs, type, lvl, n_trees) {
   }
   res
 }
+
+# Sum tree expressions for each class
+# Used by ranger and randomForest for classification
+# Uses digits17 control to preserve full numeric precision in split values
+sum_tree_expressions <- function(class_trees) {
+  vapply(
+    names(class_trees),
+    function(cls) {
+      trees <- class_trees[[cls]]
+      tree_strs <- vapply(
+        trees,
+        function(e) deparse1(e, control = "digits17"),
+        character(1)
+      )
+      paste0("(", tree_strs, ")", collapse = " + ")
+    },
+    character(1)
+  )
+}

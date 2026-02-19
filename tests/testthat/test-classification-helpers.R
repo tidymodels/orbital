@@ -178,3 +178,24 @@ test_that("helpers handle special characters in level names", {
   expect_true(grepl("`class one`", result))
   expect_true(grepl("`class two`", result))
 })
+
+test_that("sum_tree_expressions sums and deparses correctly", {
+  # Create mock tree expressions
+  tree1 <- rlang::expr(case_when(x > 1 ~ 0.5, .default = 0.3))
+  tree2 <- rlang::expr(case_when(x > 2 ~ 0.6, .default = 0.4))
+
+  class_trees <- list(
+    "a" = list(tree1, tree2),
+    "b" = list(tree1)
+  )
+
+  result <- orbital:::sum_tree_expressions(class_trees)
+
+  expect_named(result, c("a", "b"))
+  expect_type(result, "character")
+  # Check that expressions are joined with +
+
+  expect_true(grepl("\\+", result["a"]))
+  # Single tree should not have +
+  expect_false(grepl("\\+", result["b"]))
+})
