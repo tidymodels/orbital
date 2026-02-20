@@ -8,6 +8,11 @@
   ([\#90](https://github.com/tidymodels/orbital/issues/90))
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now works with `decision_tree(engine = "rpart")` models for numeric,
+  class, and probability predictions.
+  ([\#128](https://github.com/tidymodels/orbital/issues/128))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now works with `boost_tree(engine = "lightgbm")` models for numeric,
   class, and probability predictions.
   ([\#89](https://github.com/tidymodels/orbital/issues/89))
