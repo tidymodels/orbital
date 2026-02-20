@@ -10,7 +10,7 @@ orbital.lgb.Booster <- function(
   type <- default_type(type)
 
   if (mode == "regression") {
-    res <- tidypredict::tidypredict_fit(x)
+    res <- tidypredict::tidypredict_fit(x, nested = TRUE)
   } else if (mode == "classification") {
     objective <- x$params$objective
 
@@ -29,7 +29,7 @@ orbital.lgb.Booster <- function(
 }
 
 lightgbm_binary <- function(x, type, lvl) {
-  eq <- tidypredict::tidypredict_fit(x)
+  eq <- tidypredict::tidypredict_fit(x, nested = TRUE)
   eq <- deparse1(eq)
 
   binary_from_prob(eq, type, lvl)
@@ -37,7 +37,7 @@ lightgbm_binary <- function(x, type, lvl) {
 
 lightgbm_multiclass <- function(x, type, lvl) {
   # Follow xgboost pattern: extract trees and sum by class
-  trees <- tidypredict::.extract_lgb_trees(x)
+  trees <- tidypredict::.extract_lgb_trees(x, nested = TRUE)
 
   pm <- tidypredict::parse_model(x)
   num_class <- length(lvl)

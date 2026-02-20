@@ -63,16 +63,18 @@
       orbital_sql(obj, con)
     Output
       <SQL> ((CASE
-      WHEN (`hp` > 136.5) THEN 1
-      WHEN (`disp` <= 153.35 AND `hp` <= 136.5) THEN 0
-      WHEN (`disp` <= 163.8 AND `disp` > 153.35 AND `hp` <= 136.5) THEN 1
-      ELSE 0
+      WHEN (`hp` <= 136.5) THEN (CASE
+      WHEN (`disp` <= 153.35) THEN 0
+      ELSE CASE WHEN (`disp` <= 163.8) THEN 1 ELSE 0 END
+      END)
+      ELSE 1
       END) + (CASE WHEN (`hp` <= 136.5) THEN 0 ELSE 1 END)) + (CASE WHEN (`mpg` <= 17.7) THEN 1 ELSE 0 END) AS 0
       <SQL> ((CASE
-      WHEN (`hp` > 136.5) THEN 0
-      WHEN (`disp` <= 153.35 AND `hp` <= 136.5) THEN 1
-      WHEN (`disp` <= 163.8 AND `disp` > 153.35 AND `hp` <= 136.5) THEN 0
-      ELSE 1
+      WHEN (`hp` <= 136.5) THEN (CASE
+      WHEN (`disp` <= 153.35) THEN 1
+      ELSE CASE WHEN (`disp` <= 163.8) THEN 0 ELSE 1 END
+      END)
+      ELSE 0
       END) + (CASE WHEN (`hp` <= 136.5) THEN 1 ELSE 0 END)) + (CASE WHEN (`mpg` <= 17.7) THEN 0 ELSE 1 END) AS 1
       <SQL> CASE WHEN (`0` >= `1`) THEN '0' ELSE '1' END AS .pred_class
       <SQL> (`0`) / 3 AS .pred_0
@@ -84,32 +86,24 @@
       orbital_sql(obj, con)
     Output
       <SQL> ((CASE
-      WHEN (`disp` > 266.9) THEN 1
-      WHEN (`mpg` <= 21.2 AND `disp` <= 266.9) THEN 0.5
-      ELSE 0
-      END) + (CASE
-      WHEN (`disp` <= 221.7 AND `mpg` <= 21.2) THEN 0.6666667
-      WHEN (`disp` > 221.7 AND `mpg` <= 21.2) THEN 1
-      WHEN (`mpg` <= 25.2 AND `mpg` > 21.2) THEN 0
-      ELSE 0.5
-      END)) + (CASE
-      WHEN (`mpg` > 21.2) THEN 0.1
-      WHEN (`disp` <= 221.7 AND `mpg` <= 21.2) THEN 0.5714286
+      WHEN (`disp` <= 266.9) THEN (CASE WHEN (`mpg` <= 21.2) THEN 0.5 ELSE 0 END)
       ELSE 1
+      END) + (CASE
+      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 221.7) THEN 0.6666667 ELSE 1 END)
+      ELSE CASE WHEN (`mpg` <= 25.2) THEN 0 ELSE 0.5 END
+      END)) + (CASE
+      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 221.7) THEN 0.5714286 ELSE 1 END)
+      ELSE 0.1
       END) AS 0
       <SQL> ((CASE
-      WHEN (`disp` > 266.9) THEN 0
-      WHEN (`mpg` <= 21.2 AND `disp` <= 266.9) THEN 0.5
-      ELSE 1
-      END) + (CASE
-      WHEN (`disp` <= 221.7 AND `mpg` <= 21.2) THEN 0.3333333
-      WHEN (`disp` > 221.7 AND `mpg` <= 21.2) THEN 0
-      WHEN (`mpg` <= 25.2 AND `mpg` > 21.2) THEN 1
-      ELSE 0.5
-      END)) + (CASE
-      WHEN (`mpg` > 21.2) THEN 0.9
-      WHEN (`disp` <= 221.7 AND `mpg` <= 21.2) THEN 0.4285714
+      WHEN (`disp` <= 266.9) THEN (CASE WHEN (`mpg` <= 21.2) THEN 0.5 ELSE 1 END)
       ELSE 0
+      END) + (CASE
+      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 221.7) THEN 0.3333333 ELSE 0 END)
+      ELSE CASE WHEN (`mpg` <= 25.2) THEN 1 ELSE 0.5 END
+      END)) + (CASE
+      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 221.7) THEN 0.4285714 ELSE 0 END)
+      ELSE 0.9
       END) AS 1
       <SQL> (`0`) / 3 AS .pred_0
       <SQL> (`1`) / 3 AS .pred_1
