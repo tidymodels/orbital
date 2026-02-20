@@ -24,13 +24,13 @@ orbital.xgb.Booster <- function(
 
     res <- extractor(x, type, lvl)
   } else if (mode == "regression") {
-    res <- tidypredict::tidypredict_fit(x, nested = TRUE)
+    res <- tidypredict::tidypredict_fit(x)
   }
   res
 }
 
 xgboost_multisoft <- function(x, type, lvl) {
-  trees <- tidypredict::.extract_xgb_trees(x, nested = TRUE)
+  trees <- tidypredict::.extract_xgb_trees(x)
 
   trees_split <- split(
     trees,
@@ -56,7 +56,7 @@ collapse_stumps <- function(x) {
 }
 
 xgboost_logistic <- function(x, type, lvl) {
-  eq <- tidypredict::tidypredict_fit(x, nested = TRUE)
+  eq <- tidypredict::tidypredict_fit(x)
   eq <- deparse1(eq)
 
   binary_from_prob_first(eq, type, lvl)

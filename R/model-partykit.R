@@ -12,18 +12,18 @@ orbital.constparty <- function(
   if (mode == "classification") {
     res <- character()
     if ("class" %in% type) {
-      eq <- tidypredict::tidypredict_fit(x, nested = TRUE)
+      eq <- tidypredict::tidypredict_fit(x)
       eq <- deparse1(eq)
       res <- c(res, orbital_tmp_class_name = eq)
     }
     if ("prob" %in% type) {
-      eqs <- tidypredict::.extract_partykit_classprob(x, nested = TRUE)
+      eqs <- tidypredict::.extract_partykit_classprob(x)
       eqs <- vapply(eqs, deparse1, character(1))
       names(eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
       res <- c(res, eqs)
     }
   } else if (mode == "regression") {
-    res <- tidypredict::tidypredict_fit(x, nested = TRUE)
+    res <- tidypredict::tidypredict_fit(x)
   }
   res
 }

@@ -11,7 +11,7 @@ orbital.catboost.Model <- function(
   type <- default_type(type)
 
   if (mode == "regression") {
-    res <- tidypredict::tidypredict_fit(x, nested = TRUE)
+    res <- tidypredict::tidypredict_fit(x)
   } else if (mode == "classification") {
     pm <- tidypredict::parse_model(x)
     objective <- pm$general$params$objective %||% "Logloss"
@@ -31,7 +31,7 @@ orbital.catboost.Model <- function(
 }
 
 catboost_multiclass <- function(x, type, lvl) {
-  trees <- tidypredict::.extract_catboost_trees(x, nested = TRUE)
+  trees <- tidypredict::.extract_catboost_trees(x)
 
   num_class <- length(lvl)
 
@@ -48,7 +48,7 @@ catboost_multiclass <- function(x, type, lvl) {
 }
 
 catboost_binary <- function(x, type, lvl) {
-  eq <- tidypredict::tidypredict_fit(x, nested = TRUE)
+  eq <- tidypredict::tidypredict_fit(x)
   eq <- deparse1(eq)
 
   binary_from_prob(eq, type, lvl)
