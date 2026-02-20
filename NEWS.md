@@ -2,6 +2,8 @@
 
 * `orbital()` now works with `boost_tree(engine = "catboost")` models for numeric, class, and probability predictions. (#90)
 
+* `orbital()` now works with `decision_tree(engine = "rpart")` models for numeric, class, and probability predictions. (#128)
+
 * `orbital()` now works with `boost_tree(engine = "lightgbm")` models for numeric, class, and probability predictions. (#89)
 
 * `orbital()` now works with `mars(engine = "earth")` models for class and probability predictions. (#127)

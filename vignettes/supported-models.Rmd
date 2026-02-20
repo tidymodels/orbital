@@ -36,6 +36,7 @@ tibble::tribble(
   "`boost_tree()`",       "`\"xgboost\"`",      "✅",     "✅",    "✅",
   "`cubist_rules()`",     "`\"Cubist\"`",       "✅",     "❌",    "❌",
   "`decision_tree()`",    "`\"partykit\"`",     "✅",     "✅",    "✅",
+  "`decision_tree()`",    "`\"rpart\"`",        "✅",     "✅",    "✅",
   "`linear_reg()`",       "`\"lm\"`",           "✅",     "❌",    "❌",
   "`linear_reg()`",       "`\"glmnet\"`",       "✅",     "❌",    "❌",
   "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "✅",
