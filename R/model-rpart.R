@@ -1,5 +1,5 @@
 #' @export
-orbital.constparty <- function(
+orbital.rpart <- function(
   x,
   ...,
   mode = c("classification", "regression"),
@@ -17,7 +17,7 @@ orbital.constparty <- function(
       res <- c(res, orbital_tmp_class_name = eq)
     }
     if ("prob" %in% type) {
-      eqs <- tidypredict::.extract_partykit_classprob(x, nested = TRUE)
+      eqs <- tidypredict::.extract_rpart_classprob(x, nested = TRUE)
       eqs <- vapply(eqs, deparse1, character(1))
       names(eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
       res <- c(res, eqs)
