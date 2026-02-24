@@ -341,3 +341,62 @@ test_that("boost_tree(xgboost) multiclass works with separate_trees = TRUE", {
   )
   expect_equal(preds_collapsed, preds_split, tolerance = 1e-10)
 })
+
+test_that("separate_trees batches summation for many trees (regression)", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("xgboost")
+
+  bt_spec <- parsnip::boost_tree(
+    mode = "regression",
+    engine = "xgboost",
+    trees = 120
+  )
+  bt_fit <- parsnip::fit(bt_spec, mpg ~ disp + hp, mtcars)
+
+  orb <- orbital(bt_fit, separate_trees = TRUE)
+
+  # 120 trees + 3 batch sums + 1 final = 124
+  expect_length(orb, 124)
+  expect_equal(sum(grepl("_tree_", names(orb))), 120)
+  expect_equal(sum(grepl("_sum_", names(orb))), 3)
+
+  # Final sum should reference batch sums
+  expect_match(orb[[".pred"]], "\\.pred_sum_1")
+  expect_match(orb[[".pred"]], "\\.pred_sum_2")
+  expect_match(orb[[".pred"]], "\\.pred_sum_3")
+
+  # Predictions should still work
+  mtcars2 <- mtcars + 0.1
+  preds <- predict(orb, mtcars2)
+  expect_named(preds, ".pred")
+})
+
+test_that("separate_trees batches summation for many trees (multiclass)", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("xgboost")
+
+  bt_spec <- parsnip::boost_tree(
+    mode = "classification",
+    engine = "xgboost",
+    trees = 120
+  )
+  bt_fit <- parsnip::fit(bt_spec, Species ~ ., iris)
+
+  orb <- orbital(bt_fit, type = "prob", separate_trees = TRUE)
+
+  # Each class has ~120 trees (may vary due to stump collapsing)
+  # Batched in groups of 50, so expect batch sums for each class
+  n_class_trees <- sum(grepl("_logit_tree_", names(orb)))
+  n_class_batch <- sum(grepl("_logit_sum_", names(orb)))
+
+  expect_gt(n_class_trees, 300) # at least 100 trees * 3 classes
+  expect_gt(n_class_batch, 0) # should have batch sums
+
+  # Predictions should still work
+  iris2 <- iris
+  iris2[, -5] <- iris2[, -5] + 0.05
+  preds <- predict(orb, iris2)
+  expect_named(preds, paste0(".pred_", levels(iris$Species)))
+})

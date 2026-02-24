@@ -234,7 +234,8 @@ format_multiclass_logits_separate <- function(trees_split, type, lvl, prefix) {
 # Format trees as separate expressions for database parallelization
 # Returns named character vector: individual tree expressions + final sum
 # Used when separate_trees = TRUE for regression models
-format_separate_trees <- function(trees, prefix = ".pred") {
+# Batches summation in groups of 50 to avoid expression depth limits in databases
+format_separate_trees <- function(trees, prefix = ".pred", batch_size = 50) {
   n <- length(trees)
   width <- nchar(as.character(n))
   tree_names <- sprintf(paste0(prefix, "_tree_%0", width, "d"), seq_len(n))
@@ -245,9 +246,33 @@ format_separate_trees <- function(trees, prefix = ".pred") {
     character(1)
   )
 
-  sum_expr <- paste(backtick(tree_names), collapse = " + ")
-
   out <- stats::setNames(tree_strs, tree_names)
-  out <- c(out, stats::setNames(sum_expr, prefix))
+
+  # Batch summation to avoid expression depth limits
+  if (n <= batch_size) {
+    sum_expr <- paste(backtick(tree_names), collapse = " + ")
+    out <- c(out, stats::setNames(sum_expr, prefix))
+  } else {
+    # Split into batches
+    batch_indices <- split(seq_len(n), ceiling(seq_len(n) / batch_size))
+    n_batches <- length(batch_indices)
+    batch_width <- nchar(as.character(n_batches))
+    batch_names <- sprintf(
+      paste0(prefix, "_sum_%0", batch_width, "d"),
+      seq_len(n_batches)
+    )
+
+    # Create batch sum expressions
+    for (i in seq_along(batch_indices)) {
+      idx <- batch_indices[[i]]
+      batch_sum <- paste(backtick(tree_names[idx]), collapse = " + ")
+      out <- c(out, stats::setNames(batch_sum, batch_names[i]))
+    }
+
+    # Final sum of batches
+    final_sum <- paste(backtick(batch_names), collapse = " + ")
+    out <- c(out, stats::setNames(final_sum, prefix))
+  }
+
   out
 }

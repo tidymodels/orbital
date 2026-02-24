@@ -26,7 +26,11 @@ When orbital converts a tree ensemble to SQL or dplyr expressions, the default b
 .pred = "(tree1) + (tree2) + (tree3) + ... + (tree100)"
 ```
 
-This works correctly, but columnar databases like DuckDB, Snowflake, and BigQuery may not be able to parallelize the evaluation of a single expression. Each tree must be evaluated sequentially within the expression.
+This works correctly, but has two limitations:
+
+1. **No parallelization**: Columnar databases like DuckDB, Snowflake, and BigQuery may not be able to parallelize the evaluation of a single expression. Each tree must be evaluated sequentially within the expression.
+
+2. **Expression depth limits**: Many databases have limits on expression nesting depth. For example, both SQLite and DuckDB have a default limit of 1000. A model with hundreds of trees can exceed this limit, causing query failures with errors like "parser stack overflow" or "maximum expression depth exceeded".
 
 ## The solution
 
@@ -41,6 +45,23 @@ Setting `separate_trees = TRUE` emits each tree as a separate intermediate colum
 ```
 
 This representation allows the database query optimizer to potentially evaluate trees in parallel, since each intermediate column is independent.
+
+### Batched summation
+
+For models with many trees, the final summation is automatically batched in groups of 50 to avoid expression depth limits. For example, a model with 120 trees produces:
+
+```r
+.pred_tree_001 = "case_when(...)"
+.pred_tree_002 = "case_when(...)"
+...
+.pred_tree_120 = "case_when(...)"
+.pred_sum_1 = ".pred_tree_001 + ... + .pred_tree_050"  # first 50 trees
+.pred_sum_2 = ".pred_tree_051 + ... + .pred_tree_100"  # next 50 trees
+.pred_sum_3 = ".pred_tree_101 + ... + .pred_tree_120"  # remaining 20 trees
+.pred = ".pred_sum_1 + .pred_sum_2 + .pred_sum_3"
+```
+
+This keeps the maximum expression depth to around 50, well within database limits, while still allowing full parallelization of tree evaluation.
 
 ## Example
 
@@ -59,10 +80,11 @@ orb_combined <- orbital(bt_fit)
 length(orb_combined)
 #> [1] 1
 
-# Separate trees: one expression per tree plus final sum
+# Separate trees: one expression per tree, plus batch sums, plus final sum
 orb_separate <- orbital(bt_fit, separate_trees = TRUE)
 length(orb_separate)
-#> [1] 101
+#> [1] 103
+# (100 trees + 2 batch sums + 1 final .pred)
 ```
 
 ## Supported models
@@ -115,7 +137,7 @@ The default `separate_trees = FALSE` may be better when:
 
 - **Few trees**: Models with fewer than 20-30 trees are unlikely to see improvement.
 
-- **Query complexity limits**: Some databases have limits on query complexity, subquery depth, or the number of columns. A model with 500 trees would create 500+ intermediate columns, which may hit these limits.
+- **Column count limits**: Some databases have limits on the number of columns in a query. A model with 500 trees would create 500+ intermediate columns, which may hit these limits. (Note: expression depth limits are handled automatically through batched summation.)
 
 - **In-memory data frames**: When predicting on local R data frames, there's no parallelization benefit since dplyr's `mutate()` evaluates sequentially regardless of expression structure.
 
@@ -125,6 +147,7 @@ The default `separate_trees = FALSE` may be better when:
 |--------|--------------------------|-------------------------|
 | SQL size | Smaller (one expression) | Larger (many expressions) |
 | Query complexity | Single nested expression | Many simple expressions |
+| Expression depth | Can exceed DB limits | Batched to ~50 (safe) |
 | Parallelization | Limited | Possible in columnar DBs |
 | Memory during eval | Lower | Higher (intermediate cols) |
 

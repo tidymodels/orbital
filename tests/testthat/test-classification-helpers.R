@@ -208,10 +208,41 @@ test_that("format_separate_trees uses correct zero-padding", {
 
   result <- orbital:::format_separate_trees(trees, ".pred")
 
-  expect_length(result, 101)
+  # 100 trees + 2 batch sums + 1 final = 103
+  expect_length(result, 103)
   expect_true(".pred_tree_001" %in% names(result))
   expect_true(".pred_tree_100" %in% names(result))
   expect_false(".pred_tree_1" %in% names(result))
+})
+
+test_that("format_separate_trees batches summation for many trees", {
+  trees <- lapply(1:120, function(i) rlang::expr(!!i))
+
+  result <- orbital:::format_separate_trees(trees, ".pred")
+
+  # 120 trees + 3 batch sums + 1 final = 124
+  expect_length(result, 124)
+
+  # Check batch sums exist
+  expect_true(".pred_sum_1" %in% names(result))
+  expect_true(".pred_sum_2" %in% names(result))
+  expect_true(".pred_sum_3" %in% names(result))
+
+  # Final sum should reference batch sums, not individual trees
+  expect_identical(
+    result[[".pred"]],
+    "`.pred_sum_1` + `.pred_sum_2` + `.pred_sum_3`"
+  )
+})
+
+test_that("format_separate_trees does not batch for <= 50 trees", {
+  trees <- lapply(1:50, function(i) rlang::expr(!!i))
+
+  result <- orbital:::format_separate_trees(trees, ".pred")
+
+  # 50 trees + 1 final = 51 (no batch sums)
+  expect_length(result, 51)
+  expect_false(any(grepl("_sum_", names(result))))
 })
 
 test_that("format_separate_trees works with custom prefix", {
