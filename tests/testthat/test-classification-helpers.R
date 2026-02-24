@@ -22,7 +22,10 @@ test_that("binary_from_prob returns correct structure for prob only", {
 
   expect_identical(
     result,
-    c(orbital_tmp_prob_name1 = "1 - (0.7)", orbital_tmp_prob_name2 = "0.7")
+    c(
+      orbital_tmp_prob_name1 = "1 - (0.7)",
+      orbital_tmp_prob_name2 = "1 - `orbital_tmp_prob_name1`"
+    )
   )
 })
 
@@ -38,7 +41,7 @@ test_that("binary_from_prob returns both class and prob", {
     c(
       orbital_tmp_class_name = 'dplyr::case_when(0.7 > 0.5 ~ "yes", .default = "no")',
       orbital_tmp_prob_name1 = "1 - (0.7)",
-      orbital_tmp_prob_name2 = "0.7"
+      orbital_tmp_prob_name2 = "1 - `orbital_tmp_prob_name1`"
     )
   )
 })
@@ -55,7 +58,7 @@ test_that("binary_from_prob_first returns correct structure", {
     c(
       orbital_tmp_class_name = 'dplyr::case_when(0.7 > 0.5 ~ "no", .default = "yes")',
       orbital_tmp_prob_name1 = "0.7",
-      orbital_tmp_prob_name2 = "1 - (0.7)"
+      orbital_tmp_prob_name2 = "1 - `orbital_tmp_prob_name1`"
     )
   )
 })

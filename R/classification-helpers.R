@@ -22,7 +22,7 @@ binary_from_prob <- function(eq, type, lvl) {
     res <- c(
       res,
       orbital_tmp_prob_name1 = glue::glue("1 - ({eq})"),
-      orbital_tmp_prob_name2 = glue::glue("{eq}")
+      orbital_tmp_prob_name2 = "1 - `orbital_tmp_prob_name1`"
     )
   }
   res
@@ -45,7 +45,7 @@ binary_from_prob_first <- function(eq, type, lvl) {
     res <- c(
       res,
       orbital_tmp_prob_name1 = glue::glue("{eq}"),
-      orbital_tmp_prob_name2 = glue::glue("1 - ({eq})")
+      orbital_tmp_prob_name2 = "1 - `orbital_tmp_prob_name1`"
     )
   }
   res
