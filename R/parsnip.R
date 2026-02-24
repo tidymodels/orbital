@@ -1,5 +1,11 @@
 #' @export
-orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
+orbital.model_fit <- function(
+  x,
+  ...,
+  prefix = ".pred",
+  type = NULL,
+  separate_trees = FALSE
+) {
   mode <- x$spec$mode
   check_mode(mode)
   check_type(type, mode)
@@ -17,6 +23,8 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
       mode = mode,
       type = type,
       lvl = x$lvl,
+      separate_trees = separate_trees,
+      prefix = prefix,
       !!!extra_args
     ),
     silent = TRUE
@@ -53,7 +61,11 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
 
 set_pred_names <- function(res, x, mode, type, prefix) {
   if (mode == "regression") {
-    res <- stats::setNames(res, prefix)
+    # Only rename if single element (separate_trees = FALSE)
+    # When separate_trees = TRUE, names are already set correctly
+    if (length(res) == 1) {
+      res <- stats::setNames(res, prefix)
+    }
     attr(res, "pred_names") <- prefix
   }
 

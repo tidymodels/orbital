@@ -223,3 +223,119 @@ test_that("rand_forest(engine = 'ranger') works with custom prefix", {
     c("my_pred_class", paste0("my_pred_", levels(iris$Species)))
   )
 })
+
+test_that("rand_forest(ranger) regression works with separate_trees = TRUE", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("ranger")
+
+  spec <- parsnip::rand_forest(
+    mode = "regression",
+    engine = "ranger",
+    trees = 5
+  )
+
+  set.seed(123)
+  fit <- parsnip::fit(spec, mpg ~ disp + hp, mtcars)
+
+  orb_collapsed <- orbital(fit, separate_trees = FALSE)
+  orb_split <- orbital(fit, separate_trees = TRUE)
+
+  expect_length(orb_collapsed, 1)
+  expect_gt(length(orb_split), 1)
+  expect_match(names(orb_split), "_tree_", all = FALSE)
+
+  preds_collapsed <- predict(orb_collapsed, mtcars)
+  preds_split <- predict(orb_split, mtcars)
+
+  expect_named(preds_split, ".pred")
+  expect_equal(preds_collapsed, preds_split, tolerance = 1e-10)
+})
+
+test_that("rand_forest(ranger) classification works with separate_trees = TRUE", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("ranger")
+
+  spec <- parsnip::rand_forest(
+    mode = "classification",
+    engine = "ranger",
+    trees = 5
+  )
+
+  set.seed(123)
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  orb_collapsed <- orbital(
+    fit,
+    type = c("class", "prob"),
+    separate_trees = FALSE
+  )
+  orb_split <- orbital(fit, type = c("class", "prob"), separate_trees = TRUE)
+
+  expect_lt(length(orb_collapsed), length(orb_split))
+  expect_match(names(orb_split), "_tree_", all = FALSE)
+
+  preds_collapsed <- predict(orb_collapsed, iris)
+  preds_split <- predict(orb_split, iris)
+
+  expect_named(
+    preds_split,
+    c(".pred_class", paste0(".pred_", levels(iris$Species)))
+  )
+  expect_equal(preds_collapsed, preds_split, tolerance = 1e-10)
+})
+
+test_that("separate_trees batches summation for many trees (ranger regression)", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("ranger")
+
+  spec <- parsnip::rand_forest(
+    mode = "regression",
+    engine = "ranger",
+    trees = 120
+  )
+
+  set.seed(123)
+  fit <- parsnip::fit(spec, mpg ~ disp + hp, mtcars)
+
+  orb <- orbital(fit, separate_trees = TRUE)
+
+  # 120 trees + 3 batch sums + 1 final = 124
+  expect_length(orb, 124)
+  expect_equal(sum(grepl("_tree_", names(orb))), 120)
+  expect_equal(sum(grepl("_sum_", names(orb))), 3)
+
+  preds <- predict(orb, mtcars)
+  expect_named(preds, ".pred")
+})
+
+test_that("separate_trees batches summation for many trees (ranger classification)", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("ranger")
+
+  spec <- parsnip::rand_forest(
+    mode = "classification",
+    engine = "ranger",
+    trees = 120
+  )
+
+  set.seed(123)
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  orb <- orbital(fit, type = "prob", separate_trees = TRUE)
+
+  # Each class has 120 trees, batched in groups of 50
+  # Pattern: .pred_{class}_sum_tree_N for trees
+  # Pattern: .pred_{class}_sum_sum_N for batch sums
+  n_class_trees <- sum(grepl("_sum_tree_", names(orb)))
+  n_class_batch <- sum(grepl("_sum_sum_", names(orb)))
+
+  expect_equal(n_class_trees, 360) # 120 trees * 3 classes
+  expect_equal(n_class_batch, 9) # 3 batch sums * 3 classes
+
+  preds <- predict(orb, iris)
+  expect_named(preds, paste0(".pred_", levels(iris$Species)))
+})

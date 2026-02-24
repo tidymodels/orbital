@@ -1,0 +1,177 @@
+---
+title: "Parallel tree evaluation in databases"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Parallel tree evaluation in databases}
+
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r}
+#| include: false
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Tree ensemble models like XGBoost, LightGBM, and random forests combine predictions from many individual trees. By default, orbital combines all tree expressions into a single large expression. The `separate_trees` argument provides an alternative representation that may improve performance when running predictions in columnar databases.
+
+## The problem
+
+When orbital converts a tree ensemble to SQL or dplyr expressions, the default behavior creates a single massive nested expression:
+
+```r
+.pred = "(tree1) + (tree2) + (tree3) + ... + (tree100)"
+```
+
+This works correctly, but has two limitations:
+
+1. **No parallelization**: Columnar databases like DuckDB, Snowflake, and BigQuery may not be able to parallelize the evaluation of a single expression. Each tree must be evaluated sequentially within the expression.
+
+2. **Expression depth limits**: Many databases have limits on expression nesting depth. For example, both SQLite and DuckDB have a default limit of 1000. A model with hundreds of trees can exceed this limit, causing query failures with errors like "parser stack overflow" or "maximum expression depth exceeded".
+
+## The solution
+
+Setting `separate_trees = TRUE` emits each tree as a separate intermediate column:
+
+```r
+.pred_tree_001 = "case_when(...)"
+.pred_tree_002 = "case_when(...)"
+.pred_tree_003 = "case_when(...)"
+...
+.pred = ".pred_tree_001 + .pred_tree_002 + .pred_tree_003 + ..."
+```
+
+This representation allows the database query optimizer to potentially evaluate trees in parallel, since each intermediate column is independent.
+
+### Batched summation
+
+For models with many trees, the final summation is automatically batched in groups of 50 to avoid expression depth limits. For example, a model with 120 trees produces:
+
+```r
+.pred_tree_001 = "case_when(...)"
+.pred_tree_002 = "case_when(...)"
+...
+.pred_tree_120 = "case_when(...)"
+.pred_sum_1 = ".pred_tree_001 + ... + .pred_tree_050"  # first 50 trees
+.pred_sum_2 = ".pred_tree_051 + ... + .pred_tree_100"  # next 50 trees
+.pred_sum_3 = ".pred_tree_101 + ... + .pred_tree_120"  # remaining 20 trees
+.pred = ".pred_sum_1 + .pred_sum_2 + .pred_sum_3"
+```
+
+This keeps the maximum expression depth to around 50, well within database limits, while still allowing full parallelization of tree evaluation.
+
+## Example
+
+```{r}
+#| eval: false
+library(orbital)
+library(parsnip)
+library(xgboost)
+
+# Fit an XGBoost model
+bt_spec <- boost_tree(mode = "regression", engine = "xgboost", trees = 100)
+bt_fit <- fit(bt_spec, mpg ~ ., mtcars)
+
+# Default: single combined expression
+orb_combined <- orbital(bt_fit)
+length(orb_combined)
+#> [1] 1
+
+# Separate trees: one expression per tree, plus batch sums, plus final sum
+orb_separate <- orbital(bt_fit, separate_trees = TRUE)
+length(orb_separate)
+#> [1] 103
+# (100 trees + 2 batch sums + 1 final .pred)
+```
+
+## Supported models
+
+The `separate_trees` argument works with the following tree ensemble models:
+
+| Model | Engine | Regression | Classification |
+|-------|--------|------------|----------------|
+| `boost_tree()` | xgboost | Yes | Yes |
+| `boost_tree()` | lightgbm | Yes | Yes |
+| `boost_tree()` | catboost | Yes | Yes |
+| `rand_forest()` | ranger | Yes | Yes |
+| `rand_forest()` | randomForest | Yes | Yes |
+
+For single-tree models like `decision_tree()`, the argument has no effect since there is only one tree. For multiclass classification, trees are separated per class before the final softmax transformation is applied.
+
+## Output behavior
+
+The intermediate tree columns (e.g., `.pred_tree_001`) are created during evaluation but are **not** included in the final output from `predict()` or `augment()`. Only the final prediction column (e.g., `.pred`) appears in the results.
+
+```{r}
+#| eval: false
+# Intermediate columns are excluded from output
+preds <- predict(orb_separate, new_data)
+names(preds)
+#> [1] ".pred"
+```
+
+If you need to inspect the intermediate expressions, use `orbital_inline()` or examine the orbital object directly.
+
+## When to use
+
+### Good candidates for `separate_trees = TRUE`
+
+Consider using `separate_trees = TRUE` when:
+
+- **Many trees**: Models with 50+ trees benefit most. With fewer trees, the overhead of creating intermediate columns may outweigh any parallelization benefit.
+
+- **Columnar databases**: Databases like DuckDB, Snowflake, BigQuery, and ClickHouse are designed to process columns independently. They can potentially evaluate each tree column in parallel across different CPU cores.
+
+- **Large datasets**: The parallelization benefit becomes more pronounced with larger datasets where the per-row computation time dominates query overhead.
+
+- **Batch predictions**: When scoring large batches of data at once rather than single rows.
+
+### When to stick with the default
+
+The default `separate_trees = FALSE` may be better when:
+
+- **Row-oriented databases**: Traditional databases like PostgreSQL or MySQL process data row-by-row and won't benefit from column separation.
+
+- **Few trees**: Models with fewer than 20-30 trees are unlikely to see improvement.
+
+- **Column count limits**: Some databases have limits on the number of columns in a query. A model with 500 trees would create 500+ intermediate columns, which may hit these limits. (Note: expression depth limits are handled automatically through batched summation.)
+
+- **In-memory data frames**: When predicting on local R data frames, there's no parallelization benefit since dplyr's `mutate()` evaluates sequentially regardless of expression structure.
+
+### Tradeoffs
+
+| Aspect | `separate_trees = FALSE` | `separate_trees = TRUE` |
+|--------|--------------------------|-------------------------|
+| SQL size | Smaller (one expression) | Larger (many expressions) |
+| Query complexity | Single nested expression | Many simple expressions |
+| Expression depth | Can exceed DB limits | Batched to ~50 (safe) |
+| Parallelization | Limited | Possible in columnar DBs |
+| Memory during eval | Lower | Higher (intermediate cols) |
+
+### Benchmarking recommendation
+
+The actual performance benefit depends on your specific database engine, hardware, data size, and query optimizer. We recommend benchmarking both approaches with your actual workload.
+
+One way to benchmark from R uses the bench package:
+
+```{r}
+#| eval: false
+library(DBI)
+library(duckdb)
+
+con <- dbConnect(duckdb())
+dbWriteTable(con, "my_data", large_dataset)
+tbl <- tbl(con, "my_data")
+
+# Benchmark both approaches
+bench::mark(
+  combined = predict(orb_combined, tbl) |> collect(),
+  separate = predict(orb_separate, tbl) |> collect(),
+  check = FALSE
+)
+```
+
+You can also benchmark directly in your database using `orbital_sql()` to generate the SQL and your database's native profiling tools (e.g., `EXPLAIN ANALYZE` in PostgreSQL/DuckDB, Query Profile in Snowflake). This approach measures pure database execution time without R overhead.
