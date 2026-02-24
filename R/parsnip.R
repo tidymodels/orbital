@@ -1,5 +1,11 @@
 #' @export
-orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
+orbital.model_fit <- function(
+  x,
+  ...,
+  prefix = ".pred",
+  type = NULL,
+  separate_trees = FALSE
+) {
   mode <- x$spec$mode
   check_mode(mode)
   check_type(type, mode)
@@ -17,6 +23,7 @@ orbital.model_fit <- function(x, ..., prefix = ".pred", type = NULL) {
       mode = mode,
       type = type,
       lvl = x$lvl,
+      separate_trees = separate_trees,
       !!!extra_args
     ),
     silent = TRUE

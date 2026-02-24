@@ -4,7 +4,8 @@ orbital.catboost.Model <- function(
   ...,
   mode = c("classification", "regression"),
   type = NULL,
-  lvl = NULL
+  lvl = NULL,
+  separate_trees = FALSE
 ) {
   mode <- rlang::arg_match(mode)
 
