@@ -1,5 +1,11 @@
 # orbital (development version)
 
+* Binary classification probability predictions now generate cleaner code by having the second probability reference the first (e.g., `.pred_1 = 1 - .pred_0`) instead of duplicating the full expression. (#100)
+
+* New `vignette("sql-size")` documents how model type and hyperparameters affect generated SQL size, and shows how to jointly tune for predictive performance and SQL complexity.
+
+* `orbital()` gains a `separate_trees` argument for tree ensemble models (xgboost, lightgbm, catboost, ranger, randomForest). When `TRUE`, each tree is emitted as a separate intermediate column before being summed, which can enable parallel evaluation in columnar databases like DuckDB, Snowflake, and BigQuery. For models with many trees, the final summation is automatically batched in groups of 50 to avoid expression depth limits in databases. See `vignette("separate-trees")` for details. (#105)
+
 * `orbital()` now works with `boost_tree(engine = "catboost")` models for numeric, class, and probability predictions. (#90)
 
 * `orbital()` now works with `decision_tree(engine = "rpart")` models for numeric, class, and probability predictions. (#128)

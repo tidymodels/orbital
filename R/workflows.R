@@ -1,5 +1,11 @@
 #' @export
-orbital.workflow <- function(x, ..., prefix = ".pred", type = NULL) {
+orbital.workflow <- function(
+  x,
+  ...,
+  prefix = ".pred",
+  type = NULL,
+  separate_trees = FALSE
+) {
   if (!workflows::is_trained_workflow(x)) {
     cli::cli_abort("{.arg x} must be a fully trained {.cls workflow}.")
   }
@@ -12,7 +18,12 @@ orbital.workflow <- function(x, ..., prefix = ".pred", type = NULL) {
   }
 
   model_fit <- workflows::extract_fit_parsnip(x)
-  mod <- orbital(model_fit, prefix = prefix, type = type)
+  mod <- orbital(
+    model_fit,
+    prefix = prefix,
+    type = type,
+    separate_trees = separate_trees
+  )
   mod_atr <- attributes(mod)
   mod_atr$names <- c(mod_atr$names, names(out))
   mod_cls <- class(mod)

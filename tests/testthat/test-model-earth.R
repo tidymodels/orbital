@@ -285,3 +285,22 @@ test_that("mars(engine = 'earth') multiclass works with custom prefix", {
     c("my_pred_class", paste0("my_pred_", levels(iris$Species)))
   )
 })
+
+test_that("mars(earth) binary prob uses reference pattern", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("earth")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  spec <- parsnip::mars(mode = "classification") |>
+    parsnip::set_engine("earth", glm = list(family = binomial))
+
+  suppressWarnings(
+    fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
+  )
+
+  orb_obj <- orbital(fit, type = "prob")
+
+  expect_true(grepl("`.pred_0`", orb_obj[[".pred_1"]], fixed = TRUE))
+})
