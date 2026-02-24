@@ -50,8 +50,7 @@ Suggests:
     themis,
     tibble,
     tidypredict (>= 1.0.1.9000),
-    workflows,
-    xgboost
+    workflows
 VignetteBuilder: 
     knitr
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown, gt

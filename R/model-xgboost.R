@@ -78,7 +78,7 @@ xgboost_regression <- function(x, separate_trees, prefix) {
 get_xgb_json_params <- function(model) {
   tmp_file <- tempfile(fileext = ".json")
   on.exit(unlink(tmp_file), add = TRUE)
-  xgboost::xgb.save(model, tmp_file)
+  rlang::eval_tidy(rlang::call2("xgb.save", model, tmp_file, .ns = "xgboost"))
 
   json <- jsonlite::fromJSON(tmp_file)
 
