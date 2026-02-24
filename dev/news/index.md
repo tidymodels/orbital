@@ -2,6 +2,10 @@
 
 ## orbital (development version)
 
+- New `vignette("sql-size")` documents how model type and
+  hyperparameters affect generated SQL size, and shows how to jointly
+  tune for predictive performance and SQL complexity.
+
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now works with `boost_tree(engine = "catboost")` models for numeric,
   class, and probability predictions.

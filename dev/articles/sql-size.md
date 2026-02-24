@@ -1,0 +1,184 @@
+# SQL expression sizes
+
+When using orbital to generate SQL for in-database predictions, the size
+of the resulting SQL expression varies considerably depending on the
+model type and its hyperparameters. Understanding these size
+characteristics can help you choose appropriate models for database
+deployment.
+
+## How models translate to SQL
+
+Different model types produce fundamentally different SQL structures:
+
+**Linear models** become a single arithmetic expression—a sum of
+weighted terms:
+
+    prediction = intercept + (coef1 * x1) + (coef2 * x2) + ...
+
+SQL size scales linearly with the number of predictors—each predictor
+adds one term to the sum. This is far more compact than tree-based
+models, where size can grow exponentially with depth.
+
+**Tree-based models** become nested `CASE WHEN` statements:
+
+    CASE WHEN x1 > 5 THEN
+      CASE WHEN x2 > 3 THEN 10.5
+           ELSE 8.2 END
+    ELSE
+      CASE WHEN x3 > 7 THEN 6.1
+           ELSE 4.8 END
+    END
+
+Each split in the tree adds another condition, and ensemble methods sum
+many such trees together.
+
+## Tree depth affects SQL size
+
+For tree-based models, the depth of each tree directly impacts SQL size.
+Each level of depth can potentially double the number of leaf nodes, and
+each leaf requires its own path of conditions.
+
+    Depth 1:    2 leaves     ->  ~100 chars per tree
+    Depth 2:    4 leaves     ->  ~200 chars per tree
+    Depth 3:    8 leaves     ->  ~400 chars per tree
+    Depth 4:   16 leaves     ->  ~800 chars per tree
+    Depth 6:   64 leaves     ->  ~3,000 chars per tree
+    Depth 8:  256 leaves     ->  ~10,000 chars per tree
+
+In practice, trees rarely grow to their full potential depth because of
+early stopping and minimum leaf size constraints. But the relationship
+between depth and SQL size remains roughly exponential.
+
+## Number of trees in ensembles
+
+For ensemble methods like random forests and boosted trees, the number
+of trees is the primary driver of SQL size. Each tree in the ensemble
+adds its own block of `CASE WHEN` expressions, and these scale linearly:
+
+    Trees     SQL Size (depth=3)
+    ─────────────────────────────
+       10          ~3,000 chars
+       50         ~15,000 chars
+      100         ~30,000 chars
+      500        ~150,000 chars
+    1,000        ~300,000 chars
+
+This linear relationship makes it easy to estimate: doubling the number
+of trees doubles the SQL size.
+
+## Combined effect of trees and depth
+
+When you change both parameters, the effects multiply:
+
+                  Tree Depth
+                2       4       6
+             ┌───────┬───────┬───────┐
+          10 │  2K   │  5K   │  8K   │
+    Trees 50 │  8K   │ 25K   │ 40K   │
+         100 │ 15K   │ 50K   │ 80K   │
+             └───────┴───────┴───────┘
+                    (approximate SQL characters)
+
+A model with 100 trees at depth 6 produces SQL roughly 40x larger than
+one with 10 trees at depth 2.
+
+## Optimizing boosted trees for smaller SQL
+
+For boosted tree models, the number of trees and learning rate are
+interchangeable to some degree. Since orbital’s SQL size scales linearly
+with the number of trees, you can often achieve similar predictive
+performance with fewer trees and a higher learning rate—dramatically
+reducing SQL size:
+
+    Configuration              RMSE    SQL Size
+    ──────────────────────────────────────────────
+    500 trees, learning_rate=0.01   0.85    ~150K chars
+    100 trees, learning_rate=0.05   0.86     ~30K chars
+     50 trees, learning_rate=0.10   0.87     ~15K chars
+
+When performance differences are small, there can be substantial SQL
+size reductions to gain.
+
+## Tuning for both performance and SQL size
+
+You can use the `extract` argument in
+[`tune::control_grid()`](https://tune.tidymodels.org/reference/control_grid.html)
+to capture orbital object sizes during hyperparameter tuning:
+
+``` r
+library(tidymodels)
+
+extract_orbital_size <- function(x) sum(nchar(orbital(x)))
+
+bt_spec <- boost_tree(
+  trees = tune(),
+  tree_depth = tune(),
+  learn_rate = tune()
+) |>
+  set_engine("xgboost") |>
+  set_mode("regression")
+
+bt_res <- tune_grid(
+  workflow(mpg ~ ., bt_spec),
+  resamples = vfold_cv(mtcars),
+  grid = 5,
+  control = control_grid(extract = extract_orbital_size)
+)
+```
+
+Then combine the extracted sizes with performance metrics to visualize
+the trade-off:
+
+``` r
+sizes <- bt_res |>
+  collect_extracts() |>
+  unnest(.extracts) |>
+  summarize(sql_size = mean(.extracts), .by = .config)
+
+bt_res |>
+  collect_metrics() |>
+  filter(.metric == "rmse") |>
+  left_join(sizes, by = ".config") |>
+  ggplot(aes(x = sql_size, y = mean)) +
+  geom_point() +
+  labs(x = "SQL size (characters)", y = "RMSE")
+```
+
+Note that object size is a useful proxy but doesn’t perfectly predict
+computation time. Database query optimizers, caching, parallelization,
+and hardware all affect actual execution speed. A model with 2x the SQL
+size won’t necessarily take 2x as long to run. If execution time is
+critical, benchmark your top candidates directly in your target database
+environment.
+
+## Practical considerations
+
+When choosing models for database deployment:
+
+1.  **Linear models** produce the most compact SQL and are ideal when
+    the relationship is approximately linear.
+
+2.  **Single decision trees** offer a middle ground with interpretable
+    rules and moderate SQL size.
+
+3.  **Ensemble methods** (random forests, boosted trees) provide the
+    best predictive performance but generate large SQL expressions.
+
+4.  **Database limits**: Some databases have query size limits or
+    performance degradation with very large queries. Test your generated
+    SQL in your target environment.
+
+5.  **Trade-offs**: You may need to balance model accuracy against SQL
+    complexity. A simpler model with slightly lower accuracy might be
+    preferable if it generates manageable SQL.
+
+6.  **Expression depth limits**: Beyond query size, some databases limit
+    expression nesting depth (e.g., ~1000 in SQLite/DuckDB). Large tree
+    ensembles can exceed these limits even when the total SQL size is
+    acceptable. Use `separate_trees = TRUE` in
+    [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+    to emit each tree as a separate column with batched summation,
+    keeping depth well under control. This approach also enables
+    parallel tree evaluation in columnar databases like DuckDB,
+    Snowflake, and BigQuery. See `vignette("separate-trees")` for
+    details.
