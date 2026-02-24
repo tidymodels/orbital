@@ -249,3 +249,41 @@ test_that("format_separate_trees preserves numeric precision", {
   expect_match(result[[1]], "1\\.234567890123456")
   expect_match(result[[1]], "0\\.987654321098765")
 })
+
+test_that("format_multiclass_logits_separate returns correct structure", {
+  tree1 <- rlang::expr(case_when(x > 1 ~ 0.5, .default = 0.3))
+  tree2 <- rlang::expr(case_when(x > 2 ~ 0.6, .default = 0.4))
+
+  trees_split <- list(list(tree1), list(tree2))
+  lvl <- c("a", "b")
+
+  result <- orbital:::format_multiclass_logits_separate(
+    trees_split,
+    c("class", "prob"),
+    lvl,
+    ".pred"
+  )
+
+  expect_match(names(result), "_a_logit_tree_", all = FALSE)
+  expect_match(names(result), "_b_logit_tree_", all = FALSE)
+  expect_true(".pred_a_logit" %in% names(result))
+  expect_true(".pred_b_logit" %in% names(result))
+  expect_true("orbital_tmp_class_name" %in% names(result))
+  expect_true("norm" %in% names(result))
+})
+
+test_that("binary_from_prob_first_with_eq returns correct structure", {
+  tree_res <- c(logit_tree_1 = "case_when(...)", logit = "`logit_tree_1`")
+
+  result <- orbital:::binary_from_prob_first_with_eq(
+    tree_res,
+    "1/(1 + exp(-`logit`))",
+    c("class", "prob"),
+    c("no", "yes")
+  )
+
+  expect_true("orbital_tmp_class_name" %in% names(result))
+  expect_true("orbital_tmp_prob_name1" %in% names(result))
+  expect_true("orbital_tmp_prob_name2" %in% names(result))
+  expect_match(result[["orbital_tmp_class_name"]], '"no"')
+})

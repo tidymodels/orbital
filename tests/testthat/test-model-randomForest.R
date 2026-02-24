@@ -223,3 +223,65 @@ test_that("rand_forest(engine = 'randomForest') works with custom prefix", {
     c("my_pred_class", paste0("my_pred_", levels(iris$Species)))
   )
 })
+
+test_that("rand_forest(randomForest) regression works with separate_trees = TRUE", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("randomForest")
+
+  spec <- parsnip::rand_forest(
+    mode = "regression",
+    engine = "randomForest",
+    trees = 5
+  )
+
+  set.seed(123)
+  fit <- parsnip::fit(spec, mpg ~ disp + hp, mtcars)
+
+  orb_collapsed <- orbital(fit, separate_trees = FALSE)
+  orb_split <- orbital(fit, separate_trees = TRUE)
+
+  expect_length(orb_collapsed, 1)
+  expect_gt(length(orb_split), 1)
+  expect_match(names(orb_split), "_tree_", all = FALSE)
+
+  preds_collapsed <- predict(orb_collapsed, mtcars)
+  preds_split <- predict(orb_split, mtcars)
+
+  expect_named(preds_split, ".pred")
+  expect_equal(preds_collapsed, preds_split, tolerance = 1e-10)
+})
+
+test_that("rand_forest(randomForest) classification works with separate_trees = TRUE", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("randomForest")
+
+  spec <- parsnip::rand_forest(
+    mode = "classification",
+    engine = "randomForest",
+    trees = 5
+  )
+
+  set.seed(123)
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  orb_collapsed <- orbital(
+    fit,
+    type = c("class", "prob"),
+    separate_trees = FALSE
+  )
+  orb_split <- orbital(fit, type = c("class", "prob"), separate_trees = TRUE)
+
+  expect_lt(length(orb_collapsed), length(orb_split))
+  expect_match(names(orb_split), "_tree_", all = FALSE)
+
+  preds_collapsed <- predict(orb_collapsed, iris)
+  preds_split <- predict(orb_split, iris)
+
+  expect_named(
+    preds_split,
+    c(".pred_class", paste0(".pred_", levels(iris$Species)))
+  )
+  expect_equal(preds_collapsed, preds_split, tolerance = 1e-10)
+})

@@ -136,6 +136,101 @@ sum_tree_expressions <- function(class_trees) {
   )
 }
 
+# Helper for binary classification with pre-computed equation parts
+# Used when separate_trees = TRUE
+binary_from_prob_with_eq <- function(tree_res, prob_eq, type, lvl) {
+  res <- tree_res
+  if ("class" %in% type) {
+    levels <- glue::double_quote(lvl)
+    res <- c(
+      res,
+      orbital_tmp_class_name = glue::glue(
+        "dplyr::case_when({prob_eq} > 0.5 ~ {levels[2]}, .default = {levels[1]})"
+      )
+    )
+  }
+  if ("prob" %in% type) {
+    res <- c(
+      res,
+      orbital_tmp_prob_name1 = paste0("1 - (", prob_eq, ")"),
+      orbital_tmp_prob_name2 = prob_eq
+    )
+  }
+  res
+}
+
+# Helper for binary classification with pre-computed equation parts
+# Used when separate_trees = TRUE, probability is P(first level)
+binary_from_prob_first_with_eq <- function(tree_res, prob_eq, type, lvl) {
+  res <- tree_res
+  if ("class" %in% type) {
+    levels <- glue::double_quote(lvl)
+    res <- c(
+      res,
+      orbital_tmp_class_name = glue::glue(
+        "dplyr::case_when({prob_eq} > 0.5 ~ {levels[1]}, .default = {levels[2]})"
+      )
+    )
+  }
+  if ("prob" %in% type) {
+    res <- c(
+      res,
+      orbital_tmp_prob_name1 = prob_eq,
+      orbital_tmp_prob_name2 = paste0("1 - (", prob_eq, ")")
+    )
+  }
+  res
+}
+
+# Generate softmax class selection using custom column names
+# Used when separate_trees = TRUE for classification
+softmax_class_from_names <- function(col_names, lvl) {
+  col_bt <- backtick(col_names)
+  res <- character(0)
+  for (i in seq(1, length(lvl) - 1)) {
+    comparisons <- paste0(col_bt[i], " >= ", col_bt[-i])
+    line <- paste(comparisons, collapse = " & ")
+    line <- paste0(line, " ~ ", glue::double_quote(lvl[i]))
+    res[i] <- line
+  }
+
+  res <- paste(res, collapse = ", ")
+  default <- glue::double_quote(lvl[length(lvl)])
+  paste0("dplyr::case_when(", res, ", .default = ", default, ")")
+}
+
+# Format multiclass trees separately and add softmax probability calculations
+# Used when separate_trees = TRUE for logit-based multiclass (xgboost, lightgbm, catboost)
+format_multiclass_logits_separate <- function(trees_split, type, lvl, prefix) {
+  res <- character()
+  for (i in seq_along(lvl)) {
+    cls <- lvl[i]
+    cls_trees <- trees_split[[i]]
+    cls_prefix <- paste0(prefix, "_", cls, "_logit")
+    cls_res <- format_separate_trees(cls_trees, cls_prefix)
+    res <- c(res, cls_res)
+  }
+
+  # Add class selection and probability calculations
+  lvl_logit_names <- paste0(prefix, "_", lvl, "_logit")
+  lvl_bt <- backtick(lvl_logit_names)
+
+  if ("class" %in% type) {
+    res <- c(
+      res,
+      orbital_tmp_class_name = softmax_class_from_names(lvl_logit_names, lvl)
+    )
+  }
+  if ("prob" %in% type) {
+    norm_eq <- paste(paste0("exp(", lvl_bt, ")"), collapse = " + ")
+    prob_eqs <- paste0("exp(", lvl_bt, ") / norm")
+    names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
+    res <- c(res, "norm" = norm_eq, prob_eqs)
+  }
+
+  res
+}
+
 # Format trees as separate expressions for database parallelization
 # Returns named character vector: individual tree expressions + final sum
 # Used when separate_trees = TRUE for regression models
