@@ -19,6 +19,7 @@
 #'   lightgbm, catboost, ranger, randomForest), should each tree be output as a
 #'   separate expression? This can improve performance when predicting in
 #'   databases by allowing parallel evaluation of trees. Defaults to `FALSE`.
+#'   See `vignette("separate-trees")` for details.
 #'
 #' @returns An [orbital] object.
 #'
