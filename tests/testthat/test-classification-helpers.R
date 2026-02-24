@@ -268,6 +268,25 @@ test_that("format_separate_trees handles single tree", {
   expect_identical(result[[".pred"]], "`.pred_tree_1`")
 })
 
+test_that("format_separate_trees handles empty trees list", {
+  result <- orbital:::format_separate_trees(list(), ".pred")
+
+  expect_length(result, 1)
+  expect_named(result, ".pred")
+  expect_identical(result[[".pred"]], "0")
+})
+
+test_that("format_separate_trees handles boundary at 51 trees", {
+  trees <- lapply(1:51, function(i) rlang::expr(!!i))
+
+  result <- orbital:::format_separate_trees(trees, ".pred")
+
+  # 51 trees + 2 batch sums + 1 final = 54
+  expect_length(result, 54)
+  expect_true(".pred_sum_1" %in% names(result))
+  expect_true(".pred_sum_2" %in% names(result))
+})
+
 test_that("format_separate_trees preserves numeric precision", {
   tree <- rlang::expr(case_when(
     x > 1.23456789012345678 ~ 0.98765432109876543,

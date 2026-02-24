@@ -396,3 +396,30 @@ test_that("boost_tree(catboost) multiclass works with separate_trees = TRUE", {
   )
   expect_equal(preds_collapsed, preds_split, tolerance = 1e-10)
 })
+
+test_that("separate_trees batches summation for many trees (catboost multiclass)", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("catboost")
+
+  bt_spec <- parsnip::boost_tree(
+    mode = "classification",
+    engine = "catboost",
+    trees = 120,
+    min_n = 1
+  )
+  bt_fit <- parsnip::fit(bt_spec, Species ~ ., iris)
+
+  orb <- orbital(bt_fit, type = "prob", separate_trees = TRUE)
+
+  # Each class should have trees, batched in groups of 50
+  n_class_trees <- sum(grepl("_logit_tree_", names(orb)))
+  n_class_batch <- sum(grepl("_logit_sum_", names(orb)))
+
+  expect_gt(n_class_trees, 100)
+  expect_gt(n_class_batch, 0)
+
+  preds <- predict(orb, iris)
+  expect_named(preds, paste0(".pred_", levels(iris$Species)))
+})

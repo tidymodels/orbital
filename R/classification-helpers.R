@@ -117,6 +117,21 @@ multiclass_from_prob_avg <- function(prob_sum_eqs, type, lvl, n_trees) {
   res
 }
 
+# Collapse stump trees (single-leaf) into a constant value
+# Used by xgboost, lightgbm, catboost for multiclass
+collapse_stumps <- function(x) {
+  stump_ind <- lengths(x) == 2
+
+  stumps <- x[stump_ind]
+  trees <- x[!stump_ind]
+
+  stump_values <- lapply(stumps, function(x) eval(x[[2]][[3]]))
+  stump_values <- unlist(stump_values)
+  stump_values <- sum(stump_values)
+
+  c(stump_values, trees)
+}
+
 # Sum tree expressions for each class
 # Used by ranger and randomForest for classification
 # Uses digits17 control to preserve full numeric precision in split values
@@ -182,6 +197,43 @@ binary_from_prob_first_with_eq <- function(tree_res, prob_eq, type, lvl) {
   res
 }
 
+# Format classification trees separately for ranger/randomForest
+# Used when separate_trees = TRUE for classification based on votes/sums
+format_classification_trees_separate <- function(
+  class_trees,
+  type,
+  lvl,
+  prefix,
+  suffix,
+  n_trees
+) {
+  res <- character()
+  for (cls in names(class_trees)) {
+    cls_trees <- class_trees[[cls]]
+    cls_prefix <- paste0(prefix, "_", cls, "_", suffix)
+    cls_res <- format_separate_trees(cls_trees, cls_prefix)
+    res <- c(res, cls_res)
+  }
+
+  # Add probability calculations (divide by n_trees) and class selection
+  lvl_names <- paste0(prefix, "_", lvl, "_", suffix)
+  lvl_bt <- backtick(lvl_names)
+
+  if ("prob" %in% type) {
+    prob_eqs <- paste0("(", lvl_bt, ") / ", n_trees)
+    names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
+    res <- c(res, prob_eqs)
+  }
+  if ("class" %in% type) {
+    res <- c(
+      res,
+      orbital_tmp_class_name = softmax_class_from_names(lvl_names, lvl)
+    )
+  }
+
+  res
+}
+
 # Generate softmax class selection using custom column names
 # Used when separate_trees = TRUE for classification
 softmax_class_from_names <- function(col_names, lvl) {
@@ -237,6 +289,10 @@ format_multiclass_logits_separate <- function(trees_split, type, lvl, prefix) {
 # Batches summation in groups of 50 to avoid expression depth limits in databases
 format_separate_trees <- function(trees, prefix = ".pred", batch_size = 50) {
   n <- length(trees)
+
+  if (n == 0) {
+    return(stats::setNames("0", prefix))
+  }
   width <- nchar(as.character(n))
   tree_names <- sprintf(paste0(prefix, "_tree_%0", width, "d"), seq_len(n))
 

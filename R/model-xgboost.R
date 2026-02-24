@@ -111,19 +111,6 @@ xgboost_multisoft <- function(x, type, lvl, separate_trees, prefix) {
   format_multiclass_logits_separate(trees_split, type, lvl, prefix)
 }
 
-collapse_stumps <- function(x) {
-  stump_ind <- lengths(x) == 2
-
-  stumps <- x[stump_ind]
-  trees <- x[!stump_ind]
-
-  stump_values <- lapply(stumps, function(x) eval(x[[2]][[3]]))
-  stump_values <- unlist(stump_values)
-  stump_values <- sum(stump_values)
-
-  c(stump_values, trees)
-}
-
 xgboost_logistic <- function(x, type, lvl, separate_trees, prefix) {
   if (!separate_trees) {
     eq <- tidypredict::tidypredict_fit(x)

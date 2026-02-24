@@ -47,30 +47,12 @@ ranger_classification <- function(x, type, lvl, separate_trees, prefix) {
     return(multiclass_from_prob_avg(prob_sums, type, lvl, n_trees))
   }
 
-  # separate_trees = TRUE: format each class's trees separately
-  res <- character()
-  for (cls in names(class_trees)) {
-    cls_trees <- class_trees[[cls]]
-    cls_prefix <- paste0(prefix, "_", cls, "_sum")
-    cls_res <- format_separate_trees(cls_trees, cls_prefix)
-    res <- c(res, cls_res)
-  }
-
-  # Add probability calculations (divide by n_trees) and class selection
-  lvl_sum_names <- paste0(prefix, "_", lvl, "_sum")
-  lvl_bt <- backtick(lvl_sum_names)
-
-  if ("prob" %in% type) {
-    prob_eqs <- paste0("(", lvl_bt, ") / ", n_trees)
-    names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
-    res <- c(res, prob_eqs)
-  }
-  if ("class" %in% type) {
-    res <- c(
-      res,
-      orbital_tmp_class_name = softmax_class_from_names(lvl_sum_names, lvl)
-    )
-  }
-
-  res
+  format_classification_trees_separate(
+    class_trees,
+    type,
+    lvl,
+    prefix,
+    "sum",
+    n_trees
+  )
 }
