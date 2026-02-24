@@ -96,7 +96,18 @@ lightgbm_multiclass <- function(x, type, lvl, separate_trees, prefix) {
   trees_split <- lapply(trees_split, collapse_stumps)
 
   if (!separate_trees) {
-    trees_split <- vapply(trees_split, paste, character(1), collapse = " + ")
+    trees_split <- vapply(
+      trees_split,
+      function(trees) {
+        tree_strs <- vapply(
+          trees,
+          function(e) deparse1(e, control = "digits17"),
+          character(1)
+        )
+        paste(tree_strs, collapse = " + ")
+      },
+      character(1)
+    )
     return(multiclass_from_logits(trees_split, type, lvl))
   }
 
