@@ -184,3 +184,68 @@ test_that("sum_tree_expressions sums and deparses correctly", {
     )
   )
 })
+
+test_that("format_separate_trees returns correct structure", {
+  tree1 <- rlang::expr(case_when(x > 1 ~ 10, .default = 5))
+  tree2 <- rlang::expr(case_when(x > 2 ~ 20, .default = 15))
+  tree3 <- rlang::expr(case_when(x > 3 ~ 30, .default = 25))
+
+  result <- orbital:::format_separate_trees(list(tree1, tree2, tree3), ".pred")
+
+  expect_length(result, 4)
+  expect_named(
+    result,
+    c(".pred_tree_1", ".pred_tree_2", ".pred_tree_3", ".pred")
+  )
+  expect_identical(
+    result[[".pred"]],
+    "`.pred_tree_1` + `.pred_tree_2` + `.pred_tree_3`"
+  )
+})
+
+test_that("format_separate_trees uses correct zero-padding", {
+  trees <- lapply(1:100, function(i) rlang::expr(!!i))
+
+  result <- orbital:::format_separate_trees(trees, ".pred")
+
+  expect_length(result, 101)
+  expect_true(".pred_tree_001" %in% names(result))
+  expect_true(".pred_tree_100" %in% names(result))
+  expect_false(".pred_tree_1" %in% names(result))
+})
+
+test_that("format_separate_trees works with custom prefix", {
+  tree1 <- rlang::expr(case_when(x > 1 ~ 10, .default = 5))
+  tree2 <- rlang::expr(case_when(x > 2 ~ 20, .default = 15))
+
+  result <- orbital:::format_separate_trees(list(tree1, tree2), "my_model")
+
+  expect_named(result, c("my_model_tree_1", "my_model_tree_2", "my_model"))
+  expect_identical(
+    result[["my_model"]],
+    "`my_model_tree_1` + `my_model_tree_2`"
+  )
+})
+
+test_that("format_separate_trees handles single tree", {
+  tree1 <- rlang::expr(case_when(x > 1 ~ 10, .default = 5))
+
+  result <- orbital:::format_separate_trees(list(tree1), ".pred")
+
+  expect_length(result, 2)
+  expect_named(result, c(".pred_tree_1", ".pred"))
+  expect_identical(result[[".pred"]], "`.pred_tree_1`")
+})
+
+test_that("format_separate_trees preserves numeric precision", {
+  tree <- rlang::expr(case_when(
+    x > 1.23456789012345678 ~ 0.98765432109876543,
+    .default = 0
+  ))
+
+  result <- orbital:::format_separate_trees(list(tree), ".pred")
+
+  # Verify high precision is preserved (at least 15 significant digits)
+  expect_match(result[[1]], "1\\.234567890123456")
+  expect_match(result[[1]], "0\\.987654321098765")
+})

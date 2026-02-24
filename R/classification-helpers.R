@@ -135,3 +135,24 @@ sum_tree_expressions <- function(class_trees) {
     character(1)
   )
 }
+
+# Format trees as separate expressions for database parallelization
+# Returns named character vector: individual tree expressions + final sum
+# Used when separate_trees = TRUE for regression models
+format_separate_trees <- function(trees, prefix = ".pred") {
+  n <- length(trees)
+  width <- nchar(as.character(n))
+  tree_names <- sprintf(paste0(prefix, "_tree_%0", width, "d"), seq_len(n))
+
+  tree_strs <- vapply(
+    trees,
+    function(e) deparse1(e, control = "digits17"),
+    character(1)
+  )
+
+  sum_expr <- paste(backtick(tree_names), collapse = " + ")
+
+  out <- stats::setNames(tree_strs, tree_names)
+  out <- c(out, stats::setNames(sum_expr, prefix))
+  out
+}
