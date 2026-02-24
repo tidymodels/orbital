@@ -334,6 +334,50 @@ test_that("binary_from_prob_first_with_eq returns correct structure", {
 
   expect_true("orbital_tmp_class_name" %in% names(result))
   expect_true("orbital_tmp_prob_name1" %in% names(result))
+
   expect_true("orbital_tmp_prob_name2" %in% names(result))
   expect_match(result[["orbital_tmp_class_name"]], '"no"')
+})
+
+test_that("collapse_stumps sums stump values correctly", {
+  # Stumps are case_when(.default = value) with length 2
+  stumps <- list(
+    rlang::expr(case_when(.default = 0.5)),
+    rlang::expr(case_when(.default = 0.3))
+  )
+
+  result <- orbital:::collapse_stumps(stumps)
+
+  expect_length(result, 1)
+  expect_equal(result[[1]], 0.8)
+})
+
+test_that("collapse_stumps preserves non-stump trees", {
+  trees <- list(
+    rlang::expr(case_when(x > 1 ~ 0.5, .default = 0.3)),
+    rlang::expr(case_when(y > 2 ~ 0.6, .default = 0.4))
+  )
+
+  result <- orbital:::collapse_stumps(trees)
+
+  # First element is sum of stumps (0 when no stumps)
+  expect_equal(result[[1]], 0)
+  # Trees are preserved
+  expect_length(result, 3)
+  expect_identical(result[[2]], trees[[1]])
+  expect_identical(result[[3]], trees[[2]])
+})
+
+test_that("collapse_stumps handles mix of stumps and trees", {
+  mixed <- list(
+    rlang::expr(case_when(.default = 0.5)),
+    rlang::expr(case_when(x > 1 ~ 0.3, .default = 0.2)),
+    rlang::expr(case_when(.default = 0.1))
+  )
+
+  result <- orbital:::collapse_stumps(mixed)
+
+  expect_length(result, 2)
+  expect_equal(result[[1]], 0.6)
+  expect_identical(result[[2]], mixed[[2]])
 })

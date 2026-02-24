@@ -119,14 +119,14 @@ multiclass_from_prob_avg <- function(prob_sum_eqs, type, lvl, n_trees) {
 
 # Collapse stump trees (single-leaf) into a constant value
 # Used by xgboost, lightgbm, catboost for multiclass
+# Stumps are case_when(.default = value) expressions where the value is at [[2]]
 collapse_stumps <- function(x) {
   stump_ind <- lengths(x) == 2
 
   stumps <- x[stump_ind]
   trees <- x[!stump_ind]
 
-  stump_values <- lapply(stumps, function(x) eval(x[[2]][[3]]))
-  stump_values <- unlist(stump_values)
+  stump_values <- vapply(stumps, function(e) e[[2]], numeric(1))
   stump_values <- sum(stump_values)
 
   c(stump_values, trees)
