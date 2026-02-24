@@ -223,3 +223,4 @@ test_that("rand_forest(engine = 'ranger') works with custom prefix", {
     c("my_pred_class", paste0("my_pred_", levels(iris$Species)))
   )
 })
+

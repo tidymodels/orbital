@@ -153,6 +153,36 @@ test_that("boost_tree(), objective = multiclass, works with type = prob", {
   )
 })
 
+test_that("boost_tree(xgboost) multiclass prob uses all default trees (#122)", {
+  skip_if_not_installed("parsnip")
+
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("xgboost")
+
+  # Fit with default trees (parsnip default is 15)
+  bt_spec_default <- parsnip::boost_tree(mode = "classification", engine = "xgboost")
+  set.seed(1)
+  bt_fit_default <- parsnip::fit(bt_spec_default, Species ~ ., iris)
+
+  # Fit with explicit trees = 15
+
+  bt_spec_explicit <- parsnip::boost_tree(mode = "classification", trees = 15, engine = "xgboost")
+  set.seed(1)
+  bt_fit_explicit <- parsnip::fit(bt_spec_explicit, Species ~ ., iris)
+
+  orb_default <- orbital(bt_fit_default, type = "prob")
+  orb_explicit <- orbital(bt_fit_explicit, type = "prob")
+
+  # to avoid exact split values
+  iris_test <- iris
+  iris_test[, -5] <- iris_test[, -5] + 0.05
+
+  preds_default <- predict(orb_default, iris_test)
+  preds_explicit <- predict(orb_explicit, iris_test)
+
+  expect_equal(preds_default, preds_explicit, tolerance = 0.0000001)
+})
+
 test_that("boost_tree(), objective = binary, works with type = c(class, prob)", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")

@@ -296,3 +296,4 @@ test_that("boost_tree(catboost) works with custom prefix", {
 
   expect_named(preds, "my_pred")
 })
+

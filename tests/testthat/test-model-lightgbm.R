@@ -288,3 +288,4 @@ test_that("boost_tree(lightgbm) works with custom prefix", {
 
   expect_named(preds, "my_pred")
 })
+
