@@ -248,6 +248,25 @@ test_that("boost_tree(xgboost) works with custom prefix", {
   expect_named(preds, "my_pred")
 })
 
+test_that("boost_tree(xgboost) binary prob uses reference pattern", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("xgboost")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  bt_spec <- parsnip::boost_tree(
+    mode = "classification",
+    trees = 1,
+    engine = "xgboost"
+  )
+  bt_fit <- parsnip::fit(bt_spec, vs ~ disp + mpg + hp, mtcars)
+
+  orb_obj <- orbital(bt_fit, type = "prob")
+
+  expect_true(grepl("`.pred_0`", orb_obj[[".pred_1"]], fixed = TRUE))
+})
+
 test_that("boost_tree(xgboost) regression works with separate_trees = TRUE", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")

@@ -91,6 +91,16 @@ set_pred_names <- function(res, x, mode, type, prefix) {
     eq_names[prob_ind] <- prob_names
 
     names(res) <- eq_names
+
+    # Replace placeholder references in expressions with actual column names
+    if ("prob" %in% type && length(prob_names) >= 2) {
+      res <- gsub(
+        "`orbital_tmp_prob_name1`",
+        paste0("`", prob_names[1], "`"),
+        res,
+        fixed = TRUE
+      )
+    }
   }
 
   res

@@ -289,6 +289,26 @@ test_that("boost_tree(lightgbm) works with custom prefix", {
   expect_named(preds, "my_pred")
 })
 
+test_that("boost_tree(lightgbm) binary prob uses reference pattern", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("lightgbm")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  bt_spec <- parsnip::boost_tree(
+    mode = "classification",
+    engine = "lightgbm",
+    min_n = 1
+  )
+  bt_fit <- parsnip::fit(bt_spec, vs ~ disp + mpg + hp, mtcars)
+
+  orb_obj <- orbital(bt_fit, type = "prob")
+
+  expect_true(grepl("`.pred_0`", orb_obj[[".pred_1"]], fixed = TRUE))
+})
+
 test_that("boost_tree(lightgbm) regression works with separate_trees = TRUE", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("bonsai")

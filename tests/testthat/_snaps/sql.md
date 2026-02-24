@@ -25,7 +25,7 @@
       ELSE '0'
       END AS .pred_class
       <SQL> 1 - (1 / (1 + EXP(-((6.750.5 + (`disp` * -0.003776033)) + (`hp` * -0.04870484))))) AS .pred_0
-      <SQL> 1 / (1 + EXP(-((6.750.5 + (`disp` * -0.003776033)) + (`hp` * -0.04870484)))) AS .pred_1
+      <SQL> 1 - `.pred_0` AS .pred_1
 
 # sql works for glmnet multiclass
 
@@ -55,7 +55,7 @@
       ELSE '0'
       END AS .pred_class
       <SQL> 1 - (1 - 1 / (1 + EXP((1.863314 + (CASE WHEN (`hp` > 105) THEN (`hp` - 105) WHEN NOT (`hp` > 105) THEN 0 END * -017198)) + (CASE WHEN (`hp` > 175) THEN (`hp` - 175) WHEN NOT (`hp` > 175) THEN 0 END * -2.746445)))) AS .pred_0
-      <SQL> 1 - 1 / (1 + EXP((1.863314 + (CASE WHEN (`hp` > 105) THEN (`hp` - 105) WHEN NOT (`hp` > 105) THEN 0 END * -017198)) + (CASE WHEN (`hp` > 175) THEN (`hp` - 175) WHEN NOT (`hp` > 175) THEN 0 END * -2.746445))) AS .pred_1
+      <SQL> 1 - `.pred_0` AS .pred_1
 
 # sql works for randomForest classification
 
