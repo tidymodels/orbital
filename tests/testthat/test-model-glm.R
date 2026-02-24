@@ -186,3 +186,17 @@ test_that("orbital() errors when using regression type for classification model"
     orbital(fit, type = "numeric")
   )
 })
+
+test_that("logistic_reg(glm) binary prob uses reference pattern", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  spec <- parsnip::logistic_reg()
+  fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
+
+  orb_obj <- orbital(fit, type = "prob")
+
+  expect_true(grepl("`.pred_0`", orb_obj[[".pred_1"]], fixed = TRUE))
+})

@@ -247,3 +247,17 @@ test_that("linear_reg(engine = 'glmnet') works with type = numeric", {
     tolerance = 0.0000001
   )
 })
+
+test_that("logistic_reg(glmnet) binary prob uses reference pattern", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("glmnet")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  spec <- parsnip::logistic_reg(penalty = 0.01, engine = "glmnet")
+  fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
+
+  orb_obj <- orbital(fit, type = "prob")
+
+  expect_true(grepl("`.pred_0`", orb_obj[[".pred_1"]], fixed = TRUE))
+})
