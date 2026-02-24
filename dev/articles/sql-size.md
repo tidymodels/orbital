@@ -180,5 +180,6 @@ When choosing models for database deployment:
     to emit each tree as a separate column with batched summation,
     keeping depth well under control. This approach also enables
     parallel tree evaluation in columnar databases like DuckDB,
-    Snowflake, and BigQuery. See `vignette("separate-trees")` for
-    details.
+    Snowflake, and BigQuery. See
+    [`vignette("separate-trees")`](https://orbital.tidymodels.org/dev/articles/separate-trees.md)
+    for details.

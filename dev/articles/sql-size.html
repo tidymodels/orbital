@@ -46,6 +46,7 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/databases.html">Using Databases</a></li>
     <li><a class="dropdown-item" href="../articles/pros-cons.html">Pros and Cons</a></li>
+    <li><a class="dropdown-item" href="../articles/separate-trees.html">Parallel tree evaluation in databases</a></li>
     <li><a class="dropdown-item" href="../articles/sql-size.html">SQL expression sizes</a></li>
     <li><a class="dropdown-item" href="../articles/supported-models.html">Supported Models and recipes steps</a></li>
   </ul>
@@ -242,7 +243,7 @@ size is acceptable. Use <code>separate_trees = TRUE</code> in
 <code><a href="../reference/orbital.html">orbital()</a></code> to emit each tree as a separate column with
 batched summation, keeping depth well under control. This approach also
 enables parallel tree evaluation in columnar databases like DuckDB,
-Snowflake, and BigQuery. See <code>vignette("separate-trees")</code> for
+Snowflake, and BigQuery. See <code><a href="../articles/separate-trees.html">vignette("separate-trees")</a></code> for
 details.</p></li>
 </ol>
 </div>

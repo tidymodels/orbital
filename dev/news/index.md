@@ -12,6 +12,18 @@
   tune for predictive performance and SQL complexity.
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  gains a `separate_trees` argument for tree ensemble models (xgboost,
+  lightgbm, catboost, ranger, randomForest). When `TRUE`, each tree is
+  emitted as a separate intermediate column before being summed, which
+  can enable parallel evaluation in columnar databases like DuckDB,
+  Snowflake, and BigQuery. For models with many trees, the final
+  summation is automatically batched in groups of 50 to avoid expression
+  depth limits in databases. See
+  [`vignette("separate-trees")`](https://orbital.tidymodels.org/dev/articles/separate-trees.md)
+  for details.
+  ([\#105](https://github.com/tidymodels/orbital/issues/105))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now works with `boost_tree(engine = "catboost")` models for numeric,
   class, and probability predictions.
   ([\#90](https://github.com/tidymodels/orbital/issues/90))

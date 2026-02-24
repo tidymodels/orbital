@@ -21,6 +21,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/databases.html">Using Databases</a></li>
     <li><a class="dropdown-item" href="../articles/pros-cons.html">Pros and Cons</a></li>
+    <li><a class="dropdown-item" href="../articles/separate-trees.html">Parallel tree evaluation in databases</a></li>
     <li><a class="dropdown-item" href="../articles/sql-size.html">SQL expression sizes</a></li>
     <li><a class="dropdown-item" href="../articles/supported-models.html">Supported Models and recipes steps</a></li>
   </ul></li>
@@ -43,6 +44,7 @@
 <h2 class="pkg-version" data-toc-text="development version" id="orbital-development-version">orbital (development version)<a class="anchor" aria-label="anchor" href="#orbital-development-version"></a></h2>
 <ul><li><p>Binary classification probability predictions now generate cleaner code by having the second probability reference the first (e.g., <code>.pred_1 = 1 - .pred_0</code>) instead of duplicating the full expression. (<a href="https://github.com/tidymodels/orbital/issues/100" class="external-link">#100</a>)</p></li>
 <li><p>New <code>vignette("sql-size")</code> documents how model type and hyperparameters affect generated SQL size, and shows how to jointly tune for predictive performance and SQL complexity.</p></li>
+<li><p><code><a href="../reference/orbital.html">orbital()</a></code> gains a <code>separate_trees</code> argument for tree ensemble models (xgboost, lightgbm, catboost, ranger, randomForest). When <code>TRUE</code>, each tree is emitted as a separate intermediate column before being summed, which can enable parallel evaluation in columnar databases like DuckDB, Snowflake, and BigQuery. For models with many trees, the final summation is automatically batched in groups of 50 to avoid expression depth limits in databases. See <code><a href="../articles/separate-trees.html">vignette("separate-trees")</a></code> for details. (<a href="https://github.com/tidymodels/orbital/issues/105" class="external-link">#105</a>)</p></li>
 <li><p><code><a href="../reference/orbital.html">orbital()</a></code> now works with <code>boost_tree(engine = "catboost")</code> models for numeric, class, and probability predictions. (<a href="https://github.com/tidymodels/orbital/issues/90" class="external-link">#90</a>)</p></li>
 <li><p><code><a href="../reference/orbital.html">orbital()</a></code> now works with <code>decision_tree(engine = "rpart")</code> models for numeric, class, and probability predictions. (<a href="https://github.com/tidymodels/orbital/issues/128" class="external-link">#128</a>)</p></li>
 <li><p><code><a href="../reference/orbital.html">orbital()</a></code> now works with <code>boost_tree(engine = "lightgbm")</code> models for numeric, class, and probability predictions. (<a href="https://github.com/tidymodels/orbital/issues/89" class="external-link">#89</a>)</p></li>
