@@ -174,7 +174,7 @@ mtcars_arrow <- as_arrow_table(mtcars)
 
 predict(orbital_obj, mtcars_arrow)
 #> Table (query)
-#> .pred: double (add_checked(20.090625, multiply_checked(divide(cast(subtract_checked(if_else(is_null(disp, {nan_is_null=true}), 230.721875, disp), 230.721875), {to_type=double, allow_int_overflow=false, allow_time_truncate=false, allow_time_overflow=false, allow_decimal_truncate=false, allow_float_truncate=false, allow_invalid_utf8=false}), cast(123.938693831382, {to_type=double, allow_int_overflow=false, allow_time_truncate=false, allow_time_overflow=false, allow_decimal_truncate=false, allow_float_truncate=false, allow_invalid_utf8=false})), -5.10814813429143)))
+#> .pred: double (add_checked(20.090624999999996, multiply_checked(divide(cast(subtract_checked(if_else(is_null(disp, {nan_is_null=true}), 230.721875, disp), 230.721875), {to_type=double, allow_int_overflow=false, allow_time_truncate=false, allow_time_overflow=false, allow_decimal_truncate=false, allow_float_truncate=false, allow_invalid_utf8=false}), cast(123.93869383138194, {to_type=double, allow_int_overflow=false, allow_time_truncate=false, allow_time_overflow=false, allow_decimal_truncate=false, allow_float_truncate=false, allow_invalid_utf8=false})), -5.108148134291429)))
 #> 
 #> See $.data for the source Arrow object
 ```

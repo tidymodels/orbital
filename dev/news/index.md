@@ -2,6 +2,13 @@
 
 ## orbital (development version)
 
+- All numeric values embedded in SQL expressions now use full IEEE 754
+  double precision (17 significant digits) to ensure exact round-trip
+  accuracy between R and database predictions. This prevents subtle
+  numerical drift in regularized model coefficients, normalized
+  features, and tree split values.
+  ([\#138](https://github.com/tidymodels/orbital/issues/138))
+
 - New `vignette("database-deployment", package = "orbital")` shows how
   to deploy predictions to a database as tables or views.
   ([\#74](https://github.com/tidymodels/orbital/issues/74))

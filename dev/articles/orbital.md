@@ -426,7 +426,7 @@ It is also substantially smaller in size.
 
 ``` r
 object.size(orbital_obj)
-#> 48992 bytes
+#> 51184 bytes
 object.size(wf_fit)
 #> 9637184 bytes
 ```
