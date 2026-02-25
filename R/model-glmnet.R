@@ -26,7 +26,7 @@ orbital.glmnet <- function(
   if (mode == "classification") {
     if (inherits(x, "multnet")) {
       # Multiclass classification
-      class_eqs <- tidypredict::.extract_glmnet_multiclass(x, penalty = penalty)
+      class_eqs <- extract_glmnet_multiclass(x, penalty = penalty)
       # Reorder to match lvl order
       class_eqs <- class_eqs[lvl]
       res <- multiclass_from_logits(unlist(class_eqs), type, lvl)
@@ -42,6 +42,20 @@ orbital.glmnet <- function(
   res
 }
 
+# Extract multiclass glmnet coefficients with full numeric precision
+# Replacement for tidypredict::.extract_glmnet_multiclass
+extract_glmnet_multiclass <- function(model, penalty) {
+  coefs_list <- stats::coef(model, s = penalty)
+  class_names <- names(coefs_list)
+  eqs <- lapply(coefs_list, function(coef_mat) {
+    coef_names <- rownames(coef_mat)
+    coef_values <- as.numeric(coef_mat)
+    build_linear_pred(coef_names, coef_values)
+  })
+  names(eqs) <- class_names
+  eqs
+}
+
 glmnet_logistic_expr <- function(x, penalty) {
   linear_pred <- glmnet_linear_expr(x, penalty)
   glue::glue("1 / (1 + exp(-({linear_pred})))")
@@ -51,5 +65,5 @@ glmnet_linear_expr <- function(x, penalty) {
   coefs <- stats::coef(x, s = penalty)
   coef_names <- rownames(coefs)
   coef_values <- as.numeric(coefs)
-  tidypredict::.build_linear_pred(coef_names, coef_values)
+  build_linear_pred(coef_names, coef_values)
 }

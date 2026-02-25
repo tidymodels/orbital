@@ -19,10 +19,11 @@ orbital.probability_threshold <- function(x, tailor, type, prefix, ...) {
     prob_name <- gsub("^\\.pred", prefix, prob_name)
   }
 
+  threshold_fmt <- format_numeric(input$threshold)
   out <- glue::glue(
     "dplyr::case_when(
-    {prob_name} > {input$threshold} ~ '{levels[1]}',
-    {prob_name} < {input$threshold} ~ '{levels[2]}', 
+    {prob_name} > {threshold_fmt} ~ '{levels[1]}',
+    {prob_name} < {threshold_fmt} ~ '{levels[2]}',
     .default = '[EQ]'
     )"
   )

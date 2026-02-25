@@ -19,10 +19,12 @@ orbital.equivocal_zone <- function(x, tailor, type, prefix, ...) {
     prob_name <- gsub("^\\.pred", prefix, prob_name)
   }
 
+  threshold_fmt <- format_numeric(input$threshold)
+  value_fmt <- format_numeric(input$value)
   out <- glue::glue(
     "dplyr::case_when(
-    {prob_name} > {input$threshold} + {input$value} ~ '{levels[1]}',
-    {prob_name} < {input$threshold} - {input$value} ~ '{levels[2]}', 
+    {prob_name} > {threshold_fmt} + {value_fmt} ~ '{levels[1]}',
+    {prob_name} < {threshold_fmt} - {value_fmt} ~ '{levels[2]}',
     .default = '[EQ]'
     )"
   )

@@ -9,7 +9,7 @@ orbital.step_scale <- function(x, all_vars, ...) {
   used_vars <- names(sds) %in% all_vars
   sds <- sds[used_vars]
 
-  out <- glue::glue("{names(sds)} / {sds}")
+  out <- glue::glue("{names(sds)} / {format_numeric(sds)}")
   names(out) <- names(sds)
   out
 }

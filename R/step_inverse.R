@@ -12,7 +12,7 @@ orbital.step_inverse <- function(x, all_vars, ...) {
   if (offset == 0) {
     out <- glue::glue("1 / {columns}")
   } else {
-    out <- glue::glue("1 / ({columns} + {offset})")
+    out <- glue::glue("1 / ({columns} + {format_numeric(offset)})")
   }
 
   names(out) <- names(columns)

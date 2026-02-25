@@ -16,7 +16,7 @@ orbital.glm <- function(
     }
 
     eq <- tidypredict::tidypredict_fit(x)
-    eq <- deparse1(eq)
+    eq <- deparse1(eq, control = "digits17")
 
     res <- binary_from_prob(eq, type, lvl)
   } else if (mode == "regression") {

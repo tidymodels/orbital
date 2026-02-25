@@ -19,12 +19,12 @@ orbital.step_range <- function(x, all_vars, ...) {
   range_maxs <- ranges["maxs", ]
 
   out <- glue::glue(
-    "({cols} - {range_mins}) * ({max} - {min})/({range_maxs} - {range_mins}) + {min}"
+    "({cols} - {format_numeric(range_mins)}) * ({format_numeric(max)} - {format_numeric(min)})/({format_numeric(range_maxs)} - {format_numeric(range_mins)}) + {format_numeric(min)}"
   )
 
   if (is.null(x$clipping) || isTRUE(x$clipping)) {
-    out <- glue::glue("pmax({out}, {min})")
-    out <- glue::glue("pmin({out}, {max})")
+    out <- glue::glue("pmax({out}, {format_numeric(min)})")
+    out <- glue::glue("pmin({out}, {format_numeric(max)})")
   }
 
   names(out) <- cols

@@ -12,8 +12,8 @@ lencode_helper <- function(x, all_vars) {
     values <- mapping[["..value"]][!new_ind]
     default <- mapping[["..value"]][new_ind]
 
-    eq <- glue::glue("{col} == \"{levels}\" ~ {values}")
-    eq <- c(eq, glue::glue(".default = {default}"))
+    eq <- glue::glue("{col} == \"{levels}\" ~ {format_numeric(values)}")
+    eq <- c(eq, glue::glue(".default = {format_numeric(default)}"))
     eq <- paste(eq, collapse = ", ")
     eq <- glue::glue("dplyr::case_when({eq})")
 
@@ -50,7 +50,9 @@ pca_helper <- function(rot, prefix, all_vars) {
 
   for (i in seq_len(sum(used_vars))) {
     non_zero <- rot[, i] != 0
-    terms <- glue::glue("{row_nms[non_zero]} * {rot[, i][non_zero]}")
+    terms <- glue::glue(
+      "{row_nms[non_zero]} * {format_numeric(rot[, i][non_zero])}"
+    )
     if (length(terms) > n_wrap) {
       split_ind <- rep(
         seq(1, ceiling(length(terms) / n_wrap)),
@@ -198,7 +200,9 @@ spline_build_case_when <- function(var, all_knots, coefs_list) {
     poly_expr <- spline_build_poly_expr(var, coefs)
 
     if (i < n_intervals) {
-      conditions[i] <- glue::glue("{var} <= {all_knots[i + 1]} ~ {poly_expr}")
+      conditions[i] <- glue::glue(
+        "{var} <= {format_numeric(all_knots[i + 1])} ~ {poly_expr}"
+      )
     } else {
       conditions[i] <- glue::glue("TRUE ~ {poly_expr}")
     }
@@ -216,13 +220,13 @@ spline_build_poly_expr <- function(var, coefs) {
   terms <- character()
 
   if (abs(coefs[1]) >= 1e-14) {
-    terms <- c(terms, format(coefs[1], scientific = FALSE, digits = 15))
+    terms <- c(terms, format_numeric(coefs[1]))
   }
 
   for (power in seq_along(coefs[-1])) {
     coef_val <- coefs[power + 1]
     if (abs(coef_val) >= 1e-14) {
-      coef_str <- format(coef_val, scientific = FALSE, digits = 15)
+      coef_str <- format_numeric(coef_val)
       if (power == 1) {
         terms <- c(terms, glue::glue("{coef_str} * {var}"))
       } else {

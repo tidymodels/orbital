@@ -9,7 +9,7 @@ orbital.step_impute_mean <- function(x, all_vars, ...) {
   }
 
   out <- glue::glue(
-    "dplyr::if_else(is.na({names(means)}), {means}, {names(means)})"
+    "dplyr::if_else(is.na({names(means)}), {format_numeric(means)}, {names(means)})"
   )
 
   names(out) <- names(means)
