@@ -20,6 +20,8 @@
 
 * `orbital()` now works with `rand_forest(engine = "ranger")` models for class and probability predictions. (#127)
 
+* `step_YeoJohnson()` is now supported. (#96)
+
 # orbital 0.4.1
 
 * Make work with new versions of xgboost. (#119)
