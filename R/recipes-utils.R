@@ -119,7 +119,14 @@ spline_helper <- function(x, all_vars, spline_fn) {
     n_intervals <- length(all_knots) - 1
 
     # Get polynomial degree (natural splines are always cubic, B-splines can vary)
-    poly_degree <- if (!is.null(info$degree)) info$degree else 3L
+    # C-splines and I-splines need +2 because they are integrals of lower-degree splines
+    base_degree <- if (!is.null(info$degree)) info$degree else 3L
+    spline_type <- info$.fn
+    if (!is.null(spline_type) && spline_type %in% c("cSpline", "iSpline")) {
+      poly_degree <- base_degree + 2L
+    } else {
+      poly_degree <- base_degree
+    }
 
     for (basis_idx in which(needed)) {
       out_name <- out_names[basis_idx]
@@ -138,6 +145,9 @@ spline_helper <- function(x, all_vars, spline_fn) {
         )
         if (!is.null(info$degree)) {
           spline_args$degree <- info$degree
+        }
+        if (!is.null(info$scale)) {
+          spline_args$scale <- info$scale
         }
 
         basis_matrix <- do.call(spline_fn, spline_args)
@@ -174,6 +184,12 @@ spline_extract_poly_coefs <- function(x_vals, y_vals, degree = 3) {
 
 spline_build_case_when <- function(var, all_knots, coefs_list) {
   n_intervals <- length(coefs_list)
+
+  # Single interval: just return the polynomial expression directly
+  if (n_intervals == 1) {
+    return(spline_build_poly_expr(var, coefs_list[[1]]))
+  }
+
   conditions <- character(n_intervals)
 
   for (i in seq_len(n_intervals)) {
