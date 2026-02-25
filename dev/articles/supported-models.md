@@ -13,7 +13,7 @@ model to table.
 
 ## Recipes steps
 
-The following 51 recipes steps are supported
+The following 52 recipes steps are supported
 
 - `step_adasyn()`
 - [`step_bin2factor()`](https://recipes.tidymodels.org/reference/step_bin2factor.html)
@@ -65,6 +65,7 @@ The following 51 recipes steps are supported
 - `step_tomek()`
 - [`step_unknown()`](https://recipes.tidymodels.org/reference/step_unknown.html)
 - `step_upsample()`
+- [`step_YeoJohnson()`](https://recipes.tidymodels.org/reference/step_YeoJohnson.html)
 - [`step_zv()`](https://recipes.tidymodels.org/reference/step_zv.html)
 
 ## tailor adjustments

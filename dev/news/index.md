@@ -68,6 +68,10 @@
   probability predictions.
   ([\#127](https://github.com/tidymodels/orbital/issues/127))
 
+- [`step_YeoJohnson()`](https://recipes.tidymodels.org/reference/step_YeoJohnson.html)
+  is now supported.
+  ([\#96](https://github.com/tidymodels/orbital/issues/96))
+
 ## orbital 0.4.1
 
 CRAN release: 2025-12-13
