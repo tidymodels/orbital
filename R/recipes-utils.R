@@ -88,7 +88,7 @@ spline_helper <- function(x, all_vars, spline_fn) {
     var_names,
     function(var) {
       n_cols <- results[[var]]$dim[2]
-      out_names <- paste0(var, "_", seq_len(n_cols))
+      out_names <- recipes::names0(n_cols, paste0(var, "_"))
       any(out_names %in% all_vars)
     },
     logical(1)
@@ -106,7 +106,7 @@ spline_helper <- function(x, all_vars, spline_fn) {
     info <- results[[var]]
     n_basis <- info$dim[2]
 
-    out_names <- paste0(var, "_", seq_len(n_basis))
+    out_names <- recipes::names0(n_basis, paste0(var, "_"))
     needed <- out_names %in% all_vars
 
     if (!any(needed)) {

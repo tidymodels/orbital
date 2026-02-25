@@ -71,6 +71,42 @@ test_that("step_spline_natural works with varying knots", {
   }
 })
 
+test_that("step_spline_natural works with deg_free >= 10", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("splines2")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_spline_natural(disp, deg_free = 10) |>
+    recipes::prep()
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+  res <- res[names(exp)]
+
+  expect_equal(res, exp)
+})
+
+test_that("step_spline_natural works with complete_set = TRUE", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("splines2")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_spline_natural(disp, deg_free = 4, complete_set = TRUE) |>
+    recipes::prep()
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+  res <- res[names(exp)]
+
+  expect_equal(res, exp)
+})
+
 test_that("spark - step_spline_natural works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("splines2")
