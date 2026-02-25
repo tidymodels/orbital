@@ -18,7 +18,7 @@ orbital.step_discretize <- function(x, all_vars, ...) {
       eq <- c(eq, glue::glue("is.na({col})"))
     }
 
-    eq <- c(eq, glue::glue("{col} < {object$breaks[2]}"))
+    eq <- c(eq, glue::glue("{col} < {format_numeric(object$breaks[2])}"))
     if (object$bins > 2) {
       low <- seq(2, object$bins - 1)
       high <- low + 1
@@ -26,12 +26,17 @@ orbital.step_discretize <- function(x, all_vars, ...) {
       eq <- c(
         eq,
         glue::glue(
-          "{object$breaks[low]} < {col} & {col} <= {object$breaks[high]}"
+          "{format_numeric(object$breaks[low])} < {col} & {col} <= {format_numeric(object$breaks[high])}"
         )
       )
     }
     if (object$bins != 1) {
-      eq <- c(eq, glue::glue("{utils::tail(object$breaks, 2)[1]} <= {col}"))
+      eq <- c(
+        eq,
+        glue::glue(
+          "{format_numeric(utils::tail(object$breaks, 2)[1])} <= {col}"
+        )
+      )
     }
 
     eq <- glue::glue("{eq} ~ \"{object$prefix}{object$labels}\"")

@@ -20,7 +20,7 @@ orbital.earth <- function(
     } else {
       # Binary classification - tidypredict_fit returns P(second level)
       eq <- tidypredict::tidypredict_fit(x)
-      eq <- deparse1(eq)
+      eq <- deparse1(eq, control = "digits17")
 
       res <- binary_from_prob(eq, type, lvl)
     }

@@ -9,13 +9,16 @@ orbital.numeric_range <- function(x, tailor, ...) {
     return(NULL)
   }
 
+  lower_fmt <- format_numeric(lower)
+  upper_fmt <- format_numeric(upper)
+
   out <- "dplyr::case_when("
 
   if (is.finite(lower)) {
-    out <- paste0(out, "{estimate} < {lower} ~ {lower},")
+    out <- paste0(out, "{estimate} < {lower_fmt} ~ {lower_fmt},")
   }
   if (is.finite(upper)) {
-    out <- paste0(out, "{estimate} > {upper} ~ {upper},")
+    out <- paste0(out, "{estimate} > {upper_fmt} ~ {upper_fmt},")
   }
 
   out <- paste0(out, "TRUE ~ {estimate})")

@@ -10,7 +10,9 @@ orbital.step_BoxCox <- function(x, all_vars, ...) {
   out <- ifelse(
     abs(lambdas) < 0.001,
     glue::glue("log({names(lambdas)})"),
-    glue::glue("({names(lambdas)} ^ {lambdas} - 1) / {lambdas}")
+    glue::glue(
+      "({names(lambdas)} ^ {format_numeric(lambdas)} - 1) / {format_numeric(lambdas)}"
+    )
   )
   out
 }

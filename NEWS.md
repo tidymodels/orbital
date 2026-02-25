@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* All numeric values embedded in SQL expressions now use full IEEE 754 double precision (17 significant digits) to ensure exact round-trip accuracy between R and database predictions. This prevents subtle numerical drift in regularized model coefficients, normalized features, and tree split values. (#138)
+
 * New `vignette("database-deployment", package = "orbital")` shows how to deploy predictions to a database as tables or views. (#74)
 
 * Added support for `step_spline_b()`, `step_spline_convex()`, `step_spline_monotone()`, `step_spline_natural()`, and `step_spline_nonnegative()` from the recipes package. (#99)

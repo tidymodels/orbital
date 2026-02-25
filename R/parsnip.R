@@ -50,7 +50,7 @@ orbital.model_fit <- function(
   }
 
   if (is.language(res)) {
-    res <- deparse1(res)
+    res <- deparse1(res, control = "digits17")
   }
 
   res <- namespace_case_when(res)

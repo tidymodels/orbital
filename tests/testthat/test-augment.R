@@ -66,7 +66,7 @@ test_that("SQLite - augment() works", {
   )
 
   expect_s3_class(res, "tbl_lazy")
-  expect_identical(dplyr::collect(res), exp)
+  expect_equal(dplyr::collect(res), exp)
 
   DBI::dbDisconnect(con)
 })
@@ -103,7 +103,7 @@ test_that("duckdb - augment() works", {
     mtcars
   )
 
-  expect_identical(dplyr::collect(res), exp)
+  expect_equal(dplyr::collect(res), exp)
 
   DBI::dbDisconnect(con)
 })

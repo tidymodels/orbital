@@ -94,7 +94,7 @@ multiclass_from_votes <- function(vote_eqs, type, lvl, n_trees) {
     res <- c(res, orbital_tmp_class_name = softmax_class(lvl))
   }
   if ("prob" %in% type) {
-    prob_eqs <- glue::glue("({lvl_bt}) / {n_trees}")
+    prob_eqs <- glue::glue("({lvl_bt}) / {format_numeric(n_trees)}")
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, prob_eqs)
   }
@@ -107,7 +107,7 @@ multiclass_from_prob_avg <- function(prob_sum_eqs, type, lvl, n_trees) {
   lvl_bt <- backtick(lvl)
 
   if ("prob" %in% type) {
-    prob_eqs <- glue::glue("({lvl_bt}) / {n_trees}")
+    prob_eqs <- glue::glue("({lvl_bt}) / {format_numeric(n_trees)}")
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, prob_eqs)
   }
@@ -220,7 +220,7 @@ format_classification_trees_separate <- function(
   lvl_bt <- backtick(lvl_names)
 
   if ("prob" %in% type) {
-    prob_eqs <- paste0("(", lvl_bt, ") / ", n_trees)
+    prob_eqs <- paste0("(", lvl_bt, ") / ", format_numeric(n_trees))
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, prob_eqs)
   }
