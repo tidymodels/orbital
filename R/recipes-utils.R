@@ -175,8 +175,8 @@ spline_extract_poly_coefs <- function(x_vals, y_vals, degree = 3) {
     return(rep(0, degree + 1))
   }
 
-  fit <- lm(y_vals ~ poly(x_vals, degree, raw = TRUE))
-  coefs <- coef(fit)
+  fit <- stats::lm(y_vals ~ poly(x_vals, degree, raw = TRUE))
+  coefs <- stats::coef(fit)
   coefs[is.na(coefs)] <- 0
   names(coefs) <- NULL
   coefs
