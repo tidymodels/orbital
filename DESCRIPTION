@@ -45,6 +45,7 @@ Suggests:
     RSQLite,
     rstanarm,
     sparklyr,
+    splines2,
     tailor,
     testthat (>= 3.0.0),
     themis,
