@@ -2,6 +2,16 @@
 
 ## orbital (development version)
 
+- Added support for
+  [`step_spline_b()`](https://recipes.tidymodels.org/reference/step_spline_b.html),
+  [`step_spline_convex()`](https://recipes.tidymodels.org/reference/step_spline_convex.html),
+  [`step_spline_monotone()`](https://recipes.tidymodels.org/reference/step_spline_monotone.html),
+  [`step_spline_natural()`](https://recipes.tidymodels.org/reference/step_spline_natural.html),
+  and
+  [`step_spline_nonnegative()`](https://recipes.tidymodels.org/reference/step_spline_nonnegative.html)
+  from the recipes package.
+  ([\#99](https://github.com/tidymodels/orbital/issues/99))
+
 - Binary classification probability predictions now generate cleaner
   code by having the second probability reference the first (e.g.,
   `.pred_1 = 1 - .pred_0`) instead of duplicating the full expression.
