@@ -144,8 +144,19 @@ test_that("orbital printing works", {
 
   wf_fit <- parsnip::fit(wf_spec, mtcars)
 
+  # Use transform to normalize floating-point differences across platforms
+  # by rounding numbers to 4 decimal places
+  round_numbers <- function(x) {
+    gsub(
+      "(-?[0-9]+\\.[0-9]{4})[0-9]+",
+      "\\1",
+      x
+    )
+  }
+
   expect_snapshot(
-    orbital(wf_fit)
+    orbital(wf_fit),
+    transform = round_numbers
   )
 
   expect_snapshot(
@@ -153,7 +164,8 @@ test_that("orbital printing works", {
   )
 
   expect_snapshot(
-    print(orbital(wf_fit), truncate = FALSE)
+    print(orbital(wf_fit), truncate = FALSE),
+    transform = round_numbers
   )
 })
 
