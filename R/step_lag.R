@@ -11,8 +11,9 @@ orbital.step_lag <- function(x, all_vars, ...) {
   configs <- configs[used_vars, ]
   col_names <- col_names[used_vars]
 
+  default_fmt <- format_numeric(x$default)
   out <- glue::glue(
-    "dplyr::lag({configs$columns}, {configs$lag}, default = {x$default})"
+    "dplyr::lag({configs$columns}, {configs$lag}, default = {default_fmt})"
   )
 
   names(out) <- col_names

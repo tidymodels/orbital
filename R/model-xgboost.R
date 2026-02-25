@@ -65,10 +65,19 @@ xgboost_regression <- function(x, separate_trees, prefix) {
       is.null(objective)
   ) {
     if (base_score != 0) {
-      res[[sum_name]] <- paste0(base_score, " + ", res[[sum_name]])
+      res[[sum_name]] <- paste0(
+        format_numeric(base_score),
+        " + ",
+        res[[sum_name]]
+      )
     }
   } else if (objective %in% c("count:poisson", "reg:tweedie", "reg:gamma")) {
-    res[[sum_name]] <- paste0(base_score, " * exp(", res[[sum_name]], ")")
+    res[[sum_name]] <- paste0(
+      format_numeric(base_score),
+      " * exp(",
+      res[[sum_name]],
+      ")"
+    )
   }
 
   res
@@ -125,7 +134,7 @@ xgboost_multisoft <- function(x, type, lvl, separate_trees, prefix) {
 xgboost_logistic <- function(x, type, lvl, separate_trees, prefix) {
   if (!separate_trees) {
     eq <- tidypredict::tidypredict_fit(x)
-    eq <- deparse1(eq)
+    eq <- deparse1(eq, control = "digits17")
     return(binary_from_prob_first(eq, type, lvl))
   }
 
@@ -142,13 +151,14 @@ xgboost_logistic <- function(x, type, lvl, separate_trees, prefix) {
 
   # Apply logistic transformation to the sum
   logit_name <- backtick(logit_prefix)
+  base_score_fmt <- format_numeric(base_score)
   prob_eq <- paste0(
     "1 - 1/(1 + exp(",
     logit_name,
     " + log(",
-    base_score,
+    base_score_fmt,
     "/(1 - ",
-    base_score,
+    base_score_fmt,
     "))))"
   )
 

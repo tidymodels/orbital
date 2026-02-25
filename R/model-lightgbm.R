@@ -45,7 +45,7 @@ lightgbm_regression <- function(x, separate_trees, prefix) {
 lightgbm_binary <- function(x, type, lvl, separate_trees, prefix) {
   if (!separate_trees) {
     eq <- tidypredict::tidypredict_fit(x)
-    eq <- deparse1(eq)
+    eq <- deparse1(eq, control = "digits17")
     return(binary_from_prob(eq, type, lvl))
   }
 

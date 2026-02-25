@@ -7,7 +7,7 @@ orbital.step_intercept <- function(x, all_vars, ...) {
     return(NULL)
   }
 
-  out <- as.character(value)
+  out <- format_numeric(value)
   names(out) <- name
   out
 }

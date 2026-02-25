@@ -13,7 +13,7 @@ orbital.constparty <- function(
     res <- character()
     if ("class" %in% type) {
       eq <- tidypredict::tidypredict_fit(x)
-      eq <- deparse1(eq)
+      eq <- deparse1(eq, control = "digits17")
       res <- c(res, orbital_tmp_class_name = eq)
     }
     if ("prob" %in% type) {

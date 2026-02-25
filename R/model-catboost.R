@@ -50,10 +50,15 @@ catboost_regression <- function(x, separate_trees, prefix) {
 
   sum_name <- prefix
   if (scale != 1) {
-    res[[sum_name]] <- paste0(scale, " * (", res[[sum_name]], ")")
+    res[[sum_name]] <- paste0(
+      format_numeric(scale),
+      " * (",
+      res[[sum_name]],
+      ")"
+    )
   }
   if (bias != 0) {
-    res[[sum_name]] <- paste0(res[[sum_name]], " + ", bias)
+    res[[sum_name]] <- paste0(res[[sum_name]], " + ", format_numeric(bias))
   }
 
   res
@@ -94,7 +99,7 @@ catboost_multiclass <- function(x, type, lvl, separate_trees, prefix) {
 catboost_binary <- function(x, type, lvl, separate_trees, prefix) {
   if (!separate_trees) {
     eq <- tidypredict::tidypredict_fit(x)
-    eq <- deparse1(eq)
+    eq <- deparse1(eq, control = "digits17")
     return(binary_from_prob(eq, type, lvl))
   }
 

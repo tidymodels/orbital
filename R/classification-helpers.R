@@ -220,7 +220,7 @@ format_classification_trees_separate <- function(
   lvl_bt <- backtick(lvl_names)
 
   if ("prob" %in% type) {
-    prob_eqs <- paste0("(", lvl_bt, ") / ", n_trees)
+    prob_eqs <- paste0("(", lvl_bt, ") / ", format_numeric(n_trees))
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, prob_eqs)
   }

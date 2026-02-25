@@ -33,7 +33,12 @@ rf_regression <- function(x, separate_trees, prefix) {
 
   # Apply averaging for random forest
   sum_name <- prefix
-  res[[sum_name]] <- paste0("(", res[[sum_name]], ") / ", n_trees)
+  res[[sum_name]] <- paste0(
+    "(",
+    res[[sum_name]],
+    ") / ",
+    format_numeric(n_trees)
+  )
 
   res
 }
