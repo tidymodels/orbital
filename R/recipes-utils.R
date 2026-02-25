@@ -118,6 +118,9 @@ spline_helper <- function(x, all_vars, spline_fn) {
     all_knots <- c(boundary_knots[1], knots, boundary_knots[2])
     n_intervals <- length(all_knots) - 1
 
+    # Get polynomial degree (natural splines are always cubic, B-splines can vary)
+    poly_degree <- if (!is.null(info$degree)) info$degree else 3L
+
     for (basis_idx in which(needed)) {
       out_name <- out_names[basis_idx]
       coefs_list <- list()
@@ -127,15 +130,24 @@ spline_helper <- function(x, all_vars, spline_fn) {
         x_high <- all_knots[interval_idx + 1]
         x_sample <- seq(x_low + 1e-6, x_high - 1e-6, length.out = 20)
 
-        basis_matrix <- spline_fn(
-          x_sample,
+        spline_args <- list(
+          x = x_sample,
           knots = knots,
           Boundary.knots = boundary_knots,
           intercept = info$intercept
         )
+        if (!is.null(info$degree)) {
+          spline_args$degree <- info$degree
+        }
+
+        basis_matrix <- do.call(spline_fn, spline_args)
         y_sample <- basis_matrix[, basis_idx]
 
-        coefs <- spline_extract_poly_coefs(x_sample, y_sample, degree = 3)
+        coefs <- spline_extract_poly_coefs(
+          x_sample,
+          y_sample,
+          degree = poly_degree
+        )
         coefs_list[[interval_idx]] <- coefs
       }
 

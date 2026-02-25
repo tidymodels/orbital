@@ -1,6 +1,6 @@
 # orbital (development version)
 
-* Added support for `step_spline_natural()` from the recipes package.
+* Added support for `step_spline_b()` and `step_spline_natural()` from the recipes package.
 
 * Binary classification probability predictions now generate cleaner code by having the second probability reference the first (e.g., `.pred_1 = 1 - .pred_0`) instead of duplicating the full expression. (#100)
 
