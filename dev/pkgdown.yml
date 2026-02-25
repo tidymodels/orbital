@@ -2,13 +2,14 @@ pandoc: 3.1.11
 pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
+  articles/database-deployment: database-deployment.html
   articles/databases: databases.html
   articles/orbital: orbital.html
   articles/pros-cons: pros-cons.html
   separate-trees: separate-trees.html
   articles/sql-size: sql-size.html
   supported-models: supported-models.html
-last_built: 2026-02-25T21:13Z
+last_built: 2026-02-25T22:07Z
 urls:
   reference: https://orbital.tidymodels.org/reference
   article: https://orbital.tidymodels.org/articles

@@ -2,6 +2,10 @@
 
 ## orbital (development version)
 
+- New `vignette("database-deployment", package = "orbital")` shows how
+  to deploy predictions to a database as tables or views.
+  ([\#74](https://github.com/tidymodels/orbital/issues/74))
+
 - Added support for
   [`step_spline_b()`](https://recipes.tidymodels.org/reference/step_spline_b.html),
   [`step_spline_convex()`](https://recipes.tidymodels.org/reference/step_spline_convex.html),

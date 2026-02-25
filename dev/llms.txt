@@ -234,6 +234,8 @@ Reading and writing orbital objects to json files for easy storage.
 
 ### All vignettes
 
+- [Database
+  deployment](https://orbital.tidymodels.org/dev/articles/database-deployment.md):
 - [Using
   Databases](https://orbital.tidymodels.org/dev/articles/databases.md):
 - [Introduction to

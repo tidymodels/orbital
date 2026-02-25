@@ -2,6 +2,8 @@
 
 ### All vignettes
 
+- [Database
+  deployment](https://orbital.tidymodels.org/dev/articles/database-deployment.md):
 - [Using
   Databases](https://orbital.tidymodels.org/dev/articles/databases.md):
 - [Introduction to
