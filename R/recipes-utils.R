@@ -172,7 +172,7 @@ spline_build_case_when <- function(var, all_knots, coefs_list) {
     if (i < n_intervals) {
       conditions[i] <- glue::glue("{var} <= {all_knots[i + 1]} ~ {poly_expr}")
     } else {
-      conditions[i] <- glue::glue(".default = {poly_expr}")
+      conditions[i] <- glue::glue("TRUE ~ {poly_expr}")
     }
   }
 
