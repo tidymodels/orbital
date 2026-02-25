@@ -160,13 +160,20 @@ test_that("boost_tree(xgboost) multiclass prob uses all default trees (#122)", {
   skip_if_not_installed("xgboost")
 
   # Fit with default trees (parsnip default is 15)
-  bt_spec_default <- parsnip::boost_tree(mode = "classification", engine = "xgboost")
+  bt_spec_default <- parsnip::boost_tree(
+    mode = "classification",
+    engine = "xgboost"
+  )
   set.seed(1)
   bt_fit_default <- parsnip::fit(bt_spec_default, Species ~ ., iris)
 
   # Fit with explicit trees = 15
 
-  bt_spec_explicit <- parsnip::boost_tree(mode = "classification", trees = 15, engine = "xgboost")
+  bt_spec_explicit <- parsnip::boost_tree(
+    mode = "classification",
+    trees = 15,
+    engine = "xgboost"
+  )
   set.seed(1)
   bt_fit_explicit <- parsnip::fit(bt_spec_explicit, Species ~ ., iris)
 
