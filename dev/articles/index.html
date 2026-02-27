@@ -17,14 +17,12 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/orbital.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
-<li class="nav-item dropdown">
+<li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/database-deployment.html">Database deployment</a></li>
-    <li><a class="dropdown-item" href="../articles/databases.html">Using Databases</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/supported-models.html">Supported Models and recipes steps</a></li>
     <li><a class="dropdown-item" href="../articles/pros-cons.html">Pros and Cons</a></li>
-    <li><a class="dropdown-item" href="../articles/separate-trees.html">Parallel tree evaluation in databases</a></li>
-    <li><a class="dropdown-item" href="../articles/sql-size.html">SQL expression sizes</a></li>
-    <li><a class="dropdown-item" href="../articles/supported-models.html">Supported Models and recipes steps</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -41,25 +39,38 @@
     </div>
 
     <div class="section ">
-      <h3>All vignettes</h3>
+      <h3>Get started</h3>
       <div class="section-desc"></div>
 
-      <dl><dt><a href="database-deployment.html">Database deployment</a></dt>
-        <dd>
-        </dd><dt><a href="databases.html">Using Databases</a></dt>
-        <dd>
-        </dd><dt><a href="orbital.html">Introduction to orbital</a></dt>
-        <dd>
-        </dd><dt><a href="pros-cons.html">Pros and Cons</a></dt>
-        <dd>
-        </dd><dt><a href="separate-trees.html">Parallel tree evaluation in databases</a></dt>
-        <dd>
-        </dd><dt><a href="sql-size.html">SQL expression sizes</a></dt>
-        <dd>
-        </dd><dt><a href="supported-models.html">Supported Models and recipes steps</a></dt>
-        <dd>
+      <dl><dt><a href="orbital.html">Introduction to orbital</a></dt>
+        <dd><p>Start here if this is your first time using orbital! You will learn how to convert a fitted workflow into an orbital object for lightweight prediction.</p>
       </dd></dl></div>
-  </main></div>
+    <div class="section ">
+      <h3>Orbital</h3>
+      <div class="section-desc"></div>
+
+      <dl><dt><a href="supported-models.html">Supported Models and recipes steps</a></dt>
+        <dd><p>A complete list of supported parsnip models, recipes steps, and tailor adjustments that can be converted to orbital objects.</p>
+        </dd><dt><a href="pros-cons.html">Pros and Cons</a></dt>
+        <dd><p>Weigh the benefits and limitations of using orbital for prediction to determine if it’s right for your use case.</p>
+      </dd></dl></div>
+    <div class="section ">
+      <h3>SQL and deployment</h3>
+      <div class="section-desc"></div>
+
+      <dl><dt><a href="databases.html">Supported backends</a></dt>
+        <dd><p>Examples of running predictions in some of the known supported backends including SQLite, Spark, DuckDB, and Arrow.</p>
+        </dd><dt><a href="database-deployment.html">Database deployment</a></dt>
+        <dd><p>Deploy orbital predictions to a database by creating tables or views, with guidance on when to use each approach.</p>
+        </dd><dt><a href="sql-size.html">SQL expression sizes</a></dt>
+        <dd><p>Understand how model type and hyperparameters affect the size of generated SQL, and learn strategies for keeping queries manageable.</p>
+        </dd><dt><a href="separate-trees.html">Parallel tree evaluation in databases</a></dt>
+        <dd><p>Use the separate_trees argument to enable parallel evaluation of tree ensembles and avoid expression depth limits in databases.</p>
+        </dd><dt><a href="https://tidypredict.tidymodels.org/articles/float-precision.html" class="external-link">Float precision at split boundaries</a></dt>
+        <dd><p>How 32-bit vs 64-bit float differences can affect tree model predictions.</p>
+      </dd></dl></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
    </div>
