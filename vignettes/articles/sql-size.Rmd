@@ -1,5 +1,8 @@
 ---
 title: "SQL expression sizes"
+description: >
+  Understand how model type and hyperparameters affect the size of generated
+  SQL, and learn strategies for keeping queries manageable.
 ---
 
 ```{r}

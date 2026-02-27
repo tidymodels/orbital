@@ -1,5 +1,8 @@
 ---
 title: "Parallel tree evaluation in databases"
+description: >
+  Use the separate_trees argument to enable parallel evaluation of tree
+  ensembles and avoid expression depth limits in databases.
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Parallel tree evaluation in databases}

@@ -1,5 +1,8 @@
 ---
 title: "Supported Models and recipes steps"
+description: >
+  A complete list of supported parsnip models, recipes steps, and tailor
+  adjustments that can be converted to orbital objects.
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Supported Models and recipes steps}

@@ -1,5 +1,8 @@
 ---
 title: "Introduction to orbital"
+description: >
+  Start here if this is your first time using orbital! You will learn how to
+  convert a fitted workflow into an orbital object for lightweight prediction.
 ---
 
 ```{r}

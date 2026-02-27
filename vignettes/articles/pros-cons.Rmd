@@ -1,5 +1,8 @@
 ---
 title: "Pros and Cons"
+description: >
+  Weigh the benefits and limitations of using orbital for prediction to
+  determine if it's right for your use case.
 ---
 
 ```{r}

@@ -1,5 +1,8 @@
 ---
 title: "Database deployment"
+description: >
+  Deploy orbital predictions to a database by creating tables or views,
+  with guidance on when to use each approach.
 ---
 
 ```{r}

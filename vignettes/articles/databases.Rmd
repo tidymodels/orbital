@@ -1,5 +1,8 @@
 ---
 title: "Using Databases"
+description: >
+  Learn how to run predictions directly in databases like SQLite, Spark,
+  DuckDB, and Arrow without moving data to R.
 ---
 
 ```{r}
