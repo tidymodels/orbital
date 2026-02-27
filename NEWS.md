@@ -1,4 +1,4 @@
-# orbital (development version)
+# orbital 0.5.0
 
 ## New models
 

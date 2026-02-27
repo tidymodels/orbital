@@ -1,6 +1,6 @@
 Package: orbital
 Title: Predict with 'tidymodels' Workflows in Databases
-Version: 0.4.1.9000
+Version: 0.5.0
 Authors@R: c(
     person("Emil", "Hvitfeldt", , "emil.hvitfeldt@posit.co", role = c("aut", "cre")),
     person("Posit Software, PBC", role = c("cph", "fnd"),
@@ -60,4 +60,3 @@ Config/usethis/last-upkeep: 2025-06-05
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-
