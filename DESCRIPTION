@@ -50,7 +50,7 @@ Suggests:
     testthat (>= 3.0.0),
     themis,
     tibble,
-    tidypredict (>= 1.0.1.9000),
+    tidypredict (>= 1.1.0),
     workflows
 VignetteBuilder: 
     knitr
@@ -60,5 +60,4 @@ Config/usethis/last-upkeep: 2025-06-05
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
-Remotes:  
-    tidymodels/tidypredict
+
