@@ -1,8 +1,8 @@
 ---
-title: "Using Databases"
+title: "Supported backends"
 description: >
-  Learn how to run predictions directly in databases like SQLite, Spark,
-  DuckDB, and Arrow without moving data to R.
+  Examples of running predictions in some of the known supported backends
+  including SQLite, Spark, DuckDB, and Arrow.
 ---
 
 ```{r}
