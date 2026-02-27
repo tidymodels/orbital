@@ -1,5 +1,8 @@
 ---
-title: "Using Databases"
+title: "Supported backends"
+description: >
+  Examples of running predictions in some of the known supported backends
+  including SQLite, Spark, DuckDB, and Arrow.
 ---
 
 ```{r}

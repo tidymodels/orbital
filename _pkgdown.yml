@@ -40,3 +40,26 @@ reference:
   contents:
   - orbital_json_read
   - orbital_json_write
+
+articles:
+- title: Get started
+  contents:
+  - articles/orbital
+- title: Orbital
+  navbar: ~
+  contents:
+  - supported-models
+  - articles/pros-cons
+- title: SQL and deployment
+  contents:
+  - articles/databases
+  - articles/database-deployment
+  - articles/sql-size
+  - separate-trees
+  - float-precision
+
+external-articles:
+- name: float-precision
+  title: Float precision at split boundaries
+  description: How 32-bit vs 64-bit float differences can affect tree model predictions.
+  href: https://tidypredict.tidymodels.org/articles/float-precision.html
