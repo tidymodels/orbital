@@ -45,15 +45,17 @@ articles:
 - title: Get started
   contents:
   - articles/orbital
-- title: Learn more
+- title: Orbital
   navbar: ~
+  contents:
+  - supported-models
+  - articles/pros-cons
+- title: SQL and deployment
   contents:
   - articles/databases
   - articles/database-deployment
-  - supported-models
-  - separate-trees
   - articles/sql-size
-  - articles/pros-cons
+  - separate-trees
   - float-precision
 
 external-articles:
