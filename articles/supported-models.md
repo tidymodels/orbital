@@ -11,14 +11,9 @@ model to table.
 
 [TABLE]
 
-Creating orbital objects of **ranger** models takes around 1 second per
-tree. This is in part because the resulting SQL is quite large, making
-it hard to use on many platforms unless care is taken with regard to
-hyperparameters and the data.
-
 ## Recipes steps
 
-The following 46 recipes steps are supported
+The following 52 recipes steps are supported
 
 - `step_adasyn()`
 - [`step_bin2factor()`](https://recipes.tidymodels.org/reference/step_bin2factor.html)
@@ -61,10 +56,16 @@ The following 46 recipes steps are supported
 - [`step_select()`](https://recipes.tidymodels.org/reference/step_select.html)
 - `step_smote()`
 - `step_smotenc()`
+- [`step_spline_b()`](https://recipes.tidymodels.org/reference/step_spline_b.html)
+- [`step_spline_convex()`](https://recipes.tidymodels.org/reference/step_spline_convex.html)
+- [`step_spline_monotone()`](https://recipes.tidymodels.org/reference/step_spline_monotone.html)
+- [`step_spline_natural()`](https://recipes.tidymodels.org/reference/step_spline_natural.html)
+- [`step_spline_nonnegative()`](https://recipes.tidymodels.org/reference/step_spline_nonnegative.html)
 - [`step_sqrt()`](https://recipes.tidymodels.org/reference/step_sqrt.html)
 - `step_tomek()`
 - [`step_unknown()`](https://recipes.tidymodels.org/reference/step_unknown.html)
 - `step_upsample()`
+- [`step_YeoJohnson()`](https://recipes.tidymodels.org/reference/step_YeoJohnson.html)
 - [`step_zv()`](https://recipes.tidymodels.org/reference/step_zv.html)
 
 ## tailor adjustments

@@ -19,6 +19,11 @@
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><link href="../extra.css" rel="stylesheet">
 <meta property="og:title" content="Supported Models and recipes steps">
+<meta name="description" content="A complete list of supported parsnip models, recipes steps, and tailor adjustments that can be converted to orbital objects.
+">
+<meta property="og:description" content="A complete list of supported parsnip models, recipes steps, and tailor adjustments that can be converted to orbital objects.
+">
+<meta property="og:image" content="https://orbital.tidymodels.org/logo.png">
 <script src="https://cdn.jsdelivr.net/gh/posit-dev/supported-by-posit/js/badge.min.js" data-max-height="43" data-light-bg="#666f76" data-light-fg="#f9f9f9"></script><script defer data-domain="orbital.tidymodels.org,all.tidymodels.org" src="https://plausible.io/js/plausible.js"></script>
 </head>
 <body>
@@ -29,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,9 +48,10 @@
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
-<li><a class="dropdown-item" href="../articles/databases.html">Using Databases</a></li>
+<li><a class="dropdown-item" href="../articles/supported-models.html">Supported Models and recipes steps</a></li>
     <li><a class="dropdown-item" href="../articles/pros-cons.html">Pros and Cons</a></li>
-    <li><a class="dropdown-item" href="../articles/supported-models.html">Supported Models and recipes steps</a></li>
+    <li><hr class="dropdown-divider"></li>
+    <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
@@ -70,7 +76,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Supported Models and recipes steps</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.4.1/vignettes/supported-models.Rmd" class="external-link"><code>vignettes/supported-models.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.5.0/vignettes/supported-models.Rmd" class="external-link"><code>vignettes/supported-models.Rmd</code></a></small>
       <div class="d-none name"><code>supported-models.Rmd</code></div>
     </div>
 
@@ -560,6 +566,20 @@ to add model to table.</p>
 <tbody class="gt_table_body">
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"catboost"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"lightgbm"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"xgboost"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">✅</td>
@@ -575,6 +595,13 @@ to add model to table.</p>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/decision_tree.html" class="external-link">decision_tree()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"partykit"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/decision_tree.html" class="external-link">decision_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"rpart"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">✅</td>
 <td headers="prob" class="gt_row gt_center">✅</td>
@@ -604,15 +631,22 @@ to add model to table.</p>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/logistic_reg.html" class="external-link">logistic_reg()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"glmnet"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">❌</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/mars.html" class="external-link">mars()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"earth"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/multinom_reg.html" class="external-link">multinom_reg()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"glmnet"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/naive_Bayes.html" class="external-link">naive_Bayes()</a></code></span></td>
@@ -632,15 +666,15 @@ to add model to table.</p>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"randomForest"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"ranger"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 </tbody>
 <tfoot>
@@ -656,15 +690,11 @@ to add model to table.</p>
 </tfoot>
 </table>
 </div>
-<p>Creating orbital objects of <strong>ranger</strong> models takes
-around 1 second per tree. This is in part because the resulting SQL is
-quite large, making it hard to use on many platforms unless care is
-taken with regard to hyperparameters and the data.</p>
 </div>
 <div class="section level2">
 <h2 id="recipes-steps">Recipes steps<a class="anchor" aria-label="anchor" href="#recipes-steps"></a>
 </h2>
-<p>The following 46 recipes steps are supported</p>
+<p>The following 52 recipes steps are supported</p>
 <ul>
 <li><code>step_adasyn()</code></li>
 <li><code><a href="https://recipes.tidymodels.org/reference/step_bin2factor.html" class="external-link">step_bin2factor()</a></code></li>
@@ -707,10 +737,16 @@ taken with regard to hyperparameters and the data.</p>
 <li><code><a href="https://recipes.tidymodels.org/reference/step_select.html" class="external-link">step_select()</a></code></li>
 <li><code>step_smote()</code></li>
 <li><code>step_smotenc()</code></li>
+<li><code><a href="https://recipes.tidymodels.org/reference/step_spline_b.html" class="external-link">step_spline_b()</a></code></li>
+<li><code><a href="https://recipes.tidymodels.org/reference/step_spline_convex.html" class="external-link">step_spline_convex()</a></code></li>
+<li><code><a href="https://recipes.tidymodels.org/reference/step_spline_monotone.html" class="external-link">step_spline_monotone()</a></code></li>
+<li><code><a href="https://recipes.tidymodels.org/reference/step_spline_natural.html" class="external-link">step_spline_natural()</a></code></li>
+<li><code><a href="https://recipes.tidymodels.org/reference/step_spline_nonnegative.html" class="external-link">step_spline_nonnegative()</a></code></li>
 <li><code><a href="https://recipes.tidymodels.org/reference/step_sqrt.html" class="external-link">step_sqrt()</a></code></li>
 <li><code>step_tomek()</code></li>
 <li><code><a href="https://recipes.tidymodels.org/reference/step_unknown.html" class="external-link">step_unknown()</a></code></li>
 <li><code>step_upsample()</code></li>
+<li><code><a href="https://recipes.tidymodels.org/reference/step_YeoJohnson.html" class="external-link">step_YeoJohnson()</a></code></li>
 <li><code><a href="https://recipes.tidymodels.org/reference/step_zv.html" class="external-link">step_zv()</a></code></li>
 </ul>
 </div>

@@ -7,7 +7,7 @@ perform predictions.
 ## Usage
 
 ``` r
-orbital(x, ..., prefix = ".pred", type = NULL)
+orbital(x, ..., prefix = ".pred", type = NULL, separate_trees = FALSE)
 ```
 
 ## Arguments
@@ -35,6 +35,16 @@ orbital(x, ..., prefix = ".pred", type = NULL)
   predictions for classification models. Defaults to `NULL` which
   defaults to `"numeric"` for regression models and `"class"` for
   classification models.
+
+- separate_trees:
+
+  A single logical. For tree ensemble models (xgboost, lightgbm,
+  catboost, ranger, randomForest), should each tree be output as a
+  separate expression? This can improve performance when predicting in
+  databases by allowing parallel evaluation of trees. Defaults to
+  `FALSE`. See
+  [`vignette("separate-trees")`](https://orbital.tidymodels.org/articles/separate-trees.md)
+  for details.
 
 ## Value
 

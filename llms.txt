@@ -67,14 +67,14 @@ orbital_obj
 #> • cyl = (cyl - 6.1875) / 1.785922
 #> • disp = (disp - 230.7219) / 123.9387
 #> • hp = (hp - 146.6875) / 68.56287
-#> • drat = (drat - 3.596562) / 0.5346787
+#> • drat = (drat - 3.596563) / 0.5346787
 #> • wt = (wt - 3.21725) / 0.9784574
 #> • qsec = (qsec - 17.84875) / 1.786943
 #> • vs = (vs - 0.4375) / 0.5040161
 #> • am = (am - 0.40625) / 0.4989909
 #> • gear = (gear - 3.6875) / 0.7378041
 #> • carb = (carb - 2.8125) / 1.6152
-#> • .pred = 20.09062 + (cyl * -0.199024) + (disp * 1.652752) + (hp * -1.472 ...
+#> • .pred = 20.09063 + (cyl * -0.199024) + (disp * 1.652752) + (hp * -1.472 ...
 #> ────────────────────────────────────────────────────────────────────────────────
 #> 11 equations in total.
 ```
@@ -112,7 +112,7 @@ db_mtcars <- copy_to(con, mtcars)
 
 predict(orbital_obj, db_mtcars)
 #> # Source:   SQL [?? x 1]
-#> # Database: sqlite 3.51.1 []
+#> # Database: sqlite 3.51.2 []
 #>    .pred
 #>    <dbl>
 #>  1  22.6
@@ -232,12 +232,56 @@ Reading and writing orbital objects to json files for easy storage.
 
 # Articles
 
-### All vignettes
+### Get started
 
-- [Using
-  Databases](https://orbital.tidymodels.org/articles/databases.md):
 - [Introduction to
   orbital](https://orbital.tidymodels.org/articles/orbital.md):
-- [Pros and Cons](https://orbital.tidymodels.org/articles/pros-cons.md):
+
+  Start here if this is your first time using orbital! You will learn
+  how to convert a fitted workflow into an orbital object for
+  lightweight prediction.
+
+### Orbital
+
 - [Supported Models and recipes
   steps](https://orbital.tidymodels.org/articles/supported-models.md):
+
+  A complete list of supported parsnip models, recipes steps, and tailor
+  adjustments that can be converted to orbital objects.
+
+- [Pros and Cons](https://orbital.tidymodels.org/articles/pros-cons.md):
+
+  Weigh the benefits and limitations of using orbital for prediction to
+  determine if it’s right for your use case.
+
+### SQL and deployment
+
+- [Supported
+  backends](https://orbital.tidymodels.org/articles/databases.md):
+
+  Examples of running predictions in some of the known supported
+  backends including SQLite, Spark, DuckDB, and Arrow.
+
+- [Database
+  deployment](https://orbital.tidymodels.org/articles/database-deployment.md):
+
+  Deploy orbital predictions to a database by creating tables or views,
+  with guidance on when to use each approach.
+
+- [SQL expression
+  sizes](https://orbital.tidymodels.org/articles/sql-size.md):
+
+  Understand how model type and hyperparameters affect the size of
+  generated SQL, and learn strategies for keeping queries manageable.
+
+- [Parallel tree evaluation in
+  databases](https://orbital.tidymodels.org/articles/separate-trees.md):
+
+  Use the separate_trees argument to enable parallel evaluation of tree
+  ensembles and avoid expression depth limits in databases.
+
+- [Float precision at split
+  boundaries](https://tidypredict.tidymodels.org/articles/float-precision.html):
+
+  How 32-bit vs 64-bit float differences can affect tree model
+  predictions.

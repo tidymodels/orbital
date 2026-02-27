@@ -426,7 +426,7 @@ It is also substantially smaller in size.
 
 ``` r
 object.size(orbital_obj)
-#> 48992 bytes
+#> 51184 bytes
 object.size(wf_fit)
 #> 9637184 bytes
 ```
@@ -490,7 +490,7 @@ ames_sqlite <- copy_to(con, ames)
 
 predict(orbital_obj, ames_sqlite)
 #> # Source:   SQL [?? x 1]
-#> # Database: sqlite 3.51.1 []
+#> # Database: sqlite 3.51.2 []
 #>      .pred
 #>      <dbl>
 #>  1 241950.
