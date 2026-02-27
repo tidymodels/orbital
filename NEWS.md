@@ -1,22 +1,14 @@
 # orbital (development version)
 
-* All numeric values embedded in SQL expressions now use full IEEE 754 double precision (17 significant digits) to ensure exact round-trip accuracy between R and database predictions. This prevents subtle numerical drift in regularized model coefficients, normalized features, and tree split values. (#138)
+# orbital 0.5.0
 
-* New `vignette("database-deployment", package = "orbital")` shows how to deploy predictions to a database as tables or views. (#74)
-
-* Added support for `step_spline_b()`, `step_spline_convex()`, `step_spline_monotone()`, `step_spline_natural()`, and `step_spline_nonnegative()` from the recipes package. (#99)
-
-* Binary classification probability predictions now generate cleaner code by having the second probability reference the first (e.g., `.pred_1 = 1 - .pred_0`) instead of duplicating the full expression. (#100)
-
-* New `vignette("sql-size")` documents how model type and hyperparameters affect generated SQL size, and shows how to jointly tune for predictive performance and SQL complexity.
-
-* `orbital()` gains a `separate_trees` argument for tree ensemble models (xgboost, lightgbm, catboost, ranger, randomForest). When `TRUE`, each tree is emitted as a separate intermediate column before being summed, which can enable parallel evaluation in columnar databases like DuckDB, Snowflake, and BigQuery. For models with many trees, the final summation is automatically batched in groups of 50 to avoid expression depth limits in databases. See `vignette("separate-trees")` for details. (#105)
+## New models
 
 * `orbital()` now works with `boost_tree(engine = "catboost")` models for numeric, class, and probability predictions. (#90)
 
-* `orbital()` now works with `decision_tree(engine = "rpart")` models for numeric, class, and probability predictions. (#128)
-
 * `orbital()` now works with `boost_tree(engine = "lightgbm")` models for numeric, class, and probability predictions. (#89)
+
+* `orbital()` now works with `decision_tree(engine = "rpart")` models for numeric, class, and probability predictions. (#128)
 
 * `orbital()` now works with `mars(engine = "earth")` models for class and probability predictions. (#127)
 
@@ -26,7 +18,23 @@
 
 * `orbital()` now works with `rand_forest(engine = "ranger")` models for class and probability predictions. (#127)
 
+## Improvements
+
+* `orbital()` gains a `separate_trees` argument for tree ensemble models (xgboost, lightgbm, catboost, ranger, randomForest). When `TRUE`, each tree is emitted as a separate intermediate column before being summed, which can enable parallel evaluation in columnar databases like DuckDB, Snowflake, and BigQuery. For models with many trees, the final summation is automatically batched in groups of 50 to avoid expression depth limits in databases. See the "Separate trees" vignette for details. (#105)
+
+* Added support for `step_spline_b()`, `step_spline_convex()`, `step_spline_monotone()`, `step_spline_natural()`, and `step_spline_nonnegative()` from the recipes package. (#99)
+
 * `step_YeoJohnson()` is now supported. (#96)
+
+* Binary classification probability predictions now generate cleaner code by having the second probability reference the first (e.g., `.pred_1 = 1 - .pred_0`) instead of duplicating the full expression. (#100)
+
+* New "Database deployment" vignette shows how to deploy predictions to a database as tables or views. (#74)
+
+* New "SQL size" vignette documents how model type and hyperparameters affect generated SQL size, and shows how to jointly tune for predictive performance and SQL complexity.
+
+## Bug fixes
+
+* All numeric values embedded in SQL expressions now use full IEEE 754 double precision (17 significant digits) to ensure exact round-trip accuracy between R and database predictions. This prevents subtle numerical drift in regularized model coefficients, normalized features, and tree split values. (#138)
 
 # orbital 0.4.1
 
