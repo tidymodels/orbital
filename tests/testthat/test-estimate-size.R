@@ -80,3 +80,102 @@ test_that("estimate_orbital_size scales with tree depth", {
 test_that("estimate_orbital_size errors for unsupported types", {
   expect_snapshot(error = TRUE, estimate_orbital_size(lm(mpg ~ ., mtcars)))
 })
+
+# lightgbm tests
+test_that("estimate_orbital_size works for lightgbm", {
+  skip_if_not_installed("lightgbm")
+
+  set.seed(42)
+  n <- 500
+  x <- matrix(rnorm(n * 5), ncol = 5)
+  colnames(x) <- paste0("var_", 1:5)
+  y <- rowSums(x) + rnorm(n)
+
+  dtrain <- lightgbm::lgb.Dataset(x, label = y)
+  params <- list(objective = "regression", num_leaves = 15, verbose = -1)
+  model <- lightgbm::lgb.train(params, dtrain, nrounds = 10)
+
+  est <- estimate_orbital_size(model)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size scales with tree count for lightgbm", {
+  skip_if_not_installed("lightgbm")
+
+  set.seed(42)
+  n <- 500
+  x <- matrix(rnorm(n * 5), ncol = 5)
+  colnames(x) <- paste0("var_", 1:5)
+  y <- rowSums(x) + rnorm(n)
+
+  dtrain <- lightgbm::lgb.Dataset(x, label = y)
+  params <- list(objective = "regression", num_leaves = 15, verbose = -1)
+
+  model_small <- lightgbm::lgb.train(params, dtrain, nrounds = 10)
+  model_large <- lightgbm::lgb.train(params, dtrain, nrounds = 50)
+
+  est_small <- estimate_orbital_size(model_small)
+  est_large <- estimate_orbital_size(model_large)
+
+  expect_gt(est_large, est_small)
+})
+
+# ranger tests
+test_that("estimate_orbital_size works for ranger", {
+  skip_if_not_installed("ranger")
+
+  model <- ranger::ranger(mpg ~ ., data = mtcars, num.trees = 10, max.depth = 4)
+
+  est <- estimate_orbital_size(model)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size scales with tree count for ranger", {
+  skip_if_not_installed("ranger")
+
+  model_small <- ranger::ranger(
+    mpg ~ .,
+    data = mtcars,
+    num.trees = 10,
+    max.depth = 4
+  )
+  model_large <- ranger::ranger(
+    mpg ~ .,
+    data = mtcars,
+    num.trees = 50,
+    max.depth = 4
+  )
+
+  est_small <- estimate_orbital_size(model_small)
+  est_large <- estimate_orbital_size(model_large)
+
+  expect_gt(est_large, est_small)
+})
+
+# randomForest tests
+test_that("estimate_orbital_size works for randomForest", {
+  skip_if_not_installed("randomForest")
+
+  model <- randomForest::randomForest(mpg ~ ., data = mtcars, ntree = 10)
+
+  est <- estimate_orbital_size(model)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size scales with tree count for randomForest", {
+  skip_if_not_installed("randomForest")
+
+  model_small <- randomForest::randomForest(mpg ~ ., data = mtcars, ntree = 10)
+  model_large <- randomForest::randomForest(mpg ~ ., data = mtcars, ntree = 50)
+
+  est_small <- estimate_orbital_size(model_small)
+  est_large <- estimate_orbital_size(model_large)
+
+  expect_gt(est_large, est_small)
+})

@@ -2,6 +2,9 @@
 
 S3method(augment,orbital_class)
 S3method(estimate_orbital_size,default)
+S3method(estimate_orbital_size,lgb.Booster)
+S3method(estimate_orbital_size,randomForest)
+S3method(estimate_orbital_size,ranger)
 S3method(estimate_orbital_size,xgb.Booster)
 S3method(orbital,catboost.Model)
 S3method(orbital,constparty)

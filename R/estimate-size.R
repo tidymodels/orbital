@@ -25,6 +25,9 @@
 #'
 #' Currently supported:
 #' - xgboost (`xgb.Booster`)
+#' - lightgbm (`lgb.Booster`)
+#' - ranger (`ranger`)
+#' - randomForest (`randomForest`)
 #'
 #' @seealso [orbital()] for generating orbital objects, the
 #'   `vignette("sql-size")` for more on SQL size considerations.
@@ -53,6 +56,19 @@ estimate_orbital_size.default <- function(x, ...) {
   )
 }
 
+# Shared helper for tree-based models
+# Formula derived from empirical analysis of dplyr::if_else() expressions:
+# - Each tree adds ~16 chars base overhead
+# - Each internal node adds ~58 chars + feature name length
+# - Tree combination adds ~5 chars per tree for " + " and parentheses
+# - Base score addition adds ~25 chars
+estimate_tree_chars <- function(n_trees, n_internal, avg_feature_len) {
+  tree_chars <- 16 * n_trees + n_internal * (58 + avg_feature_len)
+  combination_overhead <- 5 * n_trees
+  base_overhead <- 25
+  as.integer(tree_chars + combination_overhead + base_overhead)
+}
+
 #' @rdname estimate_orbital_size
 #' @export
 estimate_orbital_size.xgb.Booster <- function(x, ...) {
@@ -79,18 +95,72 @@ estimate_orbital_size.xgb.Booster <- function(x, ...) {
     avg_feature_len <- 5
   }
 
-  # Formula derived from empirical analysis of dplyr::if_else() expressions:
+  estimate_tree_chars(n_trees, n_internal, avg_feature_len)
+}
 
-  # - Each tree adds ~16 chars base overhead
-  # - Each internal node adds ~58 chars + feature name length for the
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.lgb.Booster <- function(x, ...) {
+  rlang::check_installed("lightgbm")
 
-  #   dplyr::if_else(feature < value, ..., ...) structure
-  # - Tree combination adds ~5 chars per tree for " + " and parentheses
-  # - Base score addition adds ~25 chars
-  tree_chars <- 16 * n_trees + n_internal * (58 + avg_feature_len)
+  model_json <- x$dump_model()
+  model_info <- jsonlite::fromJSON(model_json)
 
-  combination_overhead <- 5 * n_trees
-  base_overhead <- 25
+  n_trees <- length(model_info$tree_info$num_leaves)
+  # For a binary tree: n_internal = n_leaves - 1 per tree
+  n_internal <- sum(model_info$tree_info$num_leaves - 1)
 
-  as.integer(tree_chars + combination_overhead + base_overhead)
+  feature_names <- model_info$feature_names
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_tree_chars(n_trees, n_internal, avg_feature_len)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.ranger <- function(x, ...) {
+  rlang::check_installed("ranger")
+
+  n_trees <- x$num.trees
+
+  # Count internal nodes: left child != 0 indicates internal node
+  n_internal <- sum(vapply(
+    x$forest$child.nodeIDs,
+    function(tree) sum(tree[[1]] != 0),
+    integer(1)
+  ))
+
+  feature_names <- x$forest$independent.variable.names
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_tree_chars(n_trees, n_internal, avg_feature_len)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.randomForest <- function(x, ...) {
+  rlang::check_installed("randomForest")
+
+  n_trees <- x$ntree
+
+  # Count internal nodes: leftDaughter != 0 indicates internal node
+  n_internal <- sum(x$forest$leftDaughter != 0)
+
+  # Get feature names from xlevels or fall back to generic names
+  feature_names <- names(x$forest$xlevels)
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_tree_chars(n_trees, n_internal, avg_feature_len)
 }

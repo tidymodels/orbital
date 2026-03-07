@@ -3,11 +3,20 @@
 \name{estimate_orbital_size}
 \alias{estimate_orbital_size}
 \alias{estimate_orbital_size.xgb.Booster}
+\alias{estimate_orbital_size.lgb.Booster}
+\alias{estimate_orbital_size.ranger}
+\alias{estimate_orbital_size.randomForest}
 \title{Estimate orbital object size without generating it}
 \usage{
 estimate_orbital_size(x, ...)
 
 \method{estimate_orbital_size}{xgb.Booster}(x, ...)
+
+\method{estimate_orbital_size}{lgb.Booster}(x, ...)
+
+\method{estimate_orbital_size}{ranger}(x, ...)
+
+\method{estimate_orbital_size}{randomForest}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model object.}
@@ -38,6 +47,9 @@ convert each tree to an R expression.
 Currently supported:
 \itemize{
 \item xgboost (\code{xgb.Booster})
+\item lightgbm (\code{lgb.Booster})
+\item ranger (\code{ranger})
+\item randomForest (\code{randomForest})
 }
 }
 }
