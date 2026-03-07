@@ -6,6 +6,8 @@
 \alias{estimate_orbital_size.lgb.Booster}
 \alias{estimate_orbital_size.ranger}
 \alias{estimate_orbital_size.randomForest}
+\alias{estimate_orbital_size.rpart}
+\alias{estimate_orbital_size.constparty}
 \alias{estimate_orbital_size.catboost.Model}
 \title{Estimate orbital object size without generating it}
 \usage{
@@ -18,6 +20,10 @@ estimate_orbital_size(x, ...)
 \method{estimate_orbital_size}{ranger}(x, ...)
 
 \method{estimate_orbital_size}{randomForest}(x, ...)
+
+\method{estimate_orbital_size}{rpart}(x, ...)
+
+\method{estimate_orbital_size}{constparty}(x, ...)
 
 \method{estimate_orbital_size}{catboost.Model}(x, ...)
 }
@@ -54,6 +60,8 @@ Currently supported:
 \item catboost (\code{catboost.Model})
 \item ranger (\code{ranger})
 \item randomForest (\code{randomForest})
+\item rpart (\code{rpart})
+\item partykit (\code{constparty})
 }
 }
 }

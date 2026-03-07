@@ -29,6 +29,8 @@
 #' - catboost (`catboost.Model`)
 #' - ranger (`ranger`)
 #' - randomForest (`randomForest`)
+#' - rpart (`rpart`)
+#' - partykit (`constparty`)
 #'
 #' @seealso [orbital()] for generating orbital objects, the
 #'   `vignette("sql-size")` for more on SQL size considerations.
@@ -164,6 +166,45 @@ estimate_orbital_size.randomForest <- function(x, ...) {
   }
 
   estimate_tree_chars(n_trees, n_internal, avg_feature_len)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.rpart <- function(x, ...) {
+  n_internal <- sum(x$frame$var != "<leaf>")
+
+  feature_names <- unique(x$frame$var[x$frame$var != "<leaf>"])
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_tree_chars(1L, n_internal, avg_feature_len)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.constparty <- function(x, ...) {
+  rlang::check_installed("partykit")
+
+  n_total <- length(x)
+  n_leaves <- length(partykit::nodeids(x, terminal = TRUE))
+  n_internal <- n_total - n_leaves
+
+  # Use all predictor variable names from the data
+  feature_names <- names(x$data)
+  # Remove response variable (first column is typically response)
+  if (length(feature_names) > 1) {
+    feature_names <- feature_names[-1]
+  }
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_tree_chars(1L, n_internal, avg_feature_len)
 }
 
 #' @rdname estimate_orbital_size

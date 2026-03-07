@@ -180,6 +180,43 @@ test_that("estimate_orbital_size scales with tree count for randomForest", {
   expect_gt(est_large, est_small)
 })
 
+# rpart tests
+test_that("estimate_orbital_size works for rpart", {
+  model <- rpart::rpart(mpg ~ ., data = mtcars)
+
+  est <- estimate_orbital_size(model)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size scales with tree complexity for rpart", {
+  model_simple <- rpart::rpart(mpg ~ ., data = mtcars, maxdepth = 2)
+  model_complex <- rpart::rpart(
+    mpg ~ .,
+    data = mtcars,
+    maxdepth = 10,
+    minsplit = 2
+  )
+
+  est_simple <- estimate_orbital_size(model_simple)
+  est_complex <- estimate_orbital_size(model_complex)
+
+  expect_gt(est_complex, est_simple)
+})
+
+# partykit tests
+test_that("estimate_orbital_size works for constparty", {
+  skip_if_not_installed("partykit")
+
+  model <- partykit::ctree(mpg ~ ., data = mtcars)
+
+  est <- estimate_orbital_size(model)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
 # catboost tests
 test_that("estimate_orbital_size works for catboost", {
   skip_if_not_installed("bonsai")
