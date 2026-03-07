@@ -9,6 +9,10 @@
 \alias{estimate_orbital_size.rpart}
 \alias{estimate_orbital_size.constparty}
 \alias{estimate_orbital_size.catboost.Model}
+\alias{estimate_orbital_size.glm}
+\alias{estimate_orbital_size.lm}
+\alias{estimate_orbital_size.glmnet}
+\alias{estimate_orbital_size.earth}
 \title{Estimate orbital object size without generating it}
 \usage{
 estimate_orbital_size(x, ...)
@@ -26,6 +30,14 @@ estimate_orbital_size(x, ...)
 \method{estimate_orbital_size}{constparty}(x, ...)
 
 \method{estimate_orbital_size}{catboost.Model}(x, ...)
+
+\method{estimate_orbital_size}{glm}(x, ...)
+
+\method{estimate_orbital_size}{lm}(x, ...)
+
+\method{estimate_orbital_size}{glmnet}(x, ..., penalty = NULL)
+
+\method{estimate_orbital_size}{earth}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model object.}
@@ -62,6 +74,9 @@ Currently supported:
 \item randomForest (\code{randomForest})
 \item rpart (\code{rpart})
 \item partykit (\code{constparty})
+\item glm (\code{glm})
+\item glmnet (\code{glmnet})
+\item earth (\code{earth})
 }
 }
 }

@@ -78,7 +78,7 @@ test_that("estimate_orbital_size scales with tree depth", {
 })
 
 test_that("estimate_orbital_size errors for unsupported types", {
-  expect_snapshot(error = TRUE, estimate_orbital_size(lm(mpg ~ ., mtcars)))
+  expect_snapshot(error = TRUE, estimate_orbital_size(Sys.time()))
 })
 
 # lightgbm tests
@@ -229,6 +229,71 @@ test_that("estimate_orbital_size works for catboost", {
   bt_fit <- parsnip::fit(bt_spec, mpg ~ disp + hp + wt, data = mtcars)
 
   est <- estimate_orbital_size(bt_fit$fit)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+# glm tests
+test_that("estimate_orbital_size works for glm", {
+  model <- glm(mpg ~ ., data = mtcars)
+
+  est <- estimate_orbital_size(model)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size works for lm", {
+  model <- lm(mpg ~ ., data = mtcars)
+
+  est <- estimate_orbital_size(model)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size scales with predictor count for glm", {
+  model_small <- glm(mpg ~ cyl + hp, data = mtcars)
+  model_large <- glm(mpg ~ ., data = mtcars)
+
+  est_small <- estimate_orbital_size(model_small)
+  est_large <- estimate_orbital_size(model_large)
+
+  expect_gt(est_large, est_small)
+})
+
+# glmnet tests
+test_that("estimate_orbital_size works for glmnet", {
+  skip_if_not_installed("glmnet")
+
+  x <- as.matrix(mtcars[, -1])
+  y <- mtcars[, 1]
+  model <- glmnet::glmnet(x, y, lambda = 0.1)
+
+  est <- estimate_orbital_size(model)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size errors for glmnet with multiple lambdas", {
+  skip_if_not_installed("glmnet")
+
+  x <- as.matrix(mtcars[, -1])
+  y <- mtcars[, 1]
+  model <- glmnet::glmnet(x, y)
+
+  expect_snapshot(error = TRUE, estimate_orbital_size(model))
+})
+
+# earth tests
+test_that("estimate_orbital_size works for earth", {
+  skip_if_not_installed("earth")
+
+  model <- earth::earth(mpg ~ ., data = mtcars)
+
+  est <- estimate_orbital_size(model)
 
   expect_type(est, "integer")
   expect_gt(est, 0)

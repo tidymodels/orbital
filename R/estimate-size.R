@@ -31,6 +31,9 @@
 #' - randomForest (`randomForest`)
 #' - rpart (`rpart`)
 #' - partykit (`constparty`)
+#' - glm (`glm`)
+#' - glmnet (`glmnet`)
+#' - earth (`earth`)
 #'
 #' @seealso [orbital()] for generating orbital objects, the
 #'   `vignette("sql-size")` for more on SQL size considerations.
@@ -228,4 +231,95 @@ estimate_orbital_size.catboost.Model <- function(x, ...) {
   }
 
   estimate_tree_chars(n_trees, n_internal, avg_feature_len)
+}
+
+# Shared helper for linear models
+# Formula derived from empirical analysis:
+# - Intercept adds ~20 chars
+# - Each coefficient term "(feature * coef) + " adds ~29 chars + feature name length
+estimate_linear_chars <- function(n_coefs, avg_feature_len) {
+  intercept_chars <- 20
+  # n_coefs includes intercept, so we have (n_coefs - 1) feature terms
+  feature_terms <- (n_coefs - 1) * (29 + avg_feature_len)
+  as.integer(intercept_chars + feature_terms)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.glm <- function(x, ...) {
+  coefs <- stats::coef(x)
+  n_coefs <- length(coefs)
+
+  # Exclude intercept from feature name calculation
+  feature_names <- names(coefs)
+  feature_names <- feature_names[feature_names != "(Intercept)"]
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_linear_chars(n_coefs, avg_feature_len)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.lm <- estimate_orbital_size.glm
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.glmnet <- function(x, ..., penalty = NULL) {
+  rlang::check_installed("glmnet")
+
+  if (is.null(penalty)) {
+    if (length(x$lambda) != 1) {
+      cli::cli_abort(
+        c(
+          "glmnet model has multiple penalty values.",
+          "i" = "Specify a single {.arg penalty} value."
+        )
+      )
+    }
+    penalty <- x$lambda
+  }
+
+  coefs <- stats::coef(x, s = penalty)
+  coef_values <- as.numeric(coefs)
+  coef_names <- rownames(coefs)
+
+  # Count non-zero coefficients
+  non_zero_idx <- which(coef_values != 0)
+  n_coefs <- length(non_zero_idx)
+
+  # Only count features with non-zero coefficients
+  feature_names <- coef_names[non_zero_idx]
+  feature_names <- feature_names[feature_names != "(Intercept)"]
+
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_linear_chars(n_coefs, avg_feature_len)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.earth <- function(x, ...) {
+  rlang::check_installed("earth")
+
+  coefs <- stats::coef(x)
+  n_coefs <- length(coefs)
+
+  # Earth coefficient names include hinge functions like "h(disp-145)"
+  feature_names <- names(coefs)
+  feature_names <- feature_names[feature_names != "(Intercept)"]
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_linear_chars(n_coefs, avg_feature_len)
 }
