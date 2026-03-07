@@ -179,3 +179,49 @@ test_that("estimate_orbital_size scales with tree count for randomForest", {
 
   expect_gt(est_large, est_small)
 })
+
+# catboost tests
+test_that("estimate_orbital_size works for catboost", {
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("catboost")
+
+  bt_spec <- parsnip::boost_tree(trees = 10, tree_depth = 3) |>
+    parsnip::set_engine("catboost", verbose = 0) |>
+    parsnip::set_mode("regression")
+
+  bt_fit <- parsnip::fit(bt_spec, mpg ~ disp + hp + wt, data = mtcars)
+
+  est <- estimate_orbital_size(bt_fit$fit)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size scales with tree count for catboost", {
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("catboost")
+
+  bt_spec_small <- parsnip::boost_tree(trees = 10, tree_depth = 3) |>
+    parsnip::set_engine("catboost", verbose = 0) |>
+    parsnip::set_mode("regression")
+
+  bt_spec_large <- parsnip::boost_tree(trees = 50, tree_depth = 3) |>
+    parsnip::set_engine("catboost", verbose = 0) |>
+    parsnip::set_mode("regression")
+
+  model_small <- parsnip::fit(
+    bt_spec_small,
+    mpg ~ disp + hp + wt,
+    data = mtcars
+  )
+  model_large <- parsnip::fit(
+    bt_spec_large,
+    mpg ~ disp + hp + wt,
+    data = mtcars
+  )
+
+  est_small <- estimate_orbital_size(model_small$fit)
+  est_large <- estimate_orbital_size(model_large$fit)
+
+  expect_gt(est_large, est_small)
+})

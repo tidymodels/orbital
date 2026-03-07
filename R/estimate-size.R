@@ -26,6 +26,7 @@
 #' Currently supported:
 #' - xgboost (`xgb.Booster`)
 #' - lightgbm (`lgb.Booster`)
+#' - catboost (`catboost.Model`)
 #' - ranger (`ranger`)
 #' - randomForest (`randomForest`)
 #'
@@ -156,6 +157,29 @@ estimate_orbital_size.randomForest <- function(x, ...) {
 
   # Get feature names from xlevels or fall back to generic names
   feature_names <- names(x$forest$xlevels)
+  if (length(feature_names) > 0) {
+    avg_feature_len <- mean(nchar(feature_names))
+  } else {
+    avg_feature_len <- 5
+  }
+
+  estimate_tree_chars(n_trees, n_internal, avg_feature_len)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.catboost.Model <- function(x, ...) {
+  rlang::check_installed("catboost")
+
+  # Use tidypredict's parse_model which is fast (~4ms)
+  pm <- tidypredict::parse_model(x)
+
+  n_trees <- pm$general$niter
+  # For symmetric/oblivious trees, all trees have the same number of leaves
+  n_leaves_per_tree <- length(pm$trees[[1]])
+  n_internal <- n_trees * (n_leaves_per_tree - 1)
+
+  feature_names <- pm$general$feature_names
   if (length(feature_names) > 0) {
     avg_feature_len <- mean(nchar(feature_names))
   } else {

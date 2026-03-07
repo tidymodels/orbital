@@ -6,6 +6,7 @@
 \alias{estimate_orbital_size.lgb.Booster}
 \alias{estimate_orbital_size.ranger}
 \alias{estimate_orbital_size.randomForest}
+\alias{estimate_orbital_size.catboost.Model}
 \title{Estimate orbital object size without generating it}
 \usage{
 estimate_orbital_size(x, ...)
@@ -17,6 +18,8 @@ estimate_orbital_size(x, ...)
 \method{estimate_orbital_size}{ranger}(x, ...)
 
 \method{estimate_orbital_size}{randomForest}(x, ...)
+
+\method{estimate_orbital_size}{catboost.Model}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model object.}
@@ -48,6 +51,7 @@ Currently supported:
 \itemize{
 \item xgboost (\code{xgb.Booster})
 \item lightgbm (\code{lgb.Booster})
+\item catboost (\code{catboost.Model})
 \item ranger (\code{ranger})
 \item randomForest (\code{randomForest})
 }
