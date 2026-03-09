@@ -8,6 +8,9 @@
 #'
 #' @param x A fitted model object.
 #' @param ... Additional arguments passed to methods.
+#' @param penalty For glmnet models, the penalty value (lambda) to use. If the
+#'   model was fit with a single lambda, this is used by default. Otherwise,
+#'   you must specify a value.
 #'
 #' @returns An integer estimate of the total character count of the orbital
 #'   expression.

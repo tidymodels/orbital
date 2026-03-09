@@ -43,6 +43,10 @@ estimate_orbital_size(x, ...)
 \item{x}{A fitted model object.}
 
 \item{...}{Additional arguments passed to methods.}
+
+\item{penalty}{For glmnet models, the penalty value (lambda) to use. If the
+model was fit with a single lambda, this is used by default. Otherwise,
+you must specify a value.}
 }
 \value{
 An integer estimate of the total character count of the orbital
