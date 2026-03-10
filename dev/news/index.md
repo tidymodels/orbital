@@ -7,6 +7,13 @@
   orbital expression for a model without generating it.
   ([\#144](https://github.com/tidymodels/orbital/issues/144))
 
+- [`step_dummy()`](https://recipes.tidymodels.org/reference/step_dummy.html)
+  and
+  [`step_indicate_na()`](https://recipes.tidymodels.org/reference/step_indicate_na.html)
+  now generate SQL compatible with Snowflake and other databases that
+  don’t support casting booleans directly to numeric types.
+  ([\#145](https://github.com/tidymodels/orbital/issues/145))
+
 ## orbital 0.5.0
 
 CRAN release: 2026-02-27

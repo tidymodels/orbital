@@ -315,77 +315,77 @@ an orbital object that we will use from here on out.</p>
 <span><span class="co">#&gt; • Fence = dplyr::if_else(is.na(Fence), NA, dplyr::if_else(Fence ...</span></span>
 <span><span class="co">#&gt; • Sale_Type = dplyr::if_else(is.na(Sale_Type), NA, dplyr::if_els ...</span></span>
 <span><span class="co">#&gt; • Sale_Condition = dplyr::if_else(is.na(Sale_Condition), NA, dpl ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_One_and_Half_Story_Finished_All_Ages = as.numeric( ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_Two_Story_1946_and_Newer = as.numeric(MS_SubClass ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_One_Story_PUD_1946_and_Newer = as.numeric(MS_SubCl ...</span></span>
-<span><span class="co">#&gt; • MS_SubClass_other = as.numeric(MS_SubClass == "other")</span></span>
-<span><span class="co">#&gt; • MS_Zoning_Residential_Medium_Density = as.numeric(MS_Zoning == ...</span></span>
-<span><span class="co">#&gt; • MS_Zoning_other = as.numeric(MS_Zoning == "other")</span></span>
-<span><span class="co">#&gt; • Alley_other = as.numeric(Alley == "other")</span></span>
-<span><span class="co">#&gt; • Lot_Shape_Slightly_Irregular = as.numeric(Lot_Shape == "Slight ...</span></span>
-<span><span class="co">#&gt; • Land_Contour_other = as.numeric(Land_Contour == "other")</span></span>
-<span><span class="co">#&gt; • Lot_Config_CulDSac = as.numeric(Lot_Config == "CulDSac")</span></span>
-<span><span class="co">#&gt; • Lot_Config_Inside = as.numeric(Lot_Config == "Inside")</span></span>
-<span><span class="co">#&gt; • Neighborhood_College_Creek = as.numeric(Neighborhood == "Colle ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_Old_Town = as.numeric(Neighborhood == "Old_Town")</span></span>
-<span><span class="co">#&gt; • Neighborhood_Edwards = as.numeric(Neighborhood == "Edwards")</span></span>
-<span><span class="co">#&gt; • Neighborhood_Somerset = as.numeric(Neighborhood == "Somerset")</span></span>
-<span><span class="co">#&gt; • Neighborhood_Northridge_Heights = as.numeric(Neighborhood == " ...</span></span>
-<span><span class="co">#&gt; • Neighborhood_Gilbert = as.numeric(Neighborhood == "Gilbert")</span></span>
-<span><span class="co">#&gt; • Neighborhood_Sawyer = as.numeric(Neighborhood == "Sawyer")</span></span>
-<span><span class="co">#&gt; • Neighborhood_other = as.numeric(Neighborhood == "other")</span></span>
-<span><span class="co">#&gt; • Condition_1_Norm = as.numeric(Condition_1 == "Norm")</span></span>
-<span><span class="co">#&gt; • Condition_1_other = as.numeric(Condition_1 == "other")</span></span>
-<span><span class="co">#&gt; • Bldg_Type_TwnhsE = as.numeric(Bldg_Type == "TwnhsE")</span></span>
-<span><span class="co">#&gt; • Bldg_Type_other = as.numeric(Bldg_Type == "other")</span></span>
-<span><span class="co">#&gt; • House_Style_One_Story = as.numeric(House_Style == "One_Story")</span></span>
-<span><span class="co">#&gt; • House_Style_Two_Story = as.numeric(House_Style == "Two_Story")</span></span>
-<span><span class="co">#&gt; • House_Style_other = as.numeric(House_Style == "other")</span></span>
-<span><span class="co">#&gt; • Overall_Cond_Above_Average = as.numeric(Overall_Cond == "Above ...</span></span>
-<span><span class="co">#&gt; • Overall_Cond_Good = as.numeric(Overall_Cond == "Good")</span></span>
-<span><span class="co">#&gt; • Overall_Cond_other = as.numeric(Overall_Cond == "other")</span></span>
-<span><span class="co">#&gt; • Roof_Style_Hip = as.numeric(Roof_Style == "Hip")</span></span>
-<span><span class="co">#&gt; • Exterior_1st_Plywood = as.numeric(Exterior_1st == "Plywood")</span></span>
-<span><span class="co">#&gt; • Exterior_1st_Wd.Sdng = as.numeric(Exterior_1st == "Wd Sdng")</span></span>
-<span><span class="co">#&gt; • Exterior_1st_other = as.numeric(Exterior_1st == "other")</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_MetalSd = as.numeric(Exterior_2nd == "MetalSd")</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_Plywood = as.numeric(Exterior_2nd == "Plywood")</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_VinylSd = as.numeric(Exterior_2nd == "VinylSd")</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_Wd.Sdng = as.numeric(Exterior_2nd == "Wd Sdng")</span></span>
-<span><span class="co">#&gt; • Exterior_2nd_other = as.numeric(Exterior_2nd == "other")</span></span>
-<span><span class="co">#&gt; • Mas_Vnr_Type_None = as.numeric(Mas_Vnr_Type == "None")</span></span>
-<span><span class="co">#&gt; • Mas_Vnr_Type_Stone = as.numeric(Mas_Vnr_Type == "Stone")</span></span>
-<span><span class="co">#&gt; • Exter_Cond_Typical = as.numeric(Exter_Cond == "Typical")</span></span>
-<span><span class="co">#&gt; • Foundation_CBlock = as.numeric(Foundation == "CBlock")</span></span>
-<span><span class="co">#&gt; • Foundation_PConc = as.numeric(Foundation == "PConc")</span></span>
-<span><span class="co">#&gt; • Bsmt_Cond_other = as.numeric(Bsmt_Cond == "other")</span></span>
-<span><span class="co">#&gt; • Bsmt_Exposure_Gd = as.numeric(Bsmt_Exposure == "Gd")</span></span>
-<span><span class="co">#&gt; • Bsmt_Exposure_Mn = as.numeric(Bsmt_Exposure == "Mn")</span></span>
-<span><span class="co">#&gt; • Bsmt_Exposure_No = as.numeric(Bsmt_Exposure == "No")</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_BLQ = as.numeric(BsmtFin_Type_1 == "BLQ")</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_GLQ = as.numeric(BsmtFin_Type_1 == "GLQ")</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_LwQ = as.numeric(BsmtFin_Type_1 == "LwQ")</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_Rec = as.numeric(BsmtFin_Type_1 == "Rec")</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_1_Unf = as.numeric(BsmtFin_Type_1 == "Unf")</span></span>
-<span><span class="co">#&gt; • BsmtFin_Type_2_other = as.numeric(BsmtFin_Type_2 == "other")</span></span>
-<span><span class="co">#&gt; • Heating_QC_Good = as.numeric(Heating_QC == "Good")</span></span>
-<span><span class="co">#&gt; • Heating_QC_Typical = as.numeric(Heating_QC == "Typical")</span></span>
-<span><span class="co">#&gt; • Central_Air_Y = as.numeric(Central_Air == "Y")</span></span>
-<span><span class="co">#&gt; • Electrical_SBrkr = as.numeric(Electrical == "SBrkr")</span></span>
-<span><span class="co">#&gt; • Functional_other = as.numeric(Functional == "other")</span></span>
-<span><span class="co">#&gt; • Garage_Type_BuiltIn = as.numeric(Garage_Type == "BuiltIn")</span></span>
-<span><span class="co">#&gt; • Garage_Type_Detchd = as.numeric(Garage_Type == "Detchd")</span></span>
-<span><span class="co">#&gt; • Garage_Type_No_Garage = as.numeric(Garage_Type == "No_Garage")</span></span>
-<span><span class="co">#&gt; • Garage_Finish_RFn = as.numeric(Garage_Finish == "RFn")</span></span>
-<span><span class="co">#&gt; • Garage_Finish_Unf = as.numeric(Garage_Finish == "Unf")</span></span>
-<span><span class="co">#&gt; • Garage_Cond_Typical = as.numeric(Garage_Cond == "Typical")</span></span>
-<span><span class="co">#&gt; • Paved_Drive_Paved = as.numeric(Paved_Drive == "Paved")</span></span>
-<span><span class="co">#&gt; • Fence_No_Fence = as.numeric(Fence == "No_Fence")</span></span>
-<span><span class="co">#&gt; • Fence_other = as.numeric(Fence == "other")</span></span>
-<span><span class="co">#&gt; • Sale_Type_WD. = as.numeric(Sale_Type == "WD ")</span></span>
-<span><span class="co">#&gt; • Sale_Type_other = as.numeric(Sale_Type == "other")</span></span>
-<span><span class="co">#&gt; • Sale_Condition_Normal = as.numeric(Sale_Condition == "Normal")</span></span>
-<span><span class="co">#&gt; • Sale_Condition_Partial = as.numeric(Sale_Condition == "Partial ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_One_and_Half_Story_Finished_All_Ages = dplyr::if_e ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_Two_Story_1946_and_Newer = dplyr::if_else(MS_SubCl ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_One_Story_PUD_1946_and_Newer = dplyr::if_else(MS_S ...</span></span>
+<span><span class="co">#&gt; • MS_SubClass_other = dplyr::if_else(MS_SubClass == "other", 1, ...</span></span>
+<span><span class="co">#&gt; • MS_Zoning_Residential_Medium_Density = dplyr::if_else(MS_Zonin ...</span></span>
+<span><span class="co">#&gt; • MS_Zoning_other = dplyr::if_else(MS_Zoning == "other", 1, 0)</span></span>
+<span><span class="co">#&gt; • Alley_other = dplyr::if_else(Alley == "other", 1, 0)</span></span>
+<span><span class="co">#&gt; • Lot_Shape_Slightly_Irregular = dplyr::if_else(Lot_Shape == "Sl ...</span></span>
+<span><span class="co">#&gt; • Land_Contour_other = dplyr::if_else(Land_Contour == "other", 1 ...</span></span>
+<span><span class="co">#&gt; • Lot_Config_CulDSac = dplyr::if_else(Lot_Config == "CulDSac", 1 ...</span></span>
+<span><span class="co">#&gt; • Lot_Config_Inside = dplyr::if_else(Lot_Config == "Inside", 1, ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_College_Creek = dplyr::if_else(Neighborhood == "C ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Old_Town = dplyr::if_else(Neighborhood == "Old_To ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Edwards = dplyr::if_else(Neighborhood == "Edwards ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Somerset = dplyr::if_else(Neighborhood == "Somers ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Northridge_Heights = dplyr::if_else(Neighborhood ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Gilbert = dplyr::if_else(Neighborhood == "Gilbert ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_Sawyer = dplyr::if_else(Neighborhood == "Sawyer", ...</span></span>
+<span><span class="co">#&gt; • Neighborhood_other = dplyr::if_else(Neighborhood == "other", 1 ...</span></span>
+<span><span class="co">#&gt; • Condition_1_Norm = dplyr::if_else(Condition_1 == "Norm", 1, 0)</span></span>
+<span><span class="co">#&gt; • Condition_1_other = dplyr::if_else(Condition_1 == "other", 1, ...</span></span>
+<span><span class="co">#&gt; • Bldg_Type_TwnhsE = dplyr::if_else(Bldg_Type == "TwnhsE", 1, 0)</span></span>
+<span><span class="co">#&gt; • Bldg_Type_other = dplyr::if_else(Bldg_Type == "other", 1, 0)</span></span>
+<span><span class="co">#&gt; • House_Style_One_Story = dplyr::if_else(House_Style == "One_Sto ...</span></span>
+<span><span class="co">#&gt; • House_Style_Two_Story = dplyr::if_else(House_Style == "Two_Sto ...</span></span>
+<span><span class="co">#&gt; • House_Style_other = dplyr::if_else(House_Style == "other", 1, ...</span></span>
+<span><span class="co">#&gt; • Overall_Cond_Above_Average = dplyr::if_else(Overall_Cond == "A ...</span></span>
+<span><span class="co">#&gt; • Overall_Cond_Good = dplyr::if_else(Overall_Cond == "Good", 1, ...</span></span>
+<span><span class="co">#&gt; • Overall_Cond_other = dplyr::if_else(Overall_Cond == "other", 1 ...</span></span>
+<span><span class="co">#&gt; • Roof_Style_Hip = dplyr::if_else(Roof_Style == "Hip", 1, 0)</span></span>
+<span><span class="co">#&gt; • Exterior_1st_Plywood = dplyr::if_else(Exterior_1st == "Plywood ...</span></span>
+<span><span class="co">#&gt; • Exterior_1st_Wd.Sdng = dplyr::if_else(Exterior_1st == "Wd Sdng ...</span></span>
+<span><span class="co">#&gt; • Exterior_1st_other = dplyr::if_else(Exterior_1st == "other", 1 ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_MetalSd = dplyr::if_else(Exterior_2nd == "MetalSd ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_Plywood = dplyr::if_else(Exterior_2nd == "Plywood ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_VinylSd = dplyr::if_else(Exterior_2nd == "VinylSd ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_Wd.Sdng = dplyr::if_else(Exterior_2nd == "Wd Sdng ...</span></span>
+<span><span class="co">#&gt; • Exterior_2nd_other = dplyr::if_else(Exterior_2nd == "other", 1 ...</span></span>
+<span><span class="co">#&gt; • Mas_Vnr_Type_None = dplyr::if_else(Mas_Vnr_Type == "None", 1, ...</span></span>
+<span><span class="co">#&gt; • Mas_Vnr_Type_Stone = dplyr::if_else(Mas_Vnr_Type == "Stone", 1 ...</span></span>
+<span><span class="co">#&gt; • Exter_Cond_Typical = dplyr::if_else(Exter_Cond == "Typical", 1 ...</span></span>
+<span><span class="co">#&gt; • Foundation_CBlock = dplyr::if_else(Foundation == "CBlock", 1, ...</span></span>
+<span><span class="co">#&gt; • Foundation_PConc = dplyr::if_else(Foundation == "PConc", 1, 0)</span></span>
+<span><span class="co">#&gt; • Bsmt_Cond_other = dplyr::if_else(Bsmt_Cond == "other", 1, 0)</span></span>
+<span><span class="co">#&gt; • Bsmt_Exposure_Gd = dplyr::if_else(Bsmt_Exposure == "Gd", 1, 0)</span></span>
+<span><span class="co">#&gt; • Bsmt_Exposure_Mn = dplyr::if_else(Bsmt_Exposure == "Mn", 1, 0)</span></span>
+<span><span class="co">#&gt; • Bsmt_Exposure_No = dplyr::if_else(Bsmt_Exposure == "No", 1, 0)</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_BLQ = dplyr::if_else(BsmtFin_Type_1 == "BLQ", 1 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_GLQ = dplyr::if_else(BsmtFin_Type_1 == "GLQ", 1 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_LwQ = dplyr::if_else(BsmtFin_Type_1 == "LwQ", 1 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_Rec = dplyr::if_else(BsmtFin_Type_1 == "Rec", 1 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_1_Unf = dplyr::if_else(BsmtFin_Type_1 == "Unf", 1 ...</span></span>
+<span><span class="co">#&gt; • BsmtFin_Type_2_other = dplyr::if_else(BsmtFin_Type_2 == "other ...</span></span>
+<span><span class="co">#&gt; • Heating_QC_Good = dplyr::if_else(Heating_QC == "Good", 1, 0)</span></span>
+<span><span class="co">#&gt; • Heating_QC_Typical = dplyr::if_else(Heating_QC == "Typical", 1 ...</span></span>
+<span><span class="co">#&gt; • Central_Air_Y = dplyr::if_else(Central_Air == "Y", 1, 0)</span></span>
+<span><span class="co">#&gt; • Electrical_SBrkr = dplyr::if_else(Electrical == "SBrkr", 1, 0)</span></span>
+<span><span class="co">#&gt; • Functional_other = dplyr::if_else(Functional == "other", 1, 0)</span></span>
+<span><span class="co">#&gt; • Garage_Type_BuiltIn = dplyr::if_else(Garage_Type == "BuiltIn", ...</span></span>
+<span><span class="co">#&gt; • Garage_Type_Detchd = dplyr::if_else(Garage_Type == "Detchd", 1 ...</span></span>
+<span><span class="co">#&gt; • Garage_Type_No_Garage = dplyr::if_else(Garage_Type == "No_Gara ...</span></span>
+<span><span class="co">#&gt; • Garage_Finish_RFn = dplyr::if_else(Garage_Finish == "RFn", 1, ...</span></span>
+<span><span class="co">#&gt; • Garage_Finish_Unf = dplyr::if_else(Garage_Finish == "Unf", 1, ...</span></span>
+<span><span class="co">#&gt; • Garage_Cond_Typical = dplyr::if_else(Garage_Cond == "Typical", ...</span></span>
+<span><span class="co">#&gt; • Paved_Drive_Paved = dplyr::if_else(Paved_Drive == "Paved", 1, ...</span></span>
+<span><span class="co">#&gt; • Fence_No_Fence = dplyr::if_else(Fence == "No_Fence", 1, 0)</span></span>
+<span><span class="co">#&gt; • Fence_other = dplyr::if_else(Fence == "other", 1, 0)</span></span>
+<span><span class="co">#&gt; • Sale_Type_WD. = dplyr::if_else(Sale_Type == "WD ", 1, 0)</span></span>
+<span><span class="co">#&gt; • Sale_Type_other = dplyr::if_else(Sale_Type == "other", 1, 0)</span></span>
+<span><span class="co">#&gt; • Sale_Condition_Normal = dplyr::if_else(Sale_Condition == "Norm ...</span></span>
+<span><span class="co">#&gt; • Sale_Condition_Partial = dplyr::if_else(Sale_Condition == "Par ...</span></span>
 <span><span class="co">#&gt; • Lot_Frontage = (Lot_Frontage - 57.64778) / 33.49944</span></span>
 <span><span class="co">#&gt; • Lot_Area = (Lot_Area - 10147.92) / 7880.018</span></span>
 <span><span class="co">#&gt; • Year_Built = (Year_Built - 1971.356) / 30.24536</span></span>
@@ -491,7 +491,7 @@ object which needs recipes, parsnip, workflows and the engine package to
 be loaded. It is also substantially smaller in size.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">orbital_obj</span><span class="op">)</span></span>
-<span><span class="co">#&gt; 51184 bytes</span></span>
+<span><span class="co">#&gt; 51504 bytes</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/object.size.html" class="external-link">object.size</a></span><span class="op">(</span><span class="va">wf_fit</span><span class="op">)</span></span>
 <span><span class="co">#&gt; 9637184 bytes</span></span></code></pre></div>
 </div>
@@ -658,77 +658,77 @@ the code needed to run the query.</p>
 <span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN ((`Fence` IS NULL)) THEN NULL WHEN NOT ((`Fence` IS NULL)) THEN (CASE WHEN (`Fence` IN ('Minimum_Privacy', 'No_Fence')) THEN `Fence` WHEN NOT (`Fence` IN ('Minimum_Privacy', 'No_Fence')) THEN 'other' END) END AS Fence</span></span>
 <span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN ((`Sale_Type` IS NULL)) THEN NULL WHEN NOT ((`Sale_Type` IS NULL)) THEN (CASE WHEN (`Sale_Type` IN ('New', 'WD ')) THEN `Sale_Type` WHEN NOT (`Sale_Type` IN ('New', 'WD ')) THEN 'other' END) END AS Sale_Type</span></span>
 <span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN ((`Sale_Condition` IS NULL)) THEN NULL WHEN NOT ((`Sale_Condition` IS NULL)) THEN (CASE WHEN (`Sale_Condition` IN ('Abnorml', 'Normal', 'Partial')) THEN `Sale_Condition` WHEN NOT (`Sale_Condition` IN ('Abnorml', 'Normal', 'Partial')) THEN 'other' END) END AS Sale_Condition</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`MS_SubClass` = 'One_and_Half_Story_Finished_All_Ages' AS REAL) AS MS_SubClass_One_and_Half_Story_Finished_All_Ages</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`MS_SubClass` = 'Two_Story_1946_and_Newer' AS REAL) AS MS_SubClass_Two_Story_1946_and_Newer</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`MS_SubClass` = 'One_Story_PUD_1946_and_Newer' AS REAL) AS MS_SubClass_One_Story_PUD_1946_and_Newer</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`MS_SubClass` = 'other' AS REAL) AS MS_SubClass_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`MS_Zoning` = 'Residential_Medium_Density' AS REAL) AS MS_Zoning_Residential_Medium_Density</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`MS_Zoning` = 'other' AS REAL) AS MS_Zoning_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Alley` = 'other' AS REAL) AS Alley_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Lot_Shape` = 'Slightly_Irregular' AS REAL) AS Lot_Shape_Slightly_Irregular</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Land_Contour` = 'other' AS REAL) AS Land_Contour_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Lot_Config` = 'CulDSac' AS REAL) AS Lot_Config_CulDSac</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Lot_Config` = 'Inside' AS REAL) AS Lot_Config_Inside</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Neighborhood` = 'College_Creek' AS REAL) AS Neighborhood_College_Creek</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Neighborhood` = 'Old_Town' AS REAL) AS Neighborhood_Old_Town</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Neighborhood` = 'Edwards' AS REAL) AS Neighborhood_Edwards</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Neighborhood` = 'Somerset' AS REAL) AS Neighborhood_Somerset</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Neighborhood` = 'Northridge_Heights' AS REAL) AS Neighborhood_Northridge_Heights</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Neighborhood` = 'Gilbert' AS REAL) AS Neighborhood_Gilbert</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Neighborhood` = 'Sawyer' AS REAL) AS Neighborhood_Sawyer</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Neighborhood` = 'other' AS REAL) AS Neighborhood_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Condition_1` = 'Norm' AS REAL) AS Condition_1_Norm</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Condition_1` = 'other' AS REAL) AS Condition_1_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Bldg_Type` = 'TwnhsE' AS REAL) AS Bldg_Type_TwnhsE</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Bldg_Type` = 'other' AS REAL) AS Bldg_Type_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`House_Style` = 'One_Story' AS REAL) AS House_Style_One_Story</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`House_Style` = 'Two_Story' AS REAL) AS House_Style_Two_Story</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`House_Style` = 'other' AS REAL) AS House_Style_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Overall_Cond` = 'Above_Average' AS REAL) AS Overall_Cond_Above_Average</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Overall_Cond` = 'Good' AS REAL) AS Overall_Cond_Good</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Overall_Cond` = 'other' AS REAL) AS Overall_Cond_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Roof_Style` = 'Hip' AS REAL) AS Roof_Style_Hip</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exterior_1st` = 'Plywood' AS REAL) AS Exterior_1st_Plywood</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exterior_1st` = 'Wd Sdng' AS REAL) AS Exterior_1st_Wd.Sdng</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exterior_1st` = 'other' AS REAL) AS Exterior_1st_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exterior_2nd` = 'MetalSd' AS REAL) AS Exterior_2nd_MetalSd</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exterior_2nd` = 'Plywood' AS REAL) AS Exterior_2nd_Plywood</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exterior_2nd` = 'VinylSd' AS REAL) AS Exterior_2nd_VinylSd</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exterior_2nd` = 'Wd Sdng' AS REAL) AS Exterior_2nd_Wd.Sdng</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exterior_2nd` = 'other' AS REAL) AS Exterior_2nd_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Mas_Vnr_Type` = 'None' AS REAL) AS Mas_Vnr_Type_None</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Mas_Vnr_Type` = 'Stone' AS REAL) AS Mas_Vnr_Type_Stone</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Exter_Cond` = 'Typical' AS REAL) AS Exter_Cond_Typical</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Foundation` = 'CBlock' AS REAL) AS Foundation_CBlock</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Foundation` = 'PConc' AS REAL) AS Foundation_PConc</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Bsmt_Cond` = 'other' AS REAL) AS Bsmt_Cond_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Bsmt_Exposure` = 'Gd' AS REAL) AS Bsmt_Exposure_Gd</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Bsmt_Exposure` = 'Mn' AS REAL) AS Bsmt_Exposure_Mn</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Bsmt_Exposure` = 'No' AS REAL) AS Bsmt_Exposure_No</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`BsmtFin_Type_1` = 'BLQ' AS REAL) AS BsmtFin_Type_1_BLQ</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`BsmtFin_Type_1` = 'GLQ' AS REAL) AS BsmtFin_Type_1_GLQ</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`BsmtFin_Type_1` = 'LwQ' AS REAL) AS BsmtFin_Type_1_LwQ</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`BsmtFin_Type_1` = 'Rec' AS REAL) AS BsmtFin_Type_1_Rec</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`BsmtFin_Type_1` = 'Unf' AS REAL) AS BsmtFin_Type_1_Unf</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`BsmtFin_Type_2` = 'other' AS REAL) AS BsmtFin_Type_2_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Heating_QC` = 'Good' AS REAL) AS Heating_QC_Good</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Heating_QC` = 'Typical' AS REAL) AS Heating_QC_Typical</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Central_Air` = 'Y' AS REAL) AS Central_Air_Y</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Electrical` = 'SBrkr' AS REAL) AS Electrical_SBrkr</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Functional` = 'other' AS REAL) AS Functional_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Garage_Type` = 'BuiltIn' AS REAL) AS Garage_Type_BuiltIn</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Garage_Type` = 'Detchd' AS REAL) AS Garage_Type_Detchd</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Garage_Type` = 'No_Garage' AS REAL) AS Garage_Type_No_Garage</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Garage_Finish` = 'RFn' AS REAL) AS Garage_Finish_RFn</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Garage_Finish` = 'Unf' AS REAL) AS Garage_Finish_Unf</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Garage_Cond` = 'Typical' AS REAL) AS Garage_Cond_Typical</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Paved_Drive` = 'Paved' AS REAL) AS Paved_Drive_Paved</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Fence` = 'No_Fence' AS REAL) AS Fence_No_Fence</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Fence` = 'other' AS REAL) AS Fence_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Sale_Type` = 'WD ' AS REAL) AS Sale_Type_WD.</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Sale_Type` = 'other' AS REAL) AS Sale_Type_other</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Sale_Condition` = 'Normal' AS REAL) AS Sale_Condition_Normal</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; CAST(`Sale_Condition` = 'Partial' AS REAL) AS Sale_Condition_Partial</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`MS_SubClass` = 'One_and_Half_Story_Finished_All_Ages') THEN 1.0 WHEN NOT (`MS_SubClass` = 'One_and_Half_Story_Finished_All_Ages') THEN 0.0 END AS MS_SubClass_One_and_Half_Story_Finished_All_Ages</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`MS_SubClass` = 'Two_Story_1946_and_Newer') THEN 1.0 WHEN NOT (`MS_SubClass` = 'Two_Story_1946_and_Newer') THEN 0.0 END AS MS_SubClass_Two_Story_1946_and_Newer</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`MS_SubClass` = 'One_Story_PUD_1946_and_Newer') THEN 1.0 WHEN NOT (`MS_SubClass` = 'One_Story_PUD_1946_and_Newer') THEN 0.0 END AS MS_SubClass_One_Story_PUD_1946_and_Newer</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`MS_SubClass` = 'other') THEN 1.0 WHEN NOT (`MS_SubClass` = 'other') THEN 0.0 END AS MS_SubClass_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`MS_Zoning` = 'Residential_Medium_Density') THEN 1.0 WHEN NOT (`MS_Zoning` = 'Residential_Medium_Density') THEN 0.0 END AS MS_Zoning_Residential_Medium_Density</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`MS_Zoning` = 'other') THEN 1.0 WHEN NOT (`MS_Zoning` = 'other') THEN 0.0 END AS MS_Zoning_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Alley` = 'other') THEN 1.0 WHEN NOT (`Alley` = 'other') THEN 0.0 END AS Alley_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Lot_Shape` = 'Slightly_Irregular') THEN 1.0 WHEN NOT (`Lot_Shape` = 'Slightly_Irregular') THEN 0.0 END AS Lot_Shape_Slightly_Irregular</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Land_Contour` = 'other') THEN 1.0 WHEN NOT (`Land_Contour` = 'other') THEN 0.0 END AS Land_Contour_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Lot_Config` = 'CulDSac') THEN 1.0 WHEN NOT (`Lot_Config` = 'CulDSac') THEN 0.0 END AS Lot_Config_CulDSac</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Lot_Config` = 'Inside') THEN 1.0 WHEN NOT (`Lot_Config` = 'Inside') THEN 0.0 END AS Lot_Config_Inside</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Neighborhood` = 'College_Creek') THEN 1.0 WHEN NOT (`Neighborhood` = 'College_Creek') THEN 0.0 END AS Neighborhood_College_Creek</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Neighborhood` = 'Old_Town') THEN 1.0 WHEN NOT (`Neighborhood` = 'Old_Town') THEN 0.0 END AS Neighborhood_Old_Town</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Neighborhood` = 'Edwards') THEN 1.0 WHEN NOT (`Neighborhood` = 'Edwards') THEN 0.0 END AS Neighborhood_Edwards</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Neighborhood` = 'Somerset') THEN 1.0 WHEN NOT (`Neighborhood` = 'Somerset') THEN 0.0 END AS Neighborhood_Somerset</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Neighborhood` = 'Northridge_Heights') THEN 1.0 WHEN NOT (`Neighborhood` = 'Northridge_Heights') THEN 0.0 END AS Neighborhood_Northridge_Heights</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Neighborhood` = 'Gilbert') THEN 1.0 WHEN NOT (`Neighborhood` = 'Gilbert') THEN 0.0 END AS Neighborhood_Gilbert</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Neighborhood` = 'Sawyer') THEN 1.0 WHEN NOT (`Neighborhood` = 'Sawyer') THEN 0.0 END AS Neighborhood_Sawyer</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Neighborhood` = 'other') THEN 1.0 WHEN NOT (`Neighborhood` = 'other') THEN 0.0 END AS Neighborhood_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Condition_1` = 'Norm') THEN 1.0 WHEN NOT (`Condition_1` = 'Norm') THEN 0.0 END AS Condition_1_Norm</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Condition_1` = 'other') THEN 1.0 WHEN NOT (`Condition_1` = 'other') THEN 0.0 END AS Condition_1_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Bldg_Type` = 'TwnhsE') THEN 1.0 WHEN NOT (`Bldg_Type` = 'TwnhsE') THEN 0.0 END AS Bldg_Type_TwnhsE</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Bldg_Type` = 'other') THEN 1.0 WHEN NOT (`Bldg_Type` = 'other') THEN 0.0 END AS Bldg_Type_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`House_Style` = 'One_Story') THEN 1.0 WHEN NOT (`House_Style` = 'One_Story') THEN 0.0 END AS House_Style_One_Story</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`House_Style` = 'Two_Story') THEN 1.0 WHEN NOT (`House_Style` = 'Two_Story') THEN 0.0 END AS House_Style_Two_Story</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`House_Style` = 'other') THEN 1.0 WHEN NOT (`House_Style` = 'other') THEN 0.0 END AS House_Style_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Overall_Cond` = 'Above_Average') THEN 1.0 WHEN NOT (`Overall_Cond` = 'Above_Average') THEN 0.0 END AS Overall_Cond_Above_Average</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Overall_Cond` = 'Good') THEN 1.0 WHEN NOT (`Overall_Cond` = 'Good') THEN 0.0 END AS Overall_Cond_Good</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Overall_Cond` = 'other') THEN 1.0 WHEN NOT (`Overall_Cond` = 'other') THEN 0.0 END AS Overall_Cond_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Roof_Style` = 'Hip') THEN 1.0 WHEN NOT (`Roof_Style` = 'Hip') THEN 0.0 END AS Roof_Style_Hip</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exterior_1st` = 'Plywood') THEN 1.0 WHEN NOT (`Exterior_1st` = 'Plywood') THEN 0.0 END AS Exterior_1st_Plywood</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exterior_1st` = 'Wd Sdng') THEN 1.0 WHEN NOT (`Exterior_1st` = 'Wd Sdng') THEN 0.0 END AS Exterior_1st_Wd.Sdng</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exterior_1st` = 'other') THEN 1.0 WHEN NOT (`Exterior_1st` = 'other') THEN 0.0 END AS Exterior_1st_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exterior_2nd` = 'MetalSd') THEN 1.0 WHEN NOT (`Exterior_2nd` = 'MetalSd') THEN 0.0 END AS Exterior_2nd_MetalSd</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exterior_2nd` = 'Plywood') THEN 1.0 WHEN NOT (`Exterior_2nd` = 'Plywood') THEN 0.0 END AS Exterior_2nd_Plywood</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exterior_2nd` = 'VinylSd') THEN 1.0 WHEN NOT (`Exterior_2nd` = 'VinylSd') THEN 0.0 END AS Exterior_2nd_VinylSd</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exterior_2nd` = 'Wd Sdng') THEN 1.0 WHEN NOT (`Exterior_2nd` = 'Wd Sdng') THEN 0.0 END AS Exterior_2nd_Wd.Sdng</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exterior_2nd` = 'other') THEN 1.0 WHEN NOT (`Exterior_2nd` = 'other') THEN 0.0 END AS Exterior_2nd_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Mas_Vnr_Type` = 'None') THEN 1.0 WHEN NOT (`Mas_Vnr_Type` = 'None') THEN 0.0 END AS Mas_Vnr_Type_None</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Mas_Vnr_Type` = 'Stone') THEN 1.0 WHEN NOT (`Mas_Vnr_Type` = 'Stone') THEN 0.0 END AS Mas_Vnr_Type_Stone</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Exter_Cond` = 'Typical') THEN 1.0 WHEN NOT (`Exter_Cond` = 'Typical') THEN 0.0 END AS Exter_Cond_Typical</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Foundation` = 'CBlock') THEN 1.0 WHEN NOT (`Foundation` = 'CBlock') THEN 0.0 END AS Foundation_CBlock</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Foundation` = 'PConc') THEN 1.0 WHEN NOT (`Foundation` = 'PConc') THEN 0.0 END AS Foundation_PConc</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Bsmt_Cond` = 'other') THEN 1.0 WHEN NOT (`Bsmt_Cond` = 'other') THEN 0.0 END AS Bsmt_Cond_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Bsmt_Exposure` = 'Gd') THEN 1.0 WHEN NOT (`Bsmt_Exposure` = 'Gd') THEN 0.0 END AS Bsmt_Exposure_Gd</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Bsmt_Exposure` = 'Mn') THEN 1.0 WHEN NOT (`Bsmt_Exposure` = 'Mn') THEN 0.0 END AS Bsmt_Exposure_Mn</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Bsmt_Exposure` = 'No') THEN 1.0 WHEN NOT (`Bsmt_Exposure` = 'No') THEN 0.0 END AS Bsmt_Exposure_No</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`BsmtFin_Type_1` = 'BLQ') THEN 1.0 WHEN NOT (`BsmtFin_Type_1` = 'BLQ') THEN 0.0 END AS BsmtFin_Type_1_BLQ</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`BsmtFin_Type_1` = 'GLQ') THEN 1.0 WHEN NOT (`BsmtFin_Type_1` = 'GLQ') THEN 0.0 END AS BsmtFin_Type_1_GLQ</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`BsmtFin_Type_1` = 'LwQ') THEN 1.0 WHEN NOT (`BsmtFin_Type_1` = 'LwQ') THEN 0.0 END AS BsmtFin_Type_1_LwQ</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`BsmtFin_Type_1` = 'Rec') THEN 1.0 WHEN NOT (`BsmtFin_Type_1` = 'Rec') THEN 0.0 END AS BsmtFin_Type_1_Rec</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`BsmtFin_Type_1` = 'Unf') THEN 1.0 WHEN NOT (`BsmtFin_Type_1` = 'Unf') THEN 0.0 END AS BsmtFin_Type_1_Unf</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`BsmtFin_Type_2` = 'other') THEN 1.0 WHEN NOT (`BsmtFin_Type_2` = 'other') THEN 0.0 END AS BsmtFin_Type_2_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Heating_QC` = 'Good') THEN 1.0 WHEN NOT (`Heating_QC` = 'Good') THEN 0.0 END AS Heating_QC_Good</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Heating_QC` = 'Typical') THEN 1.0 WHEN NOT (`Heating_QC` = 'Typical') THEN 0.0 END AS Heating_QC_Typical</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Central_Air` = 'Y') THEN 1.0 WHEN NOT (`Central_Air` = 'Y') THEN 0.0 END AS Central_Air_Y</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Electrical` = 'SBrkr') THEN 1.0 WHEN NOT (`Electrical` = 'SBrkr') THEN 0.0 END AS Electrical_SBrkr</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Functional` = 'other') THEN 1.0 WHEN NOT (`Functional` = 'other') THEN 0.0 END AS Functional_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Garage_Type` = 'BuiltIn') THEN 1.0 WHEN NOT (`Garage_Type` = 'BuiltIn') THEN 0.0 END AS Garage_Type_BuiltIn</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Garage_Type` = 'Detchd') THEN 1.0 WHEN NOT (`Garage_Type` = 'Detchd') THEN 0.0 END AS Garage_Type_Detchd</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Garage_Type` = 'No_Garage') THEN 1.0 WHEN NOT (`Garage_Type` = 'No_Garage') THEN 0.0 END AS Garage_Type_No_Garage</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Garage_Finish` = 'RFn') THEN 1.0 WHEN NOT (`Garage_Finish` = 'RFn') THEN 0.0 END AS Garage_Finish_RFn</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Garage_Finish` = 'Unf') THEN 1.0 WHEN NOT (`Garage_Finish` = 'Unf') THEN 0.0 END AS Garage_Finish_Unf</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Garage_Cond` = 'Typical') THEN 1.0 WHEN NOT (`Garage_Cond` = 'Typical') THEN 0.0 END AS Garage_Cond_Typical</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Paved_Drive` = 'Paved') THEN 1.0 WHEN NOT (`Paved_Drive` = 'Paved') THEN 0.0 END AS Paved_Drive_Paved</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Fence` = 'No_Fence') THEN 1.0 WHEN NOT (`Fence` = 'No_Fence') THEN 0.0 END AS Fence_No_Fence</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Fence` = 'other') THEN 1.0 WHEN NOT (`Fence` = 'other') THEN 0.0 END AS Fence_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Sale_Type` = 'WD ') THEN 1.0 WHEN NOT (`Sale_Type` = 'WD ') THEN 0.0 END AS Sale_Type_WD.</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Sale_Type` = 'other') THEN 1.0 WHEN NOT (`Sale_Type` = 'other') THEN 0.0 END AS Sale_Type_other</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Sale_Condition` = 'Normal') THEN 1.0 WHEN NOT (`Sale_Condition` = 'Normal') THEN 0.0 END AS Sale_Condition_Normal</span></span>
+<span><span class="co">#&gt; &lt;SQL&gt; CASE WHEN (`Sale_Condition` = 'Partial') THEN 1.0 WHEN NOT (`Sale_Condition` = 'Partial') THEN 0.0 END AS Sale_Condition_Partial</span></span>
 <span><span class="co">#&gt; &lt;SQL&gt; (`Lot_Frontage` - 57.6477815699659) / 33.4994407936297 AS Lot_Frontage</span></span>
 <span><span class="co">#&gt; &lt;SQL&gt; (`Lot_Area` - 10147.9218430034) / 7880.01775943909 AS Lot_Area</span></span>
 <span><span class="co">#&gt; &lt;SQL&gt; (`Year_Built` - 1971.35631399317) / 30.2453606293747 AS Year_Built</span></span>
@@ -825,7 +825,7 @@ the code needed to run the query.</p>
 <span><span class="co">#&gt; &lt;SQL&gt; (`Sale_Type_other` - 0.052901023890785) / 0.223874096830013 AS Sale_Type_other</span></span>
 <span><span class="co">#&gt; &lt;SQL&gt; (`Sale_Condition_Normal` - 0.823549488054607) / 0.381268070423093 AS Sale_Condition_Normal</span></span>
 <span><span class="co">#&gt; &lt;SQL&gt; (`Sale_Condition_Partial` - 0.083617747440273) / 0.276860941338605 AS Sale_Condition_Partial</span></span>
-<span><span class="co">#&gt; &lt;SQL&gt; (((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((180796.060068261 + (`Lot_Frontage` * 955.635117988096)) + (`Lot_Area` * 1516.76354238106)) + (`Year_Built` * 8074.09994040539)) + (`Year_Remod_Add` * 5932.22192419818)) + (`Mas_Vnr_Area` * 6997.31007185545)) + (`BsmtFin_SF_1` * -2548.64981850425)) + (`Bsmt_Unf_SF` * -3924.5747680907)) + (`Total_Bsmt_SF` * 9069.96047666669)) + (`First_Flr_SF` * 6568.67460482994)) + (`Second_Flr_SF` * 15604.7900975189)) + (`Gr_Liv_Area` * 19292.6248611376)) + (`Bsmt_Full_Bath` * 3296.44905707814)) + (`Bsmt_Half_Bath` * -533.514930287271)) + (`Full_Bath` * 2431.14756181473)) + (`Half_Bath` * 1403.62028448762)) + (`Bedroom_AbvGr` * -3345.30530477556)) + (`TotRms_AbvGrd` * 915.757489815814)) + (`Fireplaces` * 4709.45091860584)) + (`Garage_Cars` * 7318.62377224312)) + (`Garage_Area` * 1681.64099399674)) + (`Wood_Deck_SF` * 1017.69312375784)) + (`Mo_Sold` * -217.895951839059)) + (`Year_Sold` * -1007.19585740409)) + (`Longitude` * 2773.88419706624)) + (`Latitude` * 7287.77027386768)) + (`MS_SubClass_One_and_Half_Story_Finished_All_Ages` * -1687.41646914787)) + (`MS_SubClass_Two_Story_1946_and_Newer` * -3446.69967089123)) + (`MS_SubClass_One_Story_PUD_1946_and_Newer` * 62.0994382871203)) + (`MS_SubClass_other` * -535.707786962905)) + (`MS_Zoning_Residential_Medium_Density` * -2675.78583268023)) + (`MS_Zoning_other` * -2924.69567314634)) + (`Alley_other` * -316.99110420436)) + (`Lot_Shape_Slightly_Irregular` * 1245.06912629884)) + (`Land_Contour_other` * 735.184004079579)) + (`Lot_Config_CulDSac` * 2734.60341025334)) + (`Lot_Config_Inside` * 884.153669999531)) + (`Neighborhood_College_Creek` * 4526.82057036694)) + (`Neighborhood_Old_Town` * 1306.00158697638)) + (`Neighborhood_Edwards` * 538.075017955706)) + (`Neighborhood_Somerset` * 6714.41917837367)) + (`Neighborhood_Northridge_Heights` * 10903.2646416317)) + (`Neighborhood_Gilbert` * -3618.64478818433)) + (`Neighborhood_Sawyer` * 2749.71489400735)) + (`Neighborhood_other` * 8551.13463346536)) + (`Condition_1_Norm` * 4909.71154465354)) + (`Condition_1_other` * 1934.41525135307)) + (`Bldg_Type_TwnhsE` * -6070.06289564394)) + (`Bldg_Type_other` * -8159.52292042578)) + (`House_Style_One_Story` * 3381.4443870777)) + (`House_Style_Two_Story` * -3021.28835917451)) + (`House_Style_other` * -904.047140141239)) + (`Overall_Cond_Above_Average` * 1125.01512632643)) + (`Overall_Cond_Good` * 2685.0288965588)) + (`Overall_Cond_other` * 351.426196807593)) + (`Roof_Style_Hip` * 3907.97725791189)) + (`Exterior_1st_Plywood` * 225.291064359607)) + (`Exterior_1st_Wd.Sdng` * 384.762479987225)) + (`Exterior_1st_other` * 4477.11592638794)) + (`Exterior_2nd_MetalSd` * 2284.58015409167)) + (`Exterior_2nd_Plywood` * -1588.48199587957)) + (`Exterior_2nd_VinylSd` * 1474.80729570628)) + (`Exterior_2nd_Wd.Sdng` * 1831.29879973843)) + (`Exterior_2nd_other` * -976.637274539357)) + (`Mas_Vnr_Type_None` * 4971.05846503307)) + (`Mas_Vnr_Type_Stone` * 1944.99896140768)) + (`Exter_Cond_Typical` * 19.6204254164978)) + (`Foundation_CBlock` * -891.869457263651)) + (`Foundation_PConc` * 2068.63383426026)) + (`Bsmt_Cond_other` * -172.334350524601)) + (`Bsmt_Exposure_Gd` * 5690.28657826563)) + (`Bsmt_Exposure_Mn` * -2679.99772126548)) + (`Bsmt_Exposure_No` * -5597.49995139766)) + (`BsmtFin_Type_1_BLQ` * 432.577279364535)) + (`BsmtFin_Type_1_GLQ` * 5201.48231449897)) + (`BsmtFin_Type_1_LwQ` * 126.495750334264)) + (`BsmtFin_Type_1_Rec` * 1691.75502844561)) + (`BsmtFin_Type_1_Unf` * 3596.92372466207)) + (`BsmtFin_Type_2_other` * -666.08085354579)) + (`Heating_QC_Good` * -788.259085823183)) + (`Heating_QC_Typical` * -2456.20980903068)) + (`Central_Air_Y` * 402.919986048993)) + (`Electrical_SBrkr` * 139.091114370893)) + (`Functional_other` * -5120.42353672279)) + (`Garage_Type_BuiltIn` * -427.250007631447)) + (`Garage_Type_Detchd` * -207.741377522264)) + (`Garage_Type_No_Garage` * 2153.29068352442)) + (`Garage_Finish_RFn` * -3908.39521205631)) + (`Garage_Finish_Unf` * -2216.40003714454)) + (`Garage_Cond_Typical` * 1711.68386807371)) + (`Paved_Drive_Paved` * 913.813251909221)) + (`Fence_No_Fence` * -1204.23822888682)) + (`Fence_other` * -406.889886687666)) + (`Sale_Type_WD.` * -4040.58640251203)) + (`Sale_Type_other` * -2800.14205589685)) + (`Sale_Condition_Normal` * 2884.92023929979)) + (`Sale_Condition_Partial` * 2258.73838712948) AS .pred</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;SQL&gt; (((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((180796.060068261 + (`Lot_Frontage` * 955.635117988102)) + (`Lot_Area` * 1516.76354238106)) + (`Year_Built` * 8074.09994040537)) + (`Year_Remod_Add` * 5932.22192419818)) + (`Mas_Vnr_Area` * 6997.31007185544)) + (`BsmtFin_SF_1` * -2548.64981850423)) + (`Bsmt_Unf_SF` * -3924.5747680907)) + (`Total_Bsmt_SF` * 9069.9604766667)) + (`First_Flr_SF` * 6568.67460482999)) + (`Second_Flr_SF` * 15604.7900975189)) + (`Gr_Liv_Area` * 19292.6248611375)) + (`Bsmt_Full_Bath` * 3296.44905707814)) + (`Bsmt_Half_Bath` * -533.514930287272)) + (`Full_Bath` * 2431.14756181473)) + (`Half_Bath` * 1403.62028448762)) + (`Bedroom_AbvGr` * -3345.30530477555)) + (`TotRms_AbvGrd` * 915.757489815814)) + (`Fireplaces` * 4709.45091860584)) + (`Garage_Cars` * 7318.62377224312)) + (`Garage_Area` * 1681.64099399674)) + (`Wood_Deck_SF` * 1017.69312375784)) + (`Mo_Sold` * -217.895951839059)) + (`Year_Sold` * -1007.19585740409)) + (`Longitude` * 2773.88419706623)) + (`Latitude` * 7287.77027386768)) + (`MS_SubClass_One_and_Half_Story_Finished_All_Ages` * -1687.41646914787)) + (`MS_SubClass_Two_Story_1946_and_Newer` * -3446.69967089123)) + (`MS_SubClass_One_Story_PUD_1946_and_Newer` * 62.0994382871212)) + (`MS_SubClass_other` * -535.707786962906)) + (`MS_Zoning_Residential_Medium_Density` * -2675.78583268023)) + (`MS_Zoning_other` * -2924.69567314633)) + (`Alley_other` * -316.99110420436)) + (`Lot_Shape_Slightly_Irregular` * 1245.06912629884)) + (`Land_Contour_other` * 735.18400407958)) + (`Lot_Config_CulDSac` * 2734.60341025334)) + (`Lot_Config_Inside` * 884.153669999533)) + (`Neighborhood_College_Creek` * 4526.82057036694)) + (`Neighborhood_Old_Town` * 1306.00158697638)) + (`Neighborhood_Edwards` * 538.075017955702)) + (`Neighborhood_Somerset` * 6714.41917837366)) + (`Neighborhood_Northridge_Heights` * 10903.2646416317)) + (`Neighborhood_Gilbert` * -3618.64478818433)) + (`Neighborhood_Sawyer` * 2749.71489400735)) + (`Neighborhood_other` * 8551.13463346536)) + (`Condition_1_Norm` * 4909.71154465354)) + (`Condition_1_other` * 1934.41525135308)) + (`Bldg_Type_TwnhsE` * -6070.06289564394)) + (`Bldg_Type_other` * -8159.52292042577)) + (`House_Style_One_Story` * 3381.4443870777)) + (`House_Style_Two_Story` * -3021.28835917451)) + (`House_Style_other` * -904.047140141237)) + (`Overall_Cond_Above_Average` * 1125.01512632643)) + (`Overall_Cond_Good` * 2685.0288965588)) + (`Overall_Cond_other` * 351.426196807595)) + (`Roof_Style_Hip` * 3907.97725791189)) + (`Exterior_1st_Plywood` * 225.291064359611)) + (`Exterior_1st_Wd.Sdng` * 384.762479987224)) + (`Exterior_1st_other` * 4477.11592638793)) + (`Exterior_2nd_MetalSd` * 2284.58015409167)) + (`Exterior_2nd_Plywood` * -1588.48199587958)) + (`Exterior_2nd_VinylSd` * 1474.80729570628)) + (`Exterior_2nd_Wd.Sdng` * 1831.29879973843)) + (`Exterior_2nd_other` * -976.637274539353)) + (`Mas_Vnr_Type_None` * 4971.05846503306)) + (`Mas_Vnr_Type_Stone` * 1944.99896140768)) + (`Exter_Cond_Typical` * 19.6204254164979)) + (`Foundation_CBlock` * -891.86945726365)) + (`Foundation_PConc` * 2068.63383426027)) + (`Bsmt_Cond_other` * -172.334350524604)) + (`Bsmt_Exposure_Gd` * 5690.28657826563)) + (`Bsmt_Exposure_Mn` * -2679.99772126547)) + (`Bsmt_Exposure_No` * -5597.49995139766)) + (`BsmtFin_Type_1_BLQ` * 432.57727936453)) + (`BsmtFin_Type_1_GLQ` * 5201.48231449896)) + (`BsmtFin_Type_1_LwQ` * 126.495750334258)) + (`BsmtFin_Type_1_Rec` * 1691.7550284456)) + (`BsmtFin_Type_1_Unf` * 3596.92372466205)) + (`BsmtFin_Type_2_other` * -666.080853545791)) + (`Heating_QC_Good` * -788.259085823185)) + (`Heating_QC_Typical` * -2456.20980903068)) + (`Central_Air_Y` * 402.919986048993)) + (`Electrical_SBrkr` * 139.091114370893)) + (`Functional_other` * -5120.42353672279)) + (`Garage_Type_BuiltIn` * -427.250007631446)) + (`Garage_Type_Detchd` * -207.741377522263)) + (`Garage_Type_No_Garage` * 2153.29068352442)) + (`Garage_Finish_RFn` * -3908.39521205631)) + (`Garage_Finish_Unf` * -2216.40003714453)) + (`Garage_Cond_Typical` * 1711.68386807371)) + (`Paved_Drive_Paved` * 913.813251909226)) + (`Fence_No_Fence` * -1204.23822888682)) + (`Fence_other` * -406.889886687666)) + (`Sale_Type_WD.` * -4040.58640251206)) + (`Sale_Type_other` * -2800.14205589687)) + (`Sale_Condition_Normal` * 2884.92023929979)) + (`Sale_Condition_Partial` * 2258.73838712945) AS .pred</span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>
