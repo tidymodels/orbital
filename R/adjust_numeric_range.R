@@ -26,3 +26,25 @@ orbital.numeric_range <- function(x, tailor, ...) {
   names(out) <- estimate
   out
 }
+
+# dplyr::case_when with 2-3 branches ~= 80 chars
+estimate_adj_chars.numeric_range <- function(x, ...) {
+  lower <- x$arguments$lower_limit
+  upper <- x$arguments$upper_limit
+
+  if (!is.finite(lower) && !is.finite(upper)) {
+    return(0L)
+  }
+
+  # Base case_when overhead + TRUE branch
+  chars <- 40L
+  if (is.finite(lower)) {
+    chars <- chars + 30L
+  }
+
+  if (is.finite(upper)) {
+    chars <- chars + 30L
+  }
+
+  chars
+}

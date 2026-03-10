@@ -194,3 +194,56 @@ test_that("arrow - adjust_predictions_custom works", {
     dplyr::as_tibble(predict(tlr_fit, mtcars))
   )
 })
+
+test_that("estimate_adj_chars works for numeric_range", {
+  skip_if_not_installed("tailor")
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_numeric_range(lower_limit = 15, upper_limit = 25)
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- orbital:::estimate_adj_chars(tlr_fit$adjustments[[1]])
+  expect_type(res, "integer")
+  expect_true(res > 0)
+})
+
+test_that("estimate_adj_chars works for numeric_range with no limits", {
+  skip_if_not_installed("tailor")
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_numeric_range()
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- orbital:::estimate_adj_chars(tlr_fit$adjustments[[1]])
+  expect_identical(res, 0L)
+})
+
+test_that("estimate_orbital_size works for tailor", {
+  skip_if_not_installed("tailor")
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_numeric_range(lower_limit = 15, upper_limit = 25)
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- estimate_orbital_size(tlr_fit)
+  expect_type(res, "integer")
+  expect_true(res > 0)
+})

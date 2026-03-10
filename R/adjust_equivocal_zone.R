@@ -2,7 +2,7 @@
 orbital.equivocal_zone <- function(x, tailor, type, prefix, ...) {
   if (!rlang::is_missing(type) && !(all(c("prob", "class") %in% type))) {
     cli::cli_abort(c(
-      x = "{.arg type} must contain {.val prob} and {.val class} to work with 
+      x = "{.arg type} must contain {.val prob} and {.val class} to work with
       {.fn adjust_equivocal_zone}."
     ))
   }
@@ -30,4 +30,9 @@ orbital.equivocal_zone <- function(x, tailor, type, prefix, ...) {
   )
   names(out) <- out_name
   out
+}
+
+# dplyr::case_when with 3 branches and arithmetic ~= 120 chars
+estimate_adj_chars.equivocal_zone <- function(x, ...) {
+  120L
 }

@@ -178,3 +178,41 @@ test_that("arrow - adjust_predictions_custom works", {
     dplyr::as_tibble(predict(tlr_fit, mtcars))
   )
 })
+
+test_that("estimate_adj_chars works for predictions_custom", {
+  skip_if_not_installed("tailor")
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_predictions_custom(
+      double = mpg * 2,
+      half = mpg / 2
+    )
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- orbital:::estimate_adj_chars(tlr_fit$adjustments[[1]])
+  expect_type(res, "integer")
+  expect_true(res > 0)
+})
+
+test_that("estimate_adj_chars works for predictions_custom with empty selection", {
+  skip_if_not_installed("tailor")
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_predictions_custom()
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- orbital:::estimate_adj_chars(tlr_fit$adjustments[[1]])
+  expect_identical(res, 0L)
+})

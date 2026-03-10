@@ -6,7 +6,7 @@
 #' want to pay the cost of generating the full orbital object for every
 #' candidate model.
 #'
-#' @param x A fitted model object, workflow, or prepped recipe.
+#' @param x A fitted model object, workflow, prepped recipe, or fitted tailor.
 #' @param ... Additional arguments passed to methods.
 #' @param penalty For glmnet models, the penalty value (lambda) to use. If the
 #'   model was fit with a single lambda, this is used by default. Otherwise,
@@ -29,6 +29,7 @@
 #' Currently supported:
 #' - Workflows (`workflow`)
 #' - Recipes (`recipe`)
+#' - Tailors (`tailor`)
 #' - xgboost (`xgb.Booster`)
 #' - lightgbm (`lgb.Booster`)
 #' - catboost (`catboost.Model`)
@@ -380,6 +381,31 @@ estimate_orbital_size.workflow <- function(x, ...) {
   )
   total_chars <- total_chars + model_chars
 
+  # Estimate tailor contribution
+  if ("tailor" %in% names(x$post$actions)) {
+    tailor_fit <- workflows::extract_tailor(x)
+    total_chars <- total_chars + estimate_orbital_size(tailor_fit, ...)
+  }
+
+  total_chars
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.tailor <- function(x, ...) {
+  rlang::check_installed("tailor")
+
+  if (is.null(x$columns)) {
+    cli::cli_abort("{.arg x} must be a fitted {.cls tailor}.")
+  }
+
+  total_chars <- 0L
+
+  for (adj in x$adjustments) {
+    adj_chars <- estimate_adj_chars(adj)
+    total_chars <- total_chars + adj_chars
+  }
+
   total_chars
 }
 
@@ -395,4 +421,16 @@ estimate_step_chars <- function(x, ...) {
 estimate_step_chars.default <- function(x, ...) {
   n_cols <- length(x$columns %||% 0L)
   as.integer(n_cols * 40)
+}
+
+# Adjustment estimation generic and methods -----------------------------------
+
+# Internal generic for estimating adjustment character counts
+estimate_adj_chars <- function(x, ...) {
+  UseMethod("estimate_adj_chars")
+}
+
+# Default: most adjustments produce ~80 chars for a case_when expression
+estimate_adj_chars.default <- function(x, ...) {
+  80L
 }

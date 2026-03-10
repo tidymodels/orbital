@@ -15,6 +15,7 @@
 \alias{estimate_orbital_size.earth}
 \alias{estimate_orbital_size.recipe}
 \alias{estimate_orbital_size.workflow}
+\alias{estimate_orbital_size.tailor}
 \title{Estimate orbital object size without generating it}
 \usage{
 estimate_orbital_size(x, ...)
@@ -44,9 +45,11 @@ estimate_orbital_size(x, ...)
 \method{estimate_orbital_size}{recipe}(x, ...)
 
 \method{estimate_orbital_size}{workflow}(x, ...)
+
+\method{estimate_orbital_size}{tailor}(x, ...)
 }
 \arguments{
-\item{x}{A fitted model object, workflow, or prepped recipe.}
+\item{x}{A fitted model object, workflow, prepped recipe, or fitted tailor.}
 
 \item{...}{Additional arguments passed to methods.}
 
@@ -79,6 +82,7 @@ Currently supported:
 \itemize{
 \item Workflows (\code{workflow})
 \item Recipes (\code{recipe})
+\item Tailors (\code{tailor})
 \item xgboost (\code{xgb.Booster})
 \item lightgbm (\code{lgb.Booster})
 \item catboost (\code{catboost.Model})
