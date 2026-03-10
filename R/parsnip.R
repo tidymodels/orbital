@@ -17,16 +17,30 @@ orbital.model_fit <- function(
   }
 
   res <- try(
-    rlang::exec(
-      orbital,
-      x$fit,
-      mode = mode,
-      type = type,
-      lvl = x$lvl,
-      separate_trees = separate_trees,
-      prefix = prefix,
-      !!!extra_args
-    ),
+    {
+      # Explicitly call xgb.Booster method to avoid potential S3 dispatch issues
+      if (inherits(x$fit, "xgb.Booster")) {
+        orbital.xgb.Booster(
+          x$fit,
+          mode = mode,
+          type = type,
+          lvl = x$lvl,
+          separate_trees = separate_trees,
+          prefix = prefix
+        )
+      } else {
+        rlang::exec(
+          orbital,
+          x$fit,
+          mode = mode,
+          type = type,
+          lvl = x$lvl,
+          separate_trees = separate_trees,
+          prefix = prefix,
+          !!!extra_args
+        )
+      }
+    },
     silent = TRUE
   )
 
