@@ -11,7 +11,7 @@ orbital.step_indicate_na <- function(x, all_vars, ...) {
     return(NULL)
   }
 
-  out <- glue::glue("as.integer(is.na({cols}))")
+  out <- glue::glue("dplyr::if_else(is.na({cols}), 1L, 0L)")
 
   names(out) <- col_names
   out
