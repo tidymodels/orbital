@@ -1,5 +1,5 @@
 # orbital (development version)
-* `estimate_orbital_size()` is a new function that quickly estimates the character count of the orbital expression for a model without generating it.
+* `estimate_orbital_size()` is a new function that quickly estimates the character count of the orbital expression for a model without generating it. (#144)
 
 # orbital 0.5.0
 

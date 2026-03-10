@@ -16,7 +16,7 @@
 \alias{estimate_orbital_size.recipe}
 \alias{estimate_orbital_size.workflow}
 \alias{estimate_orbital_size.tailor}
-\title{Estimate orbital object size without generating it}
+\title{Estimate orbital expression character count}
 \usage{
 estimate_orbital_size(x, ...)
 
@@ -76,40 +76,40 @@ The estimates are typically within 5-10\% of the actual size.
 For tree-based models, this function is much faster than generating the full
 orbital object because it only needs to inspect the tree structure, not
 convert each tree to an R expression.
-\subsection{Supported objects}{
 
-Currently supported:
-\itemize{
-\item Workflows (\code{workflow})
-\item Recipes (\code{recipe})
-\item Tailors (\code{tailor})
-\item xgboost (\code{xgb.Booster})
-\item lightgbm (\code{lgb.Booster})
-\item catboost (\code{catboost.Model})
-\item ranger (\code{ranger})
-\item randomForest (\code{randomForest})
-\item rpart (\code{rpart})
-\item partykit (\code{constparty})
-\item glm (\code{glm})
-\item glmnet (\code{glmnet})
-\item earth (\code{earth})
-}
-}
+This function aims to support all the same models and preprocessing
+operations as \code{\link[=orbital]{orbital()}}. If you find a case where \code{orbital()} works but
+\code{estimate_orbital_size()} does not, please
+\href{https://github.com/tidymodels/orbital/issues}{file an issue}.
 }
 \examples{
 \dontshow{if (rlang::is_installed("xgboost")) withAutoprint(\{ # examplesIf}
 library(xgboost)
 
-# Create a model
+# Estimate size for an xgboost model
 x <- as.matrix(mtcars[, -1])
 y <- mtcars[, 1]
 model <- xgboost(x = x, y = y, nrounds = 50, max_depth = 4, verbosity = 0)
 
-# Estimate size (fast)
 estimate_orbital_size(model)
+\dontshow{\}) # examplesIf}
+\dontshow{if (rlang::is_installed(c("recipes", "workflows", "parsnip"))) withAutoprint(\{ # examplesIf}
+library(recipes)
+library(workflows)
+library(parsnip)
+
+# Estimate size for a workflow
+rec <- recipe(mpg ~ ., data = mtcars) |>
+  step_normalize(all_numeric_predictors())
+
+wf <- workflow() |>
+  add_recipe(rec) |>
+  add_model(linear_reg()) |>
+  fit(mtcars)
+
+estimate_orbital_size(wf)
 \dontshow{\}) # examplesIf}
 }
 \seealso{
-\code{\link[=orbital]{orbital()}} for generating orbital objects, the
-\code{vignette("sql-size")} for more on SQL size considerations.
+\code{\link[=orbital]{orbital()}} for generating orbital objects.
 }

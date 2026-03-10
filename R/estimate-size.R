@@ -1,4 +1,4 @@
-#' Estimate orbital object size without generating it
+#' Estimate orbital expression character count
 #'
 #' Estimates the character count of the orbital expression that would be
 #' generated for a model, without actually generating it. This is useful during
@@ -24,36 +24,38 @@
 #' orbital object because it only needs to inspect the tree structure, not
 #' convert each tree to an R expression.
 #'
-#' ## Supported objects
+#' This function aims to support all the same models and preprocessing
+#' operations as [orbital()]. If you find a case where `orbital()` works but
+#' `estimate_orbital_size()` does not, please
+#' [file an issue](https://github.com/tidymodels/orbital/issues).
 #'
-#' Currently supported:
-#' - Workflows (`workflow`)
-#' - Recipes (`recipe`)
-#' - Tailors (`tailor`)
-#' - xgboost (`xgb.Booster`)
-#' - lightgbm (`lgb.Booster`)
-#' - catboost (`catboost.Model`)
-#' - ranger (`ranger`)
-#' - randomForest (`randomForest`)
-#' - rpart (`rpart`)
-#' - partykit (`constparty`)
-#' - glm (`glm`)
-#' - glmnet (`glmnet`)
-#' - earth (`earth`)
-#'
-#' @seealso [orbital()] for generating orbital objects, the
-#'   `vignette("sql-size")` for more on SQL size considerations.
+#' @seealso [orbital()] for generating orbital objects.
 #'
 #' @examplesIf rlang::is_installed("xgboost")
 #' library(xgboost)
 #'
-#' # Create a model
+#' # Estimate size for an xgboost model
 #' x <- as.matrix(mtcars[, -1])
 #' y <- mtcars[, 1]
 #' model <- xgboost(x = x, y = y, nrounds = 50, max_depth = 4, verbosity = 0)
 #'
-#' # Estimate size (fast)
 #' estimate_orbital_size(model)
+#'
+#' @examplesIf rlang::is_installed(c("recipes", "workflows", "parsnip"))
+#' library(recipes)
+#' library(workflows)
+#' library(parsnip)
+#'
+#' # Estimate size for a workflow
+#' rec <- recipe(mpg ~ ., data = mtcars) |>
+#'   step_normalize(all_numeric_predictors())
+#'
+#' wf <- workflow() |>
+#'   add_recipe(rec) |>
+#'   add_model(linear_reg()) |>
+#'   fit(mtcars)
+#'
+#' estimate_orbital_size(wf)
 #'
 #' @export
 estimate_orbital_size <- function(x, ...) {
