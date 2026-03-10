@@ -5,3 +5,7 @@ orbital.step_smotenc <- function(x, all_vars, ...) {
     {.arg skip} is {.code FALSE}."
   )
 }
+
+estimate_step_chars.step_smotenc <- function(x, ...) {
+  0L
+}

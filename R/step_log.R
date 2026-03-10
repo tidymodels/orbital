@@ -22,3 +22,13 @@ orbital.step_log <- function(x, all_vars, ...) {
   names(out) <- columns
   out
 }
+
+estimate_step_chars.step_log <- function(x, ...) {
+  n_cols <- length(x$columns)
+  if (n_cols == 0) {
+    return(0L)
+  }
+  base_chars <- if (x$signed) 80 else 30
+  avg_col_len <- mean(nchar(x$columns))
+  as.integer(n_cols * (base_chars + avg_col_len))
+}

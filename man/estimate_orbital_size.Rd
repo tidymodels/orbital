@@ -13,6 +13,8 @@
 \alias{estimate_orbital_size.lm}
 \alias{estimate_orbital_size.glmnet}
 \alias{estimate_orbital_size.earth}
+\alias{estimate_orbital_size.recipe}
+\alias{estimate_orbital_size.workflow}
 \title{Estimate orbital object size without generating it}
 \usage{
 estimate_orbital_size(x, ...)
@@ -38,9 +40,13 @@ estimate_orbital_size(x, ...)
 \method{estimate_orbital_size}{glmnet}(x, ..., penalty = NULL)
 
 \method{estimate_orbital_size}{earth}(x, ...)
+
+\method{estimate_orbital_size}{recipe}(x, ...)
+
+\method{estimate_orbital_size}{workflow}(x, ...)
 }
 \arguments{
-\item{x}{A fitted model object.}
+\item{x}{A fitted model object, workflow, or prepped recipe.}
 
 \item{...}{Additional arguments passed to methods.}
 
@@ -67,10 +73,12 @@ The estimates are typically within 5-10\% of the actual size.
 For tree-based models, this function is much faster than generating the full
 orbital object because it only needs to inspect the tree structure, not
 convert each tree to an R expression.
-\subsection{Supported models}{
+\subsection{Supported objects}{
 
 Currently supported:
 \itemize{
+\item Workflows (\code{workflow})
+\item Recipes (\code{recipe})
 \item xgboost (\code{xgb.Booster})
 \item lightgbm (\code{lgb.Booster})
 \item catboost (\code{catboost.Model})

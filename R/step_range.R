@@ -30,3 +30,12 @@ orbital.step_range <- function(x, all_vars, ...) {
   names(out) <- cols
   out
 }
+
+estimate_step_chars.step_range <- function(x, ...) {
+  n_cols <- ncol(x$ranges)
+  if (n_cols == 0) {
+    return(0L)
+  }
+  avg_col_len <- mean(nchar(colnames(x$ranges)))
+  as.integer(n_cols * (35 + avg_col_len + 20))
+}

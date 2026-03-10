@@ -48,3 +48,14 @@ test_that("arrow - step_lincomb works", {
   # Isn't needed as `step_lincomb()` doesn't produce code
   expect_true(TRUE)
 })
+
+test_that("estimate_step_chars works for step_lincomb", {
+  skip_if_not_installed("recipes")
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_lincomb(recipes::all_predictors()) |>
+    recipes::prep()
+
+  res <- orbital:::estimate_step_chars(rec$steps[[1]])
+  expect_identical(res, 0L)
+})

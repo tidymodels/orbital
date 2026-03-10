@@ -47,3 +47,14 @@ test_that("arrow - step_filter_missing works", {
   # Isn't needed as `step_filter_missing()` doesn't produce code
   expect_true(TRUE)
 })
+
+test_that("estimate_step_chars works for step_filter_missing", {
+  skip_if_not_installed("recipes")
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_filter_missing(recipes::all_predictors()) |>
+    recipes::prep()
+
+  res <- orbital:::estimate_step_chars(rec$steps[[1]])
+  expect_identical(res, 0L)
+})

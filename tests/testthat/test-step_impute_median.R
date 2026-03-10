@@ -145,3 +145,26 @@ test_that("arrow - step_impute_median works", {
 
   expect_equal(res_new, res)
 })
+
+test_that("estimate_step_chars works for step_impute_median", {
+  skip_if_not_installed("recipes")
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_impute_median(recipes::all_predictors()) |>
+    recipes::prep()
+
+  res <- orbital:::estimate_step_chars(rec$steps[[1]])
+  expect_type(res, "integer")
+  expect_true(res > 0)
+})
+
+test_that("estimate_step_chars works for step_impute_median with empty selection", {
+  skip_if_not_installed("recipes")
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_impute_median() |>
+    recipes::prep()
+
+  res <- orbital:::estimate_step_chars(rec$steps[[1]])
+  expect_identical(res, 0L)
+})

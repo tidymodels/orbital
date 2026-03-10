@@ -17,3 +17,14 @@ orbital.step_dummy <- function(x, all_vars, ...) {
 
   out
 }
+
+estimate_step_chars.step_dummy <- function(x, ...) {
+  total <- 0L
+  for (var in names(x$levels)) {
+    levels <- attr(x$levels[[var]], "values")
+    n_levels <- length(levels)
+    avg_level_len <- if (n_levels > 0) mean(nchar(levels)) else 5
+    total <- total + as.integer(n_levels * (25 + nchar(var) + avg_level_len))
+  }
+  total
+}

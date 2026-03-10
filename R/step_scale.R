@@ -13,3 +13,12 @@ orbital.step_scale <- function(x, all_vars, ...) {
   names(out) <- names(sds)
   out
 }
+
+estimate_step_chars.step_scale <- function(x, ...) {
+  n_cols <- length(x$sds)
+  if (n_cols == 0) {
+    return(0L)
+  }
+  avg_col_len <- mean(nchar(names(x$sds)))
+  as.integer(n_cols * (10 + avg_col_len + 10))
+}

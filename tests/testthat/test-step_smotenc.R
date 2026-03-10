@@ -150,3 +150,18 @@ test_that("arrow - step_smotenc works", {
 
   expect_equal(res_new, res)
 })
+
+test_that("estimate_step_chars works for step_smotenc", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("themis")
+
+  mtcars0 <- dplyr::as_tibble(mtcars)
+  mtcars0$vs <- as.factor(mtcars0$vs)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars0) |>
+    themis::step_smotenc(vs, skip = TRUE) |>
+    recipes::prep()
+
+  res <- orbital:::estimate_step_chars(rec$steps[[1]])
+  expect_identical(res, 0L)
+})

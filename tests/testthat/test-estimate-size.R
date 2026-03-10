@@ -327,3 +327,94 @@ test_that("estimate_orbital_size scales with tree count for catboost", {
 
   expect_gt(est_large, est_small)
 })
+
+# Recipe tests
+test_that("estimate_orbital_size works for recipe", {
+  skip_if_not_installed("recipes")
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_normalize(recipes::all_numeric_predictors()) |>
+    recipes::prep()
+
+  est <- estimate_orbital_size(rec)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size works for recipe with dummy", {
+  skip_if_not_installed("recipes")
+
+  mtcars2 <- mtcars
+  mtcars2$cyl <- factor(mtcars2$cyl)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars2) |>
+    recipes::step_dummy(recipes::all_nominal_predictors()) |>
+    recipes::prep()
+
+  est <- estimate_orbital_size(rec)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size scales with recipe complexity", {
+  skip_if_not_installed("recipes")
+
+  rec_simple <- recipes::recipe(mpg ~ disp + hp, data = mtcars) |>
+    recipes::step_normalize(recipes::all_numeric_predictors()) |>
+    recipes::prep()
+
+  rec_complex <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_normalize(recipes::all_numeric_predictors()) |>
+    recipes::prep()
+
+  est_simple <- estimate_orbital_size(rec_simple)
+  est_complex <- estimate_orbital_size(rec_complex)
+
+  expect_gt(est_complex, est_simple)
+})
+
+# Workflow tests
+test_that("estimate_orbital_size works for workflow", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("workflows")
+  skip_if_not_installed("parsnip")
+
+  wf <- workflows::workflow() |>
+    workflows::add_recipe(
+      recipes::recipe(mpg ~ ., data = mtcars) |>
+        recipes::step_normalize(recipes::all_numeric_predictors())
+    ) |>
+    workflows::add_model(parsnip::linear_reg()) |>
+    parsnip::fit(mtcars)
+
+  est <- estimate_orbital_size(wf)
+
+  expect_type(est, "integer")
+  expect_gt(est, 0)
+})
+
+test_that("estimate_orbital_size for workflow combines recipe and model", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("workflows")
+  skip_if_not_installed("parsnip")
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_normalize(recipes::all_numeric_predictors())
+
+  wf <- workflows::workflow() |>
+    workflows::add_recipe(rec) |>
+    workflows::add_model(parsnip::linear_reg()) |>
+    parsnip::fit(mtcars)
+
+  wf_est <- estimate_orbital_size(wf)
+
+  # Estimate should be in reasonable range of actual size
+  orb <- orbital(wf)
+  actual <- sum(nchar(orb))
+
+  # Within 50% is acceptable for estimation
+  expect_gt(wf_est, actual * 0.5)
+  expect_lt(wf_est, actual * 1.5)
+})
