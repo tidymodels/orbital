@@ -1,7 +1,15 @@
+skip_if_r_lt_44 <- function() {
+  skip_if(
+    getRversion() < "4.4",
+    "xgboost tests require R >= 4.4 due to compatibility issues"
+  )
+}
+
 test_that("boost_tree(), objective = regression, works with type = numeric", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(mode = "regression", engine = "xgboost")
 
@@ -34,6 +42,7 @@ test_that("boost_tree(), objective = binary, works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   mtcars$vs <- factor(mtcars$vs)
 
@@ -62,6 +71,7 @@ test_that("boost_tree(), objective = multiclass, works with type = class", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(mode = "classification", engine = "xgboost")
 
@@ -88,6 +98,7 @@ test_that("boost_tree(), objective = binary, works with type = prob", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   mtcars$vs <- factor(mtcars$vs)
 
@@ -123,6 +134,7 @@ test_that("boost_tree(), objective = multiclass, works with type = prob", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(mode = "classification", engine = "xgboost")
 
@@ -158,6 +170,7 @@ test_that("boost_tree(xgboost) multiclass prob uses all default trees (#122)", {
 
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   # Fit with default trees (parsnip default is 15)
   bt_spec_default <- parsnip::boost_tree(
@@ -194,6 +207,7 @@ test_that("boost_tree(), objective = binary, works with type = c(class, prob)", 
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   mtcars$vs <- factor(mtcars$vs)
 
@@ -234,6 +248,7 @@ test_that("boost_tree(), objective = multiclass, works with type = c(class, prob
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(mode = "classification", engine = "xgboost")
 
@@ -273,6 +288,7 @@ test_that("boost_tree(xgboost) works with custom prefix", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(mode = "regression", engine = "xgboost")
 
@@ -289,6 +305,7 @@ test_that("boost_tree(xgboost) binary prob uses reference pattern", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   mtcars$vs <- factor(mtcars$vs)
 
@@ -308,6 +325,7 @@ test_that("boost_tree(xgboost) regression works with separate_trees = TRUE", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(
     mode = "regression",
@@ -335,6 +353,7 @@ test_that("boost_tree(xgboost) binary classification works with separate_trees =
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   mtcars2 <- mtcars
   mtcars2$vs <- factor(mtcars2$vs)
@@ -368,6 +387,7 @@ test_that("boost_tree(xgboost) multiclass works with separate_trees = TRUE", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(
     mode = "classification",
@@ -402,6 +422,7 @@ test_that("separate_trees batches summation for many trees (regression)", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(
     mode = "regression",
@@ -432,6 +453,7 @@ test_that("separate_trees batches summation for many trees (multiclass)", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
   skip_if_not_installed("xgboost")
+  skip_if_r_lt_44()
 
   bt_spec <- parsnip::boost_tree(
     mode = "classification",
