@@ -99,16 +99,48 @@ reducing SQL size:
 When performance differences are small, there can be substantial SQL
 size reductions to gain.
 
+## Estimating SQL size
+
+The
+[`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
+function provides a fast way to estimate how large an orbital expression
+will be without actually generating it. This is useful when you want to
+quickly check model sizes or track SQL size during hyperparameter
+tuning:
+
+``` r
+library(tidymodels)
+library(orbital)
+
+bt_spec <- boost_tree(trees = 100, tree_depth = 4) |>
+  set_engine("xgboost") |>
+  set_mode("regression")
+
+bt_fit <- fit(workflow(mpg ~ ., bt_spec), data = mtcars)
+
+# Fast estimation (doesn't generate the full orbital object)
+estimate_orbital_size(bt_fit)
+
+# Compare to actual size
+sum(nchar(orbital(bt_fit)))
+```
+
+The estimates are typically within 5-10% of the actual size, and the
+function is much faster for large models because it only inspects model
+metadata rather than generating the full expression.
+
 ## Tuning for both performance and SQL size
 
 You can use the `extract` argument in
 [`tune::control_grid()`](https://tune.tidymodels.org/reference/control_grid.html)
-to capture orbital object sizes during hyperparameter tuning:
+to capture estimated orbital sizes during hyperparameter tuning. Using
+[`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
+is much faster than generating the full orbital object for each
+candidate model:
 
 ``` r
 library(tidymodels)
-
-extract_orbital_size <- function(x) sum(nchar(orbital(x)))
+library(orbital)
 
 bt_spec <- boost_tree(
   trees = tune(),
@@ -122,7 +154,7 @@ bt_res <- tune_grid(
   workflow(mpg ~ ., bt_spec),
   resamples = vfold_cv(mtcars),
   grid = 5,
-  control = control_grid(extract = extract_orbital_size)
+  control = control_grid(extract = estimate_orbital_size)
 )
 ```
 
@@ -133,6 +165,7 @@ the trade-off:
 sizes <- bt_res |>
   collect_extracts() |>
   unnest(.extracts) |>
+
   summarize(sql_size = mean(.extracts), .by = .config)
 
 bt_res |>
@@ -141,10 +174,10 @@ bt_res |>
   left_join(sizes, by = ".config") |>
   ggplot(aes(x = sql_size, y = mean)) +
   geom_point() +
-  labs(x = "SQL size (characters)", y = "RMSE")
+  labs(x = "Estimated SQL size (characters)", y = "RMSE")
 ```
 
-Note that object size is a useful proxy but doesn’t perfectly predict
+Note that estimated size is a useful proxy but doesn’t perfectly predict
 computation time. Database query optimizers, caching, parallelization,
 and hardware all affect actual execution speed. A model with 2x the SQL
 size won’t necessarily take 2x as long to run. If execution time is

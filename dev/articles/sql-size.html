@@ -174,15 +174,42 @@ reducing SQL size:</p>
 size reductions to gain.</p>
 </div>
 <div class="section level2">
+<h2 id="estimating-sql-size">Estimating SQL size<a class="anchor" aria-label="anchor" href="#estimating-sql-size"></a>
+</h2>
+<p>The <code><a href="../reference/estimate_orbital_size.html">estimate_orbital_size()</a></code> function provides a fast way
+to estimate how large an orbital expression will be without actually
+generating it. This is useful when you want to quickly check model sizes
+or track SQL size during hyperparameter tuning:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/orbital" class="external-link">orbital</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bt_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree</a></span><span class="op">(</span>trees <span class="op">=</span> <span class="fl">100</span>, tree_depth <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html" class="external-link">set_engine</a></span><span class="op">(</span><span class="st">"xgboost"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_args.html" class="external-link">set_mode</a></span><span class="op">(</span><span class="st">"regression"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bt_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">bt_spec</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Fast estimation (doesn't generate the full orbital object)</span></span>
+<span><span class="fu"><a href="../reference/estimate_orbital_size.html">estimate_orbital_size</a></span><span class="op">(</span><span class="va">bt_fit</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Compare to actual size</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="fu"><a href="../reference/orbital.html">orbital</a></span><span class="op">(</span><span class="va">bt_fit</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<p>The estimates are typically within 5-10% of the actual size, and the
+function is much faster for large models because it only inspects model
+metadata rather than generating the full expression.</p>
+</div>
+<div class="section level2">
 <h2 id="tuning-for-both-performance-and-sql-size">Tuning for both performance and SQL size<a class="anchor" aria-label="anchor" href="#tuning-for-both-performance-and-sql-size"></a>
 </h2>
 <p>You can use the <code>extract</code> argument in
-<code><a href="https://tune.tidymodels.org/reference/control_grid.html" class="external-link">tune::control_grid()</a></code> to capture orbital object sizes during
-hyperparameter tuning:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code><a href="https://tune.tidymodels.org/reference/control_grid.html" class="external-link">tune::control_grid()</a></code> to capture estimated orbital sizes
+during hyperparameter tuning. Using <code><a href="../reference/estimate_orbital_size.html">estimate_orbital_size()</a></code>
+is much faster than generating the full orbital object for each
+candidate model:</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">extract_orbital_size</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nchar.html" class="external-link">nchar</a></span><span class="op">(</span><span class="fu"><a href="../reference/orbital.html">orbital</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/orbital" class="external-link">orbital</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">bt_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree</a></span><span class="op">(</span></span>
 <span>  trees <span class="op">=</span> <span class="fu"><a href="https://hardhat.tidymodels.org/reference/tune.html" class="external-link">tune</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -196,14 +223,15 @@ hyperparameter tuning:</p>
 <span>  <span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">bt_spec</span><span class="op">)</span>,</span>
 <span>  resamples <span class="op">=</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span>,</span>
 <span>  grid <span class="op">=</span> <span class="fl">5</span>,</span>
-<span>  control <span class="op">=</span> <span class="fu">control_grid</span><span class="op">(</span>extract <span class="op">=</span> <span class="va">extract_orbital_size</span><span class="op">)</span></span>
+<span>  control <span class="op">=</span> <span class="fu">control_grid</span><span class="op">(</span>extract <span class="op">=</span> <span class="va">estimate_orbital_size</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p>Then combine the extracted sizes with performance metrics to
 visualize the trade-off:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sizes</span> <span class="op">&lt;-</span> <span class="va">bt_res</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">collect_extracts</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html" class="external-link">unnest</a></span><span class="op">(</span><span class="va">.extracts</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html" class="external-link">summarize</a></span><span class="op">(</span>sql_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">.extracts</span><span class="op">)</span>, .by <span class="op">=</span> <span class="va">.config</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">bt_res</span> <span class="op">|&gt;</span></span>
@@ -212,13 +240,13 @@ visualize the trade-off:</p>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span><span class="va">sizes</span>, by <span class="op">=</span> <span class="st">".config"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">ggplot</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">sql_size</span>, y <span class="op">=</span> <span class="va">mean</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">geom_point</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"SQL size (characters)"</span>, y <span class="op">=</span> <span class="st">"RMSE"</span><span class="op">)</span></span></code></pre></div>
-<p>Note that object size is a useful proxy but doesn’t perfectly predict
-computation time. Database query optimizers, caching, parallelization,
-and hardware all affect actual execution speed. A model with 2x the SQL
-size won’t necessarily take 2x as long to run. If execution time is
-critical, benchmark your top candidates directly in your target database
-environment.</p>
+<span>  <span class="fu">labs</span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Estimated SQL size (characters)"</span>, y <span class="op">=</span> <span class="st">"RMSE"</span><span class="op">)</span></span></code></pre></div>
+<p>Note that estimated size is a useful proxy but doesn’t perfectly
+predict computation time. Database query optimizers, caching,
+parallelization, and hardware all affect actual execution speed. A model
+with 2x the SQL size won’t necessarily take 2x as long to run. If
+execution time is critical, benchmark your top candidates directly in
+your target database environment.</p>
 </div>
 <div class="section level2">
 <h2 id="practical-considerations">Practical considerations<a class="anchor" aria-label="anchor" href="#practical-considerations"></a>

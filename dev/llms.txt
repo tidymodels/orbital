@@ -196,6 +196,8 @@ object. This will almost always be the first function you use.
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   : Turn tidymodels objects into orbital objects
+- [`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
+  : Estimate orbital expression character count
 
 ## Prediction
 
