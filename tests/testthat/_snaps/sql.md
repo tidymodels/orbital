@@ -86,24 +86,42 @@
       orbital_sql(obj, con)
     Output
       <SQL> ((CASE
-      WHEN (`disp` <= 266.9) THEN (CASE WHEN (`mpg` <= 21.2) THEN 0.5 ELSE 0 END)
-      ELSE 1
-      END) + (CASE
-      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 221.7) THEN 0.6666667 ELSE 1 END)
-      ELSE CASE WHEN (`mpg` <= 25.2) THEN 0 ELSE 0.5 END
-      END)) + (CASE
-      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 221.7) THEN 0.5714286 ELSE 1 END)
-      ELSE 0.1
-      END) AS 0
-      <SQL> ((CASE
-      WHEN (`disp` <= 266.9) THEN (CASE WHEN (`mpg` <= 21.2) THEN 0.5 ELSE 1 END)
+      WHEN (`mpg` <= 21.25) THEN (CASE
+      WHEN (`mpg` <= 17.55) THEN 1
+      ELSE CASE WHEN (`mpg` <= 18.4) THEN 0 ELSE 1 END
+      END)
       ELSE 0
       END) + (CASE
-      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 221.7) THEN 0.3333333 ELSE 0 END)
-      ELSE CASE WHEN (`mpg` <= 25.2) THEN 1 ELSE 0.5 END
+      WHEN (`disp` <= 266.9) THEN (CASE
+      WHEN (`hp` <= 111.5) THEN (CASE
+      WHEN (`disp` <= 1.2) THEN 0
+      ELSE CASE WHEN (`hp` <= 109.5) THEN 0.2222222 ELSE 0.75 END
+      END)
+      ELSE 0
+      END)
+      ELSE 1
       END)) + (CASE
-      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 221.7) THEN 0.4285714 ELSE 0 END)
-      ELSE 0.9
+      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 263) THEN 0.5555556 ELSE 1 END)
+      ELSE 0
+      END) AS 0
+      <SQL> ((CASE
+      WHEN (`mpg` <= 21.25) THEN (CASE
+      WHEN (`mpg` <= 17.55) THEN 0
+      ELSE CASE WHEN (`mpg` <= 18.4) THEN 1 ELSE 0 END
+      END)
+      ELSE 1
+      END) + (CASE
+      WHEN (`disp` <= 266.9) THEN (CASE
+      WHEN (`hp` <= 111.5) THEN (CASE
+      WHEN (`disp` <= 1.2) THEN 1
+      ELSE CASE WHEN (`hp` <= 109.5) THEN 0.7777778 ELSE 0.25 END
+      END)
+      ELSE 1
+      END)
+      ELSE 0
+      END)) + (CASE
+      WHEN (`mpg` <= 21.2) THEN (CASE WHEN (`disp` <= 263) THEN 0.4444444 ELSE 0 END)
+      ELSE 1
       END) AS 1
       <SQL> (`0`) / 3 AS .pred_0
       <SQL> (`1`) / 3 AS .pred_1

@@ -124,9 +124,9 @@ test_that("sql works for ranger classification", {
     trees = 3,
     mode = "classification",
     engine = "ranger"
-  )
+  ) |>
+    parsnip::set_engine("ranger", seed = 1234)
 
-  set.seed(123)
   fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
 
   obj <- orbital(fit, type = c("class", "prob"))
