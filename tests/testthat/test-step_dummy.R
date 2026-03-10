@@ -178,3 +178,30 @@ test_that("arrow - step_dummy works", {
 
   expect_equal(res_new, exp)
 })
+
+test_that("estimate_step_chars works for step_dummy", {
+  skip_if_not_installed("recipes")
+
+  mtcars1 <- dplyr::as_tibble(mtcars)
+  mtcars1$gear <- as.character(mtcars1$gear)
+  mtcars1$carb <- as.character(mtcars1$carb)
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars1) |>
+    recipes::step_dummy(recipes::all_nominal_predictors()) |>
+    recipes::prep()
+
+  res <- orbital:::estimate_step_chars(rec$steps[[1]])
+  expect_type(res, "integer")
+  expect_true(res > 0)
+})
+
+test_that("estimate_step_chars works for step_dummy with empty selection", {
+  skip_if_not_installed("recipes")
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_dummy() |>
+    recipes::prep()
+
+  res <- orbital:::estimate_step_chars(rec$steps[[1]])
+  expect_identical(res, 0L)
+})

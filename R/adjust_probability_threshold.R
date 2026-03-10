@@ -2,7 +2,7 @@
 orbital.probability_threshold <- function(x, tailor, type, prefix, ...) {
   if (!rlang::is_missing(type) && !(all(c("prob", "class") %in% type))) {
     cli::cli_abort(c(
-      x = "{.arg type} must contain {.val prob} and {.val class} to work with 
+      x = "{.arg type} must contain {.val prob} and {.val class} to work with
       {.fn adjust_equivocal_zone}."
     ))
   }
@@ -29,4 +29,9 @@ orbital.probability_threshold <- function(x, tailor, type, prefix, ...) {
   )
   names(out) <- out_name
   out
+}
+
+# dplyr::case_when with 3 branches ~= 100 chars
+estimate_adj_chars.probability_threshold <- function(x, ...) {
+  100L
 }

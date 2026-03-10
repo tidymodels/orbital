@@ -5,3 +5,7 @@ orbital.step_nearmiss <- function(x, all_vars, ...) {
     {.arg skip} is {.code FALSE}."
   )
 }
+
+estimate_step_chars.step_nearmiss <- function(x, ...) {
+  0L
+}

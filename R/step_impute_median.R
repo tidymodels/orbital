@@ -15,3 +15,12 @@ orbital.step_impute_median <- function(x, all_vars, ...) {
   names(out) <- names(medians)
   out
 }
+
+estimate_step_chars.step_impute_median <- function(x, ...) {
+  n_cols <- length(x$medians)
+  if (n_cols == 0) {
+    return(0L)
+  }
+  avg_col_len <- mean(nchar(names(x$medians)))
+  as.integer(n_cols * (40 + avg_col_len * 2 + 10))
+}

@@ -5,3 +5,7 @@ orbital.step_smote <- function(x, all_vars, ...) {
     {.arg skip} is {.code FALSE}."
   )
 }
+
+estimate_step_chars.step_smote <- function(x, ...) {
+  0L
+}

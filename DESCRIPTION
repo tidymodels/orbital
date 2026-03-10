@@ -27,7 +27,9 @@ Suggests:
     dbplyr,
     dtplyr,
     duckdb,
+    earth,
     embed,
+    glmnet,
     glue,
     gt,
     hardhat,
@@ -40,8 +42,11 @@ Suggests:
     partykit,
     probably,
     R6,
+    randomForest,
+    ranger,
     recipes,
     rmarkdown,
+    rpart,
     RSQLite,
     rstanarm,
     sparklyr,
@@ -51,7 +56,8 @@ Suggests:
     themis,
     tibble,
     tidypredict (>= 1.1.0),
-    workflows
+    workflows,
+    xgboost
 VignetteBuilder: 
     knitr
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown, gt

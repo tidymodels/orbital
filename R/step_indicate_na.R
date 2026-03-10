@@ -16,3 +16,12 @@ orbital.step_indicate_na <- function(x, all_vars, ...) {
   names(out) <- col_names
   out
 }
+
+estimate_step_chars.step_indicate_na <- function(x, ...) {
+  n_cols <- length(x$columns)
+  if (n_cols == 0) {
+    return(0L)
+  }
+  avg_col_len <- mean(nchar(x$columns))
+  as.integer(n_cols * (25 + avg_col_len))
+}

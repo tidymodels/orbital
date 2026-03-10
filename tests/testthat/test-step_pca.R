@@ -216,3 +216,18 @@ test_that("arrow - step_pca works", {
 
   expect_equal(res_new, res)
 })
+
+test_that("estimate_step_chars works for step_pca", {
+  skip_if_not_installed("recipes")
+
+  mtcars0 <- dplyr::as_tibble(mtcars)
+  mtcars0$hp <- NULL
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars0) |>
+    recipes::step_pca(recipes::all_predictors()) |>
+    recipes::prep()
+
+  res <- orbital:::estimate_step_chars(rec$steps[[1]])
+  expect_type(res, "integer")
+  expect_true(res > 0)
+})

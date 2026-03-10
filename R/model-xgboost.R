@@ -13,7 +13,22 @@ orbital.xgb.Booster <- function(
   type <- default_type(type)
 
   if (mode == "classification") {
-    objective <- x$params$objective %||% attr(x, "params")$objective
+    objective <- x$params$objective %||%
+      attr(x, "params")$objective %||%
+      attr(x, "param")$objective
+
+    # Infer objective from number of classes if not found
+    if (is.null(objective)) {
+      num_class <- x$params$num_class %||%
+        attr(x, "params")$num_class %||%
+        attr(x, "param")$num_class
+      objective <- if (!is.null(num_class) && num_class > 2) {
+        "multi:softprob"
+      } else {
+        "binary:logistic"
+      }
+    }
+
     objective <- rlang::arg_match0(
       objective,
       c("multi:softprob", "binary:logistic")

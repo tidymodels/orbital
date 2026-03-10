@@ -19,6 +19,7 @@ reference:
     Turn a fitted workflow, parsnip, or recipes object into an orbital  object. This will almost always be the first function you use.
   contents:
   - orbital
+  - estimate_orbital_size
 - title: Prediction
   desc: >
     An orbital object can be predicted with, using data.frames or  connections to data bases.

@@ -268,3 +268,33 @@ test_that("arrow - adjust_equivocal_zone works", {
     exp
   )
 })
+
+test_that("estimate_adj_chars works for equivocal_zone", {
+  skip_if_not_installed("tailor")
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("workflows")
+  skip_if_not_installed("probably")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  mod <- parsnip::logistic_reg()
+
+  workflow <- workflows::workflow()
+  workflow <- workflows::add_formula(workflow, vs ~ disp)
+  workflow <- workflows::add_model(workflow, mod)
+
+  tailor <- tailor::tailor()
+  tailor <- tailor::adjust_equivocal_zone(
+    tailor,
+    value = 1 / 4,
+    threshold = 0.3
+  )
+  workflow <- workflows::add_tailor(workflow, tailor)
+
+  wf_fit <- workflows::fit(workflow, mtcars)
+
+  tailor_fit <- workflows::extract_tailor(wf_fit)
+  res <- orbital:::estimate_adj_chars(tailor_fit$adjustments[[1]])
+  expect_type(res, "integer")
+  expect_true(res > 0)
+})
