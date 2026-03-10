@@ -134,7 +134,7 @@ test_that("sql works for ranger classification", {
   con <- dbplyr::simulate_dbi()
 
   # Don't use snapshot - ranger results vary across platforms even with seed
- res <- orbital_sql(obj, con)
+  res <- orbital_sql(obj, con)
   expect_s3_class(res, "sql")
   expect_length(res, 5)
 })
