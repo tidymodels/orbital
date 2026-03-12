@@ -11,6 +11,7 @@ orbital.predictions_custom <- function(x, ...) {
 }
 
 # Estimate based on number of expressions, ~50 chars each
+#' @exportS3Method
 estimate_adj_chars.predictions_custom <- function(x, ...) {
   n_exprs <- length(x$arguments$commands)
   if (n_exprs == 0) {

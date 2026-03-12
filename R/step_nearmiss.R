@@ -6,6 +6,7 @@ orbital.step_nearmiss <- function(x, all_vars, ...) {
   )
 }
 
+#' @exportS3Method
 estimate_step_chars.step_nearmiss <- function(x, ...) {
   0L
 }

@@ -31,6 +31,7 @@ orbital.step_range <- function(x, all_vars, ...) {
   out
 }
 
+#' @exportS3Method
 estimate_step_chars.step_range <- function(x, ...) {
   n_cols <- ncol(x$ranges)
   if (n_cols == 0) {

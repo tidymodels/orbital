@@ -6,6 +6,7 @@ orbital.step_downsample <- function(x, all_vars, ...) {
   )
 }
 
+#' @exportS3Method
 estimate_step_chars.step_downsample <- function(x, ...) {
   0L
 }
