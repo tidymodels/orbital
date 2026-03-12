@@ -14,6 +14,7 @@ orbital.step_sqrt <- function(x, all_vars, ...) {
   out
 }
 
+#' @exportS3Method
 estimate_step_chars.step_sqrt <- function(x, ...) {
   n_cols <- length(x$columns)
   if (n_cols == 0) {

@@ -6,6 +6,7 @@ orbital.step_smotenc <- function(x, all_vars, ...) {
   )
 }
 
+#' @exportS3Method
 estimate_step_chars.step_smotenc <- function(x, ...) {
   0L
 }

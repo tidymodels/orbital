@@ -33,6 +33,7 @@ orbital.equivocal_zone <- function(x, tailor, type, prefix, ...) {
 }
 
 # dplyr::case_when with 3 branches and arithmetic ~= 120 chars
+#' @exportS3Method
 estimate_adj_chars.equivocal_zone <- function(x, ...) {
   120L
 }

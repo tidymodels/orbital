@@ -19,6 +19,7 @@ orbital.step_normalize <- function(x, all_vars, ...) {
   out
 }
 
+#' @exportS3Method
 estimate_step_chars.step_normalize <- function(x, ...) {
   n_cols <- length(x$means)
   if (n_cols == 0) {

@@ -16,6 +16,7 @@ orbital.step_impute_median <- function(x, all_vars, ...) {
   out
 }
 
+#' @exportS3Method
 estimate_step_chars.step_impute_median <- function(x, ...) {
   n_cols <- length(x$medians)
   if (n_cols == 0) {

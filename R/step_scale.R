@@ -14,6 +14,7 @@ orbital.step_scale <- function(x, all_vars, ...) {
   out
 }
 
+#' @exportS3Method
 estimate_step_chars.step_scale <- function(x, ...) {
   n_cols <- length(x$sds)
   if (n_cols == 0) {

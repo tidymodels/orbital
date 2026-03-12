@@ -6,6 +6,7 @@ orbital.step_bsmote <- function(x, all_vars, ...) {
   )
 }
 
+#' @exportS3Method
 estimate_step_chars.step_bsmote <- function(x, ...) {
   0L
 }
