@@ -28,6 +28,7 @@ orbital.numeric_range <- function(x, tailor, ...) {
 }
 
 # dplyr::case_when with 2-3 branches ~= 80 chars
+#' @exportS3Method
 estimate_adj_chars.numeric_range <- function(x, ...) {
   lower <- x$arguments$lower_limit
   upper <- x$arguments$upper_limit

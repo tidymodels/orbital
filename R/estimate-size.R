@@ -420,6 +420,7 @@ estimate_step_chars <- function(x, ...) {
 
 # Default: estimate based on number of columns affected
 # Most steps produce ~40 chars per column as a rough baseline
+#' @exportS3Method
 estimate_step_chars.default <- function(x, ...) {
   n_cols <- length(x$columns %||% 0L)
   as.integer(n_cols * 40)
@@ -433,6 +434,7 @@ estimate_adj_chars <- function(x, ...) {
 }
 
 # Default: most adjustments produce ~80 chars for a case_when expression
+#' @exportS3Method
 estimate_adj_chars.default <- function(x, ...) {
   80L
 }

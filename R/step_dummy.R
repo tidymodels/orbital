@@ -18,6 +18,7 @@ orbital.step_dummy <- function(x, all_vars, ...) {
   out
 }
 
+#' @exportS3Method
 estimate_step_chars.step_dummy <- function(x, ...) {
   total <- 0L
   for (var in names(x$levels)) {

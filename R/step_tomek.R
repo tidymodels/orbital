@@ -6,6 +6,7 @@ orbital.step_tomek <- function(x, all_vars, ...) {
   )
 }
 
+#' @exportS3Method
 estimate_step_chars.step_tomek <- function(x, ...) {
   0L
 }

@@ -32,6 +32,7 @@ orbital.probability_threshold <- function(x, tailor, type, prefix, ...) {
 }
 
 # dplyr::case_when with 3 branches ~= 100 chars
+#' @exportS3Method
 estimate_adj_chars.probability_threshold <- function(x, ...) {
   100L
 }
