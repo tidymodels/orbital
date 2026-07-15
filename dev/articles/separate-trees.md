@@ -12,6 +12,7 @@ When orbital converts a tree ensemble to SQL or dplyr expressions, the
 default behavior creates a single massive nested expression:
 
 ``` r
+
 .pred = "(tree1) + (tree2) + (tree3) + ... + (tree100)"
 ```
 
@@ -34,6 +35,7 @@ Setting `separate_trees = TRUE` emits each tree as a separate
 intermediate column:
 
 ``` r
+
 .pred_tree_001 = "case_when(...)"
 .pred_tree_002 = "case_when(...)"
 .pred_tree_003 = "case_when(...)"
@@ -52,6 +54,7 @@ in groups of 50 to avoid expression depth limits. For example, a model
 with 120 trees produces:
 
 ``` r
+
 .pred_tree_001 = "case_when(...)"
 .pred_tree_002 = "case_when(...)"
 ...
@@ -69,6 +72,7 @@ evaluation.
 ## Example
 
 ``` r
+
 library(orbital)
 library(parsnip)
 library(xgboost)
@@ -94,13 +98,13 @@ length(orb_separate)
 The `separate_trees` argument works with the following tree ensemble
 models:
 
-| Model                                                                        | Engine       | Regression | Classification |
-|------------------------------------------------------------------------------|--------------|------------|----------------|
-| [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html)   | xgboost      | Yes        | Yes            |
-| [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html)   | lightgbm     | Yes        | Yes            |
-| [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html)   | catboost     | Yes        | Yes            |
-| [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | ranger       | Yes        | Yes            |
-| [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | randomForest | Yes        | Yes            |
+| Model | Engine | Regression | Classification |
+|----|----|----|----|
+| [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html) | xgboost | Yes | Yes |
+| [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html) | lightgbm | Yes | Yes |
+| [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html) | catboost | Yes | Yes |
+| [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | ranger | Yes | Yes |
+| [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | randomForest | Yes | Yes |
 
 For single-tree models like
 [`decision_tree()`](https://parsnip.tidymodels.org/reference/decision_tree.html),
@@ -117,6 +121,7 @@ during evaluation but are **not** included in the final output from
 the final prediction column (e.g., `.pred`) appears in the results.
 
 ``` r
+
 # Intermediate columns are excluded from output
 preds <- predict(orb_separate, new_data)
 names(preds)
@@ -189,6 +194,7 @@ approaches with your actual workload.
 One way to benchmark from R uses the bench package:
 
 ``` r
+
 library(DBI)
 library(duckdb)
 

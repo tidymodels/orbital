@@ -2,10 +2,18 @@
 
 ## orbital (development version)
 
+## orbital 0.5.1
+
+CRAN release: 2026-03-13
+
+### Improvements
+
 - [`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
   is a new function that quickly estimates the character count of the
   orbital expression for a model without generating it.
   ([\#144](https://github.com/tidymodels/orbital/issues/144))
+
+### Bug fixes
 
 - [`step_dummy()`](https://recipes.tidymodels.org/reference/step_dummy.html)
   and

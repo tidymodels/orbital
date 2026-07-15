@@ -109,6 +109,7 @@ quickly check model sizes or track SQL size during hyperparameter
 tuning:
 
 ``` r
+
 library(tidymodels)
 library(orbital)
 
@@ -139,6 +140,7 @@ is much faster than generating the full orbital object for each
 candidate model:
 
 ``` r
+
 library(tidymodels)
 library(orbital)
 
@@ -162,6 +164,7 @@ Then combine the extracted sizes with performance metrics to visualize
 the trade-off:
 
 ``` r
+
 sizes <- bt_res |>
   collect_extracts() |>
   unnest(.extracts) |>
