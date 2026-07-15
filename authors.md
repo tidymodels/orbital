@@ -11,16 +11,16 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/tidymodels/orbital/blob/v0.5.0/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/tidymodels/orbital/blob/v0.5.1/DESCRIPTION)
 
 Hvitfeldt E (2026). *orbital: Predict with 'tidymodels' Workflows in
-Databases*. R package version 0.5.0,
+Databases*. R package version 0.5.1,
 <https://github.com/tidymodels/orbital>.
 
     @Manual{,
       title = {orbital: Predict with 'tidymodels' Workflows in Databases},
       author = {Emil Hvitfeldt},
       year = {2026},
-      note = {R package version 0.5.0},
+      note = {R package version 0.5.1},
       url = {https://github.com/tidymodels/orbital},
     }

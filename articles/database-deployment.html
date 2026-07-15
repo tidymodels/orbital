@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/Source_Sans_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/Source_Code_Pro-0.4.10/font.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
@@ -32,7 +32,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -74,7 +74,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Database deployment</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.5.0/vignettes/articles/database-deployment.Rmd" class="external-link"><code>vignettes/articles/database-deployment.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.5.1/vignettes/articles/database-deployment.Rmd" class="external-link"><code>vignettes/articles/database-deployment.Rmd</code></a></small>
       <div class="d-none name"><code>database-deployment.Rmd</code></div>
     </div>
 
@@ -143,8 +143,8 @@ predictions to a database table, then extract the generated SQL.</p>
 <span></span>
 <span><span class="co"># View the lazy query</span></span>
 <span><span class="va">predictions</span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Source:   SQL [?? x 12]</span></span></span>
-<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 1.4.4 [unknown@Linux 6.14.0-1017-azure:R 4.5.2/:memory:]</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># A query:  ?? x 12</span></span></span>
+<span><span class="co">#&gt; <span style="color: #949494;"># Database: DuckDB 1.5.4 [unknown@Linux 6.17.0-1018-azure:R 4.6.1/:memory:]</span></span></span>
 <span><span class="co">#&gt;      mpg   cyl    disp     hp  drat       wt  qsec    vs    am  gear</span></span>
 <span><span class="co">#&gt;    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BCBCBC;"> 1</span>  21       6 -<span style="color: #BB0000;">0.571</span>  -<span style="color: #BB0000;">0.535</span>  3.9  -<span style="color: #BB0000;">0.610</span>    16.5     0     1     4</span></span>
@@ -166,7 +166,7 @@ predictions to a database table, then extract the generated SQL.</p>
 <span><span class="va">generated_sql</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dbplyr.tidyverse.org/reference/remote_name.html" class="external-link">remote_query</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
 <span><span class="va">generated_sql</span></span>
 <span><span class="co">#&gt; &lt;SQL&gt; SELECT</span></span>
-<span><span class="co">#&gt;   q01.*,</span></span>
+<span><span class="co">#&gt;   *,</span></span>
 <span><span class="co">#&gt;   ((20.090625 + (disp * -0.116131681667974)) + (wt * -3.71900968057122)) + (hp * -2.13618249713439) AS ".pred"</span></span>
 <span><span class="co">#&gt; FROM (</span></span>
 <span><span class="co">#&gt;   SELECT</span></span>
@@ -182,7 +182,7 @@ predictions to a database table, then extract the generated SQL.</p>
 <span><span class="co">#&gt;     gear,</span></span>
 <span><span class="co">#&gt;     carb</span></span>
 <span><span class="co">#&gt;   FROM mtcars_data</span></span>
-<span><span class="co">#&gt; ) q01</span></span></code></pre></div>
+<span><span class="co">#&gt; ) AS q01</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="creating-a-table">Creating a table<a class="anchor" aria-label="anchor" href="#creating-a-table"></a>
@@ -332,7 +332,7 @@ integration with your organization’s data infrastructure.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
   </div></footer>

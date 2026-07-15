@@ -8,6 +8,7 @@ The goal of orbital is to enable running predictions of tidymodels
 To install it, use:
 
 ``` r
+
 install.packages("orbital")
 ```
 
@@ -15,6 +16,7 @@ You can install the development version of orbital from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("devtools")
 devtools::install_github("tidymodels/orbital")
 ```
@@ -24,6 +26,7 @@ devtools::install_github("tidymodels/orbital")
 Given a fitted workflow
 
 ``` r
+
 library(tidymodels)
 
 rec_spec <- recipe(mpg ~ ., data = mtcars) |>
@@ -39,6 +42,7 @@ wf_fit <- fit(wf_spec, mtcars)
 You can predict with it like normal.
 
 ``` r
+
 predict(wf_fit, mtcars)
 #> # A tibble: 32 × 1
 #>    .pred
@@ -59,6 +63,7 @@ predict(wf_fit, mtcars)
 We can get the same results by first creating an orbital object
 
 ``` r
+
 library(orbital)
 orbital_obj <- orbital(wf_fit)
 orbital_obj
@@ -84,6 +89,7 @@ and then “predicting” with it using
 results
 
 ``` r
+
 predict(orbital_obj, as_tibble(mtcars))
 #> # A tibble: 32 × 1
 #>    .pred
@@ -104,6 +110,7 @@ predict(orbital_obj, as_tibble(mtcars))
 you can also predict in most SQL databases
 
 ``` r
+
 library(DBI)
 library(RSQLite)
 
@@ -131,6 +138,7 @@ predict(orbital_obj, db_mtcars)
 and spark databases
 
 ``` r
+
 library(sparklyr)
 sc <- spark_connect(master = "local")
 
@@ -196,6 +204,8 @@ object. This will almost always be the first function you use.
 
 - [`orbital()`](https://orbital.tidymodels.org/reference/orbital.md) :
   Turn tidymodels objects into orbital objects
+- [`estimate_orbital_size()`](https://orbital.tidymodels.org/reference/estimate_orbital_size.md)
+  : Estimate orbital expression character count
 
 ## Prediction
 

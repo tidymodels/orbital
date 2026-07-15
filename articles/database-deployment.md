@@ -19,6 +19,7 @@ generation, but they have different tradeoffs:
 We start by loading our packages and creating a simple fitted workflow.
 
 ``` r
+
 library(orbital)
 library(recipes)
 library(parsnip)
@@ -29,6 +30,7 @@ library(duckdb)
 ```
 
 ``` r
+
 rec_spec <- recipe(mpg ~ disp + wt + hp, data = mtcars) |>
   step_normalize(all_numeric_predictors())
 
@@ -41,6 +43,7 @@ wf_fit <- fit(wf_spec, data = mtcars)
 Then create our orbital object.
 
 ``` r
+
 orbital_obj <- orbital(wf_fit)
 orbital_obj
 ```
@@ -52,6 +55,7 @@ requires no external setup. The same pattern works with other databases
 like PostgreSQL, Snowflake, SQL Server, and Spark.
 
 ``` r
+
 con <- dbConnect(duckdb(dbdir = ":memory:"))
 mtcars_db <- copy_to(con, mtcars, name = "mtcars_data")
 ```
@@ -66,14 +70,15 @@ to apply predictions to a database table, then extract the generated
 SQL.
 
 ``` r
+
 # Apply predictions to the table
 predictions <- mtcars_db |>
   mutate(!!!orbital_inline(orbital_obj))
 
 # View the lazy query
 predictions
-#> # Source:   SQL [?? x 12]
-#> # Database: DuckDB 1.4.4 [unknown@Linux 6.14.0-1017-azure:R 4.5.2/:memory:]
+#> # A query:  ?? x 12
+#> # Database: DuckDB 1.5.4 [unknown@Linux 6.17.0-1018-azure:R 4.6.1/:memory:]
 #>      mpg   cyl    disp     hp  drat       wt  qsec    vs    am  gear
 #>    <dbl> <dbl>   <dbl>  <dbl> <dbl>    <dbl> <dbl> <dbl> <dbl> <dbl>
 #>  1  21       6 -0.571  -0.535  3.9  -0.610    16.5     0     1     4
@@ -94,11 +99,12 @@ We can extract the SQL query using
 [`dbplyr::remote_query()`](https://dbplyr.tidyverse.org/reference/remote_name.html).
 
 ``` r
+
 library(dbplyr)
 generated_sql <- remote_query(predictions)
 generated_sql
 #> <SQL> SELECT
-#>   q01.*,
+#>   *,
 #>   ((20.090625 + (disp * -0.116131681667974)) + (wt * -3.71900968057122)) + (hp * -2.13618249713439) AS ".pred"
 #> FROM (
 #>   SELECT
@@ -114,7 +120,7 @@ generated_sql
 #>     gear,
 #>     carb
 #>   FROM mtcars_data
-#> ) q01
+#> ) AS q01
 ```
 
 ## Creating a table
@@ -123,6 +129,7 @@ Tables store predictions at a point in time. They’re fast to query and
 work well with large datasets or complex models.
 
 ``` r
+
 table_name <- "mtcars_predictions"
 table_sql <- paste("CREATE OR REPLACE TABLE", table_name, "AS", generated_sql)
 dbExecute(con, table_sql)
@@ -130,6 +137,7 @@ dbExecute(con, table_sql)
 ```
 
 ``` r
+
 tbl(con, table_name) |>
   collect()
 #> # A tibble: 32 × 12
@@ -160,6 +168,7 @@ Views compute predictions on-the-fly, providing always-fresh results
 without needing a refresh job.
 
 ``` r
+
 view_name <- "mtcars_predictions_view"
 view_sql <- paste("CREATE OR REPLACE VIEW", view_name, "AS", generated_sql)
 dbExecute(con, view_sql)
@@ -167,6 +176,7 @@ dbExecute(con, view_sql)
 ```
 
 ``` r
+
 tbl(con, view_name) |>
   collect()
 #> # A tibble: 32 × 12
@@ -195,6 +205,7 @@ In production, you often want to include only the prediction column and
 an identifier column, rather than all the intermediate calculations.
 
 ``` r
+
 # Select only ID-like columns and the prediction
 predictions_slim <- mtcars_db |>
   mutate(row_id = row_number(), !!!orbital_inline(orbital_obj)) |>

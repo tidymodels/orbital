@@ -6,6 +6,7 @@ We start by loading our packages and creating a simple fitted workflow
 using `mtcars`.
 
 ``` r
+
 library(orbital)
 library(recipes)
 library(parsnip)
@@ -13,6 +14,7 @@ library(workflows)
 ```
 
 ``` r
+
 rec_spec <- recipe(mpg ~ disp, data = mtcars) |>
   step_impute_mean(all_numeric_predictors()) |>
   step_normalize(all_numeric_predictors())
@@ -26,6 +28,7 @@ wf_fit <- fit(wf_spec, data = mtcars)
 then create our orbital object.
 
 ``` r
+
 orbital_obj <- orbital(wf_fit)
 orbital_obj
 ```
@@ -33,6 +36,7 @@ orbital_obj
 ## SQL
 
 ``` r
+
 library(DBI)
 library(RSQLite)
 
@@ -40,8 +44,8 @@ con_sqlite <- dbConnect(SQLite(), path = ":memory:")
 mtcars_sqlite <- copy_to(con_sqlite, mtcars, name = "mtcars_table")
 
 predict(orbital_obj, mtcars_sqlite)
-#> # Source:   SQL [?? x 1]
-#> # Database: sqlite 3.51.2 []
+#> # A query:  ?? x 1
+#> # Database: sqlite 3.53.3 []
 #>    .pred
 #>    <dbl>
 #>  1  23.0
@@ -58,6 +62,7 @@ predict(orbital_obj, mtcars_sqlite)
 ```
 
 ``` r
+
 predict(orbital_obj, mtcars_sqlite) |>
   collect()
 #> # A tibble: 32 × 1
@@ -79,13 +84,14 @@ predict(orbital_obj, mtcars_sqlite) |>
 ## Spark
 
 ``` r
+
 library(sparklyr)
 
 con_spark <- spark_connect(master = "local")
 mtcars_spark <- copy_to(con_spark, mtcars, overwrite = TRUE)
 
 predict(orbital_obj, mtcars_spark)
-#> # Source:   SQL [?? x 1]
+#> # A query:  ?? x 1
 #> # Database: spark_connection
 #>    .pred
 #>    <dbl>
@@ -103,6 +109,7 @@ predict(orbital_obj, mtcars_spark)
 ```
 
 ``` r
+
 predict(orbital_obj, mtcars_spark) |>
   collect()
 #> # A tibble: 32 × 1
@@ -124,14 +131,15 @@ predict(orbital_obj, mtcars_spark) |>
 ## duckdb
 
 ``` r
+
 library(duckdb)
 
 con_duckdb <- dbConnect(duckdb(dbdir = ":memory:"))
 mtcars_duckdb <- dplyr::copy_to(con_duckdb, mtcars)
 
 predict(orbital_obj, mtcars_duckdb)
-#> # Source:   SQL [?? x 1]
-#> # Database: DuckDB 1.4.4 [unknown@Linux 6.14.0-1017-azure:R 4.5.2/:memory:]
+#> # A query:  ?? x 1
+#> # Database: DuckDB 1.5.4 [unknown@Linux 6.17.0-1018-azure:R 4.6.1/:memory:]
 #>    .pred
 #>    <dbl>
 #>  1  23.0
@@ -148,6 +156,7 @@ predict(orbital_obj, mtcars_duckdb)
 ```
 
 ``` r
+
 predict(orbital_obj, mtcars_duckdb) |>
   collect()
 #> # A tibble: 32 × 1
@@ -169,6 +178,7 @@ predict(orbital_obj, mtcars_duckdb) |>
 ## arrow
 
 ``` r
+
 library(arrow)
 mtcars_arrow <- as_arrow_table(mtcars)
 
@@ -180,6 +190,7 @@ predict(orbital_obj, mtcars_arrow)
 ```
 
 ``` r
+
 predict(orbital_obj, mtcars_arrow) |>
   collect()
 #> # A tibble: 32 × 1
