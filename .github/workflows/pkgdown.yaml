@@ -42,14 +42,32 @@ jobs:
         with:
           path: /home/runner/spark/spark-3.3.4-bin-hadoop3
           key: sparklyr-spark-3.3.4-bin-hadoop3-3
+          restore-keys: |
+            sparklyr-spark-3.3.4-bin-hadoop3-
 
+      # See the note in spark-tests.yaml: archive.apache.org rate-limits
+      # GitHub Actions runners, so retry with backoff.
       - name: Install Spark (via sparklyr)
         if: steps.cache-spark.outputs.cache-hit != 'true'
         run: |
-          sparklyr::spark_install(
-            version = "3.3.4",
-            hadoop_version = "3"
-          )
+          attempts <- 5
+          for (i in seq_len(attempts)) {
+            ok <- tryCatch(
+              {
+                sparklyr::spark_install(version = "3.3.4", hadoop_version = "3")
+                TRUE
+              },
+              error = function(cnd) {
+                message("Attempt ", i, " of ", attempts, " failed: ", conditionMessage(cnd))
+                FALSE
+              }
+            )
+            if (ok) break
+            if (i < attempts) Sys.sleep(i * 20)
+          }
+          if (!ok) {
+            stop("Could not install Spark after ", attempts, " attempts.")
+          }
         shell: Rscript {0}
 
       - name: Build site
