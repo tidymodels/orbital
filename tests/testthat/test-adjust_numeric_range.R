@@ -1,5 +1,6 @@
 test_that("adjust_predictions_custom works - defaults", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
 
   tlr <- tailor::tailor() |>
     tailor::adjust_numeric_range()
@@ -23,6 +24,7 @@ test_that("adjust_predictions_custom works - defaults", {
 
 test_that("adjust_predictions_custom works - lower_limit", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
 
   tlr <- tailor::tailor() |>
     tailor::adjust_numeric_range(lower_limit = 15)
@@ -46,6 +48,7 @@ test_that("adjust_predictions_custom works - lower_limit", {
 
 test_that("adjust_predictions_custom works - upper_limit", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
 
   tlr <- tailor::tailor() |>
     tailor::adjust_numeric_range(upper_limit = 25)
@@ -69,6 +72,7 @@ test_that("adjust_predictions_custom works - upper_limit", {
 
 test_that("adjust_predictions_custom works - both", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
 
   tlr <- tailor::tailor() |>
     tailor::adjust_numeric_range(lower_limit = 15, upper_limit = 25)
@@ -92,6 +96,7 @@ test_that("adjust_predictions_custom works - both", {
 
 test_that("spark - adjust_predictions_custom works", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
   skip_if_not_installed("sparklyr")
   skip_if(is.na(testthat_spark_env_version()))
 
@@ -118,6 +123,7 @@ test_that("spark - adjust_predictions_custom works", {
 
 test_that("SQLite - adjust_predictions_custom works", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
   skip_if_not_installed("DBI")
   skip_if_not_installed("RSQLite")
   skip_on_cran()
@@ -146,6 +152,7 @@ test_that("SQLite - adjust_predictions_custom works", {
 
 test_that("duckdb - adjust_predictions_custom works", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
   skip_if_not_installed("DBI")
   skip_if_not_installed("duckdb")
 
@@ -173,6 +180,7 @@ test_that("duckdb - adjust_predictions_custom works", {
 
 test_that("arrow - adjust_predictions_custom works", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
   skip_if_not_installed("arrow")
 
   tlr <- tailor::tailor() |>
@@ -197,6 +205,7 @@ test_that("arrow - adjust_predictions_custom works", {
 
 test_that("estimate_adj_chars works for numeric_range", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
 
   tlr <- tailor::tailor() |>
     tailor::adjust_numeric_range(lower_limit = 15, upper_limit = 25)
@@ -215,6 +224,7 @@ test_that("estimate_adj_chars works for numeric_range", {
 
 test_that("estimate_adj_chars works for numeric_range with no limits", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
 
   tlr <- tailor::tailor() |>
     tailor::adjust_numeric_range()
@@ -232,6 +242,7 @@ test_that("estimate_adj_chars works for numeric_range with no limits", {
 
 test_that("estimate_orbital_size works for tailor", {
   skip_if_not_installed("tailor")
+  skip_if_not_installed("probably")
 
   tlr <- tailor::tailor() |>
     tailor::adjust_numeric_range(lower_limit = 15, upper_limit = 25)
