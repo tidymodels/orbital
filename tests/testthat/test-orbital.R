@@ -169,6 +169,27 @@ test_that("orbital printing works", {
   )
 })
 
+test_that("pretty_print rounds each number in place", {
+  expect_identical(
+    pretty_print("(6.75044994983228 + (disp * -0.00377603284098302))"),
+    "(6.75045 + (disp * -0.003776033))"
+  )
+
+  # A regex-matched number must not be re-substituted by a later match: "0.5"
+  # as a regex once turned "6.75045" into "6.750.5", and "0.0" applied twice
+  # turned "0.09017198" into "017198".
+  expect_identical(
+    pretty_print("0.0901719835820594 END * 0.5 + 0.0"),
+    "0.09017198 END * 0.5 + 0"
+  )
+
+  # Each element is rounded using its own matches, not the whole vector's.
+  expect_identical(
+    pretty_print(c("a 1.55555555 b", "c 2.66666666 d"), digits = 3),
+    c("a 1.56 b", "c 2.67 d")
+  )
+})
+
 test_that("prefix argument works", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("parsnip")
