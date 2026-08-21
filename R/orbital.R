@@ -116,16 +116,17 @@ print.orbital_class <- function(x, ..., digits = 7, truncate = TRUE) {
   invisible(NULL)
 }
 
+# Rounds every numeric literal in `x` for display. Uses `regmatches<-` rather
+# than a `sub()` loop so that each match is replaced in place: `sub()` would
+# treat the matched number as a regex (making "." a wildcard) and would recycle
+# over every element of `x`, both of which corrupted the output.
 pretty_print <- function(x, digits = 7) {
-  old_values <- regmatches(x, gregexpr("[0-9]+\\.?[0-9]+", x))
-  new_values <- lapply(old_values, function(x) signif(as.numeric(x), digits))
+  matches <- gregexpr("[0-9]+\\.?[0-9]+", x)
 
-  old_values <- unlist(old_values, use.names = FALSE)
-  new_values <- unlist(new_values, use.names = FALSE)
-
-  for (i in seq_along(old_values)) {
-    x <- sub(old_values[i], new_values[i], x)
-  }
+  regmatches(x, matches) <- lapply(
+    regmatches(x, matches),
+    function(value) as.character(signif(as.numeric(value), digits))
+  )
 
   x
 }
