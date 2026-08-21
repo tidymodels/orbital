@@ -2,6 +2,15 @@
 
 ## orbital (development version)
 
+### Bug fixes
+
+- [`print()`](https://rdrr.io/r/base/print.html) no longer corrupts
+  numbers when rounding them for display. Numbers such as
+  `6.75044994983228` and `-0.0901719835820594` were printed as `6.750.5`
+  and `-017198`. Only the printed output was affected; the expressions
+  themselves were always correct.
+  ([\#155](https://github.com/tidymodels/orbital/issues/155))
+
 ## orbital 0.5.1
 
 CRAN release: 2026-03-13
