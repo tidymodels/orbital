@@ -20,6 +20,64 @@ test_that("normal usage works works", {
   )
 })
 
+test_that("has_orbital_method() detects native methods", {
+  expect_all_true(c(
+    has_orbital_method(structure(list(), class = "glm")),
+    has_orbital_method(structure(list(), class = "ranger")),
+    has_orbital_method(structure(list(), class = "xgb.Booster"))
+  ))
+
+  # `orbital.default` exists, so a missing method must not be inferred from a
+  # failed call: it errors like any other bug would.
+  expect_false(has_orbital_method(structure(list(), class = "train.kknn")))
+})
+
+test_that("errors from native methods are not swallowed by the fallback", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+
+  local_mocked_bindings(
+    orbital.glm = function(...) cli::cli_abort("Bug inside a native method.")
+  )
+
+  mtcars$vs <- factor(mtcars$vs)
+  fit <- parsnip::fit(
+    parsnip::logistic_reg(),
+    vs ~ disp + hp,
+    mtcars
+  )
+
+  # Previously this was caught by `try()` and quietly replaced with a
+  # tidypredict result, so a broken native method still returned an answer.
+  expect_snapshot(error = TRUE, orbital(fit))
+})
+
+test_that("check_fallback_shape() refuses unadapted classification output", {
+  fit <- structure(list(), class = c("_made_up", "model_fit"))
+
+  expect_snapshot(
+    error = TRUE,
+    check_fallback_shape(c(a = "1 + 1"), fit, "classification", "class")
+  )
+
+  # Regression output needs no sentinel names, and orbital's own methods
+  # already carry them.
+  expect_invisible(check_fallback_shape(
+    c(a = "1"),
+    fit,
+    "regression",
+    "numeric"
+  ))
+  expect_invisible(
+    check_fallback_shape(
+      c(orbital_tmp_class_name = "1"),
+      fit,
+      "classification",
+      "class"
+    )
+  )
+})
+
 test_that("prefix argument works", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")

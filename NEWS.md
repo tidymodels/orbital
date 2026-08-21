@@ -2,6 +2,10 @@
 
 ## Bug fixes
 
+* `orbital()` no longer falls back to tidypredict when one of its own model methods errors. An error in a native method was previously caught and silently replaced with a tidypredict result, so a bug could still produce an answer. Whether a native method exists is now checked directly, and errors from it propagate. (#156)
+
+* `orbital()` now errors for classification models that reach the tidypredict fallback, instead of returning prediction columns named after tidypredict's internals. (#156)
+
 * `print()` no longer corrupts numbers when rounding them for display. Numbers such as `6.75044994983228` and `-0.0901719835820594` were printed as `6.750.5` and `-017198`. Only the printed output was affected; the expressions themselves were always correct. (#155)
 
 # orbital 0.5.1
