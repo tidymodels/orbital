@@ -49,14 +49,37 @@ jobs:
         with:
           path: /home/runner/spark/spark-${{ matrix.config.spark }}-bin-hadoop${{ matrix.config.hadoop }}
           key: sparklyr-spark-${{ matrix.config.spark }}-bin-hadoop${{ matrix.config.hadoop }}-3
+          restore-keys: |
+            sparklyr-spark-${{ matrix.config.spark }}-bin-hadoop${{ matrix.config.hadoop }}-
 
+      # archive.apache.org rate-limits GitHub Actions runners, so a single
+      # attempt fails intermittently. Retry with backoff: the download only has
+      # to succeed once for the cache above to be seeded, after which this step
+      # is skipped entirely.
       - name: Install Spark (via sparklyr)
         if: steps.cache-spark.outputs.cache-hit != 'true'
         run: |
-          sparklyr::spark_install(
-            version = Sys.getenv("SPARK_VERSION"),
-            hadoop_version = Sys.getenv("HADOOP_VERSION")
-          )
+          attempts <- 5
+          for (i in seq_len(attempts)) {
+            ok <- tryCatch(
+              {
+                sparklyr::spark_install(
+                  version = Sys.getenv("SPARK_VERSION"),
+                  hadoop_version = Sys.getenv("HADOOP_VERSION")
+                )
+                TRUE
+              },
+              error = function(cnd) {
+                message("Attempt ", i, " of ", attempts, " failed: ", conditionMessage(cnd))
+                FALSE
+              }
+            )
+            if (ok) break
+            if (i < attempts) Sys.sleep(i * 20)
+          }
+          if (!ok) {
+            stop("Could not install Spark after ", attempts, " attempts.")
+          }
         shell: Rscript {0}
 
       - name: Cache Livy
