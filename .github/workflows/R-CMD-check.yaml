@@ -27,7 +27,14 @@ jobs:
 
           - {os: windows-latest, r: 'release'}
           # use 4.0 or 4.1 to check with rtools40's older compiler
-          - {os: windows-latest, r: 'oldrel-4'}
+          #
+          # The lme4 binary for this R version was built against a newer Matrix
+          # than the one resolved here, so it aborts on load with "lme4 was
+          # built with Matrix ABI version 1 / Current Matrix ABI version is 0",
+          # taking the step_lencode_* tests with it. Building lme4 from source
+          # links it against the Matrix actually installed, which is what lme4's
+          # own error message recommends.
+          - {os: windows-latest, r: 'oldrel-4', extra: ', lme4?source'}
 
           - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
@@ -52,7 +59,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, xgboost=?ignore-before-r=4.3.0
+          extra-packages: any::rcmdcheck, xgboost=?ignore-before-r=4.3.0${{ matrix.config.extra }}
           needs: check
 
       - name: Install catboost
