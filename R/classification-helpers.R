@@ -117,6 +117,55 @@ multiclass_from_prob_avg <- function(prob_sum_eqs, type, lvl, n_trees) {
   res
 }
 
+# Multiclass from probabilities that are already normalized
+# Unlike multiclass_from_prob_avg(), nothing is divided: the incoming
+# expressions already sum to one across levels, so the probability sentinels
+# only need to reference the per-level columns.
+multiclass_from_probs <- function(prob_eqs, type, lvl) {
+  res <- stats::setNames(prob_eqs, lvl)
+  lvl_bt <- backtick(lvl)
+
+  if ("prob" %in% type) {
+    prob_refs <- stats::setNames(
+      lvl_bt,
+      paste0("orbital_tmp_prob_name", seq_along(lvl))
+    )
+    res <- c(res, prob_refs)
+  }
+  if ("class" %in% type) {
+    res <- c(res, orbital_tmp_class_name = softmax_class(lvl))
+  }
+  res
+}
+
+# Binary classification from a decision value rather than a probability, as
+# produced by LiblineaR SVMs. The sign of the decision value picks the class, so
+# the cut is at 0 rather than 0.5. As with binary_from_prob(), a positive value
+# means the second level.
+#
+# No probability is emitted: a decision value is uncalibrated, and putting it
+# through a logistic would invent a calibration the model does not have.
+binary_from_decision <- function(eq, type, lvl, call = rlang::caller_env()) {
+  if ("prob" %in% type) {
+    cli::cli_abort(
+      c(
+        "{.val prob} predictions are not available for this model.",
+        i = "It produces an uncalibrated decision value rather than a
+             probability.",
+        i = "Use {.code type = \"class\"} instead."
+      ),
+      call = call
+    )
+  }
+
+  levels <- glue::double_quote(lvl)
+  c(
+    orbital_tmp_class_name = glue::glue(
+      "dplyr::case_when({eq} > 0 ~ {levels[2]}, .default = {levels[1]})"
+    )
+  )
+}
+
 # Collapse stump trees (single-leaf) into a constant value
 # Used by xgboost, lightgbm, catboost for multiclass
 # Stumps are case_when(.default = value) expressions where the value is at [[2]]

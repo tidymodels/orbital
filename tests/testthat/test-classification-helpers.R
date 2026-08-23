@@ -168,6 +168,106 @@ test_that("multiclass_from_prob_avg returns correct structure for prob only", {
   )
 })
 
+test_that("multiclass_from_probs references levels without dividing", {
+  result <- orbital:::multiclass_from_probs(
+    c("0.5", "0.3", "0.2"),
+    c("class", "prob"),
+    c("a", "b", "c")
+  )
+
+  expect_identical(
+    result[c("a", "b", "c")],
+    c(a = "0.5", b = "0.3", c = "0.2")
+  )
+  expect_identical(
+    result[paste0("orbital_tmp_prob_name", 1:3)],
+    c(
+      orbital_tmp_prob_name1 = "`a`",
+      orbital_tmp_prob_name2 = "`b`",
+      orbital_tmp_prob_name3 = "`c`"
+    )
+  )
+  expect_named(result[4], "orbital_tmp_prob_name1")
+})
+
+test_that("multiclass_from_probs omits sentinels not asked for", {
+  expect_named(
+    orbital:::multiclass_from_probs("1", "class", "a"),
+    c("a", "orbital_tmp_class_name")
+  )
+  expect_named(
+    orbital:::multiclass_from_probs("1", "prob", "a"),
+    c("a", "orbital_tmp_prob_name1")
+  )
+})
+
+test_that("multiclass_from_probs evaluates to the same values as R", {
+  # Value-level check: the expression text being stable says nothing about it
+  # computing the right thing.
+  data <- data.frame(
+    p1 = c(0.7, 0.1, 0.2, 1 / 3),
+    p2 = c(0.2, 0.8, 0.2, 1 / 3),
+    p3 = c(0.1, 0.1, 0.6, 1 / 3)
+  )
+  lvl <- c("a", "b", "c")
+
+  eqs <- orbital:::multiclass_from_probs(
+    c("p1", "p2", "p3"),
+    c("class", "prob"),
+    lvl
+  )
+  res <- eval_orbital_eqs(eqs, data)
+
+  probs <- as.matrix(data)
+  expect_equal(
+    unname(as.matrix(res[paste0("orbital_tmp_prob_name", 1:3)])),
+    unname(probs)
+  )
+
+  # Ties go to the earlier level, so row 4 is "a".
+  expect_identical(
+    res$orbital_tmp_class_name,
+    c("a", "b", "c", "a")
+  )
+  expect_identical(
+    res$orbital_tmp_class_name,
+    lvl[apply(probs, 1, which.max)]
+  )
+})
+
+test_that("binary_from_decision cuts at zero, not 0.5", {
+  result <- orbital:::binary_from_decision("d", "class", c("no", "yes"))
+
+  expect_identical(
+    result,
+    c(
+      orbital_tmp_class_name = 'dplyr::case_when(d > 0 ~ "yes", .default = "no")'
+    )
+  )
+})
+
+test_that("binary_from_decision evaluates to the sign of the decision value", {
+  data <- data.frame(d = c(-2, -0.001, 0, 0.001, 2))
+
+  res <- eval_orbital_eqs(
+    orbital:::binary_from_decision("d", "class", c("no", "yes")),
+    data
+  )
+
+  # A decision value of exactly 0 falls to the first level.
+  expect_identical(
+    res$orbital_tmp_class_name,
+    c("no", "no", "no", "yes", "yes")
+  )
+})
+
+test_that("binary_from_decision refuses to invent a probability", {
+  expect_snapshot(
+    error = TRUE,
+    orbital:::binary_from_decision("d", c("class", "prob"), c("no", "yes"))
+  )
+})
+
 test_that("sum_tree_expressions sums and deparses correctly", {
   tree1 <- rlang::expr(case_when(x > 1 ~ 0.5, .default = 0.3))
   tree2 <- rlang::expr(case_when(x > 2 ~ 0.6, .default = 0.4))
