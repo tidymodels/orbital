@@ -4,6 +4,20 @@
 
 ### Bug fixes
 
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  no longer falls back to tidypredict when one of its own model methods
+  errors. An error in a native method was previously caught and silently
+  replaced with a tidypredict result, so a bug could still produce an
+  answer. Whether a native method exists is now checked directly, and
+  errors from it propagate.
+  ([\#156](https://github.com/tidymodels/orbital/issues/156))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now errors for classification models that reach the tidypredict
+  fallback, instead of returning prediction columns named after
+  tidypredict’s internals.
+  ([\#156](https://github.com/tidymodels/orbital/issues/156))
+
 - [`print()`](https://rdrr.io/r/base/print.html) no longer corrupts
   numbers when rounding them for display. Numbers such as
   `6.75044994983228` and `-0.0901719835820594` were printed as `6.750.5`
