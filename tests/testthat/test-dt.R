@@ -23,3 +23,25 @@ test_that("dt works", {
     orbital_dt(obj)
   )
 })
+
+test_that("dt works for lda multiclass", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("dtplyr")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("discrim")
+  skip_if_not_installed("MASS")
+
+  spec <- parsnip::set_engine(parsnip::discrim_linear(), "MASS")
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  obj <- orbital(fit, type = c("class", "prob"))
+
+  # This query is long enough to wrap, and `deparse()` does not put the line
+  # breaks in the same places across R versions, so the whitespace is flattened
+  # before comparing. Without that the snapshot fails on platform differences
+  # that have nothing to do with what the query computes.
+  expect_snapshot(
+    transform = flatten_query,
+    orbital_dt(obj)
+  )
+})

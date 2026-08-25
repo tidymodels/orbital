@@ -163,3 +163,22 @@ test_that("json round-trip works for ranger classification", {
 
   expect_identical(new, orbital_obj)
 })
+
+test_that("json round-trip works for lda multiclass", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("jsonlite")
+  skip_if_not_installed("discrim")
+  skip_if_not_installed("MASS")
+
+  spec <- parsnip::set_engine(parsnip::discrim_linear(), "MASS")
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  orbital_obj <- orbital(fit, type = c("class", "prob"))
+
+  tmp_file <- tempfile()
+  orbital_json_write(orbital_obj, tmp_file)
+  new <- orbital_json_read(tmp_file)
+
+  expect_identical(new, orbital_obj)
+})

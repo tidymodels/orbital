@@ -80,3 +80,20 @@
       <SQL> ("0") / 3 AS .pred_0
       <SQL> ("1") / 3 AS .pred_1
 
+# sql works for lda multiclass
+
+    Code
+      orbital_sql(obj, con)
+    Output
+      <SQL> 1 / ((1 + EXP(((((-2.021974 + ("Sepal.Length" * -1.531199)) + ("Sepal.Width" * -4.376043)) + ("Petal.Length" * 4.695665)) + ("Petal.Width" * 3.062585)) - ((((-15.47784 + ("Sepal.Length" * 6.314758)) + ("Sepal.Width" * 12.13932)) + ("Petal.Length" * -16.94642)) + ("Petal.Width" * -20.77005)))) + EXP(((((-33.53769 + ("Sepal.Length" * -4.783559)) + ("Sepal.Width" * -7.763274)) + ("Petal.Length" * 12.25076)) + ("Petal.Width" * 17.70747)) - ((((-15.47784 + ("Sepal.Length" * 6.314758)) + ("Sepal.Width" * 12.13932)) + ("Petal.Length" * -16.94642)) + ("Petal.Width" * -20.77005)))) AS setosa
+      <SQL> 1 / ((EXP(((((-15.47784 + ("Sepal.Length" * 6.314758)) + ("Sepal.Width" * 12.13932)) + ("Petal.Length" * -16.94642)) + ("Petal.Width" * -20.77005)) - ((((-2.021974 + ("Sepal.Length" * -1.531199)) + ("Sepal.Width" * -4.376043)) + ("Petal.Length" * 4.695665)) + ("Petal.Width" * 3.062585))) + 1) + EXP(((((-33.53769 + ("Sepal.Length" * -4.783559)) + ("Sepal.Width" * -7.763274)) + ("Petal.Length" * 12.25076)) + ("Petal.Width" * 17.70747)) - ((((-2.021974 + ("Sepal.Length" * -1.531199)) + ("Sepal.Width" * -4.376043)) + ("Petal.Length" * 4.695665)) + ("Petal.Width" * 3.062585)))) AS versicolor
+      <SQL> 1 / ((EXP(((((-15.47784 + ("Sepal.Length" * 6.314758)) + ("Sepal.Width" * 12.13932)) + ("Petal.Length" * -16.94642)) + ("Petal.Width" * -20.77005)) - ((((-33.53769 + ("Sepal.Length" * -4.783559)) + ("Sepal.Width" * -7.763274)) + ("Petal.Length" * 12.25076)) + ("Petal.Width" * 17.70747))) + EXP(((((-2.021974 + ("Sepal.Length" * -1.531199)) + ("Sepal.Width" * -4.376043)) + ("Petal.Length" * 4.695665)) + ("Petal.Width" * 3.062585)) - ((((-33.53769 + ("Sepal.Length" * -4.783559)) + ("Sepal.Width" * -7.763274)) + ("Petal.Length" * 12.25076)) + ("Petal.Width" * 17.70747)))) + 1) AS virginica
+      <SQL> "setosa" AS .pred_setosa
+      <SQL> "versicolor" AS .pred_versicolor
+      <SQL> "virginica" AS .pred_virginica
+      <SQL> CASE
+      WHEN ("setosa" >= "versicolor" AND "setosa" >= "virginica") THEN 'setosa'
+      WHEN ("versicolor" >= "setosa" AND "versicolor" >= "virginica") THEN 'versicolor'
+      ELSE 'virginica'
+      END AS .pred_class
+
