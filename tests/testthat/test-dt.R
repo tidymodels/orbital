@@ -36,8 +36,12 @@ test_that("dt works for lda multiclass", {
 
   obj <- orbital(fit, type = c("class", "prob"))
 
+  # This query is long enough to wrap, and `deparse()` does not put the line
+  # breaks in the same places across R versions, so the whitespace is flattened
+  # before comparing. Without that the snapshot fails on platform differences
+  # that have nothing to do with what the query computes.
   expect_snapshot(
-    transform = orbital:::pretty_print,
+    transform = flatten_query,
     orbital_dt(obj)
   )
 })

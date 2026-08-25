@@ -29,3 +29,12 @@ testthat_tbl <- function(name, data = NULL, repartition = 0L) {
 
   tbl
 }
+
+## Round a query's numbers for display, then flatten its whitespace.
+##
+## `deparse()` chooses where to break long lines, and it does not choose the
+## same places across R versions or platforms. Any snapshot of a query long
+## enough to wrap is therefore unstable for reasons unrelated to the query.
+flatten_query <- function(x) {
+  gsub("\\s+", " ", paste(pretty_print(x), collapse = " "))
+}
