@@ -37,35 +37,11 @@ catboost_regression <- function(x, separate_trees, prefix) {
     return(tidypredict::tidypredict_fit(x))
   }
 
-  # Extract individual trees
-  trees <- tidypredict::.extract_catboost_trees(x)
-
-  # Format as separate expressions
-  res <- format_separate_trees(trees, prefix)
-
-  # Apply scale and bias from parsed model
-  pm <- tidypredict::parse_model(x)
-  scale <- pm$general$scale %||% 1
-  bias <- pm$general$bias %||% 0
-
-  sum_name <- prefix
-  if (scale != 1) {
-    res[[sum_name]] <- paste0(
-      format_numeric(scale),
-      " * (",
-      res[[sum_name]],
-      ")"
-    )
-  }
-  if (bias != 0) {
-    res[[sum_name]] <- paste0(res[[sum_name]], " + ", format_numeric(bias))
-  }
-
-  res
+  separate_trees_eqs(x, prefix)
 }
 
 catboost_multiclass <- function(x, type, lvl, separate_trees, prefix) {
-  trees <- tidypredict::.extract_catboost_trees(x)
+  trees <- tidypredict::tidypredict_trees(x)
 
   num_class <- length(lvl)
 
@@ -103,17 +79,11 @@ catboost_binary <- function(x, type, lvl, separate_trees, prefix) {
     return(binary_from_prob(eq, type, lvl))
   }
 
-  # separate_trees = TRUE
-  trees <- tidypredict::.extract_catboost_trees(x)
+  # `tidypredict_combine_trees()` applies the scale, bias and inverse link, so
+  # the combined column holds a probability rather than a logit. The old code
+  # here applied neither scale nor bias, unlike the regression path.
+  prob_prefix <- paste0(prefix, "_prob")
+  res <- separate_trees_eqs(x, prob_prefix)
 
-  # Format trees separately, using a logit prefix
-  logit_prefix <- paste0(prefix, "_logit")
-  res <- format_separate_trees(trees, logit_prefix)
-
-  # Apply logistic transformation to the sum
-  logit_name <- backtick(logit_prefix)
-  prob_eq <- paste0("1/(1 + exp(-", logit_name, "))")
-
-  res <- binary_from_prob_with_eq(res, prob_eq, type, lvl)
-  res
+  binary_from_prob_with_eq(res, backtick(prob_prefix), type, lvl)
 }

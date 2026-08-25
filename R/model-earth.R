@@ -13,10 +13,10 @@ orbital.earth <- function(
     n_classes <- length(lvl)
     if (n_classes > 2) {
       # Multiclass classification
-      class_eqs <- tidypredict::.extract_earth_multiclass(x)
+      class_eqs <- deparse_eqs(tidypredict::tidypredict_class_exprs(x))
       # Reorder to match lvl order
       class_eqs <- class_eqs[lvl]
-      res <- multiclass_from_logits(unlist(class_eqs), type, lvl)
+      res <- multiclass_from_logits(class_eqs, type, lvl)
     } else {
       # Binary classification - tidypredict_fit returns P(second level)
       eq <- tidypredict::tidypredict_fit(x)

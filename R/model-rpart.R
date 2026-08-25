@@ -17,7 +17,7 @@ orbital.rpart <- function(
       res <- c(res, orbital_tmp_class_name = eq)
     }
     if ("prob" %in% type) {
-      eqs <- tidypredict::.extract_rpart_classprob(x)
+      eqs <- deparse_eqs(tidypredict::tidypredict_class_exprs(x))
       names(eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
       res <- c(res, eqs)
     }

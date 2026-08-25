@@ -52,78 +52,16 @@ xgboost_regression <- function(x, separate_trees, prefix) {
     return(tidypredict::tidypredict_fit(x))
   }
 
-  # Extract individual trees
-  trees <- tidypredict::.extract_xgb_trees(x)
-
-  # Get base_score from model
-  json_params <- get_xgb_json_params(x)
-  base_score <- json_params$base_score %||% 0.5
-
-  # Get objective to determine transformation
-  params <- attr(x, "param") %||% x$params
-  objective <- params$objective
-
-  # Format as separate expressions
-  res <- format_separate_trees(trees, prefix)
-
-  # Apply objective-specific transformation to the sum
-  sum_name <- prefix
-  if (
-    objective %in%
-      c(
-        "reg:squarederror",
-        "reg:squaredlogerror",
-        "binary:logitraw",
-        "reg:pseudohubererror",
-        "reg:absoluteerror"
-      ) ||
-      is.null(objective)
-  ) {
-    if (base_score != 0) {
-      res[[sum_name]] <- paste0(
-        format_numeric(base_score),
-        " + ",
-        res[[sum_name]]
-      )
-    }
-  } else if (objective %in% c("count:poisson", "reg:tweedie", "reg:gamma")) {
-    res[[sum_name]] <- paste0(
-      format_numeric(base_score),
-      " * exp(",
-      res[[sum_name]],
-      ")"
-    )
-  }
-
-  res
-}
-
-# Helper to get xgboost JSON params (base_score, weight_drop for DART)
-get_xgb_json_params <- function(model) {
-  tmp_file <- tempfile(fileext = ".json")
-  on.exit(unlink(tmp_file), add = TRUE)
-  rlang::eval_tidy(rlang::call2("xgb.save", model, tmp_file, .ns = "xgboost"))
-
-  json <- jsonlite::fromJSON(tmp_file)
-
-  base_score <- json$learner$learner_model_param$base_score
-  base_score <- gsub("\\[", "", base_score)
-  base_score <- gsub("\\]", "", base_score)
-  base_score <- strsplit(base_score, ",")[[1]]
-  base_score <- as.numeric(base_score)
-
-  list(
-    base_score = base_score,
-    weight_drop = json$learner$gradient_booster$weight_drop
-  )
+  separate_trees_eqs(x, prefix)
 }
 
 xgboost_multisoft <- function(x, type, lvl, separate_trees, prefix) {
-  trees <- tidypredict::.extract_xgb_trees(x)
+  trees <- tidypredict::tidypredict_trees(x)
 
+  # Trees are emitted round-major: one per class, then the next round.
   trees_split <- split(
     trees,
-    rep(seq_along(lvl), x$niter %||% nrow(attr(x, "evaluation_log")))
+    rep(seq_along(lvl), length.out = length(trees))
   )
   trees_split <- lapply(trees_split, collapse_stumps)
 
@@ -153,30 +91,11 @@ xgboost_logistic <- function(x, type, lvl, separate_trees, prefix) {
     return(binary_from_prob_first(eq, type, lvl))
   }
 
-  # separate_trees = TRUE
-  trees <- tidypredict::.extract_xgb_trees(x)
+  # `tidypredict_combine_trees()` applies the objective's inverse link, so the
+  # combined column holds the same probability `tidypredict_fit()` returns, and
+  # is oriented the same way: `P(first level)`, as the collapsed path assumes.
+  prob_prefix <- paste0(prefix, "_prob")
+  res <- separate_trees_eqs(x, prob_prefix)
 
-  # Get base_score
-  json_params <- get_xgb_json_params(x)
-  base_score <- json_params$base_score %||% 0.5
-
-  # Format trees separately, using a logit prefix
-  logit_prefix <- paste0(prefix, "_logit")
-  res <- format_separate_trees(trees, logit_prefix)
-
-  # Apply logistic transformation to the sum
-  logit_name <- backtick(logit_prefix)
-  base_score_fmt <- format_numeric(base_score)
-  prob_eq <- paste0(
-    "1 - 1/(1 + exp(",
-    logit_name,
-    " + log(",
-    base_score_fmt,
-    "/(1 - ",
-    base_score_fmt,
-    "))))"
-  )
-
-  res <- binary_from_prob_first_with_eq(res, prob_eq, type, lvl)
-  res
+  binary_from_prob_first_with_eq(res, backtick(prob_prefix), type, lvl)
 }

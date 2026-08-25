@@ -24,28 +24,12 @@ ranger_regression <- function(x, separate_trees, prefix) {
     return(tidypredict::tidypredict_fit(x))
   }
 
-  # Extract individual trees
-  trees <- tidypredict::.extract_ranger_trees(x)
-  n_trees <- x$num.trees
-
-  # Format as separate expressions
-  res <- format_separate_trees(trees, prefix)
-
-  # Apply averaging for random forest
-  sum_name <- prefix
-  res[[sum_name]] <- paste0(
-    "(",
-    res[[sum_name]],
-    ") / ",
-    format_numeric(n_trees)
-  )
-
-  res
+  separate_trees_eqs(x, prefix)
 }
 
 ranger_classification <- function(x, type, lvl, separate_trees, prefix) {
-  class_trees <- tidypredict::.extract_ranger_classprob(x)
-  n_trees <- x$num.trees
+  class_trees <- tidypredict::tidypredict_class_trees(x)
+  n_trees <- tidypredict::tidypredict_n_trees(x)
 
   if (!separate_trees) {
     prob_sums <- sum_tree_expressions(class_trees)

@@ -26,10 +26,12 @@ orbital.glmnet <- function(
   if (mode == "classification") {
     if (inherits(x, "multnet")) {
       # Multiclass classification
-      class_eqs <- extract_glmnet_multiclass(x, penalty = penalty)
+      class_eqs <- deparse_eqs(
+        tidypredict::tidypredict_class_exprs(x, penalty = penalty)
+      )
       # Reorder to match lvl order
       class_eqs <- class_eqs[lvl]
-      res <- multiclass_from_logits(unlist(class_eqs), type, lvl)
+      res <- multiclass_from_logits(class_eqs, type, lvl)
     } else {
       # Binary classification
       eq <- glmnet_logistic_expr(x, penalty)
@@ -40,20 +42,6 @@ orbital.glmnet <- function(
     res <- eq
   }
   res
-}
-
-# Extract multiclass glmnet coefficients with full numeric precision
-# Replacement for tidypredict::.extract_glmnet_multiclass
-extract_glmnet_multiclass <- function(model, penalty) {
-  coefs_list <- stats::coef(model, s = penalty)
-  class_names <- names(coefs_list)
-  eqs <- lapply(coefs_list, function(coef_mat) {
-    coef_names <- rownames(coef_mat)
-    coef_values <- as.numeric(coef_mat)
-    build_linear_pred(coef_names, coef_values)
-  })
-  names(eqs) <- class_names
-  eqs
 }
 
 glmnet_logistic_expr <- function(x, penalty) {
