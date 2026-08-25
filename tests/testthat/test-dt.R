@@ -23,3 +23,21 @@ test_that("dt works", {
     orbital_dt(obj)
   )
 })
+
+test_that("dt works for lda multiclass", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("dtplyr")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("discrim")
+  skip_if_not_installed("MASS")
+
+  spec <- parsnip::set_engine(parsnip::discrim_linear(), "MASS")
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  obj <- orbital(fit, type = c("class", "prob"))
+
+  expect_snapshot(
+    transform = orbital:::pretty_print,
+    orbital_dt(obj)
+  )
+})

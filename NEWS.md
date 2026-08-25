@@ -1,5 +1,17 @@
 # orbital (development version)
 
+## New models
+
+* `discrim_linear()` and `discrim_quad()` with the `"MASS"` engine are now supported for `type = "class"` and `type = "prob"`. (#160)
+
+* `linear_reg()` with the `"glm"` engine is now supported. (#160)
+
+* `mlp()` with the `"nnet"` engine is now supported for regression and classification. (#160)
+
+* `multinom_reg()` with the `"nnet"` engine is now supported for `type = "class"` and `type = "prob"`. (#160)
+
+* `null_model()` is now supported for regression and classification. (#160)
+
 ## Improvements
 
 * `orbital()` now supports classification models that reach the tidypredict fallback, rather than refusing them. This covers multiclass probability models such as `MASS::lda()`, models returning an uncalibrated decision value such as `LiblineaR` SVMs, and models predicting a class label directly such as `C50::C5.0()`. (#159)

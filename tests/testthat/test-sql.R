@@ -138,3 +138,23 @@ test_that("sql works for ranger classification", {
   expect_s3_class(res, "sql")
   expect_length(res, 5)
 })
+
+test_that("sql works for lda multiclass", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("dbplyr")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("discrim")
+  skip_if_not_installed("MASS")
+
+  spec <- parsnip::set_engine(parsnip::discrim_linear(), "MASS")
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  obj <- orbital(fit, type = c("class", "prob"))
+
+  con <- dbplyr::simulate_dbi()
+
+  expect_snapshot(
+    transform = orbital:::pretty_print,
+    orbital_sql(obj, con)
+  )
+})
