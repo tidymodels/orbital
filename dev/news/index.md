@@ -2,6 +2,25 @@
 
 ## orbital (development version)
 
+### Improvements
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now supports classification models that reach the tidypredict
+  fallback, rather than refusing them. This covers multiclass
+  probability models such as
+  [`MASS::lda()`](https://rdrr.io/pkg/MASS/man/lda.html), models
+  returning an uncalibrated decision value such as `LiblineaR` SVMs, and
+  models predicting a class label directly such as
+  [`C50::C5.0()`](https://topepo.github.io/C5.0/reference/C5.0.html).
+  ([\#159](https://github.com/tidymodels/orbital/issues/159))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  refuses `type = "prob"` for models that have no probability to give,
+  rather than fabricating one. A decision value is uncalibrated, so
+  putting it through a logistic would invent a calibration the model
+  does not have.
+  ([\#159](https://github.com/tidymodels/orbital/issues/159))
+
 ### Bug fixes
 
 - Binary `earth()` classification models now generate
