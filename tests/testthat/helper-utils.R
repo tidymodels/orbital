@@ -30,11 +30,15 @@ testthat_tbl <- function(name, data = NULL, repartition = 0L) {
   tbl
 }
 
-## Round a query's numbers for display, then flatten its whitespace.
+## Round a query's numbers for display, then remove the two things about a
+## `data.table` query that vary for reasons unrelated to what it computes.
 ##
-## `deparse()` chooses where to break long lines, and it does not choose the
-## same places across R versions or platforms. Any snapshot of a query long
-## enough to wrap is therefore unstable for reasons unrelated to the query.
+## `deparse()` chooses where to break long lines and does not choose the same
+## places across R versions, so any snapshot of a query long enough to wrap is
+## unstable. And dtplyr numbers its tables from a session-wide counter, so
+## `_DT1` becomes `_DT2` whenever an earlier test creates one more table than
+## before, which differs between platforms because they skip different tests.
 flatten_query <- function(x) {
-  gsub("\\s+", " ", paste(pretty_print(x), collapse = " "))
+  x <- gsub("`_DT[0-9]+`", "`_DT`", pretty_print(x))
+  gsub("\\s+", " ", paste(x, collapse = " "))
 }
