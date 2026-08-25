@@ -2,6 +2,10 @@
 
 ## Bug fixes
 
+* `orbital(separate_trees = TRUE)` now returns `NA` for rows with a missing predictor, matching what `separate_trees = FALSE` has always returned. The individual tree expressions fall through to their default branch when a split variable is `NA`, so such rows previously received a confident-looking prediction computed from no usable data. (#158)
+
+* `orbital(separate_trees = TRUE)` now applies CatBoost's scale and bias to binary classification models. The regression path applied them and the binary path did not, so the two disagreed with `separate_trees = FALSE` whenever a model carried a non-default scale or bias. (#158)
+
 * `orbital()` no longer falls back to tidypredict when one of its own model methods errors. An error in a native method was previously caught and silently replaced with a tidypredict result, so a bug could still produce an answer. Whether a native method exists is now checked directly, and errors from it propagate. (#156)
 
 * `orbital()` now errors for classification models that reach the tidypredict fallback, instead of returning prediction columns named after tidypredict's internals. (#156)

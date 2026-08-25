@@ -35,11 +35,7 @@ lightgbm_regression <- function(x, separate_trees, prefix) {
     return(tidypredict::tidypredict_fit(x))
   }
 
-  # Extract individual trees
-  trees <- tidypredict::.extract_lgb_trees(x)
-
-  # Format as separate expressions
-  format_separate_trees(trees, prefix)
+  separate_trees_eqs(x, prefix)
 }
 
 lightgbm_binary <- function(x, type, lvl, separate_trees, prefix) {
@@ -49,47 +45,24 @@ lightgbm_binary <- function(x, type, lvl, separate_trees, prefix) {
     return(binary_from_prob(eq, type, lvl))
   }
 
-  # separate_trees = TRUE
-  trees <- tidypredict::.extract_lgb_trees(x)
+  # `tidypredict_combine_trees()` applies the objective's inverse link, so the
+  # combined column holds a probability rather than a logit.
+  prob_prefix <- paste0(prefix, "_prob")
+  res <- separate_trees_eqs(x, prob_prefix)
 
-  # Format trees separately, using a logit prefix
-  logit_prefix <- paste0(prefix, "_logit")
-  res <- format_separate_trees(trees, logit_prefix)
-
-  # Apply logistic transformation to the sum
-  logit_name <- backtick(logit_prefix)
-  prob_eq <- paste0("1/(1 + exp(-", logit_name, "))")
-
-  res <- binary_from_prob_with_eq(res, prob_eq, type, lvl)
-  res
+  binary_from_prob_with_eq(res, backtick(prob_prefix), type, lvl)
 }
 
 lightgbm_multiclass <- function(x, type, lvl, separate_trees, prefix) {
   # Follow xgboost pattern: extract trees and sum by class
-  trees <- tidypredict::.extract_lgb_trees(x)
+  trees <- tidypredict::tidypredict_trees(x)
 
-  pm <- tidypredict::parse_model(x)
   num_class <- length(lvl)
-  niter <- pm$general$niter
-  total_trees <- niter * num_class
 
-  # tidypredict skips empty trees (num_leaves == 1), so we need to identify
-  # which tree indices were kept to correctly assign classes
-  n_extracted <- length(trees)
-
-  if (n_extracted == total_trees) {
-    # No empty trees, simple case like xgboost
-    tree_indices <- seq_len(total_trees) - 1L
-  } else {
-    # Some trees were skipped - get indices of non-empty trees from JSON dump
-    model_json <- x$dump_model()
-    model_info <- jsonlite::fromJSON(model_json)
-    non_empty <- model_info$tree_info$num_leaves > 1
-    tree_indices <- model_info$tree_info$tree_index[non_empty]
-  }
-
-  # Group trees by class: tree i belongs to class (i %% num_class)
-  class_assignments <- (tree_indices %% num_class) + 1
+  # Trees are emitted round-major, so position determines class. The extractor
+  # includes single-leaf trees, so no position is ever missing and the class
+  # assignment does not need to be recovered from the model's JSON dump.
+  class_assignments <- (seq_along(trees) - 1L) %% num_class + 1L
   trees_split <- split(trees, class_assignments)
 
   # Collapse stumps and sum trees for each class (like xgboost)

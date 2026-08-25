@@ -28,6 +28,12 @@ build_linear_pred <- function(coef_names, coef_values) {
   paste(terms, collapse = " + ")
 }
 
+# Deparse a list of expressions, as returned by tidypredict's extractor
+# generics, into the character equations orbital passes around. Names are kept.
+deparse_eqs <- function(x) {
+  vapply(x, function(e) deparse1(e, control = "digits17"), character(1))
+}
+
 namespace_case_when <- function(x) {
   names <- names(x)
   x <- gsub("dplyr::case_when", "case_when", x)

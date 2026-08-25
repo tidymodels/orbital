@@ -55,11 +55,13 @@ Suggests:
     testthat (>= 3.0.0),
     themis,
     tibble,
-    tidypredict (>= 1.1.0),
+    tidypredict (>= 1.1.1.9000),
     workflows,
     xgboost
-VignetteBuilder: 
+VignetteBuilder:
     knitr
+Remotes:
+    tidymodels/tidypredict
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown, gt
 Config/testthat/edition: 3
 Config/usethis/last-upkeep: 2025-06-05
