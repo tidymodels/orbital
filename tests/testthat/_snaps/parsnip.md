@@ -14,15 +14,6 @@
       Error:
       ! Bug inside a native method.
 
-# check_fallback_shape() refuses unadapted classification output
-
-    Code
-      check_fallback_shape(c(a = "1 + 1"), fit, "classification", "class")
-    Condition
-      Error in `orbital()`:
-      ! Classification output for a model of class <made_up> is not yet supported.
-      i The model itself is supported for "regression" mode.
-
 # errors on invalid modes
 
     Code

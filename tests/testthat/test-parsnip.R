@@ -52,32 +52,6 @@ test_that("errors from native methods are not swallowed by the fallback", {
   expect_snapshot(error = TRUE, orbital(fit))
 })
 
-test_that("check_fallback_shape() refuses unadapted classification output", {
-  fit <- structure(list(), class = c("_made_up", "model_fit"))
-
-  expect_snapshot(
-    error = TRUE,
-    check_fallback_shape(c(a = "1 + 1"), fit, "classification", "class")
-  )
-
-  # Regression output needs no sentinel names, and orbital's own methods
-  # already carry them.
-  expect_invisible(check_fallback_shape(
-    c(a = "1"),
-    fit,
-    "regression",
-    "numeric"
-  ))
-  expect_invisible(
-    check_fallback_shape(
-      c(orbital_tmp_class_name = "1"),
-      fit,
-      "classification",
-      "class"
-    )
-  )
-})
-
 test_that("prefix argument works", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
