@@ -1,5 +1,11 @@
 # orbital (development version)
 
+## Improvements
+
+* `orbital()` now supports classification models that reach the tidypredict fallback, rather than refusing them. This covers multiclass probability models such as `MASS::lda()`, models returning an uncalibrated decision value such as `LiblineaR` SVMs, and models predicting a class label directly such as `C50::C5.0()`. (#159)
+
+* `orbital()` refuses `type = "prob"` for models that have no probability to give, rather than fabricating one. A decision value is uncalibrated, so putting it through a logistic would invent a calibration the model does not have. (#159)
+
 ## Bug fixes
 
 * Binary `earth()` classification models now generate `1 / (1 + exp(-x))` rather than the equivalent `1 - 1 / (1 + exp(x))`. Predictions are unchanged. (#158)

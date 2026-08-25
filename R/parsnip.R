@@ -61,7 +61,7 @@ orbital.model_fit <- function(
       }
     )
 
-    check_fallback_shape(res, x, mode, type)
+    res <- route_fallback(res, x, mode, type, call = rlang::call2("orbital"))
   }
 
   if (is.language(res)) {
@@ -91,38 +91,6 @@ abort_unsupported_model <- function(x) {
     "A model of class {.cls {cls}} is not supported.",
     call = rlang::call2("orbital")
   )
-}
-
-# `set_pred_names()` renames the sentinel names that orbital's own methods
-# attach. A tidypredict result for a classification model carries no such
-# names, so the sentinels would not match and the prediction columns would come
-# out named after tidypredict's internals. Refuse instead of emitting silently
-# mis-named columns.
-check_fallback_shape <- function(res, x, mode, type) {
-  if (mode != "classification") {
-    return(invisible(res))
-  }
-
-  eq_names <- names(res)
-  has_class <- "orbital_tmp_class_name" %in% eq_names
-  has_prob <- any(grepl("^orbital_tmp_prob_name", eq_names))
-
-  if (!has_class && !has_prob) {
-    cls <- class(x)
-    cls <- setdiff(cls, "model_fit")
-    cls <- gsub("^_", "", cls)
-
-    cli::cli_abort(
-      c(
-        "Classification output for a model of class {.cls {cls}} is not yet
-         supported.",
-        i = "The model itself is supported for {.val regression} mode."
-      ),
-      call = rlang::call2("orbital")
-    )
-  }
-
-  invisible(res)
 }
 
 set_pred_names <- function(res, x, mode, type, prefix) {

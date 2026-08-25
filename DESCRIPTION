@@ -23,7 +23,9 @@ Imports:
 Suggests:
     arrow,
     bonsai,
+    C50,
     DBI,
+    discrim,
     dbplyr,
     dtplyr,
     duckdb,
@@ -36,6 +38,7 @@ Suggests:
     jsonlite,
     kknn,
     knitr,
+    LiblineaR,
     lightgbm,
     modeldata,
     parsnip,
