@@ -51,10 +51,10 @@
       orbital_sql(obj, con)
     Output
       <SQL> CASE
-      WHEN ((1 - 1 / (1 + EXP((1.863314 + (CASE WHEN ("hp" > 105) THEN ("hp" - 105) WHEN NOT ("hp" > 105) THEN 0 END * -0.09017198)) + (CASE WHEN ("hp" > 175) THEN ("hp" - 175) WHEN NOT ("hp" > 175) THEN 0 END * -2.746445)))) > 0.5) THEN '1'
+      WHEN ((1 / (1 + EXP(-((1.863314 + (CASE WHEN ("hp" > 105) THEN ("hp" - 105) WHEN NOT ("hp" > 105) THEN 0 END * -0.09017198)) + (CASE WHEN ("hp" > 175) THEN ("hp" - 175) WHEN NOT ("hp" > 175) THEN 0 END * -2.746445))))) > 0.5) THEN '1'
       ELSE '0'
       END AS .pred_class
-      <SQL> 1 - (1 - 1 / (1 + EXP((1.863314 + (CASE WHEN ("hp" > 105) THEN ("hp" - 105) WHEN NOT ("hp" > 105) THEN 0 END * -0.09017198)) + (CASE WHEN ("hp" > 175) THEN ("hp" - 175) WHEN NOT ("hp" > 175) THEN 0 END * -2.746445)))) AS .pred_0
+      <SQL> 1 - (1 / (1 + EXP(-((1.863314 + (CASE WHEN ("hp" > 105) THEN ("hp" - 105) WHEN NOT ("hp" > 105) THEN 0 END * -0.09017198)) + (CASE WHEN ("hp" > 175) THEN ("hp" - 175) WHEN NOT ("hp" > 175) THEN 0 END * -2.746445))))) AS .pred_0
       <SQL> 1 - ".pred_0" AS .pred_1
 
 # sql works for randomForest classification

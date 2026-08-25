@@ -2,6 +2,8 @@
 
 ## Bug fixes
 
+* Binary `earth()` classification models now generate `1 / (1 + exp(-x))` rather than the equivalent `1 - 1 / (1 + exp(x))`. Predictions are unchanged. (#158)
+
 * `orbital(separate_trees = TRUE)` now returns `NA` for rows with a missing predictor, matching what `separate_trees = FALSE` has always returned. The individual tree expressions fall through to their default branch when a split variable is `NA`, so such rows previously received a confident-looking prediction computed from no usable data. (#158)
 
 * `orbital(separate_trees = TRUE)` now applies CatBoost's scale and bias to binary classification models. The regression path applied them and the binary path did not, so the two disagreed with `separate_trees = FALSE` whenever a model carried a non-default scale or bias. (#158)
