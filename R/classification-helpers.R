@@ -8,17 +8,18 @@ backtick <- function(x) {
 # Binary classification from a single probability expression
 # Assumes: eq is P(second level)
 #
-# `cut` is the probability above which the second level is chosen. It is 0.5 for
-# every model whose class rule is the larger of the two probabilities, but not
-# for one that calibrates a separate decision function; see `prob_class_cut()`.
-binary_from_prob <- function(eq, type, lvl, cut = 0.5) {
+# `cut` is the probability above which the second level is chosen, and `op` the
+# comparison used against it. Both are 0.5 and `>` for every model whose class
+# rule is the larger of the two probabilities, but not for one carrying its own
+# tuned threshold; see `prob_class_rule()`.
+binary_from_prob <- function(eq, type, lvl, cut = 0.5, op = ">") {
   res <- NULL
   if ("class" %in% type) {
     levels <- glue::double_quote(lvl)
     res <- c(
       res,
       orbital_tmp_class_name = glue::glue(
-        "dplyr::case_when({eq} > {format_numeric(cut)} ~ {levels[2]}, .default = {levels[1]})"
+        "dplyr::case_when({eq} {op} {format_numeric(cut)} ~ {levels[2]}, .default = {levels[1]})"
       )
     )
   }
@@ -34,14 +35,17 @@ binary_from_prob <- function(eq, type, lvl, cut = 0.5) {
 
 # Binary classification from a single probability expression
 # Assumes: eq is P(first level)
-binary_from_prob_first <- function(eq, type, lvl) {
+#
+# `cut` is the probability above which the first level is chosen, and `op` the
+# comparison used against it; see `binary_from_prob()`.
+binary_from_prob_first <- function(eq, type, lvl, cut = 0.5, op = ">") {
   res <- NULL
   if ("class" %in% type) {
     levels <- glue::double_quote(lvl)
     res <- c(
       res,
       orbital_tmp_class_name = glue::glue(
-        "dplyr::case_when({eq} > 0.5 ~ {levels[1]}, .default = {levels[2]})"
+        "dplyr::case_when({eq} {op} {format_numeric(cut)} ~ {levels[1]}, .default = {levels[2]})"
       )
     )
   }

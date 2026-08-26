@@ -21,6 +21,7 @@ Imports:
     generics (>= 0.1.2),
     rlang
 Suggests:
+    agua,
     arrow,
     baguette,
     bonsai,
@@ -36,6 +37,7 @@ Suggests:
     glmnet,
     glue,
     gt,
+    h2o,
     hardhat,
     jsonlite,
     kernlab,

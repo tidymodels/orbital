@@ -8,6 +8,8 @@
 
 * `boost_tree()` with the `"C5.0"` engine is now supported for `type = "class"`, including multi-trial boosting. (#161)
 
+* `boost_tree()` with the `"h2o_gbm"` engine, and `rule_fit()` with the `"h2o"` engine, are now supported for regression and classification. A running H2O cluster is needed to build the orbital object, but not to use one afterwards. (#166)
+
 * `C5_rules()` with the `"C5.0"` engine is now supported for `type = "class"`. (#161)
 
 * `discrim_linear()` and `discrim_quad()` with the `"MASS"` engine are now supported for `type = "class"` and `type = "prob"`. (#160)
@@ -43,6 +45,8 @@
 * `orbital()` refuses `type = "prob"` for models that have no probability to give, rather than fabricating one. A decision value is uncalibrated, so putting it through a logistic would invent a calibration the model does not have. (#159)
 
 ## Bug fixes
+
+* `orbital()` now uses the model's own class order for binary probabilities, rather than assuming it matches the order of the outcome's factor levels. Every engine but h2o orders them the same way, so only h2o models were affected, and only when the outcome's levels were not in sorted order; for those both probability columns were swapped and the class inverted. (#166)
 
 * `orbital()` now returns the correct classes for `svm_linear()` models with the `"LiblineaR"` engine. The sign of the decision value was read as meaning the second outcome level, but LiblineaR orients it by its own class order, which need not match the order of the outcome's factor levels. When the two disagreed every class was inverted. (#164)
 
