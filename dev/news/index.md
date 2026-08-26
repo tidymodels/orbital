@@ -2,6 +2,32 @@
 
 ## orbital (development version)
 
+### New models
+
+- [`discrim_linear()`](https://parsnip.tidymodels.org/reference/discrim_linear.html)
+  and
+  [`discrim_quad()`](https://parsnip.tidymodels.org/reference/discrim_quad.html)
+  with the `"MASS"` engine are now supported for `type = "class"` and
+  `type = "prob"`.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`linear_reg()`](https://parsnip.tidymodels.org/reference/linear_reg.html)
+  with the `"glm"` engine is now supported.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) with the
+  `"nnet"` engine is now supported for regression and classification.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`multinom_reg()`](https://parsnip.tidymodels.org/reference/multinom_reg.html)
+  with the `"nnet"` engine is now supported for `type = "class"` and
+  `type = "prob"`.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`null_model()`](https://parsnip.tidymodels.org/reference/null_model.html)
+  is now supported for regression and classification.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
 ### Improvements
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
