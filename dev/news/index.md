@@ -4,6 +4,21 @@
 
 ### New models
 
+- [`bag_tree()`](https://parsnip.tidymodels.org/reference/bag_tree.html)
+  with the `"rpart"` and `"C5.0"` engines is now supported for
+  `type = "class"`. These models vote over their ensemble and expose no
+  probability, so `type = "prob"` is refused.
+  ([\#161](https://github.com/tidymodels/orbital/issues/161))
+
+- [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html)
+  with the `"C5.0"` engine is now supported for `type = "class"`,
+  including multi-trial boosting.
+  ([\#161](https://github.com/tidymodels/orbital/issues/161))
+
+- [`C5_rules()`](https://parsnip.tidymodels.org/reference/C5_rules.html)
+  with the `"C5.0"` engine is now supported for `type = "class"`.
+  ([\#161](https://github.com/tidymodels/orbital/issues/161))
+
 - [`discrim_linear()`](https://parsnip.tidymodels.org/reference/discrim_linear.html)
   and
   [`discrim_quad()`](https://parsnip.tidymodels.org/reference/discrim_quad.html)
@@ -27,6 +42,10 @@
 - [`null_model()`](https://parsnip.tidymodels.org/reference/null_model.html)
   is now supported for regression and classification.
   ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html)
+  with the `"partykit"` engine is now supported for regression.
+  ([\#161](https://github.com/tidymodels/orbital/issues/161))
 
 ### Improvements
 
