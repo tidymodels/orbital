@@ -40,6 +40,11 @@
   with the `"glm"` engine is now supported.
   ([\#160](https://github.com/tidymodels/orbital/issues/160))
 
+- [`logistic_reg()`](https://parsnip.tidymodels.org/reference/logistic_reg.html)
+  with the `"LiblineaR"` engine is now supported for `type = "class"`
+  and `type = "prob"`.
+  ([\#164](https://github.com/tidymodels/orbital/issues/164))
+
 - [`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) with the
   `"nnet"` engine is now supported for regression and classification.
   ([\#160](https://github.com/tidymodels/orbital/issues/160))
@@ -71,6 +76,23 @@
   with the `"partykit"` engine is now supported for regression.
   ([\#161](https://github.com/tidymodels/orbital/issues/161))
 
+- [`rule_fit()`](https://parsnip.tidymodels.org/reference/rule_fit.html)
+  with the `"xrf"` engine is now supported for regression and for binary
+  classification. Multiclass outcomes are refused, since xrf only fits
+  Gaussian and binomial models.
+  ([\#164](https://github.com/tidymodels/orbital/issues/164))
+
+- [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
+  with the `"kernlab"` engine is now supported for regression and
+  classification.
+  ([\#164](https://github.com/tidymodels/orbital/issues/164))
+
+- [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
+  with the `"LiblineaR"` engine is now supported for regression, in
+  addition to the `type = "class"` support added in
+  [\#159](https://github.com/tidymodels/orbital/issues/159).
+  ([\#164](https://github.com/tidymodels/orbital/issues/164))
+
 ### Improvements
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
@@ -91,6 +113,24 @@
   ([\#159](https://github.com/tidymodels/orbital/issues/159))
 
 ### Bug fixes
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now returns the correct classes for
+  [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
+  models with the `"LiblineaR"` engine. The sign of the decision value
+  was read as meaning the second outcome level, but LiblineaR orients it
+  by its own class order, which need not match the order of the
+  outcome’s factor levels. When the two disagreed every class was
+  inverted. ([\#164](https://github.com/tidymodels/orbital/issues/164))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now returns the correct classes for
+  [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
+  models with the `"kernlab"` engine. kernlab classifies by the sign of
+  its decision function and calibrates its probabilities separately, so
+  cutting those probabilities at 0.5 disagreed with the model for rows
+  near the boundary.
+  ([\#164](https://github.com/tidymodels/orbital/issues/164))
 
 - Binary `earth()` classification models now generate
   `1 / (1 + exp(-x))` rather than the equivalent `1 - 1 / (1 + exp(x))`.
