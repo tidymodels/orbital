@@ -52,13 +52,16 @@ route_prob <- function(res, x, type, call) {
   abort_if_class_by_centroid(x, type, call)
 
   if (is.language(res)) {
-    # Binary: one expression giving the probability of the second level.
-    return(binary_from_prob(
-      deparse1(res, control = "digits17"),
-      type,
-      lvl,
-      prob_class_cut(x)
-    ))
+    # Binary: one expression giving the probability of a single level, which is
+    # the model's second level rather than necessarily parsnip's.
+    eq <- deparse1(res, control = "digits17")
+    rule <- prob_class_rule(x)
+
+    if (identical(binary_positive_level(x, lvl), lvl[2])) {
+      return(binary_from_prob(eq, type, lvl, rule$cut, rule$op))
+    }
+
+    return(binary_from_prob_first(eq, type, lvl, rule$cut, rule$op))
   }
 
   if (isFALSE(tidypredict::tidypredict_normalized(x$fit))) {
@@ -109,6 +112,26 @@ order_prob_eqs <- function(prob_eqs, x, lvl, call) {
   unname(stats::setNames(prob_eqs, model_levels)[lvl])
 }
 
+# Which level the single binary probability expression is for.
+#
+# Every backend but h2o orders its classes the way the outcome's factor levels
+# are ordered, making this `lvl[2]`. h2o sorts its own domain and keeps that
+# order regardless, so a model fitted on reversed levels still returns the
+# probability of what parsnip calls the first level. Taking it for the second
+# would swap both probability columns and invert the class.
+binary_positive_level <- function(x, lvl) {
+  model_levels <- tryCatch(
+    tidypredict::tidypredict_outcome_levels(x$fit),
+    error = function(e) NULL
+  )
+
+  if (length(model_levels) != 2 || !setequal(model_levels, lvl)) {
+    return(lvl[2])
+  }
+
+  model_levels[2]
+}
+
 # Which outcome level a positive decision value means.
 #
 # LiblineaR orients its decision function toward the first entry of
@@ -133,16 +156,38 @@ decision_positive_level <- function(x, call) {
   class_names[1]
 }
 
-# The probability above which the second level is predicted.
+# The rule turning the binary probability into a class: the threshold, and the
+# comparison made against it.
 #
-# 0.5 for every model that picks the larger of the two probabilities. kernlab
-# does not: it classifies by the sign of the decision function and calibrates
-# the probabilities separately with Platt scaling, so the two rules cross at
+# `0.5` and `>` for every model that picks the larger of the two probabilities.
+# Two do not.
+#
+# h2o chooses a threshold maximizing F1 on the training data and applies that
+# instead of 0.5, so its own labels can disagree with its own probabilities
+# across a wide band. On `iris` the F1 threshold came out at 0.90, putting a 0.5
+# cut at odds with the model on half the rows. It compares with `>=`, and since
+# the threshold it picks is an observed probability rather than an arbitrary
+# number, rows landing exactly on it are common rather than a curiosity.
+#
+# kernlab classifies by the sign of the decision function and calibrates the
+# probabilities separately with Platt scaling, so the two rules cross at
 # `1 / (1 + exp(B))` rather than at 0.5. With `iris` the difference moves 2% of
 # rows, all of them near the boundary.
-prob_class_cut <- function(x) {
+prob_class_rule <- function(x) {
+  default <- list(cut = 0.5, op = ">")
+
+  if (inherits(x$fit, "H2OBinomialModel")) {
+    threshold <- x$fit@model$default_threshold
+
+    if (!is.numeric(threshold) || length(threshold) != 1) {
+      return(default)
+    }
+
+    return(list(cut = threshold, op = ">="))
+  }
+
   if (!inherits(x$fit, "ksvm")) {
-    return(0.5)
+    return(default)
   }
 
   # An `ksvm()` fitted with `prob.model = FALSE` carries an empty list here, in
@@ -150,10 +195,10 @@ prob_class_cut <- function(x) {
   prob_model <- x$fit@prob.model
 
   if (length(prob_model) < 1 || !is.numeric(prob_model[[1]]$B)) {
-    return(0.5)
+    return(default)
   }
 
-  1 / (1 + exp(prob_model[[1]]$B))
+  list(cut = 1 / (1 + exp(prob_model[[1]]$B)), op = ">")
 }
 
 # mixOmics discriminant models assign a class by distance to the class centroid
