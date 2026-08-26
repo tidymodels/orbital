@@ -22,6 +22,7 @@ Imports:
     rlang
 Suggests:
     arrow,
+    baguette,
     bonsai,
     C50,
     DBI,
@@ -54,6 +55,7 @@ Suggests:
     rpart,
     RSQLite,
     rstanarm,
+    rules,
     sparklyr,
     splines2,
     tailor,

@@ -118,6 +118,51 @@ test_that("decision_tree(partykit) works with type = c(class, prob)", {
   )
 })
 
+test_that("rand_forest(partykit) works with type = numeric", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
+
+  spec <- parsnip::rand_forest(
+    trees = 5,
+    mode = "regression",
+    engine = "partykit"
+  )
+
+  set.seed(1234)
+  fit <- parsnip::fit(spec, mpg ~ disp + vs + hp, mtcars)
+
+  preds <- predict(orbital(fit), mtcars)
+  exps <- as.data.frame(predict(fit, mtcars))
+
+  expect_named(preds, ".pred")
+  expect_type(preds$.pred, "double")
+
+  rownames(preds) <- NULL
+  rownames(exps) <- NULL
+
+  expect_equal(preds, exps)
+})
+
+test_that("rand_forest(partykit) errors for classification", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("tidypredict")
+
+  mtcars$vs <- factor(mtcars$vs)
+
+  spec <- parsnip::rand_forest(
+    trees = 5,
+    mode = "classification",
+    engine = "partykit"
+  )
+
+  set.seed(1234)
+  fit <- parsnip::fit(spec, vs ~ disp + mpg + hp, mtcars)
+
+  expect_snapshot(error = TRUE, orbital(fit, type = "class"))
+})
+
 test_that("decision_tree(partykit) works with custom prefix", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("bonsai")
