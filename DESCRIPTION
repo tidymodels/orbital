@@ -25,6 +25,7 @@ Suggests:
     baguette,
     bonsai,
     C50,
+    dbarts,
     DBI,
     discrim,
     dbplyr,

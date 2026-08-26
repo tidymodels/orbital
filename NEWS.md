@@ -4,6 +4,8 @@
 
 * `bag_tree()` with the `"rpart"` and `"C5.0"` engines is now supported for `type = "class"`. These models vote over their ensemble and expose no probability, so `type = "prob"` is refused. (#161)
 
+* `bart()` with the `"dbarts"` engine is now supported for regression. Classification is refused, since it uses a probit link that cannot be translated. (#162)
+
 * `boost_tree()` with the `"C5.0"` engine is now supported for `type = "class"`, including multi-trial boosting. (#161)
 
 * `C5_rules()` with the `"C5.0"` engine is now supported for `type = "class"`. (#161)

@@ -36,6 +36,7 @@ tibble::tribble(
   ~parsnip,               ~engine,              ~numeric, ~class, ~prob,
   "`bag_tree()`",         "`\"C5.0\"`",         "❌",     "✅",    "❌",
   "`bag_tree()`",         "`\"rpart\"`",        "❌",     "✅",    "❌",
+  "`bart()`",             "`\"dbarts\"`",       "✅",     "❌",    "❌",
   "`boost_tree()`",       "`\"C5.0\"`",         "❌",     "✅",    "❌",
   "`boost_tree()`",       "`\"catboost\"`",     "✅",     "✅",    "✅",
   "`boost_tree()`",       "`\"lightgbm\"`",     "✅",     "✅",    "✅",
