@@ -20,6 +20,14 @@
   including multi-trial boosting.
   ([\#161](https://github.com/tidymodels/orbital/issues/161))
 
+- [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html)
+  with the `"h2o_gbm"` engine, and
+  [`rule_fit()`](https://parsnip.tidymodels.org/reference/rule_fit.html)
+  with the `"h2o"` engine, are now supported for regression and
+  classification. A running H2O cluster is needed to build the orbital
+  object, but not to use one afterwards.
+  ([\#166](https://github.com/tidymodels/orbital/issues/166))
+
 - [`C5_rules()`](https://parsnip.tidymodels.org/reference/C5_rules.html)
   with the `"C5.0"` engine is now supported for `type = "class"`.
   ([\#161](https://github.com/tidymodels/orbital/issues/161))
@@ -113,6 +121,14 @@
   ([\#159](https://github.com/tidymodels/orbital/issues/159))
 
 ### Bug fixes
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now uses the model’s own class order for binary probabilities, rather
+  than assuming it matches the order of the outcome’s factor levels.
+  Every engine but h2o orders them the same way, so only h2o models were
+  affected, and only when the outcome’s levels were not in sorted order;
+  for those both probability columns were swapped and the class
+  inverted. ([\#166](https://github.com/tidymodels/orbital/issues/166))
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now returns the correct classes for
