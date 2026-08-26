@@ -2,6 +2,12 @@
 
 ## New models
 
+* `bag_tree()` with the `"rpart"` and `"C5.0"` engines is now supported for `type = "class"`. These models vote over their ensemble and expose no probability, so `type = "prob"` is refused. (#161)
+
+* `boost_tree()` with the `"C5.0"` engine is now supported for `type = "class"`, including multi-trial boosting. (#161)
+
+* `C5_rules()` with the `"C5.0"` engine is now supported for `type = "class"`. (#161)
+
 * `discrim_linear()` and `discrim_quad()` with the `"MASS"` engine are now supported for `type = "class"` and `type = "prob"`. (#160)
 
 * `linear_reg()` with the `"glm"` engine is now supported. (#160)
@@ -11,6 +17,8 @@
 * `multinom_reg()` with the `"nnet"` engine is now supported for `type = "class"` and `type = "prob"`. (#160)
 
 * `null_model()` is now supported for regression and classification. (#160)
+
+* `rand_forest()` with the `"partykit"` engine is now supported for regression. (#161)
 
 ## Improvements
 
