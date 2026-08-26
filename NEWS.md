@@ -12,13 +12,19 @@
 
 * `discrim_linear()` and `discrim_quad()` with the `"MASS"` engine are now supported for `type = "class"` and `type = "prob"`. (#160)
 
+* `discrim_linear()` with the `"mda"`, `"sda"`, and `"sparsediscrim"` engines is now supported for `type = "class"` and `type = "prob"`. (#163)
+
 * `linear_reg()` with the `"glm"` engine is now supported. (#160)
 
 * `mlp()` with the `"nnet"` engine is now supported for regression and classification. (#160)
 
 * `multinom_reg()` with the `"nnet"` engine is now supported for `type = "class"` and `type = "prob"`. (#160)
 
+* `naive_Bayes()` with the `"klaR"` and `"naivebayes"` engines is now supported for `type = "class"` and `type = "prob"`. Both engines default to `usekernel = TRUE`, which fits a kernel density per predictor and has no closed form; refit with `usekernel = FALSE` to translate one. (#163)
+
 * `null_model()` is now supported for regression and classification. (#160)
+
+* `pls()` with the `"mixOmics"` engine is now supported for regression and for `type = "prob"`. `type = "class"` is refused, since mixOmics assigns a class by distance to the class centroid rather than by the largest per-level value. (#163)
 
 * `rand_forest()` with the `"partykit"` engine is now supported for regression. (#161)
 

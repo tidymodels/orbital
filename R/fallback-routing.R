@@ -48,6 +48,8 @@ tidypredict_output_type <- function(x) {
 route_prob <- function(res, x, type, call) {
   lvl <- x$lvl
 
+  abort_if_class_by_centroid(x, type, call)
+
   if (is.language(res)) {
     # Binary: one expression giving the probability of the second level.
     return(binary_from_prob(deparse1(res, control = "digits17"), type, lvl))
@@ -99,6 +101,27 @@ order_prob_eqs <- function(prob_eqs, x, lvl, call) {
   }
 
   unname(stats::setNames(prob_eqs, model_levels)[lvl])
+}
+
+# mixOmics discriminant models assign a class by distance to the class centroid
+# in the latent space rather than by taking the largest per-level value. The two
+# rules disagree on a fifth of the rows of `iris`, so unlike every other
+# probability backend the class label cannot be derived from the per-level
+# expressions. The values themselves are exact, so only `type = "class"` goes.
+abort_if_class_by_centroid <- function(x, type, call) {
+  if (!"class" %in% type || !inherits(x$fit, "DA")) {
+    return(invisible())
+  }
+
+  cli::cli_abort(
+    c(
+      "{.val class} predictions are not available for this model.",
+      i = "It assigns a class by distance to the class centroid, which the
+           per-level values do not determine.",
+      i = "Use {.code type = \"prob\"} instead."
+    ),
+    call = call
+  )
 }
 
 # Backends that predict a class label and nothing else: there is no probability
