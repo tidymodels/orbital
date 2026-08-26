@@ -59,7 +59,12 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::rcmdcheck, xgboost=?ignore-before-r=4.3.0${{ matrix.config.extra }}
+          # mixOmics comes from Bioconductor, and the Bioconductor mirrors for
+          # the releases matching R 4.3 and older are no longer reachable, which
+          # fails dependency resolution outright rather than just skipping it.
+          # plsmod imports mixOmics, so it has to go too; its tests already skip
+          # when the engine is missing.
+          extra-packages: any::rcmdcheck, xgboost=?ignore-before-r=4.3.0, mixOmics=?ignore-before-r=4.4.0, plsmod=?ignore-before-r=4.4.0${{ matrix.config.extra }}
           needs: check
 
       - name: Install catboost
