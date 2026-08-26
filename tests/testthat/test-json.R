@@ -182,3 +182,48 @@ test_that("json round-trip works for lda multiclass", {
 
   expect_identical(new, orbital_obj)
 })
+
+test_that("json round-trip works for a binary decision value", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("jsonlite")
+  skip_if_not_installed("LiblineaR")
+
+  set.seed(123)
+  spec <- parsnip::svm_linear(mode = "classification", engine = "LiblineaR")
+  fit <- parsnip::fit(spec, Species ~ ., two_species_iris())
+
+  orbital_obj <- orbital(fit, type = "class")
+
+  tmp_file <- tempfile()
+  orbital_json_write(orbital_obj, tmp_file)
+  new <- orbital_json_read(tmp_file)
+
+  expect_identical(new, orbital_obj)
+})
+
+test_that("json round-trip preserves a probability cut away from 0.5", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("jsonlite")
+  skip_if_not_installed("kernlab")
+
+  # The threshold kernlab implies is a full precision double rather than 0.5.
+  # Rounding it on the way through JSON would move rows across the cut, which
+  # is the failure that made tidypredict add its own save and load functions.
+  set.seed(123)
+  spec <- parsnip::svm_linear(mode = "classification", engine = "kernlab")
+  fit <- parsnip::fit(spec, Species ~ ., two_species_iris())
+
+  orbital_obj <- orbital(fit, type = c("class", "prob"))
+
+  tmp_file <- tempfile()
+  orbital_json_write(orbital_obj, tmp_file)
+  new <- orbital_json_read(tmp_file)
+
+  expect_identical(new, orbital_obj)
+  expect_identical(
+    predict(new, two_species_iris()),
+    predict(orbital_obj, two_species_iris())
+  )
+})
