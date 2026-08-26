@@ -31,6 +31,11 @@
   `type = "prob"`.
   ([\#160](https://github.com/tidymodels/orbital/issues/160))
 
+- [`discrim_linear()`](https://parsnip.tidymodels.org/reference/discrim_linear.html)
+  with the `"mda"`, `"sda"`, and `"sparsediscrim"` engines is now
+  supported for `type = "class"` and `type = "prob"`.
+  ([\#163](https://github.com/tidymodels/orbital/issues/163))
+
 - [`linear_reg()`](https://parsnip.tidymodels.org/reference/linear_reg.html)
   with the `"glm"` engine is now supported.
   ([\#160](https://github.com/tidymodels/orbital/issues/160))
@@ -44,9 +49,23 @@
   `type = "prob"`.
   ([\#160](https://github.com/tidymodels/orbital/issues/160))
 
+- [`naive_Bayes()`](https://parsnip.tidymodels.org/reference/naive_Bayes.html)
+  with the `"klaR"` and `"naivebayes"` engines is now supported for
+  `type = "class"` and `type = "prob"`. Both engines default to
+  `usekernel = TRUE`, which fits a kernel density per predictor and has
+  no closed form; refit with `usekernel = FALSE` to translate one.
+  ([\#163](https://github.com/tidymodels/orbital/issues/163))
+
 - [`null_model()`](https://parsnip.tidymodels.org/reference/null_model.html)
   is now supported for regression and classification.
   ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`pls()`](https://parsnip.tidymodels.org/reference/pls.html) with the
+  `"mixOmics"` engine is now supported for regression and for
+  `type = "prob"`. `type = "class"` is refused, since mixOmics assigns a
+  class by distance to the class centroid rather than by the largest
+  per-level value.
+  ([\#163](https://github.com/tidymodels/orbital/issues/163))
 
 - [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html)
   with the `"partykit"` engine is now supported for regression.
