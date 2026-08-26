@@ -236,7 +236,7 @@ test_that("multiclass_from_probs evaluates to the same values as R", {
 })
 
 test_that("binary_from_decision cuts at zero, not 0.5", {
-  result <- orbital:::binary_from_decision("d", "class", c("no", "yes"))
+  result <- orbital:::binary_from_decision("d", "class", c("no", "yes"), "yes")
 
   expect_identical(
     result,
@@ -246,11 +246,22 @@ test_that("binary_from_decision cuts at zero, not 0.5", {
   )
 })
 
+test_that("binary_from_decision honors a positive class that is not lvl[2]", {
+  result <- orbital:::binary_from_decision("d", "class", c("no", "yes"), "no")
+
+  expect_identical(
+    result,
+    c(
+      orbital_tmp_class_name = 'dplyr::case_when(d > 0 ~ "no", .default = "yes")'
+    )
+  )
+})
+
 test_that("binary_from_decision evaluates to the sign of the decision value", {
   data <- data.frame(d = c(-2, -0.001, 0, 0.001, 2))
 
   res <- eval_orbital_eqs(
-    orbital:::binary_from_decision("d", "class", c("no", "yes")),
+    orbital:::binary_from_decision("d", "class", c("no", "yes"), "yes"),
     data
   )
 

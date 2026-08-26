@@ -56,6 +56,7 @@ tibble::tribble(
   "`linear_reg()`",       "`\"glmnet\"`",       "✅",     "❌",    "❌",
   "`logistic_reg()`",     "`\"glm\"`",          "❌",     "✅",    "✅",
   "`logistic_reg()`",     "`\"glmnet\"`",       "❌",     "✅",    "✅",
+  "`logistic_reg()`",     "`\"LiblineaR\"`",    "❌",     "✅",    "✅",
   "`mars()`",             "`\"earth\"`",        "✅",     "✅",    "✅",
   "`mlp()`",              "`\"nnet\"`",         "✅",     "✅",    "✅",
   "`multinom_reg()`",     "`\"glmnet\"`",       "❌",     "✅",    "✅",
@@ -67,7 +68,10 @@ tibble::tribble(
   "`pls()`",              "`\"mixOmics\"`",     "✅",     "❌",    "✅",
   "`rand_forest()`",      "`\"partykit\"`",     "✅",     "❌",    "❌",
   "`rand_forest()`",      "`\"randomForest\"`", "✅",     "✅",    "✅",
-  "`rand_forest()`",      "`\"ranger\"`",       "✅",     "✅",    "✅"
+  "`rand_forest()`",      "`\"ranger\"`",       "✅",     "✅",    "✅",
+  "`rule_fit()`",         "`\"xrf\"`",          "✅",     "✅",    "✅",
+  "`svm_linear()`",       "`\"kernlab\"`",      "✅",     "✅",    "✅",
+  "`svm_linear()`",       "`\"LiblineaR\"`",    "✅",     "✅",    "❌"
 ) |>
   gt() |>
   tab_spanner(

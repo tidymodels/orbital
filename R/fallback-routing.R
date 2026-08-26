@@ -29,6 +29,7 @@ route_fallback <- function(res, x, mode, type, call = rlang::caller_env()) {
       deparse_eq(res, x, call),
       type,
       x$lvl,
+      decision_positive_level(x, call),
       call = call
     ),
     class = route_class(res, x, type, call),
@@ -52,7 +53,12 @@ route_prob <- function(res, x, type, call) {
 
   if (is.language(res)) {
     # Binary: one expression giving the probability of the second level.
-    return(binary_from_prob(deparse1(res, control = "digits17"), type, lvl))
+    return(binary_from_prob(
+      deparse1(res, control = "digits17"),
+      type,
+      lvl,
+      prob_class_cut(x)
+    ))
   }
 
   if (isFALSE(tidypredict::tidypredict_normalized(x$fit))) {
@@ -101,6 +107,53 @@ order_prob_eqs <- function(prob_eqs, x, lvl, call) {
   }
 
   unname(stats::setNames(prob_eqs, model_levels)[lvl])
+}
+
+# Which outcome level a positive decision value means.
+#
+# LiblineaR orients its decision function toward the first entry of
+# `ClassNames`, which is the model's own class order and is independent of how
+# the outcome's factor levels are ordered. Reversing the levels of the outcome
+# therefore flips which level a positive value means, so this cannot be read off
+# `lvl`. tidypredict has no accessor for it yet, hence reaching into the fit.
+decision_positive_level <- function(x, call) {
+  class_names <- as.character(x$fit$ClassNames)
+
+  if (length(class_names) != 2 || !all(class_names %in% x$lvl)) {
+    cli::cli_abort(
+      c(
+        "Cannot tell which outcome level a positive decision value means.",
+        i = "The model does not record its class order in a form orbital
+             recognizes."
+      ),
+      call = call
+    )
+  }
+
+  class_names[1]
+}
+
+# The probability above which the second level is predicted.
+#
+# 0.5 for every model that picks the larger of the two probabilities. kernlab
+# does not: it classifies by the sign of the decision function and calibrates
+# the probabilities separately with Platt scaling, so the two rules cross at
+# `1 / (1 + exp(B))` rather than at 0.5. With `iris` the difference moves 2% of
+# rows, all of them near the boundary.
+prob_class_cut <- function(x) {
+  if (!inherits(x$fit, "ksvm")) {
+    return(0.5)
+  }
+
+  # An `ksvm()` fitted with `prob.model = FALSE` carries an empty list here, in
+  # which case there is no calibration to undo and 0.5 is the right cut.
+  prob_model <- x$fit@prob.model
+
+  if (length(prob_model) < 1 || !is.numeric(prob_model[[1]]$B)) {
+    return(0.5)
+  }
+
+  1 / (1 + exp(prob_model[[1]]$B))
 }
 
 # mixOmics discriminant models assign a class by distance to the class centroid
