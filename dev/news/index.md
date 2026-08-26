@@ -10,6 +10,11 @@
   probability, so `type = "prob"` is refused.
   ([\#161](https://github.com/tidymodels/orbital/issues/161))
 
+- [`bart()`](https://parsnip.tidymodels.org/reference/bart.html) with
+  the `"dbarts"` engine is now supported for regression. Classification
+  is refused, since it uses a probit link that cannot be translated.
+  ([\#162](https://github.com/tidymodels/orbital/issues/162))
+
 - [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html)
   with the `"C5.0"` engine is now supported for `type = "class"`,
   including multi-trial boosting.
