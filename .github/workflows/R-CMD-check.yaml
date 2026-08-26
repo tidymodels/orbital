@@ -64,7 +64,11 @@ jobs:
           # fails dependency resolution outright rather than just skipping it.
           # plsmod imports mixOmics, so it has to go too; its tests already skip
           # when the engine is missing.
-          extra-packages: any::rcmdcheck, xgboost=?ignore-before-r=4.3.0, mixOmics=?ignore-before-r=4.4.0, plsmod=?ignore-before-r=4.4.0${{ matrix.config.extra }}
+          #
+          # xrf imports xgboost, so installing it on an R version where xgboost
+          # is skipped would drag xgboost back in and un-skip the tests that the
+          # threshold above exists to skip. It carries the same threshold.
+          extra-packages: any::rcmdcheck, xgboost=?ignore-before-r=4.3.0, xrf=?ignore-before-r=4.3.0, mixOmics=?ignore-before-r=4.4.0, plsmod=?ignore-before-r=4.4.0${{ matrix.config.extra }}
           needs: check
 
       - name: Install catboost
