@@ -38,6 +38,7 @@ Suggests:
     gt,
     hardhat,
     jsonlite,
+    kernlab,
     kknn,
     klaR,
     knitr,
@@ -71,8 +72,10 @@ Suggests:
     themis,
     tibble,
     tidypredict (>= 1.1.1.9000),
+    withr,
     workflows,
-    xgboost
+    xgboost,
+    xrf
 VignetteBuilder:
     knitr
 Remotes:

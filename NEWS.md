@@ -16,6 +16,8 @@
 
 * `linear_reg()` with the `"glm"` engine is now supported. (#160)
 
+* `logistic_reg()` with the `"LiblineaR"` engine is now supported for `type = "class"` and `type = "prob"`. (#164)
+
 * `mlp()` with the `"nnet"` engine is now supported for regression and classification. (#160)
 
 * `multinom_reg()` with the `"nnet"` engine is now supported for `type = "class"` and `type = "prob"`. (#160)
@@ -28,6 +30,12 @@
 
 * `rand_forest()` with the `"partykit"` engine is now supported for regression. (#161)
 
+* `rule_fit()` with the `"xrf"` engine is now supported for regression and for binary classification. Multiclass outcomes are refused, since xrf only fits Gaussian and binomial models. (#164)
+
+* `svm_linear()` with the `"kernlab"` engine is now supported for regression and classification. (#164)
+
+* `svm_linear()` with the `"LiblineaR"` engine is now supported for regression, in addition to the `type = "class"` support added in #159. (#164)
+
 ## Improvements
 
 * `orbital()` now supports classification models that reach the tidypredict fallback, rather than refusing them. This covers multiclass probability models such as `MASS::lda()`, models returning an uncalibrated decision value such as `LiblineaR` SVMs, and models predicting a class label directly such as `C50::C5.0()`. (#159)
@@ -35,6 +43,10 @@
 * `orbital()` refuses `type = "prob"` for models that have no probability to give, rather than fabricating one. A decision value is uncalibrated, so putting it through a logistic would invent a calibration the model does not have. (#159)
 
 ## Bug fixes
+
+* `orbital()` now returns the correct classes for `svm_linear()` models with the `"LiblineaR"` engine. The sign of the decision value was read as meaning the second outcome level, but LiblineaR orients it by its own class order, which need not match the order of the outcome's factor levels. When the two disagreed every class was inverted. (#164)
+
+* `orbital()` now returns the correct classes for `svm_linear()` models with the `"kernlab"` engine. kernlab classifies by the sign of its decision function and calibrates its probabilities separately, so cutting those probabilities at 0.5 disagreed with the model for rows near the boundary. (#164)
 
 * Binary `earth()` classification models now generate `1 / (1 + exp(-x))` rather than the equivalent `1 - 1 / (1 + exp(x))`. Predictions are unchanged. (#158)
 

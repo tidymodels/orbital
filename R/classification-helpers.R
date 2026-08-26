@@ -7,14 +7,18 @@ backtick <- function(x) {
 
 # Binary classification from a single probability expression
 # Assumes: eq is P(second level)
-binary_from_prob <- function(eq, type, lvl) {
+#
+# `cut` is the probability above which the second level is chosen. It is 0.5 for
+# every model whose class rule is the larger of the two probabilities, but not
+# for one that calibrates a separate decision function; see `prob_class_cut()`.
+binary_from_prob <- function(eq, type, lvl, cut = 0.5) {
   res <- NULL
   if ("class" %in% type) {
     levels <- glue::double_quote(lvl)
     res <- c(
       res,
       orbital_tmp_class_name = glue::glue(
-        "dplyr::case_when({eq} > 0.5 ~ {levels[2]}, .default = {levels[1]})"
+        "dplyr::case_when({eq} > {format_numeric(cut)} ~ {levels[2]}, .default = {levels[1]})"
       )
     )
   }
@@ -140,12 +144,22 @@ multiclass_from_probs <- function(prob_eqs, type, lvl) {
 
 # Binary classification from a decision value rather than a probability, as
 # produced by LiblineaR SVMs. The sign of the decision value picks the class, so
-# the cut is at 0 rather than 0.5. As with binary_from_prob(), a positive value
-# means the second level.
+# the cut is at 0 rather than 0.5.
+#
+# Which class a positive value means is `positive`, and it cannot be assumed to
+# be the second level the way `binary_from_prob()` does: the model orients its
+# decision function by its own class order, which need not match the order of
+# the outcome's factor levels. See `decision_positive_level()`.
 #
 # No probability is emitted: a decision value is uncalibrated, and putting it
 # through a logistic would invent a calibration the model does not have.
-binary_from_decision <- function(eq, type, lvl, call = rlang::caller_env()) {
+binary_from_decision <- function(
+  eq,
+  type,
+  lvl,
+  positive,
+  call = rlang::caller_env()
+) {
   if ("prob" %in% type) {
     cli::cli_abort(
       c(
@@ -158,10 +172,11 @@ binary_from_decision <- function(eq, type, lvl, call = rlang::caller_env()) {
     )
   }
 
-  levels <- glue::double_quote(lvl)
+  negative <- glue::double_quote(setdiff(lvl, positive))
+  positive <- glue::double_quote(positive)
   c(
     orbital_tmp_class_name = glue::glue(
-      "dplyr::case_when({eq} > 0 ~ {levels[2]}, .default = {levels[1]})"
+      "dplyr::case_when({eq} > 0 ~ {positive}, .default = {negative})"
     )
   )
 }
