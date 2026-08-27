@@ -12,6 +12,8 @@
 
 * `C5_rules()` with the `"C5.0"` engine is now supported for `type = "class"`. (#161)
 
+* `decision_tree()` with the `"C5.0"` engine is now supported for `type = "class"`. Its leaves carry a class label rather than class counts, so `type = "prob"` is refused. (#173)
+
 * `discrim_linear()` and `discrim_quad()` with the `"MASS"` engine are now supported for `type = "class"` and `type = "prob"`. (#160)
 
 * `discrim_linear()` with the `"mda"`, `"sda"`, and `"sparsediscrim"` engines is now supported for `type = "class"` and `type = "prob"`. (#163)

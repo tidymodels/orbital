@@ -44,6 +44,7 @@ tibble::tribble(
   "`boost_tree()`",       "`\"xgboost\"`",      "✅",     "✅",    "✅",
   "`C5_rules()`",         "`\"C5.0\"`",         "❌",     "✅",    "❌",
   "`cubist_rules()`",     "`\"Cubist\"`",       "✅",     "❌",    "❌",
+  "`decision_tree()`",    "`\"C5.0\"`",         "❌",     "✅",    "❌",
   "`decision_tree()`",    "`\"partykit\"`",     "✅",     "✅",    "✅",
   "`decision_tree()`",    "`\"rpart\"`",        "✅",     "✅",    "✅",
   "`discrim_flexible()`", "`\"earth\"`",        "❌",     "❌",    "❌",
@@ -107,7 +108,7 @@ tibble::tribble(
 
 The two classification columns are separate because not every model produces both, and orbital refuses a type rather than inventing it.
 
-**Class without probability.** Some models predict a label directly and never compute a probability at all. `bag_tree()` and `boost_tree()` with the `"C5.0"` engine, `C5_rules()`, and `bag_tree()` with `"rpart"` all reach their answer by voting across an ensemble; the vote yields a winner, not a distribution. `svm_linear()` with `"LiblineaR"` produces a *decision value*, the signed distance from the separating hyperplane. Its sign gives the class, but its magnitude is uncalibrated: it is not a probability and does not become one by being passed through a logistic. Doing that would attach a confidence the model never estimated, so `type = "prob"` is refused for all of these.
+**Class without probability.** Some models predict a label directly and never compute a probability at all. `bag_tree()` and `boost_tree()` with the `"C5.0"` engine, `C5_rules()`, and `bag_tree()` with `"rpart"` all reach their answer by voting across an ensemble; the vote yields a winner, not a distribution. `decision_tree()` with `"C5.0"` is the single-tree version of the same thing: it labels each leaf with a class rather than with class counts. `svm_linear()` with `"LiblineaR"` produces a *decision value*, the signed distance from the separating hyperplane. Its sign gives the class, but its magnitude is uncalibrated: it is not a probability and does not become one by being passed through a logistic. Doing that would attach a confidence the model never estimated, so `type = "prob"` is refused for all of these.
 
 **Probability without class.** `pls()` with `"mixOmics"` is the reverse case. It gives per-level values, but mixOmics assigns a class by distance to the class centroid rather than by taking the largest of those values, so the obvious `which.max()` would disagree with the model on some rows. orbital gives the probabilities and refuses `type = "class"`.
 

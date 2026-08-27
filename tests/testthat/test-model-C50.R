@@ -67,6 +67,29 @@ test_that("boost_tree(C5.0) works with more than one boosting round", {
   )
 })
 
+test_that("decision_tree(C5.0) works with type = class", {
+  skip_if_no_C50()
+
+  spec <- parsnip::decision_tree(mode = "classification", engine = "C5.0")
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  preds <- predict(orbital(fit, type = "class"), iris)
+
+  expect_identical(
+    preds$.pred_class,
+    as.character(predict(fit, iris)$.pred_class)
+  )
+})
+
+test_that("decision_tree(C5.0) errors for type = prob", {
+  skip_if_no_C50()
+
+  spec <- parsnip::decision_tree(mode = "classification", engine = "C5.0")
+  fit <- parsnip::fit(spec, Species ~ ., iris)
+
+  expect_snapshot(error = TRUE, orbital(fit, type = "prob"))
+})
+
 test_that("C5_rules() works with type = class", {
   skip_if_no_C50()
   skip_if_not_installed("rules")
