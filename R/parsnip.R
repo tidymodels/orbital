@@ -47,7 +47,7 @@ orbital.model_fit <- function(
     }
   } else {
     res <- tryCatch(
-      tidypredict::tidypredict_fit(x),
+      fallback_eqs(x, mode, separate_trees, prefix),
       # tidypredict signals this class when no method handles the model at all.
       tidypredict_unsupported_model = function(cnd) {
         abort_unsupported_model(x)
