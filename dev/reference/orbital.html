@@ -112,6 +112,30 @@ argument like so <code>print(orbital_object, truncate = FALSE)</code>.</p>
 <a href="predict.orbital_class.html">predict()</a> with, or to generate code using functions
 such as <code><a href="orbital_sql.html">orbital_sql()</a></code> or <code><a href="orbital_dt.html">orbital_dt()</a></code>.</p>
     </div>
+    <div class="section level2">
+    <h2 id="numeric-precision">Numeric precision<a class="anchor" aria-label="anchor" href="#numeric-precision"></a></h2>
+
+
+<p>An orbital object holds its equations as text, so every number a model
+carries is written out as a decimal with 17 significant digits and read back
+when the object is used. On most builds of R that round-trip is exact.</p>
+<p>It is not exact on builds where <code>capabilities("long.double")</code> is <code>FALSE</code>,
+which includes some macOS builds. R accumulates the digits of a number it is
+reading into a long double, and without one to accumulate into it can land
+one unit in the last place away from the number that was written. Equations
+built on such a build are still written correctly; it is reading them back
+that loses the last bit.</p>
+<p>For nearly every model this is orders of magnitude below the model's own
+uncertainty and can be ignored. It matters for trees that split on a value
+computed from several columns rather than on a raw column, such as the
+oblique forests of <code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code> with the <code>"aorsf"</code> engine. Those splits
+sit at combinations realized by training rows, so the comparison at a split
+is an exact tie for many rows, and the smallest possible difference is
+enough to send a row down the other branch. Its prediction then moves by the
+distance between two leaves rather than by a rounding error, and predictions
+can differ from <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> on the original fit for a meaningful share of
+rows.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
