@@ -6,6 +6,33 @@
       Error in `orbital()`:
       ! A model of class <train.kknn> is not supported.
 
+# bare model fits are refused
+
+    Code
+      orbital(rpart::rpart(mpg ~ ., mtcars))
+    Condition
+      Error in `orbital()`:
+      ! `x` must be a workflow, parsnip, or recipe object, not a bare <rpart> fit.
+      i Fit the model with `parsnip::fit()` first.
+
+---
+
+    Code
+      orbital(partykit::ctree(mpg ~ ., mtcars))
+    Condition
+      Error in `orbital()`:
+      ! `x` must be a workflow, parsnip, or recipe object, not a bare <constparty> fit.
+      i Fit the model with `parsnip::fit()` first.
+
+# bare fits that already errored now say why
+
+    Code
+      orbital(randomForest::randomForest(mpg ~ ., mtcars))
+    Condition
+      Error in `orbital()`:
+      ! `x` must be a workflow, parsnip, or recipe object, not a bare <randomForest.formula> fit.
+      i Fit the model with `parsnip::fit()` first.
+
 # errors from native methods are not swallowed by the fallback
 
     Code

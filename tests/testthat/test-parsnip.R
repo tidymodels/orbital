@@ -32,6 +32,30 @@ test_that("has_orbital_method() detects native methods", {
   expect_false(has_orbital_method(structure(list(), class = "train.kknn")))
 })
 
+test_that("bare model fits are refused", {
+  skip_if_not_installed("rpart")
+  skip_if_not_installed("partykit")
+
+  # Regression fits used to take the classification branch and return a
+  # character vector named `orbital_tmp_class_name`, with no error.
+  expect_snapshot(error = TRUE, orbital(rpart::rpart(mpg ~ ., mtcars)))
+  expect_snapshot(
+    error = TRUE,
+    orbital(partykit::ctree(mpg ~ ., mtcars))
+  )
+})
+
+test_that("bare fits that already errored now say why", {
+  skip_if_not_installed("randomForest")
+
+  # This errored before, but with "Model is not a classification model.",
+  # which described an internal symptom rather than the actual mistake.
+  expect_snapshot(
+    error = TRUE,
+    orbital(randomForest::randomForest(mpg ~ ., mtcars))
+  )
+})
+
 test_that("errors from native methods are not swallowed by the fallback", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("tidypredict")
