@@ -132,6 +132,17 @@
   ([\#167](https://github.com/tidymodels/orbital/issues/167))
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now errors for a bare model fit, which was never documented input,
+  rather than returning something that looked like a result. A
+  regression fit handed in directly took the classification path
+  whatever the model was, so `orbital(rpart::rpart(mpg ~ ., mtcars))`
+  came back as a character vector named `orbital_tmp_class_name` with no
+  error and no warning. Fit the model with
+  [`parsnip::fit()`](https://generics.r-lib.org/reference/fit.html), or
+  use a workflow, as the documentation has always described.
+  ([\#113](https://github.com/tidymodels/orbital/issues/113))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now uses the model’s own class order for binary probabilities, rather
   than assuming it matches the order of the outcome’s factor levels.
   Every engine but h2o orders them the same way, so only h2o models were
