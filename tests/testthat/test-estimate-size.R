@@ -418,3 +418,35 @@ test_that("estimate_orbital_size for workflow combines recipe and model", {
   expect_gt(wf_est, actual * 0.5)
   expect_lt(wf_est, actual * 1.5)
 })
+
+test_that("estimate_orbital_size refuses a workflow whose model has no estimate", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("workflows")
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("nnet")
+
+  rec <- recipes::recipe(mpg ~ ., data = mtcars) |>
+    recipes::step_normalize(recipes::all_numeric_predictors())
+
+  wf <- workflows::workflow() |>
+    workflows::add_recipe(rec) |>
+    workflows::add_model(
+      parsnip::mlp(mode = "regression", engine = "nnet", epochs = 10)
+    ) |>
+    parsnip::fit(mtcars)
+
+  expect_snapshot(error = TRUE, estimate_orbital_size(wf))
+})
+
+test_that("estimate_orbital_size refuses a model it has no estimate for", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("nnet")
+
+  fit <- parsnip::fit(
+    parsnip::mlp(mode = "regression", engine = "nnet", epochs = 10),
+    mpg ~ .,
+    mtcars
+  )
+
+  expect_snapshot(error = TRUE, estimate_orbital_size(fit$fit))
+})

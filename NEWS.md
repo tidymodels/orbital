@@ -46,6 +46,8 @@
 
 ## Bug fixes
 
+* `estimate_orbital_size()` now errors for a workflow whose model it has no estimate for, rather than counting that model as zero characters and returning the recipe's size as the whole workflow's. The model is usually the bulk of the expression, so the number it returned could be off by orders of magnitude while looking ordinary, and it did not move as the model's hyperparameters changed. (#167)
+
 * `orbital()` now uses the model's own class order for binary probabilities, rather than assuming it matches the order of the outcome's factor levels. Every engine but h2o orders them the same way, so only h2o models were affected, and only when the outcome's levels were not in sorted order; for those both probability columns were swapped and the class inverted. (#166)
 
 * `orbital()` now returns the correct classes for `svm_linear()` models with the `"LiblineaR"` engine. The sign of the decision value was read as meaning the second outcome level, but LiblineaR orients it by its own class order, which need not match the order of the outcome's factor levels. When the two disagreed every class was inverted. (#164)

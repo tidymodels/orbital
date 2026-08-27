@@ -25,8 +25,11 @@
 #' convert each tree to an R expression.
 #'
 #' This function aims to support all the same models and preprocessing
-#' operations as [orbital()]. If you find a case where `orbital()` works but
-#' `estimate_orbital_size()` does not, please
+#' operations as [orbital()], but does not yet reach all of them. A model with
+#' no estimate is an error rather than a zero, including inside a workflow,
+#' since a workflow's model is usually the bulk of the expression and counting
+#' it as free would report the recipe's size as the whole. If you find a case
+#' where `orbital()` works but `estimate_orbital_size()` does not, please
 #' [file an issue](https://github.com/tidymodels/orbital/issues).
 #'
 #' @seealso [orbital()] for generating orbital objects.
@@ -65,8 +68,13 @@ estimate_orbital_size <- function(x, ...) {
 #' @export
 estimate_orbital_size.default <- function(x, ...) {
   cli::cli_abort(
-    "{.fn estimate_orbital_size} is not implemented for
-    {.obj_type_friendly {x}}."
+    c(
+      "{.fn estimate_orbital_size} is not implemented for
+       {.obj_type_friendly {x}}.",
+      i = "Use {.fn orbital} to build the expression and measure it, or
+           {.url https://github.com/tidymodels/orbital/issues} to request an
+           estimate for this model."
+    )
   )
 }
 
@@ -372,16 +380,14 @@ estimate_orbital_size.workflow <- function(x, ...) {
     total_chars <- total_chars + estimate_orbital_size(recipe_fit, ...)
   }
 
-  # Estimate model contribution
+  # Estimate model contribution. An unsupported model is an error rather than a
+  # zero: the model is usually the bulk of the expression, so counting it as
+  # free reports the recipe's size as the whole workflow's. That number looks
+  # ordinary, which is what makes it worse than a refusal. It is also flat
+  # across hyperparameters, so tuning on it would compare candidates that the
+  # estimate cannot tell apart.
   model_fit <- workflows::extract_fit_parsnip(x)
-  model_chars <- tryCatch(
-    estimate_orbital_size(model_fit$fit, ...),
-    error = function(e) {
-      # Fall back to 0 if model type not supported
-      0L
-    }
-  )
-  total_chars <- total_chars + model_chars
+  total_chars <- total_chars + estimate_orbital_size(model_fit$fit, ...)
 
   # Estimate tailor contribution
   if ("tailor" %in% names(x$post$actions)) {

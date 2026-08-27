@@ -78,8 +78,11 @@ orbital object because it only needs to inspect the tree structure, not
 convert each tree to an R expression.
 
 This function aims to support all the same models and preprocessing
-operations as \code{\link[=orbital]{orbital()}}. If you find a case where \code{orbital()} works but
-\code{estimate_orbital_size()} does not, please
+operations as \code{\link[=orbital]{orbital()}}, but does not yet reach all of them. A model with
+no estimate is an error rather than a zero, including inside a workflow,
+since a workflow's model is usually the bulk of the expression and counting
+it as free would report the recipe's size as the whole. If you find a case
+where \code{orbital()} works but \code{estimate_orbital_size()} does not, please
 \href{https://github.com/tidymodels/orbital/issues}{file an issue}.
 }
 \examples{
