@@ -46,7 +46,7 @@
 
 ## Bug fixes
 
-* `orbital()` now writes each number as the shortest decimal that R reads back unchanged, rather than always using 17 significant digits. R's decimal parser is not correctly rounded, so a 17-digit literal can be read back one ulp away from the value it came from. That is invisible in a linear predictor, but a tree whose cutpoints sit on values realized by training rows can send a row down the other branch, changing its prediction outright. The equations are also shorter and easier to read. (#165)
+* `orbital()` now writes each number as the shortest decimal that R reads back unchanged, rather than always using 17 significant digits. R's decimal parser is not correctly rounded, so a 17-digit literal can be read back one ulp away from the value it came from. That is invisible in a linear predictor, but a tree whose cutpoints sit on values realized by training rows can send a row down the other branch, changing its prediction outright. The equations are also shorter and easier to read. Some values no decimal literal reaches at all, so a residual difference remains for models that split on a computed value; this is described under "Numeric precision" in `?orbital`. (#165)
 
 * `estimate_orbital_size()` now errors for a workflow whose model it has no estimate for, rather than counting that model as zero characters and returning the recipe's size as the whole workflow's. The model is usually the bulk of the expression, so the number it returned could be off by orders of magnitude while looking ordinary, and it did not move as the model's hyperparameters changed. (#167)
 
