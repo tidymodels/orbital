@@ -106,11 +106,36 @@ models:
 | [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | ranger | Yes | Yes |
 | [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | randomForest | Yes | Yes |
 
+For multiclass classification, trees are separated per class before the
+final softmax transformation is applied.
+
+### Models where the argument has no effect
+
+`separate_trees` is accepted by
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+for every model, but only the five above act on it. Everything else
+silently produces the same single combined expression it would have
+produced with the default. Setting it is never an error and never
+changes the predictions, so a query that looks unchanged is the expected
+result rather than a sign something went wrong.
+
+This is worth knowing because several supported models are tree
+ensembles that nonetheless ignore it:
+
+| Model | Engine | Why |
+|----|----|----|
+| [`bag_tree()`](https://parsnip.tidymodels.org/reference/bag_tree.html) | rpart, C5.0 | Votes over the ensemble rather than summing it |
+| [`bart()`](https://parsnip.tidymodels.org/reference/bart.html) | dbarts | Sums over posterior draws, not over separable trees |
+| [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html) | C5.0 | Confidence-weighted vote that cannot be recombined arithmetically |
+| [`C5_rules()`](https://parsnip.tidymodels.org/reference/C5_rules.html) | C5.0 | As above |
+| [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | partykit | Not yet wired up; the underlying model could support it |
+| [`rule_fit()`](https://parsnip.tidymodels.org/reference/rule_fit.html) | xrf, h2o | Emitted as a rule set rather than as individual trees |
+| [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html) | h2o_gbm | Translated through h2o’s own export, which does not expose per-tree pieces |
+
 For single-tree models like
 [`decision_tree()`](https://parsnip.tidymodels.org/reference/decision_tree.html),
-the argument has no effect since there is only one tree. For multiclass
-classification, trees are separated per class before the final softmax
-transformation is applied.
+the argument has no effect for the simpler reason that there is only one
+tree to separate.
 
 ## Output behavior
 

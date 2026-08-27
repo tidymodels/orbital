@@ -11,6 +11,52 @@ model to table.
 
 [TABLE]
 
+### Why some models support one classification type but not the other
+
+The two classification columns are separate because not every model
+produces both, and orbital refuses a type rather than inventing it.
+
+**Class without probability.** Some models predict a label directly and
+never compute a probability at all.
+[`bag_tree()`](https://parsnip.tidymodels.org/reference/bag_tree.html)
+and
+[`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html)
+with the `"C5.0"` engine,
+[`C5_rules()`](https://parsnip.tidymodels.org/reference/C5_rules.html),
+and
+[`bag_tree()`](https://parsnip.tidymodels.org/reference/bag_tree.html)
+with `"rpart"` all reach their answer by voting across an ensemble; the
+vote yields a winner, not a distribution.
+[`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
+with `"LiblineaR"` produces a *decision value*, the signed distance from
+the separating hyperplane. Its sign gives the class, but its magnitude
+is uncalibrated: it is not a probability and does not become one by
+being passed through a logistic. Doing that would attach a confidence
+the model never estimated, so `type = "prob"` is refused for all of
+these.
+
+**Probability without class.**
+[`pls()`](https://parsnip.tidymodels.org/reference/pls.html) with
+`"mixOmics"` is the reverse case. It gives per-level values, but
+mixOmics assigns a class by distance to the class centroid rather than
+by taking the largest of those values, so the obvious
+[`which.max()`](https://rdrr.io/r/base/which.min.html) would disagree
+with the model on some rows. orbital gives the probabilities and refuses
+`type = "class"`.
+
+**Both, but the cut is not 0.5.**
+[`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
+with `"kernlab"` supports both, with a wrinkle worth knowing about.
+kernlab classifies by the sign of its decision function and fits its
+probabilities separately, using Platt scaling. The two rules do not
+cross at 0.5, so orbital emits kernlab’s own threshold as a literal in
+the expression. If you compare orbital’s `.pred_class` against
+thresholding its `.pred_*` columns at 0.5 yourself, expect disagreement
+on rows near the boundary; orbital matches the model, and 0.5 does not.
+
+The general rule: where a model’s own prediction rule and the naive rule
+disagree, orbital follows the model.
+
 ## Recipes steps
 
 The following 52 recipes steps are supported
