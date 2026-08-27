@@ -56,6 +56,31 @@ These objects will not be useful by themselves. They can be used to
 \link[=predict.orbital_class]{predict()} with, or to generate code using functions
 such as \code{\link[=orbital_sql]{orbital_sql()}} or \code{\link[=orbital_dt]{orbital_dt()}}.
 }
+\section{Numeric precision}{
+
+An orbital object holds its equations as text, so every number a model
+carries is written out as a decimal with 17 significant digits and read back
+when the object is used. On most builds of R that round-trip is exact.
+
+It is not exact on builds where \code{capabilities("long.double")} is \code{FALSE},
+which includes some macOS builds. R accumulates the digits of a number it is
+reading into a long double, and without one to accumulate into it can land
+one unit in the last place away from the number that was written. Equations
+built on such a build are still written correctly; it is reading them back
+that loses the last bit.
+
+For nearly every model this is orders of magnitude below the model's own
+uncertainty and can be ignored. It matters for trees that split on a value
+computed from several columns rather than on a raw column, such as the
+oblique forests of \code{rand_forest()} with the \code{"aorsf"} engine. Those splits
+sit at combinations realized by training rows, so the comparison at a split
+is an exact tie for many rows, and the smallest possible difference is
+enough to send a row down the other branch. Its prediction then moves by the
+distance between two leaves rather than by a rounding error, and predictions
+can differ from \code{predict()} on the original fit for a meaningful share of
+rows.
+}
+
 \examples{
 \dontshow{if (rlang::is_installed(c("recipes", "tidypredict", "workflows"))) withAutoprint(\{ # examplesIf}
 library(workflows)
