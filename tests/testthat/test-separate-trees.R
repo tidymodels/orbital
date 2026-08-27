@@ -18,8 +18,15 @@ expect_separate_matches_collapsed <- function(
   data,
   mode = "regression"
 ) {
-  collapsed <- orbital(model, mode = mode)
-  split <- orbital(model, mode = mode, separate_trees = TRUE)
+  # These exercise the model methods directly rather than through a fitted
+  # workflow, so they mark themselves the way `orbital.model_fit()` does.
+  collapsed <- orbital(model, mode = mode, .from_parsnip = TRUE)
+  split <- orbital(
+    model,
+    mode = mode,
+    separate_trees = TRUE,
+    .from_parsnip = TRUE
+  )
 
   expect_equal(
     eval_tree_eqs(split, data)[[".pred"]],
@@ -111,7 +118,12 @@ test_that("separate trees keep the missing-value guard the collapsed path has", 
   incomplete <- mtcars[1:2, ]
   incomplete$wt[[1]] <- NA_real_
 
-  eqs <- orbital(model, mode = "regression", separate_trees = TRUE)
+  eqs <- orbital(
+    model,
+    mode = "regression",
+    separate_trees = TRUE,
+    .from_parsnip = TRUE
+  )
   pred <- eval_tree_eqs(eqs, incomplete)[[".pred"]]
 
   # The second row still scores, so the guard is not simply blanking the column.

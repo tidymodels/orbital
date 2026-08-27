@@ -7,8 +7,10 @@ orbital.xgb.Booster <- function(
 
   lvl = NULL,
   separate_trees = FALSE,
-  prefix = ".pred"
+  prefix = ".pred",
+  .from_parsnip = FALSE
 ) {
+  check_bare_fit(x, .from_parsnip)
   mode <- rlang::arg_match(mode)
   type <- default_type(type)
 
