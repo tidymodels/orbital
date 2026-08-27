@@ -32,6 +32,8 @@
 
 * `pls()` with the `"mixOmics"` engine is now supported for regression and for `type = "prob"`. `type = "class"` is refused, since mixOmics assigns a class by distance to the class centroid rather than by the largest per-level value. (#163)
 
+* `rand_forest()` with the `"aorsf"` engine is now supported for regression. Classification is refused, since aorsf votes across the forest and exposes no probability. Note that aorsf splits on observed linear-combination values, so a row that lands exactly on a split boundary can take the other branch than `predict()` did. (#173)
+
 * `rand_forest()` with the `"partykit"` engine is now supported for regression. (#161)
 
 * `rule_fit()` with the `"xrf"` engine is now supported for regression and for binary classification. Multiclass outcomes are refused, since xrf only fits Gaussian and binomial models. (#164)
