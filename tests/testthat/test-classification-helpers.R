@@ -293,8 +293,8 @@ test_that("sum_tree_expressions sums and deparses correctly", {
   expect_identical(
     result,
     c(
-      a = "(case_when(x > 1 ~ 0.5, .default = 0.29999999999999999)) + (case_when(x > 2 ~ 0.59999999999999998, .default = 0.40000000000000002))",
-      b = "(case_when(x > 1 ~ 0.5, .default = 0.29999999999999999))"
+      a = "(case_when(x > 1 ~ 0.5, .default = 0.3)) + (case_when(x > 2 ~ 0.6, .default = 0.4))",
+      b = "(case_when(x > 1 ~ 0.5, .default = 0.3))"
     )
   )
 })
@@ -409,9 +409,10 @@ test_that("format_separate_trees preserves numeric precision", {
 
   result <- orbital:::format_separate_trees(list(tree), ".pred")
 
-  # Verify high precision is preserved (at least 15 significant digits)
-  expect_match(result[[1]], "1\\.234567890123456")
-  expect_match(result[[1]], "0\\.987654321098765")
+  expect_identical(
+    rlang::parse_expr(result[[1]]),
+    tree
+  )
 })
 
 test_that("format_multiclass_logits_separate returns correct structure", {
