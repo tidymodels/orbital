@@ -129,3 +129,91 @@ test_that("separate trees keep the missing-value guard the collapsed path has", 
   # The second row still scores, so the guard is not simply blanking the column.
   expect_equal(is.na(pred), c(TRUE, FALSE))
 })
+
+# The fallback path: models orbital has no method of its own for, whose trees
+# come from tidypredict's extractors. These go through a fitted parsnip model
+# rather than a bare fit, since that is where the fallback lives.
+expect_fallback_separate_matches_collapsed <- function(fit, data) {
+  collapsed <- orbital(fit)
+  split <- orbital(fit, separate_trees = TRUE)
+
+  expect_gt(length(split), length(collapsed))
+  expect_equal(
+    eval_tree_eqs(split, data)[[".pred"]],
+    eval_tree_eqs(collapsed, data)[[".pred"]]
+  )
+}
+
+test_that("separate trees work for rand_forest(aorsf)", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("aorsf")
+
+  set.seed(1)
+  spec <- parsnip::set_engine(
+    parsnip::rand_forest(mode = "regression", trees = 3),
+    "aorsf"
+  )
+  fit <- parsnip::fit(spec, mpg ~ wt + cyl + disp, mtcars)
+
+  # aorsf splits on observed values, so a training row can sit exactly on a
+  # split boundary. Jittering keeps both paths off those ties.
+  set.seed(99)
+  data <- mtcars
+  data[] <- lapply(mtcars, function(x) x + stats::rnorm(length(x), 0, 0.01))
+
+  expect_fallback_separate_matches_collapsed(fit, data)
+})
+
+test_that("separate trees work for rand_forest(partykit)", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("partykit")
+
+  set.seed(1)
+  spec <- parsnip::set_engine(
+    parsnip::rand_forest(mode = "regression", trees = 3),
+    "partykit"
+  )
+  fit <- parsnip::fit(spec, mpg ~ wt + cyl, mtcars)
+
+  expect_fallback_separate_matches_collapsed(fit, mtcars)
+})
+
+# Batching divides the trees into subtotals, so the divisor of an averaging
+# ensemble has to come from the model rather than from the number of subtotals
+# handed back.
+test_that("separate trees match the collapsed expression when batching a forest that averages", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("bonsai")
+  skip_if_not_installed("partykit")
+
+  set.seed(1)
+  spec <- parsnip::set_engine(
+    parsnip::rand_forest(mode = "regression", trees = 60),
+    "partykit"
+  )
+  fit <- parsnip::fit(spec, mpg ~ wt + cyl, mtcars)
+
+  split <- orbital(fit, separate_trees = TRUE)
+
+  expect_match(names(split), "_sum_", all = FALSE)
+  expect_equal(
+    eval_tree_eqs(split, mtcars)[[".pred"]],
+    eval_tree_eqs(orbital(fit), mtcars)[[".pred"]]
+  )
+})
+
+test_that("separate_trees is ignored for a fallback model with no trees", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("nnet")
+
+  set.seed(1)
+  fit <- parsnip::fit(
+    parsnip::set_engine(parsnip::mlp(mode = "regression"), "nnet"),
+    mpg ~ wt + cyl,
+    mtcars
+  )
+
+  expect_identical(orbital(fit, separate_trees = TRUE), orbital(fit))
+})
