@@ -16,8 +16,8 @@
 #'   predictions for classification models. Defaults to `NULL` which defaults to
 #'   `"numeric"` for regression models and `"class"` for classification models.
 #' @param separate_trees A single logical. For tree ensemble models (xgboost,
-#'   lightgbm, catboost, ranger, randomForest), should each tree be output as a
-#'   separate expression? This can improve performance when predicting in
+#'   lightgbm, catboost, ranger, randomForest, aorsf, partykit), should each
+#'   tree be output as a separate expression? This can improve performance when predicting in
 #'   databases by allowing parallel evaluation of trees. Defaults to `FALSE`.
 #'   See `vignette("separate-trees")` for details.
 #'

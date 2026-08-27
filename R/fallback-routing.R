@@ -10,6 +10,45 @@
 # expression both for a probability and for an uncalibrated decision value, and
 # cutting a decision value at 0.5 would give silently wrong classes for every
 # row whose value falls between 0 and 0.5.
+# The fitted equations for a model orbital has no method of its own for.
+#
+# `separate_trees` is honoured here for any ensemble tidypredict exposes trees
+# for, so that a model reaching the fallback gets the same one-column-per-tree
+# treatment as one of orbital's native methods. Only regression takes that path:
+# the classification shapes are assembled by `route_fallback()` below from a
+# result it expects to be a single expression or a per-level list, neither of
+# which a column-per-tree vector is.
+fallback_eqs <- function(x, mode, separate_trees, prefix) {
+  if (separate_trees && mode == "regression" && has_tree_methods(x$fit)) {
+    return(separate_trees_eqs(x$fit, prefix))
+  }
+
+  tidypredict::tidypredict_fit(x)
+}
+
+# Both generics are required, not just the first. tidypredict documents them as
+# a set for exactly this reason: trees that cannot be recombined are only good
+# for producing a wrong answer.
+#
+# The lookup is made in tidypredict's namespace because that is where these
+# generics live. Without it the search starts from orbital's namespace, which
+# does not import them, and every model comes back as having no method.
+has_tree_methods <- function(x) {
+  ns <- asNamespace("tidypredict")
+
+  has_method <- function(generic) {
+    any(vapply(
+      class(x),
+      function(cls) {
+        !is.null(utils::getS3method(generic, cls, optional = TRUE, envir = ns))
+      },
+      logical(1)
+    ))
+  }
+
+  has_method("tidypredict_trees") && has_method("tidypredict_combine_trees")
+}
+
 route_fallback <- function(res, x, mode, type, call = rlang::caller_env()) {
   if (mode != "classification") {
     return(res)

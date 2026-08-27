@@ -12,6 +12,8 @@
 
 * `C5_rules()` with the `"C5.0"` engine is now supported for `type = "class"`. (#161)
 
+* `decision_tree()` with the `"C5.0"` engine is now supported for `type = "class"`. Its leaves carry a class label rather than class counts, so `type = "prob"` is refused. (#173)
+
 * `discrim_linear()` and `discrim_quad()` with the `"MASS"` engine are now supported for `type = "class"` and `type = "prob"`. (#160)
 
 * `discrim_linear()` with the `"mda"`, `"sda"`, and `"sparsediscrim"` engines is now supported for `type = "class"` and `type = "prob"`. (#163)
@@ -30,6 +32,8 @@
 
 * `pls()` with the `"mixOmics"` engine is now supported for regression and for `type = "prob"`. `type = "class"` is refused, since mixOmics assigns a class by distance to the class centroid rather than by the largest per-level value. (#163)
 
+* `rand_forest()` with the `"aorsf"` engine is now supported for regression. Classification is refused, since aorsf votes across the forest and exposes no probability. Note that aorsf splits on observed linear-combination values, so a row that lands exactly on a split boundary can take the other branch than `predict()` did. (#173)
+
 * `rand_forest()` with the `"partykit"` engine is now supported for regression. (#161)
 
 * `rule_fit()` with the `"xrf"` engine is now supported for regression and for binary classification. Multiclass outcomes are refused, since xrf only fits Gaussian and binomial models. (#164)
@@ -39,6 +43,8 @@
 * `svm_linear()` with the `"LiblineaR"` engine is now supported for regression, in addition to the `type = "class"` support added in #159. (#164)
 
 ## Improvements
+
+* `orbital(separate_trees = TRUE)` now works for `rand_forest()` with the `"aorsf"` and `"partykit"` engines. The argument used to be accepted and silently ignored for every model orbital has no method of its own for; it is now honoured for any regression ensemble whose per-tree expressions tidypredict exposes. (#173)
 
 * `orbital()` now supports classification models that reach the tidypredict fallback, rather than refusing them. This covers multiclass probability models such as `MASS::lda()`, models returning an uncalibrated decision value such as `LiblineaR` SVMs, and models predicting a class label directly such as `C50::C5.0()`. (#159)
 

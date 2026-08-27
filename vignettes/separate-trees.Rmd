@@ -101,12 +101,16 @@ The `separate_trees` argument works with the following tree ensemble models:
 | `boost_tree()` | catboost | Yes | Yes |
 | `rand_forest()` | ranger | Yes | Yes |
 | `rand_forest()` | randomForest | Yes | Yes |
+| `rand_forest()` | aorsf | Yes | Not supported at all |
+| `rand_forest()` | partykit | Yes | Not supported at all |
 
 For multiclass classification, trees are separated per class before the final softmax transformation is applied.
 
+The last two are regression-only in the "Not supported" sense that orbital cannot translate them for classification in the first place, rather than that `separate_trees` is the missing piece.
+
 ### Models where the argument has no effect
 
-`separate_trees` is accepted by `orbital()` for every model, but only the five above act on it. Everything else silently produces the same single combined expression it would have produced with the default. Setting it is never an error and never changes the predictions, so a query that looks unchanged is the expected result rather than a sign something went wrong.
+`separate_trees` is accepted by `orbital()` for every model, but only the seven above act on it. Everything else silently produces the same single combined expression it would have produced with the default. Setting it is never an error and never changes the predictions, so a query that looks unchanged is the expected result rather than a sign something went wrong.
 
 This is worth knowing because several supported models are tree ensembles that nonetheless ignore it:
 
@@ -116,7 +120,6 @@ This is worth knowing because several supported models are tree ensembles that n
 | `bart()` | dbarts | Sums over posterior draws, not over separable trees |
 | `boost_tree()` | C5.0 | Confidence-weighted vote that cannot be recombined arithmetically |
 | `C5_rules()` | C5.0 | As above |
-| `rand_forest()` | partykit | Not yet wired up; the underlying model could support it |
 | `rule_fit()` | xrf, h2o | Emitted as a rule set rather than as individual trees |
 | `boost_tree()` | h2o_gbm | Translated through h2o's own export, which does not expose per-tree pieces |
 
