@@ -29,7 +29,8 @@ orbital.model_fit <- function(
         type = type,
         lvl = x$lvl,
         separate_trees = separate_trees,
-        prefix = prefix
+        prefix = prefix,
+        .from_parsnip = TRUE
       )
     } else {
       res <- rlang::exec(
@@ -40,6 +41,7 @@ orbital.model_fit <- function(
         lvl = x$lvl,
         separate_trees = separate_trees,
         prefix = prefix,
+        .from_parsnip = TRUE,
         !!!extra_args
       )
     }
@@ -72,6 +74,31 @@ orbital.model_fit <- function(
   res <- set_pred_names(res, x, mode, type, prefix)
 
   new_orbital_class(res)
+}
+
+# The model methods are registered on an exported generic, so a bare fit reaches
+# them even though `orbital()` documents only workflow, parsnip, and recipe
+# input. They cannot be unregistered: `orbital.model_fit()` reaches them by
+# dispatching on `x$fit`. So the internal caller marks itself instead.
+#
+# Without this a bare fit takes the classification branch whatever the model is,
+# because `mode` defaults to `c("classification", "regression")` and
+# `arg_match()` takes the first. A bare regression `rpart` came back as a
+# character vector named `orbital_tmp_class_name`: an internal placeholder, no
+# error, no warning.
+check_bare_fit <- function(x, from_parsnip, call = rlang::caller_env()) {
+  if (from_parsnip) {
+    return(invisible())
+  }
+
+  cli::cli_abort(
+    c(
+      "{.arg x} must be a workflow, parsnip, or recipe object, not a bare
+       {.cls {class(x)[1]}} fit.",
+      i = "Fit the model with {.fn parsnip::fit} first."
+    ),
+    call = call
+  )
 }
 
 has_orbital_method <- function(x) {
