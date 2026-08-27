@@ -4,8 +4,10 @@ orbital.glm <- function(
   ...,
   mode = c("classification", "regression"),
   type = NULL,
-  lvl = NULL
+  lvl = NULL,
+  .from_parsnip = FALSE
 ) {
+  check_bare_fit(x, .from_parsnip)
   mode <- rlang::arg_match(mode)
   type <- default_type(type)
 
