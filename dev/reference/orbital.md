@@ -39,10 +39,10 @@ orbital(x, ..., prefix = ".pred", type = NULL, separate_trees = FALSE)
 - separate_trees:
 
   A single logical. For tree ensemble models (xgboost, lightgbm,
-  catboost, ranger, randomForest), should each tree be output as a
-  separate expression? This can improve performance when predicting in
-  databases by allowing parallel evaluation of trees. Defaults to
-  `FALSE`. See
+  catboost, ranger, randomForest, aorsf, partykit), should each tree be
+  output as a separate expression? This can improve performance when
+  predicting in databases by allowing parallel evaluation of trees.
+  Defaults to `FALSE`. See
   [`vignette("separate-trees")`](https://orbital.tidymodels.org/dev/articles/separate-trees.md)
   for details.
 

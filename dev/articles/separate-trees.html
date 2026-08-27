@@ -153,7 +153,7 @@ evaluation.</p>
 <span></span>
 <span><span class="co"># Fit an XGBoost model</span></span>
 <span><span class="va">bt_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"regression"</span>, engine <span class="op">=</span> <span class="st">"xgboost"</span>, trees <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">bt_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">bt_spec</span>, <span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">bt_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">bt_spec</span>, <span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default: single combined expression</span></span>
 <span><span class="va">orb_combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/orbital.html">orbital</a></span><span class="op">(</span><span class="va">bt_fit</span><span class="op">)</span></span>
@@ -209,19 +209,34 @@ tree ensemble models:</p>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
+<tr class="even">
+<td><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></td>
+<td>aorsf</td>
+<td>Yes</td>
+<td>Not supported at all</td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></td>
+<td>partykit</td>
+<td>Yes</td>
+<td>Not supported at all</td>
+</tr>
 </tbody>
 </table>
 <p>For multiclass classification, trees are separated per class before
 the final softmax transformation is applied.</p>
+<p>The last two are regression-only in the “Not supported” sense that
+orbital cannot translate them for classification in the first place,
+rather than that <code>separate_trees</code> is the missing piece.</p>
 <div class="section level3">
 <h3 id="models-where-the-argument-has-no-effect">Models where the argument has no effect<a class="anchor" aria-label="anchor" href="#models-where-the-argument-has-no-effect"></a>
 </h3>
 <p><code>separate_trees</code> is accepted by <code><a href="../reference/orbital.html">orbital()</a></code> for
-every model, but only the five above act on it. Everything else silently
-produces the same single combined expression it would have produced with
-the default. Setting it is never an error and never changes the
-predictions, so a query that looks unchanged is the expected result
-rather than a sign something went wrong.</p>
+every model, but only the seven above act on it. Everything else
+silently produces the same single combined expression it would have
+produced with the default. Setting it is never an error and never
+changes the predictions, so a query that looks unchanged is the expected
+result rather than a sign something went wrong.</p>
 <p>This is worth knowing because several supported models are tree
 ensembles that nonetheless ignore it:</p>
 <table class="table">
@@ -258,16 +273,11 @@ arithmetically</td>
 <td>As above</td>
 </tr>
 <tr class="odd">
-<td><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></td>
-<td>partykit</td>
-<td>Not yet wired up; the underlying model could support it</td>
-</tr>
-<tr class="even">
 <td><code><a href="https://parsnip.tidymodels.org/reference/rule_fit.html" class="external-link">rule_fit()</a></code></td>
 <td>xrf, h2o</td>
 <td>Emitted as a rule set rather than as individual trees</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></td>
 <td>h2o_gbm</td>
 <td>Translated through h2o’s own export, which does not expose per-tree
@@ -285,7 +295,7 @@ tree to separate.</p>
 </h2>
 <p>The intermediate tree columns (e.g., <code>.pred_tree_001</code>) are
 created during evaluation but are <strong>not</strong> included in the
-final output from <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> or <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code>. Only
+final output from <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> or <code><a href="https://rdrr.io/pkg/generics/man/augment.html" class="external-link">augment()</a></code>. Only
 the final prediction column (e.g., <code>.pred</code>) appears in the
 results.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

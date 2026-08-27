@@ -27,6 +27,9 @@ and
 [`bag_tree()`](https://parsnip.tidymodels.org/reference/bag_tree.html)
 with `"rpart"` all reach their answer by voting across an ensemble; the
 vote yields a winner, not a distribution.
+[`decision_tree()`](https://parsnip.tidymodels.org/reference/decision_tree.html)
+with `"C5.0"` is the single-tree version of the same thing: it labels
+each leaf with a class rather than with class counts.
 [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
 with `"LiblineaR"` produces a *decision value*, the signed distance from
 the separating hyperplane. Its sign gives the class, but its magnitude

@@ -105,15 +105,21 @@ models:
 | [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html) | catboost | Yes | Yes |
 | [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | ranger | Yes | Yes |
 | [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | randomForest | Yes | Yes |
+| [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | aorsf | Yes | Not supported at all |
+| [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | partykit | Yes | Not supported at all |
 
 For multiclass classification, trees are separated per class before the
 final softmax transformation is applied.
+
+The last two are regression-only in the “Not supported” sense that
+orbital cannot translate them for classification in the first place,
+rather than that `separate_trees` is the missing piece.
 
 ### Models where the argument has no effect
 
 `separate_trees` is accepted by
 [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-for every model, but only the five above act on it. Everything else
+for every model, but only the seven above act on it. Everything else
 silently produces the same single combined expression it would have
 produced with the default. Setting it is never an error and never
 changes the predictions, so a query that looks unchanged is the expected
@@ -128,7 +134,6 @@ ensembles that nonetheless ignore it:
 | [`bart()`](https://parsnip.tidymodels.org/reference/bart.html) | dbarts | Sums over posterior draws, not over separable trees |
 | [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html) | C5.0 | Confidence-weighted vote that cannot be recombined arithmetically |
 | [`C5_rules()`](https://parsnip.tidymodels.org/reference/C5_rules.html) | C5.0 | As above |
-| [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html) | partykit | Not yet wired up; the underlying model could support it |
 | [`rule_fit()`](https://parsnip.tidymodels.org/reference/rule_fit.html) | xrf, h2o | Emitted as a rule set rather than as individual trees |
 | [`boost_tree()`](https://parsnip.tidymodels.org/reference/boost_tree.html) | h2o_gbm | Translated through h2o’s own export, which does not expose per-tree pieces |
 
@@ -142,8 +147,8 @@ tree to separate.
 The intermediate tree columns (e.g., `.pred_tree_001`) are created
 during evaluation but are **not** included in the final output from
 [`predict()`](https://rdrr.io/r/stats/predict.html) or
-[`augment()`](https://generics.r-lib.org/reference/augment.html). Only
-the final prediction column (e.g., `.pred`) appears in the results.
+[`augment()`](https://rdrr.io/pkg/generics/man/augment.html). Only the
+final prediction column (e.g., `.pred`) appears in the results.
 
 ``` r
 

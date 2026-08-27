@@ -637,6 +637,13 @@ to add model to table.</p>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/decision_tree.html" class="external-link">decision_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"C5.0"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/decision_tree.html" class="external-link">decision_tree()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"partykit"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">✅</td>
@@ -798,6 +805,13 @@ to add model to table.</p>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"aorsf"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">❌</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"partykit"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">❌</td>
@@ -871,13 +885,15 @@ label directly and never compute a probability at all.
 <code>"C5.0"</code> engine, <code><a href="https://parsnip.tidymodels.org/reference/C5_rules.html" class="external-link">C5_rules()</a></code>, and
 <code><a href="https://parsnip.tidymodels.org/reference/bag_tree.html" class="external-link">bag_tree()</a></code> with <code>"rpart"</code> all reach their answer
 by voting across an ensemble; the vote yields a winner, not a
-distribution. <code><a href="https://parsnip.tidymodels.org/reference/svm_linear.html" class="external-link">svm_linear()</a></code> with <code>"LiblineaR"</code>
-produces a <em>decision value</em>, the signed distance from the
-separating hyperplane. Its sign gives the class, but its magnitude is
-uncalibrated: it is not a probability and does not become one by being
-passed through a logistic. Doing that would attach a confidence the
-model never estimated, so <code>type = "prob"</code> is refused for all
-of these.</p>
+distribution. <code><a href="https://parsnip.tidymodels.org/reference/decision_tree.html" class="external-link">decision_tree()</a></code> with <code>"C5.0"</code> is
+the single-tree version of the same thing: it labels each leaf with a
+class rather than with class counts. <code><a href="https://parsnip.tidymodels.org/reference/svm_linear.html" class="external-link">svm_linear()</a></code> with
+<code>"LiblineaR"</code> produces a <em>decision value</em>, the signed
+distance from the separating hyperplane. Its sign gives the class, but
+its magnitude is uncalibrated: it is not a probability and does not
+become one by being passed through a logistic. Doing that would attach a
+confidence the model never estimated, so <code>type = "prob"</code> is
+refused for all of these.</p>
 <p><strong>Probability without class.</strong> <code><a href="https://parsnip.tidymodels.org/reference/pls.html" class="external-link">pls()</a></code> with
 <code>"mixOmics"</code> is the reverse case. It gives per-level values,
 but mixOmics assigns a class by distance to the class centroid rather

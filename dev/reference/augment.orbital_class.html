@@ -41,13 +41,13 @@
     </div>
 
     <div class="ref-description section level2">
-    <p><code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code> will add column(s) for predictions to the given data.</p>
+    <p><code><a href="https://rdrr.io/pkg/generics/man/augment.html" class="external-link">augment()</a></code> will add column(s) for predictions to the given data.</p>
     </div>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="co"># S3 method for class 'orbital_class'</span></span>
-<span><span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">new_data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/pkg/generics/man/augment.html" class="external-link">augment</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">new_data</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -77,7 +77,7 @@
 <span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">orbital_obj</span>, <span class="va">new_data</span><span class="op">)</span>,</span>
 <span>  <span class="va">new_data</span></span>
 <span><span class="op">)</span></span></code></pre><p></p></div>
-<p>Note that <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code> works better and safer than above as it also works on
+<p>Note that <code><a href="https://rdrr.io/pkg/generics/man/augment.html" class="external-link">augment()</a></code> works better and safer than above as it also works on
 data set in data bases.</p>
 <p>This function is confirmed to not work work in spark data bases or arrow
 tables.</p>
@@ -110,11 +110,11 @@ tables.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">wf_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="va">rec_spec</span>, <span class="va">lm_spec</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">orbital_obj</span> <span class="op">&lt;-</span> <span class="fu"><a href="orbital.html">orbital</a></span><span class="op">(</span><span class="va">wf_fit</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span><span class="va">orbital_obj</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/generics/man/augment.html" class="external-link">augment</a></span><span class="op">(</span><span class="va">orbital_obj</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       .pred  mpg cyl  disp  hp drat    wt  qsec vs am gear carb</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  22.59951 21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  22.11189 21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4</span>

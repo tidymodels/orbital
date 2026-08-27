@@ -84,8 +84,8 @@ predictions for classification models. Defaults to <code>NULL</code> which defau
 
 <dt id="arg-separate-trees">separate_trees<a class="anchor" aria-label="anchor" href="#arg-separate-trees"></a></dt>
 <dd><p>A single logical. For tree ensemble models (xgboost,
-lightgbm, catboost, ranger, randomForest), should each tree be output as a
-separate expression? This can improve performance when predicting in
+lightgbm, catboost, ranger, randomForest, aorsf, partykit), should each
+tree be output as a separate expression? This can improve performance when predicting in
 databases by allowing parallel evaluation of trees. Defaults to <code>FALSE</code>.
 See <code><a href="../articles/separate-trees.html">vignette("separate-trees")</a></code> for details.</p></dd>
 
@@ -150,7 +150,7 @@ rows.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">wf_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="va">rec_spec</span>, <span class="va">lm_spec</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">orbital</span><span class="op">(</span><span class="va">wf_fit</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -170,7 +170,7 @@ rows.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 11 equations in total.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Also works on parsnip object by itself</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">lm_spec</span>, <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">lm_spec</span>, <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">orbital</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">orbital Object</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────</span></span>

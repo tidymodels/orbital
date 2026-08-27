@@ -1,7 +1,7 @@
 # Augment using orbital objects
 
-[`augment()`](https://generics.r-lib.org/reference/augment.html) will
-add column(s) for predictions to the given data.
+[`augment()`](https://rdrr.io/pkg/generics/man/augment.html) will add
+column(s) for predictions to the given data.
 
 ## Usage
 
@@ -38,9 +38,9 @@ This function is a shorthand for the following code
       new_data
     )
 
-Note that
-[`augment()`](https://generics.r-lib.org/reference/augment.html) works
-better and safer than above as it also works on data set in data bases.
+Note that [`augment()`](https://rdrr.io/pkg/generics/man/augment.html)
+works better and safer than above as it also works on data set in data
+bases.
 
 This function is confirmed to not work work in spark data bases or arrow
 tables.

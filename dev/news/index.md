@@ -32,6 +32,12 @@
   with the `"C5.0"` engine is now supported for `type = "class"`.
   ([\#161](https://github.com/tidymodels/orbital/issues/161))
 
+- [`decision_tree()`](https://parsnip.tidymodels.org/reference/decision_tree.html)
+  with the `"C5.0"` engine is now supported for `type = "class"`. Its
+  leaves carry a class label rather than class counts, so
+  `type = "prob"` is refused.
+  ([\#173](https://github.com/tidymodels/orbital/issues/173))
+
 - [`discrim_linear()`](https://parsnip.tidymodels.org/reference/discrim_linear.html)
   and
   [`discrim_quad()`](https://parsnip.tidymodels.org/reference/discrim_quad.html)
@@ -81,6 +87,15 @@
   ([\#163](https://github.com/tidymodels/orbital/issues/163))
 
 - [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html)
+  with the `"aorsf"` engine is now supported for regression.
+  Classification is refused, since aorsf votes across the forest and
+  exposes no probability. Note that aorsf splits on observed
+  linear-combination values, so a row that lands exactly on a split
+  boundary can take the other branch than
+  [`predict()`](https://rdrr.io/r/stats/predict.html) did.
+  ([\#173](https://github.com/tidymodels/orbital/issues/173))
+
+- [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html)
   with the `"partykit"` engine is now supported for regression.
   ([\#161](https://github.com/tidymodels/orbital/issues/161))
 
@@ -102,6 +117,14 @@
   ([\#164](https://github.com/tidymodels/orbital/issues/164))
 
 ### Improvements
+
+- `orbital(separate_trees = TRUE)` now works for
+  [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html)
+  with the `"aorsf"` and `"partykit"` engines. The argument used to be
+  accepted and silently ignored for every model orbital has no method of
+  its own for; it is now honoured for any regression ensemble whose
+  per-tree expressions tidypredict exposes.
+  ([\#173](https://github.com/tidymodels/orbital/issues/173))
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now supports classification models that reach the tidypredict
@@ -138,8 +161,8 @@
   whatever the model was, so `orbital(rpart::rpart(mpg ~ ., mtcars))`
   came back as a character vector named `orbital_tmp_class_name` with no
   error and no warning. Fit the model with
-  [`parsnip::fit()`](https://generics.r-lib.org/reference/fit.html), or
-  use a workflow, as the documentation has always described.
+  [`parsnip::fit()`](https://rdrr.io/pkg/generics/man/fit.html), or use
+  a workflow, as the documentation has always described.
   ([\#113](https://github.com/tidymodels/orbital/issues/113))
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
@@ -388,8 +411,8 @@ CRAN release: 2024-12-22
   prediction and probability predictions.
   ([\#77](https://github.com/tidymodels/orbital/issues/77))
 
-- [`augment()`](https://generics.r-lib.org/reference/augment.html)
-  method for
+- [`augment()`](https://rdrr.io/pkg/generics/man/augment.html) method
+  for
   [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   object have been added.
   ([\#55](https://github.com/tidymodels/orbital/issues/55))
