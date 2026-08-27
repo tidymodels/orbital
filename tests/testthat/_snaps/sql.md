@@ -97,3 +97,25 @@
       ELSE 'virginica'
       END AS .pred_class
 
+# sql works for a binary decision value
+
+    Code
+      orbital_sql(obj, con)
+    Output
+      <SQL> CASE
+      WHEN (((((1.70829 + ("Sepal.Length" * 0.8510269)) + ("Sepal.Width" * 0.986845)) + ("Petal.Length" * -1.380919)) + ("Petal.Width" * -1.865502)) > 0) THEN 'versicolor'
+      ELSE 'virginica'
+      END AS .pred_class
+
+# sql works for a binary probability cut away from 0.5
+
+    Code
+      orbital_sql(obj, con)
+    Output
+      <SQL> CASE
+      WHEN ((1 / (1 + EXP(-((((-14.71509 + ("Sepal.Length" * -1.074479)) + ("Sepal.Width" * -2.9855)) + ("Petal.Length" * 3.688835)) + ("Petal.Width" * 7.278738))))) > 0.4330417) THEN 'virginica'
+      ELSE 'versicolor'
+      END AS .pred_class
+      <SQL> 1 - (1 / (1 + EXP(-((((-14.71509 + ("Sepal.Length" * -1.074479)) + ("Sepal.Width" * -2.9855)) + ("Petal.Length" * 3.688835)) + ("Petal.Width" * 7.278738))))) AS .pred_versicolor
+      <SQL> 1 - ".pred_versicolor" AS .pred_virginica
+

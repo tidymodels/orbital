@@ -31,3 +31,17 @@
     Output
       copy(`_DT`)[, `:=`(c("setosa", "versicolor", "virginica", ".pred_setosa", ".pred_versicolor", ".pred_virginica", ".pred_class"), { setosa <- 1/(1 + exp(-2.021974 + (Sepal.Length * -1.531199) + (Sepal.Width * -4.376043) + (Petal.Length * 4.695665) + (Petal.Width * 3.062585) - (-15.47784 + (Sepal.Length * 6.314758) + (Sepal.Width * 12.13932) + (Petal.Length * -16.94642) + (Petal.Width * -20.77005))) + exp(-33.53769 + (Sepal.Length * -4.783559) + (Sepal.Width * -7.763274) + (Petal.Length * 12.25076) + (Petal.Width * 17.70747) - (-15.47784 + (Sepal.Length * 6.314758) + (Sepal.Width * 12.13932) + (Petal.Length * -16.94642) + (Petal.Width * -20.77005)))) versicolor <- 1/(exp(-15.47784 + (Sepal.Length * 6.314758) + (Sepal.Width * 12.13932) + (Petal.Length * -16.94642) + (Petal.Width * -20.77005) - (-2.021974 + (Sepal.Length * -1.531199) + (Sepal.Width * -4.376043) + (Petal.Length * 4.695665) + (Petal.Width * 3.062585))) + 1 + exp(-33.53769 + (Sepal.Length * -4.783559) + (Sepal.Width * -7.763274) + (Petal.Length * 12.25076) + (Petal.Width * 17.70747) - (-2.021974 + (Sepal.Length * -1.531199) + (Sepal.Width * -4.376043) + (Petal.Length * 4.695665) + (Petal.Width * 3.062585)))) virginica <- 1/(exp(-15.47784 + (Sepal.Length * 6.314758) + (Sepal.Width * 12.13932) + (Petal.Length * -16.94642) + (Petal.Width * -20.77005) - (-33.53769 + (Sepal.Length * -4.783559) + (Sepal.Width * -7.763274) + (Petal.Length * 12.25076) + (Petal.Width * 17.70747))) + exp(-2.021974 + (Sepal.Length * -1.531199) + (Sepal.Width * -4.376043) + (Petal.Length * 4.695665) + (Petal.Width * 3.062585) - (-33.53769 + (Sepal.Length * -4.783559) + (Sepal.Width * -7.763274) + (Petal.Length * 12.25076) + (Petal.Width * 17.70747))) + 1) .pred_setosa <- setosa .pred_versicolor <- versicolor .pred_virginica <- virginica .pred_class <- fcase(setosa >= versicolor & setosa >= virginica, "setosa", versicolor >= setosa & versicolor >= virginica, "versicolor", rep(TRUE, .N), "virginica") .(setosa, versicolor, virginica, .pred_setosa, .pred_versicolor, .pred_virginica, .pred_class) })]
 
+# dt works for a binary decision value
+
+    Code
+      orbital_dt(obj)
+    Output
+      copy(`_DT`)[, `:=`(.pred_class = fcase(1.70829 + (Sepal.Length * 0.8510269) + (Sepal.Width * 0.986845) + (Petal.Length * -1.380919) + (Petal.Width * -1.865502) > 0, "versicolor", rep(TRUE, .N), "virginica"))]
+
+# dt works for a binary probability cut away from 0.5
+
+    Code
+      orbital_dt(obj)
+    Output
+      copy(`_DT`)[, `:=`(c(".pred_class", ".pred_versicolor", ".pred_virginica"), { .pred_class <- fcase(1/(1 + exp(-(-14.71509 + (Sepal.Length * -1.074479) + (Sepal.Width * -2.9855) + (Petal.Length * 3.688835) + (Petal.Width * 7.278738)))) > 0.4330417, "virginica", rep(TRUE, .N), "versicolor") .pred_versicolor <- 1 - (1/(1 + exp(-(-14.71509 + (Sepal.Length * -1.074479) + (Sepal.Width * -2.9855) + (Petal.Length * 3.688835) + (Petal.Width * 7.278738))))) .pred_virginica <- 1 - .pred_versicolor .(.pred_class, .pred_versicolor, .pred_virginica) })]
+

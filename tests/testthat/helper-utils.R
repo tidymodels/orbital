@@ -42,3 +42,16 @@ flatten_query <- function(x) {
   x <- gsub("`_DT[0-9]+`", "`_DT`", pretty_print(x))
   gsub("\\s+", " ", paste(x, collapse = " "))
 }
+
+## The two non-setosa iris species, as a two-level outcome.
+##
+## Deliberately not named `binary_iris()`: two test files define a top-level
+## function by that name and they do not mean the same thing, one recoding
+## setosa against the rest and the other dropping setosa. They do not collide
+## because each file gets its own environment, but a shared helper reusing the
+## name would.
+two_species_iris <- function(levels = c("versicolor", "virginica")) {
+  df <- iris[iris$Species != "setosa", ]
+  df$Species <- factor(as.character(df$Species), levels = levels)
+  df
+}

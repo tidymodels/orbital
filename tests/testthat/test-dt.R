@@ -45,3 +45,41 @@ test_that("dt works for lda multiclass", {
     orbital_dt(obj)
   )
 })
+
+test_that("dt works for a binary decision value", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("dtplyr")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("LiblineaR")
+
+  # LiblineaR's solver is seeded from R's RNG, so its coefficients move between
+  # runs and the snapshot would not be stable without this.
+  set.seed(123)
+  spec <- parsnip::svm_linear(mode = "classification", engine = "LiblineaR")
+  fit <- parsnip::fit(spec, Species ~ ., two_species_iris())
+
+  obj <- orbital(fit, type = "class")
+
+  expect_snapshot(
+    transform = flatten_query,
+    orbital_dt(obj)
+  )
+})
+
+test_that("dt works for a binary probability cut away from 0.5", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("dtplyr")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("kernlab")
+
+  set.seed(123)
+  spec <- parsnip::svm_linear(mode = "classification", engine = "kernlab")
+  fit <- parsnip::fit(spec, Species ~ ., two_species_iris())
+
+  obj <- orbital(fit, type = c("class", "prob"))
+
+  expect_snapshot(
+    transform = flatten_query,
+    orbital_dt(obj)
+  )
+})
