@@ -102,7 +102,25 @@ The `separate_trees` argument works with the following tree ensemble models:
 | `rand_forest()` | ranger | Yes | Yes |
 | `rand_forest()` | randomForest | Yes | Yes |
 
-For single-tree models like `decision_tree()`, the argument has no effect since there is only one tree. For multiclass classification, trees are separated per class before the final softmax transformation is applied.
+For multiclass classification, trees are separated per class before the final softmax transformation is applied.
+
+### Models where the argument has no effect
+
+`separate_trees` is accepted by `orbital()` for every model, but only the five above act on it. Everything else silently produces the same single combined expression it would have produced with the default. Setting it is never an error and never changes the predictions, so a query that looks unchanged is the expected result rather than a sign something went wrong.
+
+This is worth knowing because several supported models are tree ensembles that nonetheless ignore it:
+
+| Model | Engine | Why |
+|-------|--------|-----|
+| `bag_tree()` | rpart, C5.0 | Votes over the ensemble rather than summing it |
+| `bart()` | dbarts | Sums over posterior draws, not over separable trees |
+| `boost_tree()` | C5.0 | Confidence-weighted vote that cannot be recombined arithmetically |
+| `C5_rules()` | C5.0 | As above |
+| `rand_forest()` | partykit | Not yet wired up; the underlying model could support it |
+| `rule_fit()` | xrf, h2o | Emitted as a rule set rather than as individual trees |
+| `boost_tree()` | h2o_gbm | Translated through h2o's own export, which does not expose per-tree pieces |
+
+For single-tree models like `decision_tree()`, the argument has no effect for the simpler reason that there is only one tree to separate.
 
 ## Output behavior
 
