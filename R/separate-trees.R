@@ -14,7 +14,7 @@ tree_columns <- function(trees, prefix, batch_size = 50) {
 
   tree_strs <- vapply(
     trees,
-    function(e) deparse1(e, control = "digits17"),
+    deparse_exact,
     character(1)
   )
 
@@ -61,6 +61,6 @@ separate_trees_eqs <- function(x, prefix, trees = NULL, batch_size = 50) {
 
   c(
     cols$eqs,
-    stats::setNames(deparse1(combined, control = "digits17"), prefix)
+    stats::setNames(deparse_exact(combined), prefix)
   )
 }

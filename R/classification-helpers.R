@@ -202,7 +202,6 @@ collapse_stumps <- function(x) {
 
 # Sum tree expressions for each class
 # Used by ranger and randomForest for classification
-# Uses digits17 control to preserve full numeric precision in split values
 sum_tree_expressions <- function(class_trees) {
   vapply(
     names(class_trees),
@@ -210,7 +209,7 @@ sum_tree_expressions <- function(class_trees) {
       trees <- class_trees[[cls]]
       tree_strs <- vapply(
         trees,
-        function(e) deparse1(e, control = "digits17"),
+        deparse_exact,
         character(1)
       )
       paste0("(", tree_strs, ")", collapse = " + ")
@@ -366,7 +365,7 @@ format_separate_trees <- function(trees, prefix = ".pred", batch_size = 50) {
 
   tree_strs <- vapply(
     trees,
-    function(e) deparse1(e, control = "digits17"),
+    deparse_exact,
     character(1)
   )
 

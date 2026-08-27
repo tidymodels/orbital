@@ -54,7 +54,7 @@ route_prob <- function(res, x, type, call) {
   if (is.language(res)) {
     # Binary: one expression giving the probability of a single level, which is
     # the model's second level rather than necessarily parsnip's.
-    eq <- deparse1(res, control = "digits17")
+    eq <- deparse_exact(res)
     rule <- prob_class_rule(x)
 
     if (identical(binary_positive_level(x, lvl), lvl[2])) {
@@ -248,7 +248,7 @@ deparse_eq <- function(res, x, call) {
     )
   }
 
-  deparse1(res, control = "digits17")
+  deparse_exact(res)
 }
 
 abort_unsupported_output <- function(x, call) {

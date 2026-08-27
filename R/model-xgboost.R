@@ -71,7 +71,7 @@ xgboost_multisoft <- function(x, type, lvl, separate_trees, prefix) {
       function(trees) {
         tree_strs <- vapply(
           trees,
-          function(e) deparse1(e, control = "digits17"),
+          deparse_exact,
           character(1)
         )
         paste(tree_strs, collapse = " + ")
@@ -87,7 +87,7 @@ xgboost_multisoft <- function(x, type, lvl, separate_trees, prefix) {
 xgboost_logistic <- function(x, type, lvl, separate_trees, prefix) {
   if (!separate_trees) {
     eq <- tidypredict::tidypredict_fit(x)
-    eq <- deparse1(eq, control = "digits17")
+    eq <- deparse_exact(eq)
     return(binary_from_prob_first(eq, type, lvl))
   }
 
