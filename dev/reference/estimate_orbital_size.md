@@ -88,8 +88,11 @@ not convert each tree to an R expression.
 
 This function aims to support all the same models and preprocessing
 operations as
-[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md).
-If you find a case where
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md),
+but does not yet reach all of them. A model with no estimate is an error
+rather than a zero, including inside a workflow, since a workflow's
+model is usually the bulk of the expression and counting it as free
+would report the recipe's size as the whole. If you find a case where
 [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
 works but `estimate_orbital_size()` does not, please [file an
 issue](https://github.com/tidymodels/orbital/issues).

@@ -135,8 +135,11 @@ The estimates are typically within 5-10% of the actual size.</p>
 orbital object because it only needs to inspect the tree structure, not
 convert each tree to an R expression.</p>
 <p>This function aims to support all the same models and preprocessing
-operations as <code><a href="orbital.html">orbital()</a></code>. If you find a case where <code><a href="orbital.html">orbital()</a></code> works but
-<code>estimate_orbital_size()</code> does not, please
+operations as <code><a href="orbital.html">orbital()</a></code>, but does not yet reach all of them. A model with
+no estimate is an error rather than a zero, including inside a workflow,
+since a workflow's model is usually the bulk of the expression and counting
+it as free would report the recipe's size as the whole. If you find a case
+where <code><a href="orbital.html">orbital()</a></code> works but <code>estimate_orbital_size()</code> does not, please
 <a href="https://github.com/tidymodels/orbital/issues" class="external-link">file an issue</a>.</p>
     </div>
     <div class="section level2">

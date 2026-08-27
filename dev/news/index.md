@@ -122,6 +122,15 @@
 
 ### Bug fixes
 
+- [`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
+  now errors for a workflow whose model it has no estimate for, rather
+  than counting that model as zero characters and returning the recipe’s
+  size as the whole workflow’s. The model is usually the bulk of the
+  expression, so the number it returned could be off by orders of
+  magnitude while looking ordinary, and it did not move as the model’s
+  hyperparameters changed.
+  ([\#167](https://github.com/tidymodels/orbital/issues/167))
+
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now uses the model’s own class order for binary probabilities, rather
   than assuming it matches the order of the outcome’s factor levels.
