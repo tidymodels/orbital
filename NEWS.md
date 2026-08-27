@@ -44,6 +44,8 @@
 
 ## Improvements
 
+* `orbital(separate_trees = TRUE)` now works for `rand_forest()` with the `"aorsf"` and `"partykit"` engines. The argument used to be accepted and silently ignored for every model orbital has no method of its own for; it is now honoured for any regression ensemble whose per-tree expressions tidypredict exposes. (#173)
+
 * `orbital()` now supports classification models that reach the tidypredict fallback, rather than refusing them. This covers multiclass probability models such as `MASS::lda()`, models returning an uncalibrated decision value such as `LiblineaR` SVMs, and models predicting a class label directly such as `C50::C5.0()`. (#159)
 
 * `orbital()` refuses `type = "prob"` for models that have no probability to give, rather than fabricating one. A decision value is uncalibrated, so putting it through a logistic would invent a calibration the model does not have. (#159)

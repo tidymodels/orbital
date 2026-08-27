@@ -23,8 +23,8 @@ predictions for classification models. Defaults to \code{NULL} which defaults to
 \code{"numeric"} for regression models and \code{"class"} for classification models.}
 
 \item{separate_trees}{A single logical. For tree ensemble models (xgboost,
-lightgbm, catboost, ranger, randomForest), should each tree be output as a
-separate expression? This can improve performance when predicting in
+lightgbm, catboost, ranger, randomForest, aorsf, partykit), should each
+tree be output as a separate expression? This can improve performance when predicting in
 databases by allowing parallel evaluation of trees. Defaults to \code{FALSE}.
 See \code{vignette("separate-trees")} for details.}
 }
