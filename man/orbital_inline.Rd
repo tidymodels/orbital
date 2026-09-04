@@ -10,7 +10,7 @@ orbital_inline(x)
 \item{x}{An \link{orbital} object.}
 }
 \value{
-a list of \link[rlang:defusing-advanced]{quosures}.
+a list of \link[rlang:quos]{quosures}.
 }
 \description{
 Use orbital object splicing function to apply orbital prediction in a quosure
