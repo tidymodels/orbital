@@ -1,4 +1,4 @@
-# orbital (development version)
+# orbital 0.6.0
 
 ## Breaking changes
 
