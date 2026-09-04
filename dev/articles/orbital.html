@@ -33,7 +33,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -143,7 +143,7 @@ the preprocessing, then specify a parsnip model to go along with it.</p>
 <p>Putting them together in a workflow gives us this fitted model.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wf_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="va">rec_spec</span>, <span class="va">lm_spec</span><span class="op">)</span></span>
-<span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, data <span class="op">=</span> <span class="va">ames</span><span class="op">)</span></span>
+<span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, data <span class="op">=</span> <span class="va">ames</span><span class="op">)</span></span>
 <span><span class="va">wf_fit</span></span>
 <span><span class="co">#&gt; ══ Workflow [trained] ═════════════════════════════════════════════════</span></span>
 <span><span class="co">#&gt; <span style="font-style: italic;">Preprocessor:</span> Recipe</span></span>

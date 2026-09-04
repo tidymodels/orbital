@@ -2,7 +2,46 @@
 
 ## orbital (development version)
 
+## orbital 0.7.0
+
+## orbital 0.6.0
+
+### Breaking changes
+
+- [`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
+  now errors for a workflow whose model it has no estimate for, rather
+  than counting that model as zero characters and returning the recipe’s
+  size as the whole workflow’s. The model is usually the bulk of the
+  expression, so the number it returned could be off by orders of
+  magnitude while looking ordinary, and it did not move as the model’s
+  hyperparameters changed. Use a model that has an estimate, or generate
+  the expression with
+  [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  and measure it directly.
+  ([\#167](https://github.com/tidymodels/orbital/issues/167))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now errors for a bare model fit, which was never documented input,
+  rather than returning something that looked like a result. A
+  regression fit handed in directly took the classification path
+  whatever the model was, so `orbital(rpart::rpart(mpg ~ ., mtcars))`
+  came back as a character vector named `orbital_tmp_class_name` with no
+  error and no warning. Fit the model with
+  [`parsnip::fit()`](https://generics.r-lib.org/reference/fit.html), or
+  use a workflow, as the documentation has always described.
+  ([\#113](https://github.com/tidymodels/orbital/issues/113))
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now errors for `type = "prob"` on models that have no probability to
+  give, rather than fabricating one. A decision value is uncalibrated,
+  so putting it through a logistic would invent a calibration the model
+  does not have. Use `type = "class"` for these models, or fit an engine
+  that estimates probabilities.
+  ([\#159](https://github.com/tidymodels/orbital/issues/159))
+
 ### New models
+
+#### Trees and ensembles
 
 - [`bag_tree()`](https://parsnip.tidymodels.org/reference/bag_tree.html)
   with the `"rpart"` and `"C5.0"` engines is now supported for
@@ -38,54 +77,6 @@
   `type = "prob"` is refused.
   ([\#173](https://github.com/tidymodels/orbital/issues/173))
 
-- [`discrim_linear()`](https://parsnip.tidymodels.org/reference/discrim_linear.html)
-  and
-  [`discrim_quad()`](https://parsnip.tidymodels.org/reference/discrim_quad.html)
-  with the `"MASS"` engine are now supported for `type = "class"` and
-  `type = "prob"`.
-  ([\#160](https://github.com/tidymodels/orbital/issues/160))
-
-- [`discrim_linear()`](https://parsnip.tidymodels.org/reference/discrim_linear.html)
-  with the `"mda"`, `"sda"`, and `"sparsediscrim"` engines is now
-  supported for `type = "class"` and `type = "prob"`.
-  ([\#163](https://github.com/tidymodels/orbital/issues/163))
-
-- [`linear_reg()`](https://parsnip.tidymodels.org/reference/linear_reg.html)
-  with the `"glm"` engine is now supported.
-  ([\#160](https://github.com/tidymodels/orbital/issues/160))
-
-- [`logistic_reg()`](https://parsnip.tidymodels.org/reference/logistic_reg.html)
-  with the `"LiblineaR"` engine is now supported for `type = "class"`
-  and `type = "prob"`.
-  ([\#164](https://github.com/tidymodels/orbital/issues/164))
-
-- [`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) with the
-  `"nnet"` engine is now supported for regression and classification.
-  ([\#160](https://github.com/tidymodels/orbital/issues/160))
-
-- [`multinom_reg()`](https://parsnip.tidymodels.org/reference/multinom_reg.html)
-  with the `"nnet"` engine is now supported for `type = "class"` and
-  `type = "prob"`.
-  ([\#160](https://github.com/tidymodels/orbital/issues/160))
-
-- [`naive_Bayes()`](https://parsnip.tidymodels.org/reference/naive_Bayes.html)
-  with the `"klaR"` and `"naivebayes"` engines is now supported for
-  `type = "class"` and `type = "prob"`. Both engines default to
-  `usekernel = TRUE`, which fits a kernel density per predictor and has
-  no closed form; refit with `usekernel = FALSE` to translate one.
-  ([\#163](https://github.com/tidymodels/orbital/issues/163))
-
-- [`null_model()`](https://parsnip.tidymodels.org/reference/null_model.html)
-  is now supported for regression and classification.
-  ([\#160](https://github.com/tidymodels/orbital/issues/160))
-
-- [`pls()`](https://parsnip.tidymodels.org/reference/pls.html) with the
-  `"mixOmics"` engine is now supported for regression and for
-  `type = "prob"`. `type = "class"` is refused, since mixOmics assigns a
-  class by distance to the class centroid rather than by the largest
-  per-level value.
-  ([\#163](https://github.com/tidymodels/orbital/issues/163))
-
 - [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html)
   with the `"aorsf"` engine is now supported for regression.
   Classification is refused, since aorsf votes across the forest and
@@ -105,6 +96,45 @@
   Gaussian and binomial models.
   ([\#164](https://github.com/tidymodels/orbital/issues/164))
 
+#### Discriminant analysis
+
+- [`discrim_linear()`](https://parsnip.tidymodels.org/reference/discrim_linear.html)
+  and
+  [`discrim_quad()`](https://parsnip.tidymodels.org/reference/discrim_quad.html)
+  with the `"MASS"` engine are now supported for `type = "class"` and
+  `type = "prob"`.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`discrim_linear()`](https://parsnip.tidymodels.org/reference/discrim_linear.html)
+  with the `"mda"`, `"sda"`, and `"sparsediscrim"` engines is now
+  supported for `type = "class"` and `type = "prob"`.
+  ([\#163](https://github.com/tidymodels/orbital/issues/163))
+
+- [`naive_Bayes()`](https://parsnip.tidymodels.org/reference/naive_Bayes.html)
+  with the `"klaR"` and `"naivebayes"` engines is now supported for
+  `type = "class"` and `type = "prob"`. Both engines default to
+  `usekernel = TRUE`, which fits a kernel density per predictor and has
+  no closed form; refit with `usekernel = FALSE` to translate one.
+  ([\#163](https://github.com/tidymodels/orbital/issues/163))
+
+#### Linear models
+
+- [`linear_reg()`](https://parsnip.tidymodels.org/reference/linear_reg.html)
+  with the `"glm"` engine is now supported.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`logistic_reg()`](https://parsnip.tidymodels.org/reference/logistic_reg.html)
+  with the `"LiblineaR"` engine is now supported for `type = "class"`
+  and `type = "prob"`.
+  ([\#164](https://github.com/tidymodels/orbital/issues/164))
+
+- [`multinom_reg()`](https://parsnip.tidymodels.org/reference/multinom_reg.html)
+  with the `"nnet"` engine is now supported for `type = "class"` and
+  `type = "prob"`.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+#### Support vector machines
+
 - [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
   with the `"kernlab"` engine is now supported for regression and
   classification.
@@ -116,13 +146,30 @@
   [\#159](https://github.com/tidymodels/orbital/issues/159).
   ([\#164](https://github.com/tidymodels/orbital/issues/164))
 
+#### Other models
+
+- [`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) with the
+  `"nnet"` engine is now supported for regression and classification.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`null_model()`](https://parsnip.tidymodels.org/reference/null_model.html)
+  is now supported for regression and classification.
+  ([\#160](https://github.com/tidymodels/orbital/issues/160))
+
+- [`pls()`](https://parsnip.tidymodels.org/reference/pls.html) with the
+  `"mixOmics"` engine is now supported for regression and for
+  `type = "prob"`. `type = "class"` is refused, since mixOmics assigns a
+  class by distance to the class centroid rather than by the largest
+  per-level value.
+  ([\#163](https://github.com/tidymodels/orbital/issues/163))
+
 ### Improvements
 
 - `orbital(separate_trees = TRUE)` now works for
   [`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html)
   with the `"aorsf"` and `"partykit"` engines. The argument used to be
   accepted and silently ignored for every model orbital has no method of
-  its own for; it is now honoured for any regression ensemble whose
+  its own for; it is now honored for any regression ensemble whose
   per-tree expressions tidypredict exposes.
   ([\#173](https://github.com/tidymodels/orbital/issues/173))
 
@@ -136,34 +183,21 @@
   [`C50::C5.0()`](https://topepo.github.io/C5.0/reference/C5.0.html).
   ([\#159](https://github.com/tidymodels/orbital/issues/159))
 
-- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-  refuses `type = "prob"` for models that have no probability to give,
-  rather than fabricating one. A decision value is uncalibrated, so
-  putting it through a logistic would invent a calibration the model
-  does not have.
-  ([\#159](https://github.com/tidymodels/orbital/issues/159))
-
 ### Bug fixes
 
-- [`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
-  now errors for a workflow whose model it has no estimate for, rather
-  than counting that model as zero characters and returning the recipe’s
-  size as the whole workflow’s. The model is usually the bulk of the
-  expression, so the number it returned could be off by orders of
-  magnitude while looking ordinary, and it did not move as the model’s
-  hyperparameters changed.
-  ([\#167](https://github.com/tidymodels/orbital/issues/167))
+- [`mars()`](https://parsnip.tidymodels.org/reference/mars.html) models
+  with the `"earth"` engine now generate `1 / (1 + exp(-x))` for binary
+  classification, rather than the equivalent `1 - 1 / (1 + exp(x))`.
+  Predictions are unchanged.
+  ([\#158](https://github.com/tidymodels/orbital/issues/158))
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-  now errors for a bare model fit, which was never documented input,
-  rather than returning something that looked like a result. A
-  regression fit handed in directly took the classification path
-  whatever the model was, so `orbital(rpart::rpart(mpg ~ ., mtcars))`
-  came back as a character vector named `orbital_tmp_class_name` with no
-  error and no warning. Fit the model with
-  [`parsnip::fit()`](https://rdrr.io/pkg/generics/man/fit.html), or use
-  a workflow, as the documentation has always described.
-  ([\#113](https://github.com/tidymodels/orbital/issues/113))
+  no longer falls back to tidypredict when one of its own model methods
+  errors. An error in a native method was previously caught and silently
+  replaced with a tidypredict result, so a bug could still produce an
+  answer. Whether a native method exists is now checked directly, and
+  errors from it propagate.
+  ([\#156](https://github.com/tidymodels/orbital/issues/156))
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now uses the model’s own class order for binary probabilities, rather
@@ -176,25 +210,20 @@
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now returns the correct classes for
   [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
-  models with the `"LiblineaR"` engine. The sign of the decision value
-  was read as meaning the second outcome level, but LiblineaR orients it
-  by its own class order, which need not match the order of the
-  outcome’s factor levels. When the two disagreed every class was
-  inverted. ([\#164](https://github.com/tidymodels/orbital/issues/164))
-
-- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-  now returns the correct classes for
-  [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
   models with the `"kernlab"` engine. kernlab classifies by the sign of
   its decision function and calibrates its probabilities separately, so
   cutting those probabilities at 0.5 disagreed with the model for rows
   near the boundary.
   ([\#164](https://github.com/tidymodels/orbital/issues/164))
 
-- Binary `earth()` classification models now generate
-  `1 / (1 + exp(-x))` rather than the equivalent `1 - 1 / (1 + exp(x))`.
-  Predictions are unchanged.
-  ([\#158](https://github.com/tidymodels/orbital/issues/158))
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now returns the correct classes for
+  [`svm_linear()`](https://parsnip.tidymodels.org/reference/svm_linear.html)
+  models with the `"LiblineaR"` engine. The sign of the decision value
+  was read as meaning the second outcome level, but LiblineaR orients it
+  by its own class order, which need not match the order of the
+  outcome’s factor levels. When the two disagreed every class was
+  inverted. ([\#164](https://github.com/tidymodels/orbital/issues/164))
 
 - `orbital(separate_trees = TRUE)` now returns `NA` for rows with a
   missing predictor, matching what `separate_trees = FALSE` has always
@@ -208,20 +237,6 @@
   the binary path did not, so the two disagreed with
   `separate_trees = FALSE` whenever a model carried a non-default scale
   or bias. ([\#158](https://github.com/tidymodels/orbital/issues/158))
-
-- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-  no longer falls back to tidypredict when one of its own model methods
-  errors. An error in a native method was previously caught and silently
-  replaced with a tidypredict result, so a bug could still produce an
-  answer. Whether a native method exists is now checked directly, and
-  errors from it propagate.
-  ([\#156](https://github.com/tidymodels/orbital/issues/156))
-
-- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-  now errors for classification models that reach the tidypredict
-  fallback, instead of returning prediction columns named after
-  tidypredict’s internals.
-  ([\#156](https://github.com/tidymodels/orbital/issues/156))
 
 - [`print()`](https://rdrr.io/r/base/print.html) no longer corrupts
   numbers when rounding them for display. Numbers such as
@@ -411,8 +426,8 @@ CRAN release: 2024-12-22
   prediction and probability predictions.
   ([\#77](https://github.com/tidymodels/orbital/issues/77))
 
-- [`augment()`](https://rdrr.io/pkg/generics/man/augment.html) method
-  for
+- [`augment()`](https://generics.r-lib.org/reference/augment.html)
+  method for
   [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   object have been added.
   ([\#55](https://github.com/tidymodels/orbital/issues/55))

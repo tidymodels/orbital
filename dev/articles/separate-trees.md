@@ -147,8 +147,8 @@ tree to separate.
 The intermediate tree columns (e.g., `.pred_tree_001`) are created
 during evaluation but are **not** included in the final output from
 [`predict()`](https://rdrr.io/r/stats/predict.html) or
-[`augment()`](https://rdrr.io/pkg/generics/man/augment.html). Only the
-final prediction column (e.g., `.pred`) appears in the results.
+[`augment()`](https://generics.r-lib.org/reference/augment.html). Only
+the final prediction column (e.g., `.pred`) appears in the results.
 
 ``` r
 

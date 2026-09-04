@@ -110,7 +110,14 @@ library(xgboost)
 # Estimate size for an xgboost model
 x <- as.matrix(mtcars[, -1])
 y <- mtcars[, 1]
-model <- xgboost(x = x, y = y, nrounds = 50, max_depth = 4, verbosity = 0)
+model <- xgboost(
+  x = x,
+  y = y,
+  nrounds = 50,
+  max_depth = 4,
+  verbosity = 0,
+  nthreads = 1
+)
 
 estimate_orbital_size(model)
 #> [1] 26404

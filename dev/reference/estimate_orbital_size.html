@@ -15,7 +15,7 @@ candidate model."><meta property="og:image" content="https://orbital.tidymodels.
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -154,7 +154,14 @@ where <code><a href="orbital.html">orbital()</a></code> works but <code>estimate
 <span class="r-in"><span><span class="co"># Estimate size for an xgboost model</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgboost.html" class="external-link">xgboost</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, nrounds <span class="op">=</span> <span class="fl">50</span>, max_depth <span class="op">=</span> <span class="fl">4</span>, verbosity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgboost.html" class="external-link">xgboost</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="va">y</span>,</span></span>
+<span class="r-in"><span>  nrounds <span class="op">=</span> <span class="fl">50</span>,</span></span>
+<span class="r-in"><span>  max_depth <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  verbosity <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  nthreads <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">estimate_orbital_size</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 26404</span>
@@ -169,7 +176,7 @@ where <code><a href="orbital.html">orbital()</a></code> works but <code>estimate
 <span class="r-in"><span><span class="va">wf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://workflows.tidymodels.org/reference/add_recipe.html" class="external-link">add_recipe</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu"><a href="https://workflows.tidymodels.org/reference/add_model.html" class="external-link">add_model</a></span><span class="op">(</span><span class="fu"><a href="https://parsnip.tidymodels.org/reference/linear_reg.html" class="external-link">linear_reg</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
-<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">estimate_orbital_size</span><span class="op">(</span><span class="va">wf</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 872</span>

@@ -35,7 +35,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -153,7 +153,7 @@ evaluation.</p>
 <span></span>
 <span><span class="co"># Fit an XGBoost model</span></span>
 <span><span class="va">bt_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree</a></span><span class="op">(</span>mode <span class="op">=</span> <span class="st">"regression"</span>, engine <span class="op">=</span> <span class="st">"xgboost"</span>, trees <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span><span class="va">bt_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">bt_spec</span>, <span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">bt_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">bt_spec</span>, <span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Default: single combined expression</span></span>
 <span><span class="va">orb_combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/orbital.html">orbital</a></span><span class="op">(</span><span class="va">bt_fit</span><span class="op">)</span></span>
@@ -295,7 +295,7 @@ tree to separate.</p>
 </h2>
 <p>The intermediate tree columns (e.g., <code>.pred_tree_001</code>) are
 created during evaluation but are <strong>not</strong> included in the
-final output from <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> or <code><a href="https://rdrr.io/pkg/generics/man/augment.html" class="external-link">augment()</a></code>. Only
+final output from <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> or <code><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment()</a></code>. Only
 the final prediction column (e.g., <code>.pred</code>) appears in the
 results.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

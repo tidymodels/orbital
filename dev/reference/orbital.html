@@ -11,7 +11,7 @@ predictions."><meta property="og:image" content="https://orbital.tidymodels.org/
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.5.1.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.7.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -150,7 +150,7 @@ rows.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">wf_spec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="va">rec_spec</span>, <span class="va">lm_spec</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">wf_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">wf_spec</span>, <span class="va">mtcars</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">orbital</span><span class="op">(</span><span class="va">wf_fit</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -170,7 +170,7 @@ rows.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> 11 equations in total.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Also works on parsnip object by itself</span></span></span>
-<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/pkg/generics/man/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">lm_spec</span>, <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">lm_spec</span>, <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>  <span class="fu">orbital</span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">──</span> <span style="font-weight: bold;">orbital Object</span> <span style="color: #00BBBB;">─────────────────────────────────────────────────────</span></span>

@@ -5,4 +5,4 @@ to see their documentation.
 
 - generics:
 
-  [`augment`](https://rdrr.io/pkg/generics/man/augment.html)
+  [`augment()`](https://generics.r-lib.org/reference/augment.html)
