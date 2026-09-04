@@ -15,7 +15,7 @@ candidate model."><meta property="og:image" content="https://orbital.tidymodels.
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@ candidate model."><meta property="og:image" content="https://orbital.tidymodels.
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Estimate orbital expression character count</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.5.1/R/estimate-size.R" class="external-link"><code>R/estimate-size.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.7.0/R/estimate-size.R" class="external-link"><code>R/estimate-size.R</code></a></small>
       <div class="d-none name"><code>estimate_orbital_size.Rd</code></div>
     </div>
 
@@ -135,8 +135,11 @@ The estimates are typically within 5-10% of the actual size.</p>
 orbital object because it only needs to inspect the tree structure, not
 convert each tree to an R expression.</p>
 <p>This function aims to support all the same models and preprocessing
-operations as <code><a href="orbital.html">orbital()</a></code>. If you find a case where <code><a href="orbital.html">orbital()</a></code> works but
-<code>estimate_orbital_size()</code> does not, please
+operations as <code><a href="orbital.html">orbital()</a></code>, but does not yet reach all of them. A model with
+no estimate is an error rather than a zero, including inside a workflow,
+since a workflow's model is usually the bulk of the expression and counting
+it as free would report the recipe's size as the whole. If you find a case
+where <code><a href="orbital.html">orbital()</a></code> works but <code>estimate_orbital_size()</code> does not, please
 <a href="https://github.com/tidymodels/orbital/issues" class="external-link">file an issue</a>.</p>
     </div>
     <div class="section level2">
@@ -151,7 +154,14 @@ operations as <code><a href="orbital.html">orbital()</a></code>. If you find a c
 <span class="r-in"><span><span class="co"># Estimate size for an xgboost model</span></span></span>
 <span class="r-in"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">[</span>, <span class="op">-</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">y</span> <span class="op">&lt;-</span> <span class="va">mtcars</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgboost.html" class="external-link">xgboost</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, nrounds <span class="op">=</span> <span class="fl">50</span>, max_depth <span class="op">=</span> <span class="fl">4</span>, verbosity <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/xgboost/man/xgboost.html" class="external-link">xgboost</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="va">x</span>,</span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="va">y</span>,</span></span>
+<span class="r-in"><span>  nrounds <span class="op">=</span> <span class="fl">50</span>,</span></span>
+<span class="r-in"><span>  max_depth <span class="op">=</span> <span class="fl">4</span>,</span></span>
+<span class="r-in"><span>  verbosity <span class="op">=</span> <span class="fl">0</span>,</span></span>
+<span class="r-in"><span>  nthreads <span class="op">=</span> <span class="fl">1</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">estimate_orbital_size</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] 26404</span>

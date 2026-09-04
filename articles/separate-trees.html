@@ -34,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Parallel tree evaluation in databases</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.5.1/vignettes/separate-trees.Rmd" class="external-link"><code>vignettes/separate-trees.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.7.0/vignettes/separate-trees.Rmd" class="external-link"><code>vignettes/separate-trees.Rmd</code></a></small>
       <div class="d-none name"><code>separate-trees.Rmd</code></div>
     </div>
 
@@ -208,12 +208,86 @@ tree ensemble models:</p>
 <td>Yes</td>
 <td>Yes</td>
 </tr>
+<tr class="even">
+<td><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></td>
+<td>aorsf</td>
+<td>Yes</td>
+<td>Not supported at all</td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></td>
+<td>partykit</td>
+<td>Yes</td>
+<td>Not supported at all</td>
+</tr>
+</tbody>
+</table>
+<p>For multiclass classification, trees are separated per class before
+the final softmax transformation is applied.</p>
+<p>The last two are regression-only in the “Not supported” sense that
+orbital cannot translate them for classification in the first place,
+rather than that <code>separate_trees</code> is the missing piece.</p>
+<div class="section level3">
+<h3 id="models-where-the-argument-has-no-effect">Models where the argument has no effect<a class="anchor" aria-label="anchor" href="#models-where-the-argument-has-no-effect"></a>
+</h3>
+<p><code>separate_trees</code> is accepted by <code><a href="../reference/orbital.html">orbital()</a></code> for
+every model, but only the seven above act on it. Everything else
+silently produces the same single combined expression it would have
+produced with the default. Setting it is never an error and never
+changes the predictions, so a query that looks unchanged is the expected
+result rather than a sign something went wrong.</p>
+<p>This is worth knowing because several supported models are tree
+ensembles that nonetheless ignore it:</p>
+<table class="table">
+<colgroup>
+<col width="35%">
+<col width="40%">
+<col width="25%">
+</colgroup>
+<thead><tr class="header">
+<th>Model</th>
+<th>Engine</th>
+<th>Why</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="https://parsnip.tidymodels.org/reference/bag_tree.html" class="external-link">bag_tree()</a></code></td>
+<td>rpart, C5.0</td>
+<td>Votes over the ensemble rather than summing it</td>
+</tr>
+<tr class="even">
+<td><code><a href="https://parsnip.tidymodels.org/reference/bart.html" class="external-link">bart()</a></code></td>
+<td>dbarts</td>
+<td>Sums over posterior draws, not over separable trees</td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></td>
+<td>C5.0</td>
+<td>Confidence-weighted vote that cannot be recombined
+arithmetically</td>
+</tr>
+<tr class="even">
+<td><code><a href="https://parsnip.tidymodels.org/reference/C5_rules.html" class="external-link">C5_rules()</a></code></td>
+<td>C5.0</td>
+<td>As above</td>
+</tr>
+<tr class="odd">
+<td><code><a href="https://parsnip.tidymodels.org/reference/rule_fit.html" class="external-link">rule_fit()</a></code></td>
+<td>xrf, h2o</td>
+<td>Emitted as a rule set rather than as individual trees</td>
+</tr>
+<tr class="even">
+<td><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></td>
+<td>h2o_gbm</td>
+<td>Translated through h2o’s own export, which does not expose per-tree
+pieces</td>
+</tr>
 </tbody>
 </table>
 <p>For single-tree models like <code><a href="https://parsnip.tidymodels.org/reference/decision_tree.html" class="external-link">decision_tree()</a></code>, the
-argument has no effect since there is only one tree. For multiclass
-classification, trees are separated per class before the final softmax
-transformation is applied.</p>
+argument has no effect for the simpler reason that there is only one
+tree to separate.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="output-behavior">Output behavior<a class="anchor" aria-label="anchor" href="#output-behavior"></a>

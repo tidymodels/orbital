@@ -39,10 +39,10 @@ orbital(x, ..., prefix = ".pred", type = NULL, separate_trees = FALSE)
 - separate_trees:
 
   A single logical. For tree ensemble models (xgboost, lightgbm,
-  catboost, ranger, randomForest), should each tree be output as a
-  separate expression? This can improve performance when predicting in
-  databases by allowing parallel evaluation of trees. Defaults to
-  `FALSE`. See
+  catboost, ranger, randomForest, aorsf, partykit), should each tree be
+  output as a separate expression? This can improve performance when
+  predicting in databases by allowing parallel evaluation of trees.
+  Defaults to `FALSE`. See
   [`vignette("separate-trees")`](https://orbital.tidymodels.org/articles/separate-trees.md)
   for details.
 
@@ -74,6 +74,33 @@ with, or to generate code using functions such as
 [`orbital_sql()`](https://orbital.tidymodels.org/reference/orbital_sql.md)
 or
 [`orbital_dt()`](https://orbital.tidymodels.org/reference/orbital_dt.md).
+
+## Numeric precision
+
+An orbital object holds its equations as text, so every number a model
+carries is written out as a decimal with 17 significant digits and read
+back when the object is used. On most builds of R that round-trip is
+exact.
+
+It is not exact on builds where `capabilities("long.double")` is
+`FALSE`, which includes some macOS builds. R accumulates the digits of a
+number it is reading into a long double, and without one to accumulate
+into it can land one unit in the last place away from the number that
+was written. Equations built on such a build are still written
+correctly; it is reading them back that loses the last bit.
+
+For nearly every model this is orders of magnitude below the model's own
+uncertainty and can be ignored. It matters for trees that split on a
+value computed from several columns rather than on a raw column, such as
+the oblique forests of
+[`rand_forest()`](https://parsnip.tidymodels.org/reference/rand_forest.html)
+with the `"aorsf"` engine. Those splits sit at combinations realized by
+training rows, so the comparison at a split is an exact tie for many
+rows, and the smallest possible difference is enough to send a row down
+the other branch. Its prediction then moves by the distance between two
+leaves rather than by a rounding error, and predictions can differ from
+[`predict()`](https://rdrr.io/r/stats/predict.html) on the original fit
+for a meaningful share of rows.
 
 ## Examples
 

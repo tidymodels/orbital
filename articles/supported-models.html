@@ -34,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Supported Models and recipes steps</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.5.1/vignettes/supported-models.Rmd" class="external-link"><code>vignettes/supported-models.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.7.0/vignettes/supported-models.Rmd" class="external-link"><code>vignettes/supported-models.Rmd</code></a></small>
       <div class="d-none name"><code>supported-models.Rmd</code></div>
     </div>
 
@@ -565,8 +565,43 @@ to add model to table.</p>
 </thead>
 <tbody class="gt_table_body">
 <tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/bag_tree.html" class="external-link">bag_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"C5.0"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/bag_tree.html" class="external-link">bag_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"rpart"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/bart.html" class="external-link">bart()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"dbarts"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">❌</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"C5.0"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"catboost"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"h2o_gbm"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">✅</td>
 <td headers="prob" class="gt_row gt_center">✅</td>
@@ -586,10 +621,24 @@ to add model to table.</p>
 <td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/C5_rules.html" class="external-link">C5_rules()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"C5.0"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/cubist_rules.html" class="external-link">cubist_rules()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"Cubist"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">❌</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/decision_tree.html" class="external-link">decision_tree()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"C5.0"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
 <td headers="prob" class="gt_row gt_center">❌</td>
 </tr>
 <tr>
@@ -607,8 +656,57 @@ to add model to table.</p>
 <td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/discrim_flexible.html" class="external-link">discrim_flexible()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"earth"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">❌</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/discrim_linear.html" class="external-link">discrim_linear()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"MASS"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/discrim_linear.html" class="external-link">discrim_linear()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"mda"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/discrim_linear.html" class="external-link">discrim_linear()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"sda"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/discrim_linear.html" class="external-link">discrim_linear()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"sparsediscrim"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/discrim_quad.html" class="external-link">discrim_quad()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"MASS"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/linear_reg.html" class="external-link">linear_reg()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"lm"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">❌</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/linear_reg.html" class="external-link">linear_reg()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"glm"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">❌</td>
 <td headers="prob" class="gt_row gt_center">❌</td>
@@ -635,8 +733,22 @@ to add model to table.</p>
 <td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/logistic_reg.html" class="external-link">logistic_reg()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"LiblineaR"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/mars.html" class="external-link">mars()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"earth"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/mlp.html" class="external-link">mlp()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"nnet"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">✅</td>
 <td headers="prob" class="gt_row gt_center">✅</td>
@@ -649,16 +761,58 @@ to add model to table.</p>
 <td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/multinom_reg.html" class="external-link">multinom_reg()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"nnet"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/naive_Bayes.html" class="external-link">naive_Bayes()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"klaR"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/naive_Bayes.html" class="external-link">naive_Bayes()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"naivebayes"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">❌</td>
-<td headers="class" class="gt_row gt_center">⚪</td>
-<td headers="prob" class="gt_row gt_center">⚪</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/nearest_neighbor.html" class="external-link">nearest_neighbor()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>any</code></span></td>
 <td headers="numeric" class="gt_row gt_center">❌</td>
+<td headers="class" class="gt_row gt_center">❌</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/null_model.html" class="external-link">null_model()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"parsnip"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/pls.html" class="external-link">pls()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"mixOmics"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">❌</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"aorsf"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">❌</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rand_forest.html" class="external-link">rand_forest()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"partykit"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">❌</td>
 <td headers="prob" class="gt_row gt_center">❌</td>
 </tr>
@@ -676,6 +830,34 @@ to add model to table.</p>
 <td headers="class" class="gt_row gt_center">✅</td>
 <td headers="prob" class="gt_row gt_center">✅</td>
 </tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rule_fit.html" class="external-link">rule_fit()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"h2o"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/rule_fit.html" class="external-link">rule_fit()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"xrf"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/svm_linear.html" class="external-link">svm_linear()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"kernlab"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/svm_linear.html" class="external-link">svm_linear()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"LiblineaR"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">❌</td>
+</tr>
 </tbody>
 <tfoot>
 <tr class="gt_footnotes">
@@ -689,6 +871,46 @@ to add model to table.</p>
     </tr>
 </tfoot>
 </table>
+</div>
+<div class="section level3">
+<h3 id="why-some-models-support-one-classification-type-but-not-the-other">Why some models support one classification type but not the
+other<a class="anchor" aria-label="anchor" href="#why-some-models-support-one-classification-type-but-not-the-other"></a>
+</h3>
+<p>The two classification columns are separate because not every model
+produces both, and orbital refuses a type rather than inventing it.</p>
+<p><strong>Class without probability.</strong> Some models predict a
+label directly and never compute a probability at all.
+<code><a href="https://parsnip.tidymodels.org/reference/bag_tree.html" class="external-link">bag_tree()</a></code> and <code><a href="https://parsnip.tidymodels.org/reference/boost_tree.html" class="external-link">boost_tree()</a></code> with the
+<code>"C5.0"</code> engine, <code><a href="https://parsnip.tidymodels.org/reference/C5_rules.html" class="external-link">C5_rules()</a></code>, and
+<code><a href="https://parsnip.tidymodels.org/reference/bag_tree.html" class="external-link">bag_tree()</a></code> with <code>"rpart"</code> all reach their answer
+by voting across an ensemble; the vote yields a winner, not a
+distribution. <code><a href="https://parsnip.tidymodels.org/reference/decision_tree.html" class="external-link">decision_tree()</a></code> with <code>"C5.0"</code> is
+the single-tree version of the same thing: it labels each leaf with a
+class rather than with class counts. <code><a href="https://parsnip.tidymodels.org/reference/svm_linear.html" class="external-link">svm_linear()</a></code> with
+<code>"LiblineaR"</code> produces a <em>decision value</em>, the signed
+distance from the separating hyperplane. Its sign gives the class, but
+its magnitude is uncalibrated: it is not a probability and does not
+become one by being passed through a logistic. Doing that would attach a
+confidence the model never estimated, so <code>type = "prob"</code> is
+refused for all of these.</p>
+<p><strong>Probability without class.</strong> <code><a href="https://parsnip.tidymodels.org/reference/pls.html" class="external-link">pls()</a></code> with
+<code>"mixOmics"</code> is the reverse case. It gives per-level values,
+but mixOmics assigns a class by distance to the class centroid rather
+than by taking the largest of those values, so the obvious
+<code><a href="https://rdrr.io/r/base/which.min.html" class="external-link">which.max()</a></code> would disagree with the model on some rows.
+orbital gives the probabilities and refuses
+<code>type = "class"</code>.</p>
+<p><strong>Both, but the cut is not 0.5.</strong>
+<code><a href="https://parsnip.tidymodels.org/reference/svm_linear.html" class="external-link">svm_linear()</a></code> with <code>"kernlab"</code> supports both,
+with a wrinkle worth knowing about. kernlab classifies by the sign of
+its decision function and fits its probabilities separately, using Platt
+scaling. The two rules do not cross at 0.5, so orbital emits kernlab’s
+own threshold as a literal in the expression. If you compare orbital’s
+<code>.pred_class</code> against thresholding its <code>.pred_*</code>
+columns at 0.5 yourself, expect disagreement on rows near the boundary;
+orbital matches the model, and 0.5 does not.</p>
+<p>The general rule: where a model’s own prediction rule and the naive
+rule disagree, orbital follows the model.</p>
 </div>
 </div>
 <div class="section level2">
