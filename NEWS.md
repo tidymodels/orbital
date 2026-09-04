@@ -1,6 +1,20 @@
 # orbital (development version)
 
+# orbital 0.7.0
+
+# orbital 0.6.0
+
+## Breaking changes
+
+* `estimate_orbital_size()` now errors for a workflow whose model it has no estimate for, rather than counting that model as zero characters and returning the recipe's size as the whole workflow's. The model is usually the bulk of the expression, so the number it returned could be off by orders of magnitude while looking ordinary, and it did not move as the model's hyperparameters changed. Use a model that has an estimate, or generate the expression with `orbital()` and measure it directly. (#167)
+
+* `orbital()` now errors for a bare model fit, which was never documented input, rather than returning something that looked like a result. A regression fit handed in directly took the classification path whatever the model was, so `orbital(rpart::rpart(mpg ~ ., mtcars))` came back as a character vector named `orbital_tmp_class_name` with no error and no warning. Fit the model with `parsnip::fit()`, or use a workflow, as the documentation has always described. (#113)
+
+* `orbital()` now errors for `type = "prob"` on models that have no probability to give, rather than fabricating one. A decision value is uncalibrated, so putting it through a logistic would invent a calibration the model does not have. Use `type = "class"` for these models, or fit an engine that estimates probabilities. (#159)
+
 ## New models
+
+### Trees and ensembles
 
 * `bag_tree()` with the `"rpart"` and `"C5.0"` engines is now supported for `type = "class"`. These models vote over their ensemble and expose no probability, so `type = "prob"` is refused. (#161)
 
@@ -14,63 +28,63 @@
 
 * `decision_tree()` with the `"C5.0"` engine is now supported for `type = "class"`. Its leaves carry a class label rather than class counts, so `type = "prob"` is refused. (#173)
 
-* `discrim_linear()` and `discrim_quad()` with the `"MASS"` engine are now supported for `type = "class"` and `type = "prob"`. (#160)
-
-* `discrim_linear()` with the `"mda"`, `"sda"`, and `"sparsediscrim"` engines is now supported for `type = "class"` and `type = "prob"`. (#163)
-
-* `linear_reg()` with the `"glm"` engine is now supported. (#160)
-
-* `logistic_reg()` with the `"LiblineaR"` engine is now supported for `type = "class"` and `type = "prob"`. (#164)
-
-* `mlp()` with the `"nnet"` engine is now supported for regression and classification. (#160)
-
-* `multinom_reg()` with the `"nnet"` engine is now supported for `type = "class"` and `type = "prob"`. (#160)
-
-* `naive_Bayes()` with the `"klaR"` and `"naivebayes"` engines is now supported for `type = "class"` and `type = "prob"`. Both engines default to `usekernel = TRUE`, which fits a kernel density per predictor and has no closed form; refit with `usekernel = FALSE` to translate one. (#163)
-
-* `null_model()` is now supported for regression and classification. (#160)
-
-* `pls()` with the `"mixOmics"` engine is now supported for regression and for `type = "prob"`. `type = "class"` is refused, since mixOmics assigns a class by distance to the class centroid rather than by the largest per-level value. (#163)
-
 * `rand_forest()` with the `"aorsf"` engine is now supported for regression. Classification is refused, since aorsf votes across the forest and exposes no probability. Note that aorsf splits on observed linear-combination values, so a row that lands exactly on a split boundary can take the other branch than `predict()` did. (#173)
 
 * `rand_forest()` with the `"partykit"` engine is now supported for regression. (#161)
 
 * `rule_fit()` with the `"xrf"` engine is now supported for regression and for binary classification. Multiclass outcomes are refused, since xrf only fits Gaussian and binomial models. (#164)
 
+### Discriminant analysis
+
+* `discrim_linear()` and `discrim_quad()` with the `"MASS"` engine are now supported for `type = "class"` and `type = "prob"`. (#160)
+
+* `discrim_linear()` with the `"mda"`, `"sda"`, and `"sparsediscrim"` engines is now supported for `type = "class"` and `type = "prob"`. (#163)
+
+* `naive_Bayes()` with the `"klaR"` and `"naivebayes"` engines is now supported for `type = "class"` and `type = "prob"`. Both engines default to `usekernel = TRUE`, which fits a kernel density per predictor and has no closed form; refit with `usekernel = FALSE` to translate one. (#163)
+
+### Linear models
+
+* `linear_reg()` with the `"glm"` engine is now supported. (#160)
+
+* `logistic_reg()` with the `"LiblineaR"` engine is now supported for `type = "class"` and `type = "prob"`. (#164)
+
+* `multinom_reg()` with the `"nnet"` engine is now supported for `type = "class"` and `type = "prob"`. (#160)
+
+### Support vector machines
+
 * `svm_linear()` with the `"kernlab"` engine is now supported for regression and classification. (#164)
 
 * `svm_linear()` with the `"LiblineaR"` engine is now supported for regression, in addition to the `type = "class"` support added in #159. (#164)
 
+### Other models
+
+* `mlp()` with the `"nnet"` engine is now supported for regression and classification. (#160)
+
+* `null_model()` is now supported for regression and classification. (#160)
+
+* `pls()` with the `"mixOmics"` engine is now supported for regression and for `type = "prob"`. `type = "class"` is refused, since mixOmics assigns a class by distance to the class centroid rather than by the largest per-level value. (#163)
+
 ## Improvements
 
-* `orbital(separate_trees = TRUE)` now works for `rand_forest()` with the `"aorsf"` and `"partykit"` engines. The argument used to be accepted and silently ignored for every model orbital has no method of its own for; it is now honoured for any regression ensemble whose per-tree expressions tidypredict exposes. (#173)
+* `orbital(separate_trees = TRUE)` now works for `rand_forest()` with the `"aorsf"` and `"partykit"` engines. The argument used to be accepted and silently ignored for every model orbital has no method of its own for; it is now honored for any regression ensemble whose per-tree expressions tidypredict exposes. (#173)
 
 * `orbital()` now supports classification models that reach the tidypredict fallback, rather than refusing them. This covers multiclass probability models such as `MASS::lda()`, models returning an uncalibrated decision value such as `LiblineaR` SVMs, and models predicting a class label directly such as `C50::C5.0()`. (#159)
 
-* `orbital()` refuses `type = "prob"` for models that have no probability to give, rather than fabricating one. A decision value is uncalibrated, so putting it through a logistic would invent a calibration the model does not have. (#159)
-
 ## Bug fixes
 
-* `estimate_orbital_size()` now errors for a workflow whose model it has no estimate for, rather than counting that model as zero characters and returning the recipe's size as the whole workflow's. The model is usually the bulk of the expression, so the number it returned could be off by orders of magnitude while looking ordinary, and it did not move as the model's hyperparameters changed. (#167)
+* `mars()` models with the `"earth"` engine now generate `1 / (1 + exp(-x))` for binary classification, rather than the equivalent `1 - 1 / (1 + exp(x))`. Predictions are unchanged. (#158)
 
-* `orbital()` now errors for a bare model fit, which was never documented input, rather than returning something that looked like a result. A regression fit handed in directly took the classification path whatever the model was, so `orbital(rpart::rpart(mpg ~ ., mtcars))` came back as a character vector named `orbital_tmp_class_name` with no error and no warning. Fit the model with `parsnip::fit()`, or use a workflow, as the documentation has always described. (#113)
+* `orbital()` no longer falls back to tidypredict when one of its own model methods errors. An error in a native method was previously caught and silently replaced with a tidypredict result, so a bug could still produce an answer. Whether a native method exists is now checked directly, and errors from it propagate. (#156)
 
 * `orbital()` now uses the model's own class order for binary probabilities, rather than assuming it matches the order of the outcome's factor levels. Every engine but h2o orders them the same way, so only h2o models were affected, and only when the outcome's levels were not in sorted order; for those both probability columns were swapped and the class inverted. (#166)
 
-* `orbital()` now returns the correct classes for `svm_linear()` models with the `"LiblineaR"` engine. The sign of the decision value was read as meaning the second outcome level, but LiblineaR orients it by its own class order, which need not match the order of the outcome's factor levels. When the two disagreed every class was inverted. (#164)
-
 * `orbital()` now returns the correct classes for `svm_linear()` models with the `"kernlab"` engine. kernlab classifies by the sign of its decision function and calibrates its probabilities separately, so cutting those probabilities at 0.5 disagreed with the model for rows near the boundary. (#164)
 
-* Binary `earth()` classification models now generate `1 / (1 + exp(-x))` rather than the equivalent `1 - 1 / (1 + exp(x))`. Predictions are unchanged. (#158)
+* `orbital()` now returns the correct classes for `svm_linear()` models with the `"LiblineaR"` engine. The sign of the decision value was read as meaning the second outcome level, but LiblineaR orients it by its own class order, which need not match the order of the outcome's factor levels. When the two disagreed every class was inverted. (#164)
 
 * `orbital(separate_trees = TRUE)` now returns `NA` for rows with a missing predictor, matching what `separate_trees = FALSE` has always returned. The individual tree expressions fall through to their default branch when a split variable is `NA`, so such rows previously received a confident-looking prediction computed from no usable data. (#158)
 
 * `orbital(separate_trees = TRUE)` now applies CatBoost's scale and bias to binary classification models. The regression path applied them and the binary path did not, so the two disagreed with `separate_trees = FALSE` whenever a model carried a non-default scale or bias. (#158)
-
-* `orbital()` no longer falls back to tidypredict when one of its own model methods errors. An error in a native method was previously caught and silently replaced with a tidypredict result, so a bug could still produce an answer. Whether a native method exists is now checked directly, and errors from it propagate. (#156)
-
-* `orbital()` now errors for classification models that reach the tidypredict fallback, instead of returning prediction columns named after tidypredict's internals. (#156)
 
 * `print()` no longer corrupts numbers when rounding them for display. Numbers such as `6.75044994983228` and `-0.0901719835820594` were printed as `6.750.5` and `-017198`. Only the printed output was affected; the expressions themselves were always correct. (#155)
 
