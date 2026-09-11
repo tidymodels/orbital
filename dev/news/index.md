@@ -4,6 +4,8 @@
 
 ## orbital 0.7.0
 
+CRAN release: 2026-09-04
+
 ## orbital 0.6.0
 
 ### Breaking changes
