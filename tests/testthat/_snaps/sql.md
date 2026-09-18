@@ -103,7 +103,7 @@
       orbital_sql(obj, con)
     Output
       <SQL> CASE
-      WHEN (((((1.70829 + ("Sepal.Length" * 0.8510269)) + ("Sepal.Width" * 0.986845)) + ("Petal.Length" * -1.380919)) + ("Petal.Width" * -1.865502)) > 0) THEN 'versicolor'
+      WHEN (((((1.688658 + ("Sepal.Length" * 0.8523153)) + ("Sepal.Width" * 0.9876914)) + ("Petal.Length" * -1.37889)) + ("Petal.Width" * -1.8705)) > 0) THEN 'versicolor'
       ELSE 'virginica'
       END AS .pred_class
 

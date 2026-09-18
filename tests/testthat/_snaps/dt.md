@@ -36,7 +36,7 @@
     Code
       orbital_dt(obj)
     Output
-      copy(`_DT`)[, `:=`(.pred_class = fcase(1.70829 + (Sepal.Length * 0.8510269) + (Sepal.Width * 0.986845) + (Petal.Length * -1.380919) + (Petal.Width * -1.865502) > 0, "versicolor", rep(TRUE, .N), "virginica"))]
+      copy(`_DT`)[, `:=`(.pred_class = fcase(1.688658 + (Sepal.Length * 0.8523153) + (Sepal.Width * 0.9876914) + (Petal.Length * -1.37889) + (Petal.Width * -1.8705) > 0, "versicolor", rep(TRUE, .N), "virginica"))]
 
 # dt works for a binary probability cut away from 0.5
 
