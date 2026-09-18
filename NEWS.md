@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* Bare `torch::nn_sequential()` fully-connected feed-forward networks are now supported, generating one column per neuron so that predictions no longer inline exponentially with network depth the way `tidypredict::tidypredict_fit()` did for `parsnip::mlp(engine = "nnet")` (#149).
+
 # orbital 0.7.0
 
 # orbital 0.6.0
