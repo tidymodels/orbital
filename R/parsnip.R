@@ -71,7 +71,7 @@ orbital.model_fit <- function(
   }
 
   res <- namespace_case_when(res)
-  res <- set_pred_names(res, x, mode, type, prefix)
+  res <- set_pred_names(res, x$lvl, mode, type, prefix)
 
   new_orbital_class(res)
 }
@@ -120,7 +120,7 @@ abort_unsupported_model <- function(x) {
   )
 }
 
-set_pred_names <- function(res, x, mode, type, prefix) {
+set_pred_names <- function(res, lvl, mode, type, prefix) {
   if (mode == "regression") {
     # Only rename if single element (separate_trees = FALSE)
     # When separate_trees = TRUE, names are already set correctly
@@ -138,7 +138,7 @@ set_pred_names <- function(res, x, mode, type, prefix) {
       class_names <- paste0(prefix, "_class")
     }
     if ("prob" %in% type) {
-      prob_names <- paste0(prefix, "_", x$lvl)
+      prob_names <- paste0(prefix, "_", lvl)
     }
 
     attr(res, "pred_names") <- c(class_names, prob_names)
