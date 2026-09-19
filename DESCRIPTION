@@ -75,6 +75,7 @@ Suggests:
     themis,
     tibble,
     tidypredict (>= 1.2.0),
+    torch,
     withr,
     workflows,
     xgboost,

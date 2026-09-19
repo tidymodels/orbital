@@ -23,6 +23,68 @@ nn_activations <- c(
   "gelu"
 )
 
+# Shape-based inference shared by every `orbital.*` back end built on top of
+# `nn_sequential_layers()`: a network with more than one output unit is never
+# regression in this package (`nn_output_eqs()` only allows a single-unit
+# regression output), so it's unambiguously classification even without a
+# trailing sigmoid/softmax module (e.g. a bare final linear layer trained
+# with a cross-entropy loss, which never adds one).
+nn_infer_mode <- function(n_out, final_activation) {
+  if (n_out > 1 || final_activation %in% c("sigmoid", "softmax")) {
+    "classification"
+  } else {
+    "regression"
+  }
+}
+
+nn_default_lvl <- function(n_out) {
+  paste0("class_", seq_len(max(n_out, 2)) - 1)
+}
+
+# Validates a user-supplied `lvl` against the length `nn_output_eqs()`
+# actually consumes: 2 for a single output unit (always routed as binary
+# classification through a sigmoid), or `n_out` for two or more. Left
+# unchecked, a too-short `lvl` silently drops the last class/level instead of
+# erroring.
+nn_check_lvl <- function(lvl, n_out, call = rlang::caller_env()) {
+  if (is.null(lvl)) {
+    return(invisible())
+  }
+
+  expected <- max(n_out, 2)
+  if (length(lvl) != expected) {
+    cli::cli_abort(
+      c(
+        "{.arg lvl} must have length {expected}, not {length(lvl)}.",
+        i = if (n_out == 1) {
+          "A single output unit is always treated as binary classification,
+           which requires 2 levels."
+        } else {
+          "The network has {n_out} output units."
+        }
+      ),
+      call = call
+    )
+  }
+}
+
+# Validates a user-supplied `input_names` against the first layer's actual
+# input width. Left unchecked, a too-short `input_names` silently drops the
+# last feature instead of erroring.
+nn_check_input_names <- function(
+  input_names,
+  n_in,
+  call = rlang::caller_env()
+) {
+  if (length(input_names) != n_in) {
+    cli::cli_abort(
+      "{.arg input_names} has length {length(input_names)}, but the first
+       layer expects {n_in} input{?s}.",
+      call = call
+    )
+  }
+}
+
 # Wrap one neuron's linear-predictor expression (already full precision,
 # already backtick-quoted variable references, as returned by
 # `build_linear_pred()`) in its activation function. `params` carries any
