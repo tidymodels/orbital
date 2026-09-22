@@ -2,12 +2,24 @@
 
 ## orbital (development version)
 
+- [`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
+  now supports `parsnip::mlp(engine = "brulee")` fits and bare
+  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
+  networks ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+
 - [`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) with the
   `"brulee"` engine is now supported for regression and classification,
   reusing the same per-neuron column generation as bare
   [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
   support, since a `brulee_mlp` fit is a torch `nn_sequential` under the
   hood ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)’s
+  new `output_layer` argument exposes an intermediate hidden layer’s
+  neuron columns alongside the usual `.pred*` columns, for
+  `parsnip::mlp(engine = "brulee")` fits and bare
+  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
+  networks ([\#149](https://github.com/tidymodels/orbital/issues/149)).
 
 - Bare
   [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)

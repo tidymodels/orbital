@@ -100,6 +100,12 @@ candidate model.</p>
 <span><span class="fu">estimate_orbital_size</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for class 'tailor'</span></span>
+<span><span class="fu">estimate_orbital_size</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'nn_sequential'</span></span>
+<span><span class="fu">estimate_orbital_size</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span>, <span class="va">input_names</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># S3 method for class 'brulee_mlp'</span></span>
 <span><span class="fu">estimate_orbital_size</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -119,6 +125,12 @@ candidate model.</p>
 <dd><p>For glmnet models, the penalty value (lambda) to use. If the
 model was fit with a single lambda, this is used by default. Otherwise,
 you must specify a value.</p></dd>
+
+
+<dt id="arg-input-names">input_names<a class="anchor" aria-label="anchor" href="#arg-input-names"></a></dt>
+<dd><p>For a bare <code><a href="https://torch.mlverse.org/docs/reference/nn_sequential.html" class="external-link">torch::nn_sequential()</a></code> model, the names of
+the model's input features, in order. Required, since torch tensors are
+positional and carry no column names.</p></dd>
 
 </dl></div>
     <div class="section level2">

@@ -52,6 +52,12 @@ estimate_orbital_size(x, ...)
 
 # S3 method for class 'tailor'
 estimate_orbital_size(x, ...)
+
+# S3 method for class 'nn_sequential'
+estimate_orbital_size(x, ..., input_names)
+
+# S3 method for class 'brulee_mlp'
+estimate_orbital_size(x, ...)
 ```
 
 ## Arguments
@@ -69,6 +75,13 @@ estimate_orbital_size(x, ...)
   For glmnet models, the penalty value (lambda) to use. If the model was
   fit with a single lambda, this is used by default. Otherwise, you must
   specify a value.
+
+- input_names:
+
+  For a bare
+  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
+  model, the names of the model's input features, in order. Required,
+  since torch tensors are positional and carry no column names.
 
 ## Value
 
