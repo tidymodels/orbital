@@ -37,6 +37,7 @@ orbital.brulee_mlp <- function(
   mode = c("classification", "regression"),
   type = NULL,
   lvl = NULL,
+  output_layer = NULL,
   .from_parsnip = FALSE
 ) {
   check_bare_fit(x, .from_parsnip)
@@ -59,10 +60,27 @@ orbital.brulee_mlp <- function(
     type,
     lvl
   )
+  layer_names <- nn_output_layer_names(
+    forward$hidden_eqs,
+    output_layer,
+    length(layers)
+  )
 
   if (mode == "regression") {
     out_eqs[[1]] <- brulee_unscale_expr(out_eqs[[1]], x$y_stats)
   }
 
-  c(forward$hidden_eqs, out_eqs)
+  res <- c(forward$hidden_eqs, out_eqs)
+  # `orbital.brulee_mlp()` is only ever reached through `orbital.model_fit()`
+  # dispatching on `x$fit` (`check_bare_fit()` above refuses a direct bare
+  # call), so it must return a raw named-expression vector for
+  # `orbital.model_fit()` to name and wrap, not call `set_pred_names()` or
+  # `new_orbital_class()` itself. The requested `output_layer` names have
+  # nowhere else to travel back to the caller, so they're smuggled through as
+  # an attribute `orbital.model_fit()` knows to look for and merge into
+  # `pred_names` after its own naming pass.
+  if (!is.null(layer_names)) {
+    attr(res, "orbital_output_layer_names") <- layer_names
+  }
+  res
 }

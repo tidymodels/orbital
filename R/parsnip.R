@@ -4,16 +4,26 @@ orbital.model_fit <- function(
   ...,
   prefix = ".pred",
   type = NULL,
-  separate_trees = FALSE
+  separate_trees = FALSE,
+  output_layer = NULL
 ) {
   mode <- x$spec$mode
   check_mode(mode)
   check_type(type, mode)
   type <- default_type(type)
 
+  if (!is.null(output_layer) && !inherits(x$fit, "brulee_mlp")) {
+    cli::cli_abort(
+      "{.arg output_layer} is only supported for {.cls brulee_mlp} models."
+    )
+  }
+
   extra_args <- list()
   if (inherits(x$fit, "glmnet")) {
     extra_args$penalty <- rlang::eval_tidy(x$spec$args$penalty)
+  }
+  if (!is.null(output_layer)) {
+    extra_args$output_layer <- output_layer
   }
 
   # Whether a native method exists is asked directly rather than inferred from
@@ -66,12 +76,21 @@ orbital.model_fit <- function(
     res <- route_fallback(res, x, mode, type, call = rlang::call2("orbital"))
   }
 
+  # Captured before any of the transformations below, none of which are
+  # guaranteed to preserve an arbitrary attribute (see `orbital.brulee_mlp()`
+  # for how/why this attribute gets set).
+  output_layer_names <- attr(res, "orbital_output_layer_names")
+
   if (is.language(res)) {
     res <- deparse1(res, control = "digits17")
   }
 
   res <- namespace_case_when(res)
   res <- set_pred_names(res, x$lvl, mode, type, prefix)
+
+  if (!is.null(output_layer_names)) {
+    attr(res, "pred_names") <- c(attr(res, "pred_names"), output_layer_names)
+  }
 
   new_orbital_class(res)
 }
