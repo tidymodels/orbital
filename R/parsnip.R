@@ -12,9 +12,19 @@ orbital.model_fit <- function(
   check_type(type, mode)
   type <- default_type(type)
 
-  if (!is.null(output_layer) && !inherits(x$fit, "brulee_mlp")) {
+  is_keras_sequential <- inherits(
+    x$fit,
+    "keras.src.models.sequential.Sequential"
+  )
+
+  if (
+    !is.null(output_layer) &&
+      !inherits(x$fit, "brulee_mlp") &&
+      !is_keras_sequential
+  ) {
     cli::cli_abort(
-      "{.arg output_layer} is only supported for {.cls brulee_mlp} models."
+      "{.arg output_layer} is only supported for {.cls brulee_mlp} and
+       {.cls keras.src.models.sequential.Sequential} models."
     )
   }
 
@@ -24,6 +34,9 @@ orbital.model_fit <- function(
   }
   if (!is.null(output_layer)) {
     extra_args$output_layer <- output_layer
+  }
+  if (is_keras_sequential) {
+    extra_args$input_names <- keras_predictor_names(x)
   }
 
   # Whether a native method exists is asked directly rather than inferred from
