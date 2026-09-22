@@ -2,6 +2,13 @@
 
 ## orbital (development version)
 
+- [`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) with the
+  `"brulee"` engine is now supported for regression and classification,
+  reusing the same per-neuron column generation as bare
+  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
+  support, since a `brulee_mlp` fit is a torch `nn_sequential` under the
+  hood ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+
 - Bare
   [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
   fully-connected feed-forward networks are now supported, generating
