@@ -1,6 +1,10 @@
 # orbital (development version)
 
+* `estimate_orbital_size()` now supports `parsnip::mlp(engine = "brulee")` fits and bare `torch::nn_sequential()` networks (#149).
+
 * `mlp()` with the `"brulee"` engine is now supported for regression and classification, reusing the same per-neuron column generation as bare `torch::nn_sequential()` support, since a `brulee_mlp` fit is a torch `nn_sequential` under the hood (#149).
+
+* `orbital()`'s new `output_layer` argument exposes an intermediate hidden layer's neuron columns alongside the usual `.pred*` columns, for `parsnip::mlp(engine = "brulee")` fits and bare `torch::nn_sequential()` networks (#149).
 
 * Bare `torch::nn_sequential()` fully-connected feed-forward networks are now supported, generating one column per neuron so that predictions no longer inline exponentially with network depth the way `tidypredict::tidypredict_fit()` did for `parsnip::mlp(engine = "nnet")` (#149).
 
