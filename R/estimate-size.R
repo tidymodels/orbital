@@ -527,6 +527,31 @@ estimate_orbital_size.brulee_mlp <- function(x, ...) {
   estimate_nn_sequential_chars(layers, x$dims$features)
 }
 
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.keras.src.models.sequential.Sequential <- function(
+  x,
+  ...,
+  input_names
+) {
+  if (missing(input_names)) {
+    cli::cli_abort(
+      "{.arg input_names} is required for bare keras3 {.cls Sequential}
+       models."
+    )
+  }
+
+  layers <- keras_sequential_layers(x$layers)
+
+  if (length(layers) == 0) {
+    cli::cli_abort("{.arg x} contains no {.cls Dense} layers.")
+  }
+
+  nn_check_input_names(input_names, ncol(layers[[1]]$weight))
+
+  estimate_nn_sequential_chars(layers, input_names)
+}
+
 # Step estimation generic and methods ----------------------------------------
 
 # Internal generic for estimating step character counts
