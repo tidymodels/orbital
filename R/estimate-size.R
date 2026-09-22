@@ -11,6 +11,9 @@
 #' @param penalty For glmnet models, the penalty value (lambda) to use. If the
 #'   model was fit with a single lambda, this is used by default. Otherwise,
 #'   you must specify a value.
+#' @param input_names For a bare `torch::nn_sequential()` model, the names of
+#'   the model's input features, in order. Required, since torch tensors are
+#'   positional and carry no column names.
 #'
 #' @returns An integer estimate of the total character count of the orbital
 #'   expression.
