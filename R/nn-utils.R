@@ -197,6 +197,41 @@ nn_layer_exprs <- function(
   list(eqs = exprs, names = out_names)
 }
 
+# Shared by `orbital.nn_sequential()` and `orbital.brulee_mlp()`: walks
+# `layers` (as produced by `nn_sequential_layers()`) forward, materializing
+# every hidden layer's neuron columns and returning the final layer's raw
+# (pre-activation) linear expressions separately, since final-layer routing
+# (`nn_output_eqs()`) needs to see the fitted activation string alongside
+# them rather than have it already applied.
+nn_forward_eqs <- function(layers, input_names) {
+  hidden_eqs <- character(0)
+  linear_eqs <- NULL
+  names_in <- input_names
+
+  for (i in seq_along(layers)) {
+    layer <- layers[[i]]
+    is_last <- i == length(layers)
+
+    layer_res <- nn_layer_exprs(
+      layer$weight,
+      layer$bias,
+      names_in,
+      activation = if (is_last) "linear" else layer$activation,
+      layer_prefix = sprintf("orbital_nn_L%d", i),
+      params = if (is_last) list() else layer$params
+    )
+
+    if (is_last) {
+      linear_eqs <- layer_res$eqs
+    } else {
+      hidden_eqs <- c(hidden_eqs, layer_res$eqs)
+    }
+    names_in <- layer_res$names
+  }
+
+  list(hidden_eqs = hidden_eqs, linear_eqs = linear_eqs)
+}
+
 # Final-layer routing: given the last layer's raw affine (pre-activation)
 # expressions and its declared activation, dispatch to the existing
 # classification helpers (`R/classification-helpers.R`) or return the

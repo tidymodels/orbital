@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* `mlp()` with the `"brulee"` engine is now supported for regression and classification, reusing the same per-neuron column generation as bare `torch::nn_sequential()` support, since a `brulee_mlp` fit is a torch `nn_sequential` under the hood (#149).
+
 * Bare `torch::nn_sequential()` fully-connected feed-forward networks are now supported, generating one column per neuron so that predictions no longer inline exponentially with network depth the way `tidypredict::tidypredict_fit()` did for `parsnip::mlp(engine = "nnet")` (#149).
 
 # orbital 0.7.0

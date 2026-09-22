@@ -171,34 +171,16 @@ orbital.nn_sequential <- function(
     lvl <- lvl %||% nn_default_lvl(n_out)
   }
 
-  hidden_eqs <- character(0)
-  linear_eqs <- NULL
-  names_in <- input_names
+  forward <- nn_forward_eqs(layers, input_names)
+  out_eqs <- nn_output_eqs(
+    forward$linear_eqs,
+    final_activation,
+    mode,
+    type,
+    lvl
+  )
 
-  for (i in seq_along(layers)) {
-    layer <- layers[[i]]
-    is_last <- i == length(layers)
-
-    layer_res <- nn_layer_exprs(
-      layer$weight,
-      layer$bias,
-      names_in,
-      activation = if (is_last) "linear" else layer$activation,
-      layer_prefix = sprintf("orbital_nn_L%d", i),
-      params = if (is_last) list() else layer$params
-    )
-
-    if (is_last) {
-      linear_eqs <- layer_res$eqs
-    } else {
-      hidden_eqs <- c(hidden_eqs, layer_res$eqs)
-    }
-    names_in <- layer_res$names
-  }
-
-  out_eqs <- nn_output_eqs(linear_eqs, final_activation, mode, type, lvl)
-
-  res <- c(hidden_eqs, out_eqs)
+  res <- c(forward$hidden_eqs, out_eqs)
   res <- set_pred_names(res, lvl, mode, type, prefix)
 
   new_orbital_class(res)

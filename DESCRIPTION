@@ -26,6 +26,7 @@ Suggests:
     arrow,
     baguette,
     bonsai,
+    brulee (>= 1.1.0),
     C50,
     dbarts,
     DBI,

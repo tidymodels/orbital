@@ -60,6 +60,7 @@ tibble::tribble(
   "`logistic_reg()`",     "`\"glmnet\"`",       "❌",     "✅",    "✅",
   "`logistic_reg()`",     "`\"LiblineaR\"`",    "❌",     "✅",    "✅",
   "`mars()`",             "`\"earth\"`",        "✅",     "✅",    "✅",
+  "`mlp()`",              "`\"brulee\"`",       "✅",     "✅",    "✅",
   "`mlp()`",              "`\"nnet\"`",         "✅",     "✅",    "✅",
   "`multinom_reg()`",     "`\"glmnet\"`",       "❌",     "✅",    "✅",
   "`multinom_reg()`",     "`\"nnet\"`",         "❌",     "✅",    "✅",
