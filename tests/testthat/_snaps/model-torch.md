@@ -69,3 +69,11 @@
       ! <nn_softmax> is only supported when normalizing over the last dimension (the per-example class scores).
       i Got `dim = 1`; only `dim = 2` or `dim = -1` are supported.
 
+# output_layer is validated against the number of hidden layers
+
+    Code
+      orbital(model, input_names = c("x1", "x2"), mode = "regression", output_layer = 2L)
+    Condition
+      Error in `orbital()`:
+      ! `output_layer` must be a single integer between 1 and 1, not 2.
+

@@ -11,6 +11,9 @@
 #' @param penalty For glmnet models, the penalty value (lambda) to use. If the
 #'   model was fit with a single lambda, this is used by default. Otherwise,
 #'   you must specify a value.
+#' @param input_names For a bare `torch::nn_sequential()` model, the names of
+#'   the model's input features, in order. Required, since torch tensors are
+#'   positional and carry no column names.
 #'
 #' @returns An integer estimate of the total character count of the orbital
 #'   expression.
@@ -422,6 +425,106 @@ estimate_orbital_size.tailor <- function(x, ...) {
   }
 
   total_chars
+}
+
+# Neural network methods (torch/brulee feed-forward networks) ---------------
+
+# Each neuron's expression is structurally a linear predictor over its
+# layer's inputs (`estimate_linear_chars()` already models exactly that
+# shape), then wrapped in its activation function. relu/sigmoid/tanh/linear
+# wrap the linear predictor's text once; leaky_relu/elu/gelu each repeat it
+# three times (see `nn_activation_expr()`), so those get a multiplier rather
+# than just a fixed additive overhead.
+nn_activation_multiplier <- function(activation) {
+  if (activation %in% c("leaky_relu", "elu", "gelu")) 3L else 1L
+}
+
+nn_activation_overhead <- function(activation) {
+  switch(
+    activation,
+    relu = 10L,
+    sigmoid = 22L,
+    tanh = 6L,
+    gelu = 70L,
+    leaky_relu = 45L,
+    elu = 45L,
+    0L
+  )
+}
+
+# One layer's total expression character count across all its neurons.
+estimate_nn_layer_chars <- function(n_in, n_out, avg_input_len, activation) {
+  lin_chars <- estimate_linear_chars(n_in + 1, avg_input_len)
+  neuron_chars <- lin_chars *
+    nn_activation_multiplier(activation) +
+    nn_activation_overhead(activation)
+  as.integer(n_out * neuron_chars)
+}
+
+# The generated column name length for layer `i`'s neurons, matching
+# `nn_layer_exprs()`'s own `<prefix>_<zero-padded index>` naming exactly, so
+# a later layer's `avg_input_len` reflects what it actually references.
+nn_layer_name_len <- function(i, n_out) {
+  prefix <- sprintf("orbital_nn_L%d", i)
+  width <- nchar(as.character(n_out))
+  nchar(prefix) + 1L + width
+}
+
+# Base overhead for the final layer's output routing (`nn_output_eqs()`):
+# small and roughly constant regardless of network shape, since it only adds
+# a handful of expressions on top of the last layer's raw neurons (a sigmoid
+# wrap, a softmax normalization, or a direct pass-through).
+estimate_nn_output_chars <- function() 50L
+
+# Walks `layers` (as produced by `nn_sequential_layers()`) the same way
+# `nn_forward_eqs()` does, without materializing any actual expression text.
+estimate_nn_sequential_chars <- function(layers, input_names) {
+  avg_len <- mean(nchar(input_names))
+  total_chars <- estimate_nn_output_chars()
+
+  for (i in seq_along(layers)) {
+    n_in <- ncol(layers[[i]]$weight)
+    n_out <- nrow(layers[[i]]$weight)
+    is_last <- i == length(layers)
+    activation <- if (is_last) "linear" else layers[[i]]$activation
+
+    total_chars <- total_chars +
+      estimate_nn_layer_chars(n_in, n_out, avg_len, activation)
+    avg_len <- nn_layer_name_len(i, n_out)
+  }
+
+  as.integer(total_chars)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.nn_sequential <- function(x, ..., input_names) {
+  if (missing(input_names)) {
+    cli::cli_abort(
+      "{.arg input_names} is required for bare {.cls nn_sequential} models."
+    )
+  }
+
+  layers <- nn_sequential_layers(x$children)
+
+  if (length(layers) == 0) {
+    cli::cli_abort("{.arg x} contains no {.cls nn_linear} layers.")
+  }
+
+  nn_check_input_names(input_names, ncol(layers[[1]]$weight))
+
+  estimate_nn_sequential_chars(layers, input_names)
+}
+
+#' @rdname estimate_orbital_size
+#' @export
+estimate_orbital_size.brulee_mlp <- function(x, ...) {
+  rlang::check_installed("brulee")
+
+  module <- brulee_revive_mlp(x)
+  layers <- nn_sequential_layers(module$model$children)
+
+  estimate_nn_sequential_chars(layers, x$dims$features)
 }
 
 # Step estimation generic and methods ----------------------------------------

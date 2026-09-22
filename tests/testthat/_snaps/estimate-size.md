@@ -34,3 +34,11 @@
       ! `estimate_orbital_size()` is not implemented for a <nnet.formula> object.
       i Use `orbital()` to build the expression and measure it, or <https://github.com/tidymodels/orbital/issues> to request an estimate for this model.
 
+# estimate_orbital_size requires input_names for nn_sequential
+
+    Code
+      estimate_orbital_size(model)
+    Condition
+      Error in `estimate_orbital_size()`:
+      ! `input_names` is required for bare <nn_sequential> models.
+

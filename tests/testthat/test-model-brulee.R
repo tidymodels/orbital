@@ -131,6 +131,63 @@ test_that("mlp(engine = brulee) binary classification works", {
   )
 })
 
+test_that("output_layer exposes an intermediate layer's neuron columns", {
+  skip_if_no_brulee()
+
+  fit <- brulee_mlp_fit("regression", mpg ~ disp + hp + wt, scaled_mtcars)
+  preds <- predict(orbital(fit, output_layer = 1), scaled_mtcars)
+
+  expect_named(
+    preds,
+    c(".pred", paste0("orbital_nn_L1_", 1:6))
+  )
+
+  module <- brulee_revive_mlp(fit$fit)
+  x <- torch::torch_tensor(
+    as.matrix(scaled_mtcars[c("disp", "hp", "wt")]),
+    dtype = torch::torch_float()
+  )
+  hidden <- as.matrix(module$model[[2]](module$model[[1]](x)))
+
+  expect_equal(
+    as.matrix(preds[, paste0("orbital_nn_L1_", 1:6)]),
+    hidden,
+    ignore_attr = TRUE,
+    tolerance = 1e-5
+  )
+})
+
+test_that("output_layer is only supported for brulee_mlp models", {
+  skip_if_not_installed("parsnip")
+
+  fit <- parsnip::fit(parsnip::linear_reg(), mpg ~ disp, mtcars)
+  expect_snapshot(orbital(fit, output_layer = 1), error = TRUE)
+})
+
+test_that("duckdb - brulee mlp round-trips through real SQL", {
+  skip_if_no_brulee()
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  fit <- brulee_mlp_fit("regression", mpg ~ disp + hp + wt, scaled_mtcars)
+  ob <- orbital(fit)
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  data_tbl <- dplyr::copy_to(con, scaled_mtcars, "brulee_data")
+
+  res_sql <- dplyr::mutate(data_tbl, !!!orbital_inline(ob)) |>
+    dplyr::collect()
+
+  expect_equal(
+    res_sql$.pred,
+    predict(fit, scaled_mtcars)$.pred,
+    ignore_attr = TRUE,
+    tolerance = 1e-5
+  )
+
+  DBI::dbDisconnect(con)
+})
+
 test_that("mlp(engine = brulee) dropout is a no-op and does not error", {
   skip_if_no_brulee()
 

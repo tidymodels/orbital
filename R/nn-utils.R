@@ -232,6 +232,44 @@ nn_forward_eqs <- function(layers, input_names) {
   list(hidden_eqs = hidden_eqs, linear_eqs = linear_eqs)
 }
 
+# Validates a user-supplied `output_layer` against the number of hidden
+# layers `nn_forward_eqs()` actually materializes as their own columns (layers
+# 1..(n_layers - 1); the final layer's pre-activation values are never stored
+# under their own names, so requesting it isn't meaningful here). Returns the
+# requested layer's neuron column names, in the same order `nn_layer_exprs()`
+# generated them, to append to `pred_names` alongside the usual `.pred*`
+# columns.
+nn_output_layer_names <- function(
+  hidden_eqs,
+  output_layer,
+  n_layers,
+  call = rlang::caller_env()
+) {
+  if (is.null(output_layer)) {
+    return(NULL)
+  }
+
+  if (
+    length(output_layer) != 1 ||
+      !is.numeric(output_layer) ||
+      output_layer != as.integer(output_layer) ||
+      output_layer < 1 ||
+      output_layer >= n_layers
+  ) {
+    cli::cli_abort(
+      "{.arg output_layer} must be a single integer between 1 and
+       {n_layers - 1}, not {.val {output_layer}}.",
+      call = call
+    )
+  }
+
+  grep(
+    sprintf("^orbital_nn_L%d_", output_layer),
+    names(hidden_eqs),
+    value = TRUE
+  )
+}
+
 # Final-layer routing: given the last layer's raw affine (pre-activation)
 # expressions and its declared activation, dispatch to the existing
 # classification helpers (`R/classification-helpers.R`) or return the

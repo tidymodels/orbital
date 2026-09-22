@@ -292,3 +292,109 @@ test_that("wide network expression size stays roughly linear, not exponential", 
 
   expect_lt(sql_size, 1e5)
 })
+
+test_that("output_layer exposes an intermediate layer's neuron columns", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(3, 4),
+    torch::nn_relu(),
+    torch::nn_linear(4, 2),
+    torch::nn_relu(),
+    torch::nn_linear(2, 1)
+  )
+  data <- data.frame(x1 = rnorm(10), x2 = rnorm(10), x3 = rnorm(10))
+
+  ob <- orbital(
+    model,
+    input_names = c("x1", "x2", "x3"),
+    mode = "regression",
+    output_layer = 2
+  )
+  preds <- predict(ob, data)
+
+  expect_named(preds, c(".pred", "orbital_nn_L2_1", "orbital_nn_L2_2"))
+
+  x <- torch::torch_tensor(as.matrix(data))
+  hidden <- as.matrix(model[[4]](model[[3]](model[[2]](model[[1]](x)))))
+  expect_equal(
+    as.matrix(preds[, c("orbital_nn_L2_1", "orbital_nn_L2_2")]),
+    hidden,
+    ignore_attr = TRUE,
+    tolerance = 1e-5
+  )
+})
+
+test_that("output_layer is validated against the number of hidden layers", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(2, 4),
+    torch::nn_relu(),
+    torch::nn_linear(4, 1)
+  )
+  expect_snapshot(
+    orbital(
+      model,
+      input_names = c("x1", "x2"),
+      mode = "regression",
+      output_layer = 2L
+    ),
+    error = TRUE
+  )
+})
+
+test_that("duckdb - deep and wide networks round-trip through real SQL", {
+  skip_if_no_torch()
+  skip_if_not_installed("DBI")
+  skip_if_not_installed("duckdb")
+
+  deep_model <- torch_seq_model(
+    torch::nn_linear(4, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 1)
+  )
+  wide_model <- torch_seq_model(
+    torch::nn_linear(4, 120),
+    torch::nn_relu(),
+    torch::nn_linear(120, 1)
+  )
+  data <- data.frame(
+    x1 = rnorm(10),
+    x2 = rnorm(10),
+    x3 = rnorm(10),
+    x4 = rnorm(10)
+  )
+
+  con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
+  data_tbl <- dplyr::copy_to(con, data, "nn_data")
+
+  for (model in list(deep = deep_model, wide = wide_model)) {
+    ob <- orbital(model, input_names = c("x1", "x2", "x3", "x4"))
+    res_sql <- dplyr::mutate(data_tbl, !!!orbital_inline(ob)) |>
+      dplyr::collect()
+
+    expect_equal(
+      res_sql$.pred,
+      as.numeric(torch_predict(model, data)),
+      ignore_attr = TRUE,
+      tolerance = 1e-5
+    )
+  }
+
+  DBI::dbDisconnect(con)
+})

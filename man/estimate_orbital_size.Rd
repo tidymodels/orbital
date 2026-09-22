@@ -16,6 +16,8 @@
 \alias{estimate_orbital_size.recipe}
 \alias{estimate_orbital_size.workflow}
 \alias{estimate_orbital_size.tailor}
+\alias{estimate_orbital_size.nn_sequential}
+\alias{estimate_orbital_size.brulee_mlp}
 \title{Estimate orbital expression character count}
 \usage{
 estimate_orbital_size(x, ...)
@@ -47,6 +49,10 @@ estimate_orbital_size(x, ...)
 \method{estimate_orbital_size}{workflow}(x, ...)
 
 \method{estimate_orbital_size}{tailor}(x, ...)
+
+\method{estimate_orbital_size}{nn_sequential}(x, ..., input_names)
+
+\method{estimate_orbital_size}{brulee_mlp}(x, ...)
 }
 \arguments{
 \item{x}{A fitted model object, workflow, prepped recipe, or fitted tailor.}
@@ -56,6 +62,10 @@ estimate_orbital_size(x, ...)
 \item{penalty}{For glmnet models, the penalty value (lambda) to use. If the
 model was fit with a single lambda, this is used by default. Otherwise,
 you must specify a value.}
+
+\item{input_names}{For a bare \code{torch::nn_sequential()} model, the names of
+the model's input features, in order. Required, since torch tensors are
+positional and carry no column names.}
 }
 \value{
 An integer estimate of the total character count of the orbital

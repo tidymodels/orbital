@@ -135,7 +135,8 @@ orbital.nn_sequential <- function(
   mode = NULL,
   type = NULL,
   lvl = NULL,
-  prefix = ".pred"
+  prefix = ".pred",
+  output_layer = NULL
 ) {
   if (missing(input_names)) {
     cli::cli_abort(
@@ -179,9 +180,17 @@ orbital.nn_sequential <- function(
     type,
     lvl
   )
+  layer_names <- nn_output_layer_names(
+    forward$hidden_eqs,
+    output_layer,
+    length(layers)
+  )
 
   res <- c(forward$hidden_eqs, out_eqs)
   res <- set_pred_names(res, lvl, mode, type, prefix)
+  if (!is.null(layer_names)) {
+    attr(res, "pred_names") <- c(attr(res, "pred_names"), layer_names)
+  }
 
   new_orbital_class(res)
 }

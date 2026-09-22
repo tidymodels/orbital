@@ -450,3 +450,82 @@ test_that("estimate_orbital_size refuses a model it has no estimate for", {
 
   expect_snapshot(error = TRUE, estimate_orbital_size(fit$fit))
 })
+
+test_that("estimate_orbital_size works for bare nn_sequential", {
+  skip_if_not_installed("torch")
+  if (!torch::torch_is_installed()) {
+    skip("libtorch is not installed")
+  }
+
+  torch::torch_manual_seed(1)
+  model <- torch::nn_sequential(
+    torch::nn_linear(3, 8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 1)
+  )
+
+  est <- estimate_orbital_size(model, input_names = c("x1", "x2", "x3"))
+  actual <- sum(nchar(orbital(model, input_names = c("x1", "x2", "x3"))))
+
+  expect_type(est, "integer")
+  expect_equal(est, actual, tolerance = 0.1)
+})
+
+test_that("estimate_orbital_size requires input_names for nn_sequential", {
+  skip_if_not_installed("torch")
+  if (!torch::torch_is_installed()) {
+    skip("libtorch is not installed")
+  }
+
+  torch::torch_manual_seed(1)
+  model <- torch::nn_sequential(torch::nn_linear(3, 1))
+  expect_snapshot(error = TRUE, estimate_orbital_size(model))
+})
+
+test_that("estimate_orbital_size scales with network depth/width for nn_sequential", {
+  skip_if_not_installed("torch")
+  if (!torch::torch_is_installed()) {
+    skip("libtorch is not installed")
+  }
+
+  torch::torch_manual_seed(1)
+  small <- torch::nn_sequential(torch::nn_linear(3, 4), torch::nn_linear(4, 1))
+  large <- torch::nn_sequential(
+    torch::nn_linear(3, 40),
+    torch::nn_linear(40, 1)
+  )
+
+  est_small <- estimate_orbital_size(small, input_names = c("x1", "x2", "x3"))
+  est_large <- estimate_orbital_size(large, input_names = c("x1", "x2", "x3"))
+
+  expect_gt(est_large, est_small)
+})
+
+test_that("estimate_orbital_size works for brulee_mlp", {
+  skip_if_not_installed("parsnip")
+  skip_if_not_installed("brulee")
+  skip_if_not_installed("torch")
+  if (!torch::torch_is_installed()) {
+    skip("libtorch is not installed")
+  }
+
+  set.seed(1)
+  torch::torch_manual_seed(1)
+  fit <- parsnip::fit(
+    parsnip::set_mode(
+      parsnip::set_engine(
+        parsnip::mlp(epochs = 5, hidden_units = 4),
+        "brulee"
+      ),
+      "regression"
+    ),
+    mpg ~ disp + hp,
+    mtcars
+  )
+
+  est <- estimate_orbital_size(fit$fit)
+  actual <- sum(nchar(orbital(fit)))
+
+  expect_type(est, "integer")
+  expect_equal(est, actual, tolerance = 0.1)
+})
