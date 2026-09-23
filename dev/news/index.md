@@ -45,6 +45,17 @@
   did for `parsnip::mlp(engine = "nnet")`
   ([\#149](https://github.com/tidymodels/orbital/issues/149)).
 
+- Neural network support now covers `BatchNorm`/`LayerNorm` layers
+  interleaved between a linear/`Dense` layer and its activation
+  ([`torch::nn_batch_norm1d()`](https://torch.mlverse.org/docs/reference/nn_batch_norm1d.html)/`nn_layer_norm()`
+  and keras3’s
+  `layer_batch_normalization()`/`layer_layer_normalization()`), for
+  every neural network entry point: bare
+  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html),
+  `mlp(engine = "brulee")`, bare keras3 `Sequential`, and
+  `mlp(engine = "keras3")`
+  ([\#184](https://github.com/tidymodels/orbital/issues/184)).
+
 ## orbital 0.7.0
 
 CRAN release: 2026-09-04
