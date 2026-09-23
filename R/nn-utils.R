@@ -328,7 +328,24 @@ nn_layer_exprs_layer_norm <- function(
 # (pre-activation) linear expressions separately, since final-layer routing
 # (`nn_output_eqs()`) needs to see the fitted activation string alongside
 # them rather than have it already applied.
-nn_forward_eqs <- function(layers, input_names) {
+#
+# `prefix` namespaces the generated column names (`<prefix>_L<layer>_<unit>`),
+# letting a multi-output network's trunk and each head walk with disjoint
+# names instead of every call defaulting to the same `orbital_nn_L*` names and
+# colliding. `activate_final`, used only by the trunk side of a multi-output
+# network, treats every layer as hidden (materializing the last layer's
+# activated output like any other) instead of holding it back as
+# `linear_eqs`: a trunk's output feeds a head's first layer as real
+# already-activated values, not a set of logits awaiting `nn_output_eqs()`
+# routing. `names`, the last layer's output column names, is always returned
+# so a caller (the multi-output orchestrator) can thread it into the next
+# call's `input_names` without recomputing it.
+nn_forward_eqs <- function(
+  layers,
+  input_names,
+  prefix = "orbital_nn",
+  activate_final = FALSE
+) {
   hidden_eqs <- character(0)
   linear_eqs <- NULL
   names_in <- input_names
@@ -336,27 +353,28 @@ nn_forward_eqs <- function(layers, input_names) {
   for (i in seq_along(layers)) {
     layer <- layers[[i]]
     is_last <- i == length(layers)
+    treat_as_hidden <- !is_last || activate_final
 
     layer_res <- nn_layer_exprs(
       layer$weight,
       layer$bias,
       names_in,
-      activation = if (is_last) "linear" else layer$activation,
-      layer_prefix = sprintf("orbital_nn_L%d", i),
-      params = if (is_last) list() else layer$params,
+      activation = if (treat_as_hidden) layer$activation else "linear",
+      layer_prefix = sprintf(paste0(prefix, "_L%d"), i),
+      params = if (treat_as_hidden) layer$params else list(),
       norm = layer$norm
     )
 
     hidden_eqs <- c(hidden_eqs, layer_res$extra)
-    if (is_last) {
-      linear_eqs <- layer_res$eqs
-    } else {
+    if (treat_as_hidden) {
       hidden_eqs <- c(hidden_eqs, layer_res$eqs)
+    } else {
+      linear_eqs <- layer_res$eqs
     }
     names_in <- layer_res$names
   }
 
-  list(hidden_eqs = hidden_eqs, linear_eqs = linear_eqs)
+  list(hidden_eqs = hidden_eqs, linear_eqs = linear_eqs, names = names_in)
 }
 
 # Validates a user-supplied `output_layer` against the number of hidden
@@ -490,4 +508,93 @@ nn_output_eqs <- function(
   }
 
   multiclass_from_logits(unname(linear_eqs), type, lvl)
+}
+
+# Multi-output networks (issue #185): validates the `list(trunk = ..., heads =
+# list(...))` shape `orbital.list()` requires, per the design doc's decision
+# to require an explicit trunk/heads split rather than tracing an arbitrary
+# `nn_module`'s `forward()` (out of scope; see the dev plan).
+nn_check_trunk_heads <- function(x, call = rlang::caller_env()) {
+  nms <- names(x)
+  if (is.null(nms) || !identical(sort(nms), c("heads", "trunk"))) {
+    cli::cli_abort(
+      c(
+        "A multi-output network must be a list with exactly two named
+         elements, {.field trunk} and {.field heads}.",
+        i = "Got names {.val {nms}}."
+      ),
+      call = call
+    )
+  }
+
+  if (!inherits(x$trunk, "nn_sequential")) {
+    cli::cli_abort(
+      "{.field trunk} must be a {.cls nn_sequential}, not
+       {.obj_type_friendly {x$trunk}}.",
+      call = call
+    )
+  }
+
+  heads <- x$heads
+  head_names <- names(heads)
+  if (
+    !is.list(heads) ||
+      length(heads) == 0 ||
+      is.null(head_names) ||
+      any(head_names == "") ||
+      anyDuplicated(head_names) != 0
+  ) {
+    cli::cli_abort(
+      "{.field heads} must be a non-empty list with unique names.",
+      call = call
+    )
+  }
+
+  is_seq <- vapply(heads, inherits, logical(1), "nn_sequential")
+  if (!all(is_seq)) {
+    cli::cli_abort(
+      "Every element of {.field heads} must be a {.cls nn_sequential}, but
+       {.val {head_names[!is_seq]}} {?is/are} not.",
+      call = call
+    )
+  }
+}
+
+# `mode`/`type`/`lvl` for a multi-output network are each either `NULL` (every
+# head falls back to its own default/inferred value, exactly as a
+# single-output network would) or a list named by head, validated against the
+# network's actual head names so a typo or a head added later fails loudly
+# instead of silently falling back to the default for that head. Heads
+# omitted from the list keep their own default/inferred value too — a caller
+# only needs to override the heads that actually need it (e.g. supplying
+# `lvl` only for the one head that's classification).
+nn_multi_arg <- function(x, head_names, arg_name, call = rlang::caller_env()) {
+  out <- stats::setNames(vector("list", length(head_names)), head_names)
+
+  if (is.null(x)) {
+    return(out)
+  }
+
+  nms <- names(x)
+  if (is.null(nms) || any(nms == "")) {
+    cli::cli_abort(
+      "{.arg {arg_name}} must be a list named by head for a multi-output
+       network, not {.obj_type_friendly {x}}.",
+      call = call
+    )
+  }
+
+  extra <- setdiff(nms, head_names)
+  if (length(extra) > 0) {
+    cli::cli_abort(
+      c(
+        "{.arg {arg_name}} has names not matching any head: {.val {extra}}.",
+        i = "This network's heads are {.val {head_names}}."
+      ),
+      call = call
+    )
+  }
+
+  out[nms] <- x
+  out
 }

@@ -10,6 +10,8 @@
 
 * `orbital()`'s new `output_layer` argument exposes an intermediate hidden layer's neuron columns alongside the usual `.pred*` columns, for `parsnip::mlp(engine = "brulee")` fits, `parsnip::mlp(engine = "keras3")` fits, bare `torch::nn_sequential()` networks, and bare keras3 `Sequential` networks (#149).
 
+* `orbital()` now supports multi-output torch networks, given as an explicit `list(trunk = ..., heads = list(...))` where the trunk and every head is a bare `torch::nn_sequential()`. `mode`, `type`, and `lvl` each accept a list named by head so heads can mix regression and classification, and predictions are named `<prefix>_<head>*` (e.g. `.pred_price`, `.pred_category_class`) to keep every head's columns from colliding (#185).
+
 * Bare `torch::nn_sequential()` fully-connected feed-forward networks are now supported, generating one column per neuron so that predictions no longer inline exponentially with network depth the way `tidypredict::tidypredict_fit()` did for `parsnip::mlp(engine = "nnet")` (#149).
 
 * Neural network support now covers `BatchNorm`/`LayerNorm` layers interleaved between a linear/`Dense` layer and its activation (`torch::nn_batch_norm1d()`/`nn_layer_norm()` and keras3's `layer_batch_normalization()`/`layer_layer_normalization()`), for every neural network entry point: bare `torch::nn_sequential()`, `mlp(engine = "brulee")`, bare keras3 `Sequential`, and `mlp(engine = "keras3")` (#184).
