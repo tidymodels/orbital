@@ -485,3 +485,122 @@ test_that("nn_layer_exprs() preserves full digits17 precision for non-terminatin
   )
   expect_identical(as.numeric(bias_literal), 0.2)
 })
+
+test_that("nn_layer_exprs() applies a batch_norm affine before the activation", {
+  weight <- matrix(c(1, 0, 0, 1), nrow = 2)
+  bias <- c(0, 0)
+  norm <- list(
+    type = "batch_norm",
+    running_mean = c(1, -1),
+    running_var = c(3, 3),
+    gamma = c(2, 2),
+    beta = c(0.5, 0.5),
+    eps = 0
+  )
+
+  res <- nn_layer_exprs(
+    weight,
+    bias,
+    c("x1", "x2"),
+    "identity",
+    "h1",
+    norm = norm
+  )
+  expect_identical(res$extra, character(0))
+
+  data <- eval_nn_eqs(res$eqs, data.frame(x1 = 4, x2 = -4))
+  expect_equal(data$h1_1, (4 - 1) / sqrt(3) * 2 + 0.5)
+  expect_equal(data$h1_2, (-4 - -1) / sqrt(3) * 2 + 0.5)
+})
+
+test_that("nn_layer_exprs() computes layer_norm's per-row mean/variance from its own raw values", {
+  weight <- diag(3)
+  bias <- c(0, 0, 0)
+  norm <- list(
+    type = "layer_norm",
+    gamma = c(1, 1, 1),
+    beta = c(0, 0, 0),
+    eps = 0
+  )
+
+  res <- nn_layer_exprs(
+    weight,
+    bias,
+    c("x1", "x2", "x3"),
+    "identity",
+    "h1",
+    norm = norm
+  )
+  expect_named(
+    res$extra,
+    c("h1_ln_raw_1", "h1_ln_raw_2", "h1_ln_raw_3", "h1_ln_mean", "h1_ln_var")
+  )
+
+  x <- c(1, 2, 6)
+  data <- eval_nn_eqs(
+    c(res$extra, res$eqs),
+    data.frame(x1 = x[1], x2 = x[2], x3 = x[3])
+  )
+
+  m <- mean(x)
+  v <- mean((x - m)^2)
+  expect_equal(unname(unlist(data[res$names])), (x - m) / sqrt(v))
+})
+
+test_that("nn_layer_exprs() layer_norm output does not depend on batch_size", {
+  set.seed(1)
+  weight <- matrix(rnorm(5 * 3), nrow = 5)
+  bias <- rnorm(5)
+  norm <- list(
+    type = "layer_norm",
+    gamma = c(2, 0.5, 1, 1.5, -1),
+    beta = c(0, 1, -1, 0.5, 0.2),
+    eps = 1e-5
+  )
+  data <- data.frame(x1 = 0.3, x2 = -1.1, x3 = 0.7)
+
+  batched <- nn_layer_exprs(
+    weight,
+    bias,
+    c("x1", "x2", "x3"),
+    "relu",
+    "h1",
+    norm = norm,
+    batch_size = 2
+  )
+  unbatched <- nn_layer_exprs(
+    weight,
+    bias,
+    c("x1", "x2", "x3"),
+    "relu",
+    "h1",
+    norm = norm,
+    batch_size = 50
+  )
+
+  res_batched <- eval_nn_eqs(c(batched$extra, batched$eqs), data)
+  res_unbatched <- eval_nn_eqs(c(unbatched$extra, unbatched$eqs), data)
+
+  expect_equal(
+    unname(unlist(res_batched[batched$names])),
+    unname(unlist(res_unbatched[unbatched$names]))
+  )
+})
+
+test_that("nn_output_layer_names() does not match layer_norm's intermediate columns", {
+  hidden_eqs <- stats::setNames(
+    character(5),
+    c(
+      "orbital_nn_L1_ln_raw_1",
+      "orbital_nn_L1_ln_raw_2",
+      "orbital_nn_L1_ln_mean",
+      "orbital_nn_L1_ln_var",
+      "orbital_nn_L1_1"
+    )
+  )
+
+  expect_identical(
+    nn_output_layer_names(hidden_eqs, output_layer = 1, n_layers = 2),
+    "orbital_nn_L1_1"
+  )
+})

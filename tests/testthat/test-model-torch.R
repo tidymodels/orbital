@@ -278,6 +278,145 @@ test_that("dropout is a no-op and does not error", {
   )
 })
 
+test_that("nn_batch_norm1d works", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(3, 6),
+    torch::nn_batch_norm1d(6),
+    torch::nn_relu(),
+    torch::nn_linear(6, 1)
+  )
+  # Populate non-trivial running statistics before switching to eval mode, so
+  # this test actually exercises the affine transform rather than just its
+  # untrained (mean 0, var 1) defaults.
+  model$train(TRUE)
+  invisible(model(torch::torch_randn(50, 3)))
+  model$train(FALSE)
+
+  data <- data.frame(x1 = rnorm(20), x2 = rnorm(20), x3 = rnorm(20))
+  ob <- orbital(model, input_names = c("x1", "x2", "x3"), mode = "regression")
+  preds <- predict(ob, data)
+
+  expect_equal(
+    preds$.pred,
+    as.numeric(torch_predict(model, data)),
+    tolerance = 1e-5
+  )
+})
+
+test_that("nn_layer_norm works", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(3, 6),
+    torch::nn_layer_norm(6),
+    torch::nn_tanh(),
+    torch::nn_linear(6, 1)
+  )
+  data <- data.frame(x1 = rnorm(20), x2 = rnorm(20), x3 = rnorm(20))
+  ob <- orbital(model, input_names = c("x1", "x2", "x3"), mode = "regression")
+  preds <- predict(ob, data)
+
+  expect_equal(
+    preds$.pred,
+    as.numeric(torch_predict(model, data)),
+    tolerance = 1e-5
+  )
+})
+
+test_that("normalization module must come before the activation", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(2, 4),
+    torch::nn_relu(),
+    torch::nn_batch_norm1d(4),
+    torch::nn_linear(4, 1)
+  )
+  expect_snapshot(
+    orbital(model, input_names = c("x1", "x2")),
+    error = TRUE
+  )
+})
+
+test_that("a linear layer can only have one normalization module", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(2, 4),
+    torch::nn_batch_norm1d(4),
+    torch::nn_layer_norm(4),
+    torch::nn_relu(),
+    torch::nn_linear(4, 1)
+  )
+  expect_snapshot(
+    orbital(model, input_names = c("x1", "x2")),
+    error = TRUE
+  )
+})
+
+test_that("nn_batch_norm1d with track_running_stats = FALSE errors", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(2, 4),
+    torch::nn_batch_norm1d(4, track_running_stats = FALSE),
+    torch::nn_relu(),
+    torch::nn_linear(4, 1)
+  )
+  expect_snapshot(
+    orbital(model, input_names = c("x1", "x2")),
+    error = TRUE
+  )
+})
+
+test_that("nn_layer_norm normalizing over a mismatched width errors", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(2, 4),
+    torch::nn_layer_norm(2),
+    torch::nn_relu(),
+    torch::nn_linear(4, 1)
+  )
+  expect_snapshot(
+    orbital(model, input_names = c("x1", "x2")),
+    error = TRUE
+  )
+})
+
+test_that("output_layer does not leak nn_layer_norm's intermediate columns", {
+  skip_if_no_torch()
+
+  model <- torch_seq_model(
+    torch::nn_linear(3, 4),
+    torch::nn_layer_norm(4),
+    torch::nn_relu(),
+    torch::nn_linear(4, 1)
+  )
+  data <- data.frame(x1 = rnorm(10), x2 = rnorm(10), x3 = rnorm(10))
+
+  ob <- orbital(
+    model,
+    input_names = c("x1", "x2", "x3"),
+    mode = "regression",
+    output_layer = 1
+  )
+  preds <- predict(ob, data)
+
+  expect_named(preds, c(".pred", paste0("orbital_nn_L1_", 1:4)))
+
+  x <- torch::torch_tensor(as.matrix(data))
+  hidden <- as.matrix(model[[3]](model[[2]](model[[1]](x))))
+  expect_equal(
+    as.matrix(preds[, paste0("orbital_nn_L1_", 1:4)]),
+    hidden,
+    ignore_attr = TRUE,
+    tolerance = 1e-5
+  )
+})
+
 test_that("wide network expression size stays roughly linear, not exponential", {
   skip_if_no_torch()
 
@@ -373,6 +512,18 @@ test_that("duckdb - deep and wide networks round-trip through real SQL", {
     torch::nn_relu(),
     torch::nn_linear(120, 1)
   )
+  norm_model <- torch_seq_model(
+    torch::nn_linear(4, 8),
+    torch::nn_batch_norm1d(8),
+    torch::nn_relu(),
+    torch::nn_linear(8, 8),
+    torch::nn_layer_norm(8),
+    torch::nn_tanh(),
+    torch::nn_linear(8, 1)
+  )
+  norm_model$train(TRUE)
+  invisible(norm_model(torch::torch_randn(50, 4)))
+  norm_model$train(FALSE)
   data <- data.frame(
     x1 = rnorm(10),
     x2 = rnorm(10),
@@ -383,7 +534,7 @@ test_that("duckdb - deep and wide networks round-trip through real SQL", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   data_tbl <- dplyr::copy_to(con, data, "nn_data")
 
-  for (model in list(deep = deep_model, wide = wide_model)) {
+  for (model in list(deep = deep_model, wide = wide_model, norm = norm_model)) {
     ob <- orbital(model, input_names = c("x1", "x2", "x3", "x4"))
     res_sql <- dplyr::mutate(data_tbl, !!!orbital_inline(ob)) |>
       dplyr::collect()
