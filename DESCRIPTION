@@ -42,6 +42,7 @@ Suggests:
     h2o,
     hardhat,
     jsonlite,
+    keras3,
     kernlab,
     kknn,
     klaR,

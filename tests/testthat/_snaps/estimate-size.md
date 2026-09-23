@@ -42,3 +42,11 @@
       Error in `estimate_orbital_size()`:
       ! `input_names` is required for bare <nn_sequential> models.
 
+# estimate_orbital_size requires input_names for bare keras3 Sequential
+
+    Code
+      estimate_orbital_size(model)
+    Condition
+      Error in `estimate_orbital_size()`:
+      ! `input_names` is required for bare keras3 <Sequential> models.
+

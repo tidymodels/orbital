@@ -529,3 +529,87 @@ test_that("estimate_orbital_size works for brulee_mlp", {
   expect_type(est, "integer")
   expect_equal(est, actual, tolerance = 0.1)
 })
+
+skip_if_no_keras_estimate <- function() {
+  skip_if_not_installed("keras3")
+  ok <- tryCatch(
+    {
+      keras3::keras_model_sequential(input_shape = 1)
+      TRUE
+    },
+    error = function(cnd) FALSE
+  )
+  if (!ok) {
+    skip("keras3's Python/TensorFlow backend is not available")
+  }
+}
+
+test_that("estimate_orbital_size works for bare keras3 Sequential", {
+  skip_if_no_keras_estimate()
+
+  keras3::set_random_seed(1)
+  model <- keras3::keras_model_sequential(input_shape = 3) |>
+    keras3::layer_dense(units = 8, activation = "relu") |>
+    keras3::layer_dense(units = 1, activation = "linear")
+
+  est <- estimate_orbital_size(model, input_names = c("x1", "x2", "x3"))
+  actual <- sum(nchar(orbital(model, input_names = c("x1", "x2", "x3"))))
+
+  expect_type(est, "integer")
+  # A freshly-constructed (never-trained) keras Dense layer's bias defaults
+  # to exactly 0, which `build_linear_pred()` omits from the generated
+  # expression entirely; a real trained model's biases are essentially never
+  # exactly 0, so the estimate is calibrated against that (see the
+  # `mlp(engine = "keras3")` test below), not this artificially-shorter case.
+  expect_lt(est, actual * 1.3)
+})
+
+test_that("estimate_orbital_size requires input_names for bare keras3 Sequential", {
+  skip_if_no_keras_estimate()
+
+  model <- keras3::keras_model_sequential(input_shape = 3) |>
+    keras3::layer_dense(units = 1)
+  expect_snapshot(error = TRUE, estimate_orbital_size(model))
+})
+
+test_that("estimate_orbital_size scales with network depth/width for keras3", {
+  skip_if_no_keras_estimate()
+
+  keras3::set_random_seed(1)
+  small <- keras3::keras_model_sequential(input_shape = 3) |>
+    keras3::layer_dense(units = 4, activation = "relu") |>
+    keras3::layer_dense(units = 1, activation = "linear")
+  large <- keras3::keras_model_sequential(input_shape = 3) |>
+    keras3::layer_dense(units = 40, activation = "relu") |>
+    keras3::layer_dense(units = 1, activation = "linear")
+
+  est_small <- estimate_orbital_size(small, input_names = c("x1", "x2", "x3"))
+  est_large <- estimate_orbital_size(large, input_names = c("x1", "x2", "x3"))
+
+  expect_gt(est_large, est_small)
+})
+
+test_that("estimate_orbital_size works for mlp(engine = keras3)", {
+  skip_if_no_keras_estimate()
+  skip_if_not_installed("parsnip")
+
+  set.seed(1)
+  keras3::set_random_seed(1)
+  fit <- parsnip::fit(
+    parsnip::set_mode(
+      parsnip::set_engine(
+        parsnip::mlp(epochs = 20, hidden_units = 8, activation = "relu"),
+        "keras3"
+      ),
+      "regression"
+    ),
+    mpg ~ disp + hp,
+    mtcars
+  )
+
+  est <- estimate_orbital_size(fit$fit, input_names = c("disp", "hp"))
+  actual <- sum(nchar(orbital(fit)))
+
+  expect_type(est, "integer")
+  expect_equal(est, actual, tolerance = 0.1)
+})
