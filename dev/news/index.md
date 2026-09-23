@@ -36,6 +36,17 @@
   networks, and bare keras3 `Sequential` networks
   ([\#149](https://github.com/tidymodels/orbital/issues/149)).
 
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now supports multi-output torch networks, given as an explicit
+  `list(trunk = ..., heads = list(...))` where the trunk and every head
+  is a bare
+  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html).
+  `mode`, `type`, and `lvl` each accept a list named by head so heads
+  can mix regression and classification, and predictions are named
+  `<prefix>_<head>*` (e.g. `.pred_price`, `.pred_category_class`) to
+  keep every head’s columns from colliding
+  ([\#185](https://github.com/tidymodels/orbital/issues/185)).
+
 - Bare
   [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
   fully-connected feed-forward networks are now supported, generating
