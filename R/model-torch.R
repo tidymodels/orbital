@@ -31,6 +31,74 @@ torch_activation_modules <- c(
   "nn_softmax"
 )
 
+# Normalization modules (milestone 4, issue #149): attach to the immediately
+# preceding `nn_linear` layer as its `$norm`, the same way an activation
+# module attaches as its `$activation`, since `nn_layer_exprs()` wants both
+# folded into one layer entry rather than as separate modules in the walk.
+torch_norm_modules <- c("nn_batch_norm1d", "nn_layer_norm")
+
+# `nn_batch_norm1d`'s eval-time transform is a fixed per-channel affine read
+# off its own stored running statistics (`running_mean`/`running_var`) and,
+# if `affine = TRUE`, its learned `weight`/`bias` (gamma/beta); `affine =
+# FALSE` means no learned scale/shift, i.e. gamma = 1, beta = 0.
+# `track_running_stats = FALSE` means eval mode still normalizes by each
+# batch's own statistics rather than fixed ones, which orbital has no batch
+# to compute over and so can't reproduce as a static expression.
+torch_batch_norm_norm <- function(child, call) {
+  if (isFALSE(child$track_running_stats)) {
+    cli::cli_abort(
+      c(
+        "{.cls nn_batch_norm1d} with {.code track_running_stats = FALSE} is
+         not supported.",
+        i = "Without stored running statistics, its evaluation-time output
+             depends on each prediction batch's own statistics, which
+             orbital cannot reproduce as a fixed per-row expression."
+      ),
+      call = call
+    )
+  }
+
+  n <- length(child$running_mean)
+  list(
+    type = "batch_norm",
+    running_mean = as.numeric(child$running_mean),
+    running_var = as.numeric(child$running_var),
+    gamma = if (isTRUE(child$affine)) as.numeric(child$weight) else rep(1, n),
+    beta = if (isTRUE(child$affine)) as.numeric(child$bias) else rep(0, n),
+    eps = as.numeric(child$eps)
+  )
+}
+
+# `nn_layer_norm`'s eval-time transform normalizes over the dimensions given
+# by `normalized_shape`; only the single-dimension case matching the
+# preceding linear layer's full output width is supported (normalizing over
+# a subset, or over more dimensions than exist here, has no meaning for a
+# feed-forward MLP's per-row neuron vector).
+torch_layer_norm_norm <- function(child, n_in, call) {
+  shape <- as.integer(unlist(child$normalized_shape))
+  if (length(shape) != 1 || shape != n_in) {
+    cli::cli_abort(
+      c(
+        "{.cls nn_layer_norm} is only supported when normalizing over
+         exactly the preceding layer's {n_in} output unit{?s}.",
+        i = "Got {.code normalized_shape = {shape}}."
+      ),
+      call = call
+    )
+  }
+
+  list(
+    type = "layer_norm",
+    gamma = if (!is.null(child$weight)) {
+      as.numeric(child$weight)
+    } else {
+      rep(1, n_in)
+    },
+    beta = if (!is.null(child$bias)) as.numeric(child$bias) else rep(0, n_in),
+    eps = as.numeric(child$eps)
+  )
+}
+
 # Walks a torch `nn_sequential`'s children into `list(list(weight, bias,
 # activation, params), ...)`, one entry per `nn_linear` layer. An activation
 # module attaches to the immediately preceding `nn_linear` layer rather than
@@ -60,6 +128,45 @@ nn_sequential_layers <- function(children, call = rlang::caller_env()) {
     }
 
     if (cls == "nn_dropout") {
+      next
+    }
+
+    if (cls %in% torch_norm_modules) {
+      if (length(layers) == 0) {
+        cli::cli_abort(
+          "A {.cls {cls}} module cannot be the first module in a
+           {.cls nn_sequential}.",
+          call = call
+        )
+      }
+      last <- layers[[length(layers)]]
+      if (!is.null(last$norm)) {
+        cli::cli_abort(
+          "A {.cls nn_linear} layer can only be followed by one
+           normalization module, but this one has both {.cls {last$norm$cls}}
+           and {.cls {cls}}.",
+          call = call
+        )
+      }
+      if (last$activation != "linear") {
+        cli::cli_abort(
+          c(
+            "{.cls {cls}} must come before the activation module in each
+             {.cls nn_linear} block.",
+            i = "Got an activation module already applied to this layer
+                 before {.cls {cls}}."
+          ),
+          call = call
+        )
+      }
+
+      norm <- if (cls == "nn_batch_norm1d") {
+        torch_batch_norm_norm(child, call)
+      } else {
+        torch_layer_norm_norm(child, nrow(last$weight), call)
+      }
+      norm$cls <- cls
+      layers[[length(layers)]]$norm <- norm
       next
     }
 
@@ -99,8 +206,9 @@ nn_sequential_layers <- function(children, call = rlang::caller_env()) {
     cli::cli_abort(
       c(
         "Module {.cls {cls}} is not supported.",
-        i = "Supported modules are {.cls nn_linear}, {.cls nn_dropout}, and
-             the activation modules {.cls {torch_activation_modules}}."
+        i = "Supported modules are {.cls nn_linear}, {.cls nn_dropout}, the
+             activation modules {.cls {torch_activation_modules}}, and the
+             normalization modules {.cls {torch_norm_modules}}."
       ),
       call = call
     )

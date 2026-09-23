@@ -128,6 +128,23 @@ nn_activation_expr <- function(
   )
 }
 
+# A fixed per-channel affine transform, read directly off a fitted
+# BatchNorm layer's own stored statistics/parameters (never recomputed from
+# the current batch, which is what makes this representable as a plain SQL
+# expression at all): `(x - running_mean) / sqrt(running_var + eps) * gamma +
+# beta`. Applied to one neuron's raw (pre-activation) expression before
+# `nn_activation_expr()` wraps it.
+nn_batch_norm_expr <- function(x, norm, i) {
+  mean_i <- format_numeric(norm$running_mean[i])
+  var_i <- format_numeric(norm$running_var[i])
+  eps <- format_numeric(norm$eps)
+  gamma_i <- format_numeric(norm$gamma[i])
+  beta_i <- format_numeric(norm$beta[i])
+  glue::glue(
+    "(({x}) - {mean_i}) / sqrt({var_i} + {eps}) * {gamma_i} + {beta_i}"
+  )
+}
+
 # One hidden layer's worth of neuron columns.
 #
 # `weight` is a matrix with one row per output neuron and one column per input
@@ -138,9 +155,17 @@ nn_activation_expr <- function(
 # (either the model's own feature names, for the first layer, or the previous
 # layer's returned `names`).
 #
-# Returns `list(eqs, names)`: `eqs` is a named character vector, one
+# `norm`, if not `NULL`, is a fitted normalization layer's config (see
+# `nn_batch_norm_expr()` above and `nn_layer_exprs_layer_norm()` below),
+# applied between the raw linear predictor and the activation, matching where
+# BatchNorm/LayerNorm actually sit in a real network.
+#
+# Returns `list(eqs, names, extra)`: `eqs` is a named character vector, one
 # expression per output neuron; `names` is `names(eqs)`, handed back so the
-# caller can thread it in as the next layer's `input_names`.
+# caller can thread it in as the next layer's `input_names`; `extra` is any
+# additional intermediate columns that had to be materialized to compute
+# `eqs` but aren't themselves per-neuron outputs (empty except for
+# `norm$type == "layer_norm"`, see below).
 #
 # `batch_size` guards against very wide layers hitting a database's
 # per-`SELECT`-list column limit, mirroring `tree_columns()`'s batching. Since
@@ -163,11 +188,26 @@ nn_layer_exprs <- function(
   activation,
   layer_prefix,
   params = list(),
+  norm = NULL,
   batch_size = 50
 ) {
   n_out <- nrow(weight)
   width <- nchar(as.character(n_out))
   out_names <- sprintf(paste0(layer_prefix, "_%0", width, "d"), seq_len(n_out))
+
+  if (!is.null(norm) && norm$type == "layer_norm") {
+    return(nn_layer_exprs_layer_norm(
+      weight,
+      bias,
+      input_names,
+      activation,
+      layer_prefix,
+      params,
+      norm,
+      out_names,
+      batch_size
+    ))
+  }
 
   batch_indices <- split(seq_len(n_out), ceiling(seq_len(n_out) / batch_size))
 
@@ -189,12 +229,97 @@ nn_layer_exprs <- function(
           ")"
         )
       }
+      if (!is.null(norm)) {
+        lin <- nn_batch_norm_expr(lin, norm, i)
+      }
       exprs[[out_names[i]]] <- nn_activation_expr(lin, activation, params)
     }
     barrier <- out_names[idx[length(idx)]]
   }
 
-  list(eqs = exprs, names = out_names)
+  list(eqs = exprs, names = out_names, extra = character(0))
+}
+
+# LayerNorm normalizes each row over the layer's own neurons at inference
+# time (mean/variance computed from the current row, not read off fixed
+# running statistics the way BatchNorm's are), so unlike
+# `nn_batch_norm_expr()` this can't fold into each neuron's own independent
+# expression: every neuron in the layer needs every other neuron's raw
+# (pre-normalization) value first. This materializes those raw values as
+# their own intermediate columns (`<layer_prefix>_ln_raw_<i>`, never matched
+# by `nn_output_layer_names()`'s `output_layer` grep, which only matches the
+# final `<layer_prefix>_<zero-padded index>` names), then a shared mean/
+# variance pair, then the final normalized + affine + activated value per
+# neuron referencing those by name.
+nn_layer_exprs_layer_norm <- function(
+  weight,
+  bias,
+  input_names,
+  activation,
+  layer_prefix,
+  params,
+  norm,
+  out_names,
+  batch_size
+) {
+  n_out <- nrow(weight)
+  raw_names <- paste0(layer_prefix, "_ln_raw_", seq_len(n_out))
+
+  batch_indices <- split(seq_len(n_out), ceiling(seq_len(n_out) / batch_size))
+  raw_exprs <- stats::setNames(character(n_out), raw_names)
+  barrier <- NULL
+
+  for (idx in batch_indices) {
+    for (i in idx) {
+      lin <- build_linear_pred(
+        c("(Intercept)", input_names),
+        c(bias[i], weight[i, ])
+      )
+      if (!is.null(barrier)) {
+        lin <- paste0(
+          "dplyr::if_else(FALSE, ",
+          backtick(barrier),
+          ", ",
+          lin,
+          ")"
+        )
+      }
+      raw_exprs[[raw_names[i]]] <- lin
+    }
+    barrier <- raw_names[idx[length(idx)]]
+  }
+
+  mean_name <- paste0(layer_prefix, "_ln_mean")
+  var_name <- paste0(layer_prefix, "_ln_var")
+  mean_expr <- paste0(
+    "(",
+    paste(backtick(raw_names), collapse = " + "),
+    ") / ",
+    n_out
+  )
+  dev_terms <- paste0(
+    "(",
+    backtick(raw_names),
+    " - ",
+    backtick(mean_name),
+    ")^2"
+  )
+  var_expr <- paste0("(", paste(dev_terms, collapse = " + "), ") / ", n_out)
+
+  stat_exprs <- stats::setNames(c(mean_expr, var_expr), c(mean_name, var_name))
+
+  eps <- format_numeric(norm$eps)
+  exprs <- stats::setNames(character(n_out), out_names)
+  for (i in seq_len(n_out)) {
+    gamma_i <- format_numeric(norm$gamma[i])
+    beta_i <- format_numeric(norm$beta[i])
+    normed <- glue::glue(
+      "(({backtick(raw_names[i])}) - {backtick(mean_name)}) / sqrt({backtick(var_name)} + {eps}) * {gamma_i} + {beta_i}"
+    )
+    exprs[[out_names[i]]] <- nn_activation_expr(normed, activation, params)
+  }
+
+  list(eqs = exprs, names = out_names, extra = c(raw_exprs, stat_exprs))
 }
 
 # Shared by `orbital.nn_sequential()` and `orbital.brulee_mlp()`: walks
@@ -218,9 +343,11 @@ nn_forward_eqs <- function(layers, input_names) {
       names_in,
       activation = if (is_last) "linear" else layer$activation,
       layer_prefix = sprintf("orbital_nn_L%d", i),
-      params = if (is_last) list() else layer$params
+      params = if (is_last) list() else layer$params,
+      norm = layer$norm
     )
 
+    hidden_eqs <- c(hidden_eqs, layer_res$extra)
     if (is_last) {
       linear_eqs <- layer_res$eqs
     } else {
@@ -263,8 +390,12 @@ nn_output_layer_names <- function(
     )
   }
 
+  # Anchored to digits-only suffixes so this only ever matches the per-neuron
+  # output names `nn_layer_exprs()` returns as `eqs`, never a LayerNorm
+  # layer's intermediate `_ln_raw_*`/`_ln_mean`/`_ln_var` columns (which also
+  # start with the same `orbital_nn_L<i>_` prefix but aren't outputs).
   grep(
-    sprintf("^orbital_nn_L%d_", output_layer),
+    sprintf("^orbital_nn_L%d_[0-9]+$", output_layer),
     names(hidden_eqs),
     value = TRUE
   )

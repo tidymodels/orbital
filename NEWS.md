@@ -12,6 +12,8 @@
 
 * Bare `torch::nn_sequential()` fully-connected feed-forward networks are now supported, generating one column per neuron so that predictions no longer inline exponentially with network depth the way `tidypredict::tidypredict_fit()` did for `parsnip::mlp(engine = "nnet")` (#149).
 
+* Neural network support now covers `BatchNorm`/`LayerNorm` layers interleaved between a linear/`Dense` layer and its activation (`torch::nn_batch_norm1d()`/`nn_layer_norm()` and keras3's `layer_batch_normalization()`/`layer_layer_normalization()`), for every neural network entry point: bare `torch::nn_sequential()`, `mlp(engine = "brulee")`, bare keras3 `Sequential`, and `mlp(engine = "keras3")` (#184).
+
 # orbital 0.7.0
 
 # orbital 0.6.0

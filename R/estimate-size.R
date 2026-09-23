@@ -452,13 +452,79 @@ nn_activation_overhead <- function(activation) {
   )
 }
 
+# BatchNorm folds into each neuron's own expression (four extra full-
+# precision numeric constants and a `sqrt()`), so its overhead is a small
+# constant per neuron, calibrated against a fitted `nn_batch_norm1d` network
+# (~88 chars/neuron measured).
+nn_batch_norm_overhead_chars <- function(n_out) {
+  as.integer(n_out * 88L)
+}
+
+# LayerNorm is far more expensive than BatchNorm: it also materializes a raw
+# pre-norm column (as large as the neuron's own un-normed linear predictor),
+# a mean expression referencing every one of the layer's `n_out` raw columns
+# by name, a variance expression referencing both those and the mean
+# (roughly twice as long per term), and a final per-neuron expression
+# referencing all three by name, on top of the same numeric-constant
+# overhead as BatchNorm. Calibrated against a fitted `nn_layer_norm` network.
+nn_layer_norm_overhead_chars <- function(
+  layer_prefix,
+  n_in,
+  n_out,
+  avg_input_len
+) {
+  raw_chars <- estimate_linear_chars(n_in + 1, avg_input_len)
+  raw_name_len <- nchar(backtick(paste0(layer_prefix, "_ln_raw_", n_out)))
+  mean_name_len <- nchar(backtick(paste0(layer_prefix, "_ln_mean")))
+  var_name_len <- nchar(backtick(paste0(layer_prefix, "_ln_var")))
+
+  mean_chars <- as.integer(n_out * (raw_name_len + 3L))
+  var_chars <- as.integer(n_out * (raw_name_len + mean_name_len + 8L))
+  final_chars <- as.integer(
+    n_out * (raw_name_len + mean_name_len + var_name_len + 60L)
+  )
+
+  as.integer(n_out * raw_chars + mean_chars + var_chars + final_chars)
+}
+
 # One layer's total expression character count across all its neurons.
-estimate_nn_layer_chars <- function(n_in, n_out, avg_input_len, activation) {
+#
+# BatchNorm folds additively into each neuron's own single expression (its
+# overhead is on top of the usual linear-pred + activation cost). LayerNorm
+# instead *replaces* that per-neuron calculation entirely: the layer's raw
+# pre-norm columns take the place of what would have been the inlined
+# linear predictor, and the final per-neuron expression (already including a
+# flat activation-overhead approximation calibrated against `relu`, not
+# `nn_activation_overhead()`'s exact per-activation table) takes the place
+# of the usual activation-wrapped neuron, so adding the usual term on top
+# would double-count.
+estimate_nn_layer_chars <- function(
+  n_in,
+  n_out,
+  avg_input_len,
+  activation,
+  layer_prefix,
+  norm = NULL
+) {
+  if (!is.null(norm) && norm$type == "layer_norm") {
+    return(nn_layer_norm_overhead_chars(
+      layer_prefix,
+      n_in,
+      n_out,
+      avg_input_len
+    ))
+  }
+
   lin_chars <- estimate_linear_chars(n_in + 1, avg_input_len)
   neuron_chars <- lin_chars *
     nn_activation_multiplier(activation) +
     nn_activation_overhead(activation)
-  as.integer(n_out * neuron_chars)
+  total <- as.integer(n_out * neuron_chars)
+
+  if (!is.null(norm) && norm$type == "batch_norm") {
+    total <- total + nn_batch_norm_overhead_chars(n_out)
+  }
+  total
 }
 
 # The generated column name length for layer `i`'s neurons, matching
@@ -489,7 +555,14 @@ estimate_nn_sequential_chars <- function(layers, input_names) {
     activation <- if (is_last) "linear" else layers[[i]]$activation
 
     total_chars <- total_chars +
-      estimate_nn_layer_chars(n_in, n_out, avg_len, activation)
+      estimate_nn_layer_chars(
+        n_in,
+        n_out,
+        avg_len,
+        activation,
+        sprintf("orbital_nn_L%d", i),
+        layers[[i]]$norm
+      )
     avg_len <- nn_layer_name_len(i, n_out)
   }
 

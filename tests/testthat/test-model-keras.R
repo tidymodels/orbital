@@ -270,6 +270,121 @@ test_that("output_layer is validated against the number of hidden layers", {
   )
 })
 
+test_that("BatchNormalization works", {
+  skip_if_no_keras()
+
+  model <- keras_seq_model(
+    3,
+    \(m) keras3::layer_dense(m, units = 6),
+    \(m) keras3::layer_batch_normalization(m),
+    \(m) keras3::layer_activation(m, "relu"),
+    \(m) keras3::layer_dense(m, units = 1)
+  )
+  x_train <- keras3::random_normal(c(50, 3))
+  # Populate non-trivial moving statistics before predicting, so this test
+  # actually exercises the affine transform rather than just its untrained
+  # (moving mean 0, moving variance 1) defaults.
+  invisible(model(x_train, training = TRUE))
+  invisible(model(x_train, training = TRUE))
+
+  data <- data.frame(x1 = rnorm(20), x2 = rnorm(20), x3 = rnorm(20))
+  ob <- orbital(model, input_names = c("x1", "x2", "x3"), mode = "regression")
+  preds <- predict(ob, data)
+
+  expect_equal(
+    preds$.pred,
+    as.numeric(keras_predict(model, data)),
+    tolerance = 1e-5
+  )
+})
+
+test_that("LayerNormalization works", {
+  skip_if_no_keras()
+
+  model <- keras_seq_model(
+    3,
+    \(m) keras3::layer_dense(m, units = 6),
+    \(m) keras3::layer_layer_normalization(m),
+    \(m) keras3::layer_activation(m, "tanh"),
+    \(m) keras3::layer_dense(m, units = 1)
+  )
+  data <- data.frame(x1 = rnorm(20), x2 = rnorm(20), x3 = rnorm(20))
+  ob <- orbital(model, input_names = c("x1", "x2", "x3"), mode = "regression")
+  preds <- predict(ob, data)
+
+  expect_equal(
+    preds$.pred,
+    as.numeric(keras_predict(model, data)),
+    tolerance = 1e-5
+  )
+})
+
+test_that("normalization layer must come before the activation", {
+  skip_if_no_keras()
+
+  model <- keras_seq_model(
+    2,
+    \(m) keras3::layer_dense(m, units = 4, activation = "relu"),
+    \(m) keras3::layer_batch_normalization(m),
+    \(m) keras3::layer_dense(m, units = 1)
+  )
+  expect_snapshot(
+    orbital(model, input_names = c("x1", "x2")),
+    error = TRUE
+  )
+})
+
+test_that("a Dense layer can only have one normalization layer", {
+  skip_if_no_keras()
+
+  model <- keras_seq_model(
+    2,
+    \(m) keras3::layer_dense(m, units = 4),
+    \(m) keras3::layer_batch_normalization(m),
+    \(m) keras3::layer_layer_normalization(m),
+    \(m) keras3::layer_activation(m, "relu"),
+    \(m) keras3::layer_dense(m, units = 1)
+  )
+  expect_snapshot(
+    orbital(model, input_names = c("x1", "x2")),
+    error = TRUE
+  )
+})
+
+test_that("output_layer does not leak LayerNormalization's intermediate columns", {
+  skip_if_no_keras()
+
+  model <- keras_seq_model(
+    3,
+    \(m) keras3::layer_dense(m, units = 4),
+    \(m) keras3::layer_layer_normalization(m),
+    \(m) keras3::layer_activation(m, "relu"),
+    \(m) keras3::layer_dense(m, units = 1)
+  )
+  data <- data.frame(x1 = rnorm(10), x2 = rnorm(10), x3 = rnorm(10))
+
+  ob <- orbital(
+    model,
+    input_names = c("x1", "x2", "x3"),
+    mode = "regression",
+    output_layer = 1
+  )
+  preds <- predict(ob, data)
+
+  expect_named(preds, c(".pred", paste0("orbital_nn_L1_", 1:4)))
+
+  x <- as.matrix(data)
+  hidden <- as.matrix(model$layers[[3]](model$layers[[2]](model$layers[[1]](
+    x
+  ))))
+  expect_equal(
+    as.matrix(preds[, paste0("orbital_nn_L1_", 1:4)]),
+    hidden,
+    ignore_attr = TRUE,
+    tolerance = 1e-5
+  )
+})
+
 skip_if_no_parsnip_keras <- function() {
   skip_if_no_keras()
   skip_if_not_installed("parsnip")
@@ -374,6 +489,19 @@ test_that("duckdb - deep and wide networks round-trip through real SQL", {
     \(m) keras3::layer_dense(m, units = 120, activation = "relu"),
     \(m) keras3::layer_dense(m, units = 1, activation = "linear")
   )
+  norm_model <- keras_seq_model(
+    4,
+    \(m) keras3::layer_dense(m, units = 8),
+    \(m) keras3::layer_batch_normalization(m),
+    \(m) keras3::layer_activation(m, "relu"),
+    \(m) keras3::layer_dense(m, units = 8),
+    \(m) keras3::layer_layer_normalization(m),
+    \(m) keras3::layer_activation(m, "tanh"),
+    \(m) keras3::layer_dense(m, units = 1)
+  )
+  x_train <- keras3::random_normal(c(50, 4))
+  invisible(norm_model(x_train, training = TRUE))
+  invisible(norm_model(x_train, training = TRUE))
   data <- data.frame(
     x1 = rnorm(10),
     x2 = rnorm(10),
@@ -384,7 +512,7 @@ test_that("duckdb - deep and wide networks round-trip through real SQL", {
   con <- DBI::dbConnect(duckdb::duckdb(dbdir = ":memory:"))
   data_tbl <- dplyr::copy_to(con, data, "keras_nn_data")
 
-  for (model in list(deep = deep_model, wide = wide_model)) {
+  for (model in list(deep = deep_model, wide = wide_model, norm = norm_model)) {
     ob <- orbital(model, input_names = c("x1", "x2", "x3", "x4"))
     res_sql <- dplyr::mutate(data_tbl, !!!orbital_inline(ob)) |>
       dplyr::collect()

@@ -501,6 +501,36 @@ test_that("estimate_orbital_size scales with network depth/width for nn_sequenti
   expect_gt(est_large, est_small)
 })
 
+test_that("estimate_orbital_size works for nn_sequential with BatchNorm/LayerNorm", {
+  skip_if_not_installed("torch")
+  if (!torch::torch_is_installed()) {
+    skip("libtorch is not installed")
+  }
+
+  torch::torch_manual_seed(1)
+  model <- torch::nn_sequential(
+    torch::nn_linear(8, 16),
+    torch::nn_batch_norm1d(16),
+    torch::nn_relu(),
+    torch::nn_linear(16, 10),
+    torch::nn_layer_norm(10),
+    torch::nn_relu(),
+    torch::nn_linear(10, 1)
+  )
+  # Populate non-trivial BatchNorm running statistics, matching the size a
+  # realistically-trained network's expression actually is.
+  model$train(TRUE)
+  invisible(model(torch::torch_randn(50, 8)))
+  model$train(FALSE)
+
+  input_names <- paste0("x", 1:8)
+  est <- estimate_orbital_size(model, input_names = input_names)
+  actual <- sum(nchar(orbital(model, input_names = input_names)))
+
+  expect_type(est, "integer")
+  expect_equal(est, actual, tolerance = 0.1)
+})
+
 test_that("estimate_orbital_size works for brulee_mlp", {
   skip_if_not_installed("parsnip")
   skip_if_not_installed("brulee")
@@ -587,6 +617,31 @@ test_that("estimate_orbital_size scales with network depth/width for keras3", {
   est_large <- estimate_orbital_size(large, input_names = c("x1", "x2", "x3"))
 
   expect_gt(est_large, est_small)
+})
+
+test_that("estimate_orbital_size works for keras3 Sequential with BatchNorm/LayerNorm", {
+  skip_if_no_keras_estimate()
+
+  keras3::set_random_seed(1)
+  model <- keras3::keras_model_sequential(input_shape = 8) |>
+    keras3::layer_dense(units = 16) |>
+    keras3::layer_batch_normalization() |>
+    keras3::layer_activation("relu") |>
+    keras3::layer_dense(units = 10) |>
+    keras3::layer_layer_normalization() |>
+    keras3::layer_activation("relu") |>
+    keras3::layer_dense(units = 1)
+
+  x_train <- keras3::random_normal(c(50, 8))
+  invisible(model(x_train, training = TRUE))
+  invisible(model(x_train, training = TRUE))
+
+  input_names <- paste0("x", 1:8)
+  est <- estimate_orbital_size(model, input_names = input_names)
+  actual <- sum(nchar(orbital(model, input_names = input_names)))
+
+  expect_type(est, "integer")
+  expect_equal(est, actual, tolerance = 0.1)
 })
 
 test_that("estimate_orbital_size works for mlp(engine = keras3)", {

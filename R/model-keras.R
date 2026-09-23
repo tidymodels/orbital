@@ -41,6 +41,86 @@ keras_activation_strings <- c(
   names(keras_param_activations)
 )
 
+# Normalization layers (milestone 4, issue #149): attach to the immediately
+# preceding `Dense` entry as its `$norm`, the same way an activation string
+# attaches as its `$activation`. Note `layer_normalization()` in the keras3 R
+# package is the *preprocessing* `Normalization` layer (feature standardizing
+# using `adapt()`-computed stats), an unrelated thing; the transformer-style
+# LayerNorm supported here is `layer_layer_normalization()`, which maps to
+# the `LayerNormalization` class below.
+keras_norm_classes <- c(
+  batch_norm = "keras.src.layers.normalization.batch_normalization.BatchNormalization",
+  layer_norm = "keras.src.layers.normalization.layer_normalization.LayerNormalization"
+)
+
+# Both BatchNormalization and LayerNormalization default to normalizing over
+# the last axis (the feature axis after a `Dense` layer, which is the only
+# shape a feed-forward MLP's per-row neuron vector has); any other `axis`
+# has no meaning here.
+keras_check_norm_axis <- function(layer, cls, call) {
+  axis <- as.integer(unlist(layer$axis))
+  if (!identical(axis, -1L)) {
+    cli::cli_abort(
+      c(
+        "{.cls {cls}} is only supported when normalizing over the last axis
+         (the feature axis after a {.cls Dense} layer).",
+        i = "Got {.code axis = {axis}}."
+      ),
+      call = call
+    )
+  }
+}
+
+# `BatchNormalization`'s eval-time transform is a fixed per-channel affine
+# read off its own stored moving statistics and, if `scale`/`center = TRUE`,
+# its learned `gamma`/`beta`; `scale`/`center = FALSE` means no learned
+# scale/shift, i.e. gamma = 1, beta = 0.
+keras_batch_norm_norm <- function(layer, call) {
+  keras_check_norm_axis(layer, "BatchNormalization", call)
+
+  running_mean <- as.numeric(as.array(layer$moving_mean))
+  n <- length(running_mean)
+  list(
+    type = "batch_norm",
+    running_mean = running_mean,
+    running_var = as.numeric(as.array(layer$moving_variance)),
+    gamma = if (isTRUE(layer$scale)) {
+      as.numeric(as.array(layer$gamma))
+    } else {
+      rep(1, n)
+    },
+    beta = if (isTRUE(layer$center)) {
+      as.numeric(as.array(layer$beta))
+    } else {
+      rep(0, n)
+    },
+    eps = as.numeric(layer$epsilon)
+  )
+}
+
+# `LayerNormalization`'s eval-time transform normalizes over the last axis;
+# `n_in` (the preceding `Dense` layer's output width) is what that axis
+# actually is here, so its learned `gamma`/`beta` (already that width) need
+# no further shape validation.
+keras_layer_norm_norm <- function(layer, n_in, call) {
+  keras_check_norm_axis(layer, "LayerNormalization", call)
+
+  list(
+    type = "layer_norm",
+    gamma = if (isTRUE(layer$scale)) {
+      as.numeric(as.array(layer$gamma))
+    } else {
+      rep(1, n_in)
+    },
+    beta = if (isTRUE(layer$center)) {
+      as.numeric(as.array(layer$beta))
+    } else {
+      rep(0, n_in)
+    },
+    eps = as.numeric(layer$epsilon)
+  )
+}
+
 # Walks a keras3 `Sequential`'s `$layers` into `list(list(weight, bias,
 # activation, params), ...)`, one entry per `Dense` layer. `Dropout` is a
 # no-op at eval time and is skipped, mirroring `nn_sequential_layers()`.
@@ -86,10 +166,92 @@ keras_sequential_layers <- function(layers, call = rlang::caller_env()) {
       next
     }
 
+    # A standalone `Activation` layer, used when the activation needs to sit
+    # after a normalization layer rather than baked into `Dense` directly
+    # (the standard idiom for combining `Dense` with BatchNorm/LayerNorm:
+    # `layer_dense(activation = NULL) |> layer_batch_normalization() |>
+    # layer_activation("relu")`). Attaches to the preceding `Dense` entry
+    # exactly like a baked-in activation string would.
+    if (cls == "keras.src.layers.activations.activation.Activation") {
+      if (length(out) == 0) {
+        cli::cli_abort(
+          "A {.cls Activation} layer cannot be the first layer in a
+           {.cls Sequential}.",
+          call = call
+        )
+      }
+      last <- out[[length(out)]]
+      if (last$activation != "linear") {
+        cli::cli_abort(
+          "A {.cls Dense} block can only have one activation, but this one
+           has both a baked-in activation and a separate {.cls Activation}
+           layer.",
+          call = call
+        )
+      }
+
+      activation <- layer$get_config()$activation
+      if (!activation %in% keras_activation_strings) {
+        cli::cli_abort(
+          c(
+            "Activation {.val {activation}} is not supported.",
+            i = "Supported activations are: {.val {keras_activation_strings}}."
+          ),
+          call = call
+        )
+      }
+
+      out[[length(out)]]$activation <- activation
+      out[[length(out)]]$params <- keras_param_activations[[activation]] %||%
+        list()
+      next
+    }
+
+    if (cls %in% keras_norm_classes) {
+      if (length(out) == 0) {
+        cli::cli_abort(
+          "A {.cls {cls}} layer cannot be the first layer in a
+           {.cls Sequential}.",
+          call = call
+        )
+      }
+      last <- out[[length(out)]]
+      if (!is.null(last$norm)) {
+        cli::cli_abort(
+          "A {.cls Dense} layer can only be followed by one normalization
+           layer, but this one has both {.cls {last$norm$cls}} and
+           {.cls {cls}}.",
+          call = call
+        )
+      }
+      if (last$activation != "linear") {
+        cli::cli_abort(
+          c(
+            "{.cls {cls}} must come before the activation in each
+             {.cls Dense} block.",
+            i = "Got an activation already applied to this layer before
+                 {.cls {cls}}."
+          ),
+          call = call
+        )
+      }
+
+      norm <- if (cls == keras_norm_classes[["batch_norm"]]) {
+        keras_batch_norm_norm(layer, call)
+      } else {
+        keras_layer_norm_norm(layer, nrow(last$weight), call)
+      }
+      norm$cls <- cls
+      out[[length(out)]]$norm <- norm
+      next
+    }
+
     cli::cli_abort(
       c(
         "Layer {.cls {cls}} is not supported.",
-        i = "Supported layers are {.cls Dense} and {.cls Dropout}."
+        i = "Supported layers are {.cls Dense}, {.cls Dropout},
+             {.cls Activation}, {.cls BatchNormalization}, and
+             {.cls LayerNormalization}."
       ),
       call = call
     )
