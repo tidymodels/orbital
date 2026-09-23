@@ -52,34 +52,51 @@ jobs:
           restore-keys: |
             sparklyr-spark-${{ matrix.config.spark }}-bin-hadoop${{ matrix.config.hadoop }}-
 
-      # archive.apache.org rate-limits GitHub Actions runners, so a single
-      # attempt fails intermittently. Retry with backoff: the download only has
-      # to succeed once for the cache above to be seeded, after which this step
-      # is skipped entirely.
+      # archive.apache.org deliberately throttles this download (its response
+      # carries `Vary: Slow,Glacial`) to something like 100-200KB/s, so a full
+      # ~300MB Spark tarball takes 30-50 minutes even when nothing is wrong.
+      # sparklyr::spark_install()'s own `download.file()` wrapper enforces a
+      # fixed 300-second timeout per call, which is far too short for that;
+      # retrying the whole `spark_install()` call (as before) just restarts
+      # the download from zero every time and can never outrun the timeout.
+      # Downloading with `curl -C -` first resumes across attempts instead of
+      # discarding progress, and imposes no artificial per-attempt timeout of
+      # our own; once the extracted directory exists, `spark_install()` below
+      # sees it and skips downloading entirely.
+      - name: Download Spark
+        if: steps.cache-spark.outputs.cache-hit != 'true'
+        run: |
+          info <- sparklyr:::spark_install_find(
+            version = Sys.getenv("SPARK_VERSION"),
+            hadoop_version = Sys.getenv("HADOOP_VERSION"),
+            installed_only = FALSE,
+            latest = TRUE
+          )
+          if (!dir.exists(info$sparkVersionDir)) {
+            dir.create(info$sparkDir, recursive = TRUE, showWarnings = FALSE)
+            status <- system2(
+              "curl",
+              c(
+                "--fail", "--location", "--continue-at", "-",
+                "--retry", "20", "--retry-all-errors", "--retry-delay", "10",
+                "--output", info$packageLocalPath, info$packageRemotePath
+              )
+            )
+            if (status != 0) {
+              stop("Could not download Spark (curl exit status ", status, ").")
+            }
+            untar(info$packageLocalPath, exdir = info$sparkDir, tar = "internal")
+            unlink(info$packageLocalPath)
+          }
+        shell: Rscript {0}
+
       - name: Install Spark (via sparklyr)
         if: steps.cache-spark.outputs.cache-hit != 'true'
         run: |
-          attempts <- 5
-          for (i in seq_len(attempts)) {
-            ok <- tryCatch(
-              {
-                sparklyr::spark_install(
-                  version = Sys.getenv("SPARK_VERSION"),
-                  hadoop_version = Sys.getenv("HADOOP_VERSION")
-                )
-                TRUE
-              },
-              error = function(cnd) {
-                message("Attempt ", i, " of ", attempts, " failed: ", conditionMessage(cnd))
-                FALSE
-              }
-            )
-            if (ok) break
-            if (i < attempts) Sys.sleep(i * 20)
-          }
-          if (!ok) {
-            stop("Could not install Spark after ", attempts, " attempts.")
-          }
+          sparklyr::spark_install(
+            version = Sys.getenv("SPARK_VERSION"),
+            hadoop_version = Sys.getenv("HADOOP_VERSION")
+          )
         shell: Rscript {0}
 
       - name: Cache Livy

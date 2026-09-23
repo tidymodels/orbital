@@ -45,29 +45,43 @@ jobs:
           restore-keys: |
             sparklyr-spark-3.3.4-bin-hadoop3-
 
-      # See the note in spark-tests.yaml: archive.apache.org rate-limits
-      # GitHub Actions runners, so retry with backoff.
+      # See the note in Spark-Tests.yaml: archive.apache.org deliberately
+      # throttles this download to something like 100-200KB/s, so download it
+      # with a resumable `curl -C -` first (no artificial per-attempt
+      # timeout, and retries resume instead of restarting from zero); once
+      # the extracted directory exists, `spark_install()` below sees it and
+      # skips downloading entirely.
+      - name: Download Spark
+        if: steps.cache-spark.outputs.cache-hit != 'true'
+        run: |
+          info <- sparklyr:::spark_install_find(
+            version = "3.3.4",
+            hadoop_version = "3",
+            installed_only = FALSE,
+            latest = TRUE
+          )
+          if (!dir.exists(info$sparkVersionDir)) {
+            dir.create(info$sparkDir, recursive = TRUE, showWarnings = FALSE)
+            status <- system2(
+              "curl",
+              c(
+                "--fail", "--location", "--continue-at", "-",
+                "--retry", "20", "--retry-all-errors", "--retry-delay", "10",
+                "--output", info$packageLocalPath, info$packageRemotePath
+              )
+            )
+            if (status != 0) {
+              stop("Could not download Spark (curl exit status ", status, ").")
+            }
+            untar(info$packageLocalPath, exdir = info$sparkDir, tar = "internal")
+            unlink(info$packageLocalPath)
+          }
+        shell: Rscript {0}
+
       - name: Install Spark (via sparklyr)
         if: steps.cache-spark.outputs.cache-hit != 'true'
         run: |
-          attempts <- 5
-          for (i in seq_len(attempts)) {
-            ok <- tryCatch(
-              {
-                sparklyr::spark_install(version = "3.3.4", hadoop_version = "3")
-                TRUE
-              },
-              error = function(cnd) {
-                message("Attempt ", i, " of ", attempts, " failed: ", conditionMessage(cnd))
-                FALSE
-              }
-            )
-            if (ok) break
-            if (i < attempts) Sys.sleep(i * 20)
-          }
-          if (!ok) {
-            stop("Could not install Spark after ", attempts, " attempts.")
-          }
+          sparklyr::spark_install(version = "3.3.4", hadoop_version = "3")
         shell: Rscript {0}
 
       - name: Build site
