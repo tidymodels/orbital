@@ -58,6 +58,9 @@ estimate_orbital_size(x, ..., input_names)
 
 # S3 method for class 'brulee_mlp'
 estimate_orbital_size(x, ...)
+
+# S3 method for class 'keras.src.models.sequential.Sequential'
+estimate_orbital_size(x, ..., input_names)
 ```
 
 ## Arguments
