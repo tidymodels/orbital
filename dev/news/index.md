@@ -2,6 +2,11 @@
 
 ## orbital (development version)
 
+- `torch` and `keras3` in Suggests now have version floors
+  (`torch (>= 0.17.0)`, `keras3 (>= 1.5.1)`), matching the floor already
+  in place for `brulee`, at the versions verified against neural network
+  support ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+
 - Bare keras3 `Sequential` fully-connected feed-forward networks are now
   supported, reusing the same per-neuron column generation as bare
   [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
@@ -68,10 +73,10 @@
 
 - Neural network support now covers `BatchNorm`/`LayerNorm` layers
   interleaved between a linear/`Dense` layer and its activation
-  ([`torch::nn_batch_norm1d()`](https://torch.mlverse.org/docs/reference/nn_batch_norm1d.html)/`nn_layer_norm()`
+  ([`torch::nn_batch_norm1d()`](https://torch.mlverse.org/docs/reference/nn_batch_norm1d.html)/[`nn_layer_norm()`](https://torch.mlverse.org/docs/reference/nn_layer_norm.html)
   and keras3’s
-  `layer_batch_normalization()`/`layer_layer_normalization()`), for
-  every neural network entry point: bare
+  [`layer_batch_normalization()`](https://keras3.posit.co/reference/layer_batch_normalization.html)/[`layer_layer_normalization()`](https://keras3.posit.co/reference/layer_layer_normalization.html)),
+  for every neural network entry point: bare
   [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html),
   `mlp(engine = "brulee")`, bare keras3 `Sequential`, and
   `mlp(engine = "keras3")`

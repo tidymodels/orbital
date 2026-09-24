@@ -1,0 +1,218 @@
+# Neural networks
+
+If you fit a feed-forward network through
+[`parsnip::mlp()`](https://parsnip.tidymodels.org/reference/mlp.html)
+inside a `workflow`,
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+works exactly as it does for any other model: call
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+on the fitted workflow and everything else in this package
+([`predict()`](https://rdrr.io/r/stats/predict.html),
+[`orbital_sql()`](https://orbital.tidymodels.org/dev/reference/orbital_sql.md),
+[`orbital_inline()`](https://orbital.tidymodels.org/dev/reference/orbital_inline.md),
+and so on) follows the usual pattern described in `vignette("orbital")`.
+Nothing below is required for that path.
+
+This vignette instead covers converting a network object directly,
+either because you built one yourself with
+[`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
+or
+[`keras3::keras_model_sequential()`](https://keras3.posit.co/reference/keras_model_sequential.html)/[`keras3::keras_model()`](https://keras3.posit.co/reference/keras_model.html),
+or because you want more control than
+[`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) exposes (a
+custom `mode`, `type`, or `lvl`, or extracting an intermediate hidden
+layer instead of the final output).
+
+## Supported layers
+
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+walks a network’s layers directly, so it only supports the layer types
+it knows how to translate into an equivalent SQL/dplyr expression:
+
+- A stack of linear/dense layers, each optionally followed by an
+  activation (`relu`, `sigmoid`, `tanh`, `linear`/`identity`,
+  `leaky_relu`, `elu`, `gelu`, and `softmax` on the final layer only).
+- `Dropout` layers, which are a no-op at prediction time and are
+  skipped.
+- `BatchNorm`/`LayerNorm` (torch: `nn_batch_norm1d`, `nn_layer_norm`;
+  keras3:
+  [`layer_batch_normalization()`](https://keras3.posit.co/reference/layer_batch_normalization.html),
+  [`layer_layer_normalization()`](https://keras3.posit.co/reference/layer_layer_normalization.html)),
+  applied using their stored evaluation-time statistics.
+
+Anything else (convolutional layers, recurrent layers, attention,
+residual/skip connections, embeddings, and so on) is not supported and
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+will error rather than silently producing an incorrect translation.
+
+## Input names
+
+Unlike a fitted [`lm()`](https://rdrr.io/r/stats/lm.html) or
+[`parsnip::model_fit()`](https://parsnip.tidymodels.org/reference/model_fit.html),
+a bare torch or keras3 network carries no record of its input feature
+names anywhere in the object: torch tensors are positional, and a keras3
+`Input()` is an anonymous fixed-width vector. Because of this,
+`input_names` is required whenever you call
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+on a bare network directly, in the same order the network was trained
+on:
+
+``` r
+
+library(orbital)
+library(torch)
+
+net <- nn_sequential(
+  nn_linear(4, 8),
+  nn_relu(),
+  nn_linear(8, 1)
+)
+
+ob <- orbital(net, input_names = c("x1", "x2", "x3", "x4"))
+predict(ob, new_data)
+```
+
+The same requirement applies to bare keras3 models:
+
+``` r
+
+library(keras3)
+
+x <- keras_model_sequential(input_shape = 4) |>
+  layer_dense(8, activation = "relu") |>
+  layer_dense(1)
+
+ob <- orbital(x, input_names = c("x1", "x2", "x3", "x4"))
+```
+
+## Mode, type, and lvl
+
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+infers `mode` from the network’s shape: a single output unit with a
+linear (or no) final activation is `"regression"`; anything with more
+than one output unit, or a single unit behind a `sigmoid`, is
+`"classification"`. You can override the inferred value with
+`mode = "regression"`/`mode = "classification"` if you trained the
+network with a loss function that doesn’t match this default (for
+example, a single-unit classifier with a bare linear final layer and a
+manually-implemented loss).
+
+For a classification network, `type` controls whether
+[`predict()`](https://rdrr.io/r/stats/predict.html) returns class
+probabilities (`type = "prob"`, the default) or the predicted class
+(`type = "class"`). `lvl` names the classes; if you don’t supply one,
+they default to `class_0`, `class_1`, and so on, in the network’s own
+output order:
+
+``` r
+
+ob <- orbital(
+  net,
+  input_names = c("x1", "x2", "x3", "x4"),
+  type = "class",
+  lvl = c("no", "yes")
+)
+```
+
+## Extracting an intermediate layer
+
+`output_layer` lets you stop at a hidden layer instead of the network’s
+final output, useful for exposing a learned embedding rather than a
+prediction. It takes the 1-based index of the linear/dense layer to stop
+at (counting only linear/dense layers, ignoring activations, dropout,
+and normalization):
+
+``` r
+
+ob <- orbital(net, input_names = c("x1", "x2", "x3", "x4"), output_layer = 1)
+predict(ob, new_data)
+#>   .pred_layer_1_1 .pred_layer_1_2 ... .pred_layer_1_8
+```
+
+`output_layer` is not supported for multi-output networks (below), since
+there each head already exposes its own layers separately.
+
+## Multi-output networks
+
+A network with a shared trunk feeding two or more separate output heads
+(for example, predicting both a numeric price and a product category
+from the same hidden representation) is a branching graph rather than a
+single chain, so it needs its own input shape. `mode`, `type`, and `lvl`
+each become a named list keyed by head name instead of a single value,
+and each head’s own value is inferred/defaulted independently, exactly
+as it would be for a single-output network.
+
+### torch
+
+For torch, express the trunk and heads explicitly as a
+`list(trunk = ..., heads = list(...))`, each element a plain
+[`nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html):
+
+``` r
+
+net <- list(
+  trunk = nn_sequential(
+    nn_linear(4, 8),
+    nn_relu()
+  ),
+  heads = list(
+    price = nn_sequential(nn_linear(8, 1)),
+    category = nn_sequential(nn_linear(8, 2))
+  )
+)
+
+ob <- orbital(
+  net,
+  input_names = c("x1", "x2", "x3", "x4"),
+  mode = list(price = "regression", category = "classification"),
+  lvl = list(category = c("standard", "luxury"))
+)
+preds <- predict(ob, new_data)
+names(preds)
+#> [1] ".pred_price" ".pred_category_class"
+```
+
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+has no way to infer trunk/heads from an arbitrary torch `nn_module`’s
+`forward()` method, which is why the shape has to be spelled out this
+way rather than passed as a single network object.
+
+### keras3
+
+keras3’s functional API already records the model’s graph in its own
+config, so there’s no separate trunk/heads argument to fill in: build
+the model with
+[`keras_model()`](https://keras3.posit.co/reference/keras_model.html)
+and a named list of outputs, and
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+infers the shared trunk and each head’s own layers directly from the
+graph, by finding the longest run of layers common to every output’s
+path back to the input.
+
+``` r
+
+library(keras3)
+
+inp <- keras_input(shape = 4L)
+trunk <- inp |> layer_dense(8, activation = "relu")
+price <- trunk |> layer_dense(1)
+category <- trunk |> layer_dense(2)
+
+x <- keras_model(inputs = inp, outputs = list(price = price, category = category))
+
+ob <- orbital(
+  x,
+  input_names = c("x1", "x2", "x3", "x4"),
+  mode = list(price = "regression", category = "classification"),
+  lvl = list(category = c("standard", "luxury"))
+)
+```
+
+If the outputs list isn’t named, the head names fall back to the
+outputs’ own layer names.
+
+A functional model must have exactly one input and two or more outputs;
+a layer that is called more than once, or that merges more than one
+tensor
+(e.g. [`layer_concatenate()`](https://keras3.posit.co/reference/layer_concatenate.html)),
+is not supported, since neither has a meaningful trunk/heads split.
