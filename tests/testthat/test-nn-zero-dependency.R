@@ -18,6 +18,14 @@ run_in_fresh_session <- function(ob, data) {
   saveRDS(ob, ob_path)
   saveRDS(data, data_path)
 
+  # On CI, some jobs (e.g. the Spark workflow) never actually install
+  # `orbital`, they only `devtools::load_all()` it; `library(orbital)` would
+  # fail in a genuinely fresh subprocess there even though nothing is
+  # actually wrong. Fall back to `devtools::load_all()` on the current
+  # package's own source tree (its path is `getwd()` during `devtools::
+  # test()`/`R CMD check`, not a heavy dependency itself either way).
+  pkg_root <- getwd()
+
   script_path <- tempfile(fileext = ".R")
   withr::defer(unlink(script_path))
   writeLines(
@@ -25,7 +33,11 @@ run_in_fresh_session <- function(ob, data) {
       "args <- commandArgs(trailingOnly = TRUE)",
       "ob <- readRDS(args[[1]])",
       "data <- readRDS(args[[2]])",
-      "library(orbital)",
+      "if (requireNamespace('orbital', quietly = TRUE)) {",
+      "  library(orbital)",
+      "} else {",
+      "  devtools::load_all(args[[4]], quiet = TRUE)",
+      "}",
       "preds <- predict(ob, data)",
       "con <- dbplyr::simulate_dbi()",
       "sql <- orbital_sql(ob, con)",
@@ -44,7 +56,8 @@ run_in_fresh_session <- function(ob, data) {
       shQuote(script_path),
       shQuote(ob_path),
       shQuote(data_path),
-      shQuote(out_path)
+      shQuote(out_path),
+      shQuote(pkg_root)
     ),
     stdout = TRUE,
     stderr = TRUE
