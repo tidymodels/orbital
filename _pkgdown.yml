@@ -50,6 +50,7 @@ articles:
   navbar: ~
   contents:
   - supported-models
+  - neural-networks
   - articles/pros-cons
 - title: SQL and deployment
   contents:
