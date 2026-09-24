@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* `torch` and `keras3` in Suggests now have version floors (`torch (>= 0.17.0)`, `keras3 (>= 1.5.1)`), matching the floor already in place for `brulee`, at the versions verified against neural network support (#149).
+
 * Bare keras3 `Sequential` fully-connected feed-forward networks are now supported, reusing the same per-neuron column generation as bare `torch::nn_sequential()` support (#149).
 
 * `estimate_orbital_size()` now supports `parsnip::mlp(engine = "brulee")` fits, `parsnip::mlp(engine = "keras3")` fits, bare `torch::nn_sequential()` networks, and bare keras3 `Sequential` networks (#149).
