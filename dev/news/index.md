@@ -47,6 +47,16 @@
   keep every head’s columns from colliding
   ([\#185](https://github.com/tidymodels/orbital/issues/185)).
 
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now supports multi-output bare keras3 functional models
+  ([`keras3::keras_model()`](https://keras3.posit.co/reference/keras_model.html)
+  with `outputs` a named list), inferring the shared trunk and each
+  head’s own layers directly from the model’s graph rather than
+  requiring a separate trunk/heads argument. `mode`, `type`, and `lvl`
+  each accept a list named by head, matching the multi-output torch
+  support above
+  ([\#185](https://github.com/tidymodels/orbital/issues/185)).
+
 - Bare
   [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
   fully-connected feed-forward networks are now supported, generating
