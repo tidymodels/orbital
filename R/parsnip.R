@@ -154,9 +154,16 @@ abort_unsupported_model <- function(x) {
 
 set_pred_names <- function(res, lvl, mode, type, prefix) {
   if (mode == "regression") {
-    # Only rename if single element (separate_trees = FALSE)
-    # When separate_trees = TRUE, names are already set correctly
-    if (length(res) == 1) {
+    # Only rename an element actually named ".pred": the single-tree/nn
+    # case (`length(res) == 1`), or the nn multi-output case, where a
+    # regression head's own hidden layer columns sit alongside its final
+    # ".pred" entry and must be left untouched. When separate_trees = TRUE,
+    # every element already has its own correct name and none is ".pred", so
+    # nothing matches and nothing is renamed.
+    pred_ind <- names(res) %in% ".pred"
+    if (any(pred_ind)) {
+      names(res)[pred_ind] <- prefix
+    } else if (length(res) == 1) {
       res <- stats::setNames(res, prefix)
     }
     attr(res, "pred_names") <- prefix
