@@ -87,14 +87,25 @@ rename_stack_member_eqs <- function(eq, mode, member_name) {
     new_names <- paste0(old_names, "_", member_name)
   }
 
-  # Longest names first so a shorter name that happens to be a substring of a
-  # longer one (e.g. "norm" inside "norm2") can't clobber part of it.
-  ord <- order(nchar(old_names), decreasing = TRUE)
-  for (i in ord) {
-    pattern <- paste0("`", old_names[i], "`")
-    replacement <- paste0("`", new_names[i], "`")
-    eq <- gsub(pattern, replacement, eq, fixed = TRUE)
-  }
+  # Substituting at the symbol level (rather than gsub-ing the expression
+  # text) means this doesn't care whether a cross-reference happens to be
+  # backtick-quoted in the source text: hand-written equations backtick their
+  # references (e.g. multiclass's `norm`), but tidypredict-generated ones
+  # (e.g. a ranger member's separate-trees average) don't, because those
+  # names are already syntactically valid identifiers. Symbol substitution
+  # also can't clobber part of an unrelated longer name the way a naive
+  # substring gsub could (e.g. "norm" inside "norm2").
+  subs <- stats::setNames(lapply(new_names, as.symbol), old_names)
+  eq <- vapply(
+    eq,
+    function(txt) {
+      deparse1(
+        do.call(substitute, list(str2lang(txt), subs)),
+        control = "digits17"
+      )
+    },
+    character(1)
+  )
 
   names(eq) <- new_names
   eq
