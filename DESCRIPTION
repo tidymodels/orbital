@@ -65,6 +65,7 @@ Suggests:
     recipes,
     rmarkdown,
     rpart,
+    rsample,
     RSQLite,
     rstanarm,
     rules,
@@ -72,16 +73,19 @@ Suggests:
     sparklyr,
     sparsediscrim,
     splines2,
+    stacks,
     tailor,
     testthat (>= 3.0.0),
     themis,
     tibble,
     tidypredict (>= 1.2.0),
     torch (>= 0.17.0),
+    tune,
     withr,
     workflows,
     xgboost,
-    xrf
+    xrf,
+    yardstick
 VignetteBuilder:
     knitr
 Config/Needs/website: tidyverse/tidytemplate, rmarkdown, gt
