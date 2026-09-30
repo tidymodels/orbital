@@ -119,9 +119,9 @@ test_that("multiclass_from_logits returns correct structure for prob only", {
       b = "y",
       c = "z",
       norm = "exp(`a`) + exp(`b`) + exp(`c`)",
-      orbital_tmp_prob_name1 = "exp(`a`) / norm",
-      orbital_tmp_prob_name2 = "exp(`b`) / norm",
-      orbital_tmp_prob_name3 = "exp(`c`) / norm"
+      orbital_tmp_prob_name1 = "exp(`a`) / `norm`",
+      orbital_tmp_prob_name2 = "exp(`b`) / `norm`",
+      orbital_tmp_prob_name3 = "exp(`c`) / `norm`"
     )
   )
 })

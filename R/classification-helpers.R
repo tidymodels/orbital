@@ -86,7 +86,7 @@ multiclass_from_logits <- function(logit_eqs, type, lvl) {
   }
   if ("prob" %in% type) {
     norm_eq <- glue::glue_collapse(glue::glue("exp({lvl_bt})"), sep = " + ")
-    prob_eqs <- glue::glue("exp({lvl_bt}) / norm")
+    prob_eqs <- glue::glue("exp({lvl_bt}) / `norm`")
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, "norm" = norm_eq, prob_eqs)
   }
@@ -343,7 +343,7 @@ format_multiclass_logits_separate <- function(trees_split, type, lvl, prefix) {
   }
   if ("prob" %in% type) {
     norm_eq <- paste(paste0("exp(", lvl_bt, ")"), collapse = " + ")
-    prob_eqs <- paste0("exp(", lvl_bt, ") / norm")
+    prob_eqs <- paste0("exp(", lvl_bt, ") / `norm`")
     names(prob_eqs) <- paste0("orbital_tmp_prob_name", seq_along(lvl))
     res <- c(res, "norm" = norm_eq, prob_eqs)
   }
