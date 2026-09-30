@@ -60,6 +60,17 @@ on rows near the boundary; orbital matches the model, and 0.5 does not.
 The general rule: where a model’s own prediction rule and the naive rule
 disagree, orbital follows the model.
 
+## Ensembles
+
+[`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+supports fitted
+[`stacks::stacks()`](https://stacks.tidymodels.org/reference/stacks.html)
+ensembles (`stacks::linear_stack` objects produced by
+`stacks() |> add_candidates() |> blend_predictions() |> fit_members()`).
+Every member workflow must itself use a model orbital supports; the
+ensemble’s own blending step is always a `glmnet` fit and is always
+supported.
+
 ## Recipes steps
 
 The following 52 recipes steps are supported

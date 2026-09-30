@@ -930,6 +930,16 @@ rule disagree, orbital follows the model.</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="ensembles">Ensembles<a class="anchor" aria-label="anchor" href="#ensembles"></a>
+</h2>
+<p><code><a href="../reference/orbital.html">orbital()</a></code> supports fitted <code><a href="https://stacks.tidymodels.org/reference/stacks.html" class="external-link">stacks::stacks()</a></code>
+ensembles (<code>stacks::linear_stack</code> objects produced by
+<code>stacks() |&gt; add_candidates() |&gt; blend_predictions() |&gt; fit_members()</code>).
+Every member workflow must itself use a model orbital supports; the
+ensemble’s own blending step is always a <code>glmnet</code> fit and is
+always supported.</p>
+</div>
+<div class="section level2">
 <h2 id="recipes-steps">Recipes steps<a class="anchor" aria-label="anchor" href="#recipes-steps"></a>
 </h2>
 <p>The following 52 recipes steps are supported</p>

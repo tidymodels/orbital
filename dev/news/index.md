@@ -62,6 +62,15 @@
   support above
   ([\#185](https://github.com/tidymodels/orbital/issues/185)).
 
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  now supports fitted
+  [`stacks::stacks()`](https://stacks.tidymodels.org/reference/stacks.html)
+  ensembles (`stacks::linear_stack` objects), reusing each member
+  workflow’s own
+  [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  equations plus the elastic-net blending equations
+  ([\#54](https://github.com/tidymodels/orbital/issues/54)).
+
 - Bare
   [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
   fully-connected feed-forward networks are now supported, generating
