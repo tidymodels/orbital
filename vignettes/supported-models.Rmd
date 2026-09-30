@@ -119,6 +119,10 @@ The two classification columns are separate because not every model produces bot
 
 The general rule: where a model's own prediction rule and the naive rule disagree, orbital follows the model.
 
+## Ensembles
+
+`orbital()` supports fitted `stacks::stacks()` ensembles (`stacks::linear_stack` objects produced by `stacks() |> add_candidates() |> blend_predictions() |> fit_members()`). Every member workflow must itself use a model orbital supports; the ensemble's own blending step is always a `glmnet` fit and is always supported.
+
 ## Recipes steps
 
 ```{r}

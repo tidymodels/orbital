@@ -16,6 +16,8 @@
 
 * `orbital()` now supports multi-output bare keras3 functional models (`keras3::keras_model()` with `outputs` a named list), inferring the shared trunk and each head's own layers directly from the model's graph rather than requiring a separate trunk/heads argument. `mode`, `type`, and `lvl` each accept a list named by head, matching the multi-output torch support above (#185).
 
+* `orbital()` now supports fitted `stacks::stacks()` ensembles (`stacks::linear_stack` objects), reusing each member workflow's own `orbital()` equations plus the elastic-net blending equations (#54).
+
 * Bare `torch::nn_sequential()` fully-connected feed-forward networks are now supported, generating one column per neuron so that predictions no longer inline exponentially with network depth the way `tidypredict::tidypredict_fit()` did for `parsnip::mlp(engine = "nnet")` (#149).
 
 * Neural network support now covers `BatchNorm`/`LayerNorm` layers interleaved between a linear/`Dense` layer and its activation (`torch::nn_batch_norm1d()`/`nn_layer_norm()` and keras3's `layer_batch_normalization()`/`layer_layer_normalization()`), for every neural network entry point: bare `torch::nn_sequential()`, `mlp(engine = "brulee")`, bare keras3 `Sequential`, and `mlp(engine = "keras3")` (#184).
