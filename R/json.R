@@ -4,6 +4,9 @@
 #'
 #' @param x An [orbital] object.
 #' @param path file on disk.
+#' @param timestamp Whether to record the creation time in a `created` field,
+#'   as an ISO 8601 UTC string. Defaults to `FALSE` so that re-writing an
+#'   unchanged object doesn't produce a diff under version control.
 #'
 #' @details
 #' The structure of the resulting JSON file allows for easy reading, both by
@@ -37,7 +40,11 @@
 #'
 #' readLines(tmp_file)
 #' @export
-orbital_json_write <- function(x, path) {
+orbital_json_write <- function(x, path, timestamp = FALSE) {
+  if (!rlang::is_bool(timestamp)) {
+    cli::cli_abort("{.arg timestamp} must be {.code TRUE} or {.code FALSE}.")
+  }
+
   actions <- as.list(unclass(x))
 
   res <- list(
@@ -45,6 +52,10 @@ orbital_json_write <- function(x, path) {
     pred_names = attr(x, "pred_names"),
     version = 2
   )
+
+  if (timestamp) {
+    res$created <- format(Sys.time(), "%Y-%m-%dT%H:%M:%SZ", tz = "UTC")
+  }
 
   res <- jsonlite::toJSON(res, pretty = TRUE, auto_unbox = TRUE)
 
