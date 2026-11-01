@@ -41,3 +41,16 @@ namespace_case_when <- function(x) {
   names(x) <- names
   x
 }
+
+# Turn a list of quosures into single-line character equations. Unlike
+# `as_label()` this doesn't truncate long expressions, and the width cutoff
+# keeps each equation on one line. Names are kept.
+quos_to_eqs <- function(x) {
+  vapply(
+    x,
+    function(q) {
+      paste(deparse(rlang::quo_squash(q), width.cutoff = 500L), collapse = " ")
+    },
+    character(1)
+  )
+}

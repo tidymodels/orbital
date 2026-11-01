@@ -6,8 +6,7 @@ orbital.predictions_custom <- function(x, ...) {
     return(NULL)
   }
 
-  out <- vapply(input, rlang::as_label, character(1))
-  out
+  quos_to_eqs(input)
 }
 
 # Estimate based on number of expressions, ~50 chars each
