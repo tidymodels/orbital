@@ -15,6 +15,37 @@ test_that("step_mutate works", {
   expect_equal(res, exp)
 })
 
+test_that("step_mutate works with long expressions", {
+  skip_if_not_installed("recipes")
+
+  mtcars <- dplyr::as_tibble(mtcars)
+
+  rec <- recipes::recipe(~., data = mtcars) |>
+    recipes::step_mutate(
+      bin = dplyr::case_when(
+        mpg <= 15 ~ "a",
+        mpg <= 20 ~ "b",
+        mpg <= 25 ~ "c",
+        mpg > 25 ~ "d"
+      )
+    ) |>
+    recipes::prep()
+
+  eqs <- unclass(orbital(rec))
+  expect_no_match(eqs, "\n")
+  expect_no_match(eqs, "...", fixed = TRUE)
+
+  res <- dplyr::mutate(mtcars, !!!orbital_inline(orbital(rec)))
+
+  exp <- recipes::bake(rec, new_data = mtcars)
+  exp <- exp[names(res)]
+
+  expect_equal(res, exp)
+
+  res_sql <- orbital_sql(orbital(rec), con = dbplyr::simulate_dbi())
+  expect_match(as.character(res_sql), "CASE", fixed = TRUE)
+})
+
 test_that("step_mutate only calculates what is sufficient", {
   skip_if_not_installed("recipes")
 

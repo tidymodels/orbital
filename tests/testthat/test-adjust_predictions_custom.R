@@ -216,3 +216,33 @@ test_that("estimate_adj_chars works for predictions_custom with empty selection"
   res <- orbital:::estimate_adj_chars(tlr_fit$adjustments[[1]])
   expect_identical(res, 0L)
 })
+
+test_that("adjust_predictions_custom works with long expressions", {
+  skip_if_not_installed("tailor")
+
+  tlr <- tailor::tailor() |>
+    tailor::adjust_predictions_custom(
+      bin = dplyr::case_when(
+        mpg <= 15 ~ "aaaaaaaaaa",
+        mpg <= 20 ~ "bbbbbbbbbb",
+        mpg <= 25 ~ "cccccccccc",
+        mpg > 25 ~ "dddddddddd"
+      )
+    )
+
+  tlr_fit <- tailor::fit(
+    tlr,
+    mtcars,
+    outcome = c(mpg),
+    estimate = c(disp)
+  )
+
+  res <- orbital(tlr_fit)
+
+  expect_no_match(unclass(res), "\n")
+  expect_no_match(unclass(res), "...", fixed = TRUE)
+  expect_identical(
+    predict(tlr_fit, mtcars),
+    predict(res, tibble::as_tibble(mtcars))
+  )
+})
