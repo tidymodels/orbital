@@ -4,12 +4,16 @@
 \alias{orbital_json_write}
 \title{Save orbital object as json file}
 \usage{
-orbital_json_write(x, path)
+orbital_json_write(x, path, timestamp = FALSE)
 }
 \arguments{
 \item{x}{An \link{orbital} object.}
 
 \item{path}{file on disk.}
+
+\item{timestamp}{Whether to record the creation time in a \code{created} field,
+as an ISO 8601 UTC string. Defaults to \code{FALSE} so that re-writing an
+unchanged object doesn't produce a diff under version control.}
 }
 \value{
 Nothing.
