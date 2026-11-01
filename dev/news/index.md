@@ -2,6 +2,15 @@
 
 ## orbital (development version)
 
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  no longer truncates long
+  [`recipes::step_mutate()`](https://recipes.tidymodels.org/reference/step_mutate.html)
+  and
+  [`tailor::adjust_predictions_custom()`](https://tailor.tidymodels.org/reference/adjust_predictions_custom.html)
+  expressions to `...`, which previously produced equations that failed
+  at prediction time
+  ([\#192](https://github.com/tidymodels/orbital/issues/192)).
+
 - `torch` and `keras3` in Suggests now have version floors
   (`torch (>= 0.17.0)`, `keras3 (>= 1.5.1)`), matching the floor already
   in place for `brulee`, at the versions verified against neural network
