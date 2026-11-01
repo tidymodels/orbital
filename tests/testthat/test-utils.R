@@ -77,3 +77,22 @@ test_that("build_linear_pred handles no intercept", {
   result <- orbital:::build_linear_pred(coef_names, coef_values)
   expect_equal(result, "(`x` * 2) + (`y` * 3)")
 })
+
+test_that("quos_to_eqs keeps long expressions on one line", {
+  qs <- rlang::quos(
+    a = mpg + 1,
+    b = dplyr::case_when(
+      mpg <= 15 ~ "aaaaaaaaaa",
+      mpg <= 20 ~ "bbbbbbbbbb",
+      mpg <= 25 ~ "cccccccccc",
+      mpg > 25 ~ "dddddddddd"
+    )
+  )
+
+  res <- quos_to_eqs(qs)
+
+  expect_named(res, c("a", "b"))
+  expect_no_match(res, "\n")
+  expect_no_match(res, "...", fixed = TRUE)
+  expect_identical(res[["a"]], "mpg + 1")
+})

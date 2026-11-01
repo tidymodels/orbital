@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* `orbital()` no longer truncates long `recipes::step_mutate()` and `tailor::adjust_predictions_custom()` expressions to `...`, which previously produced equations that failed at prediction time (#192).
+
 * `torch` and `keras3` in Suggests now have version floors (`torch (>= 0.17.0)`, `keras3 (>= 1.5.1)`), matching the floor already in place for `brulee`, at the versions verified against neural network support (#149).
 
 * Bare keras3 `Sequential` fully-connected feed-forward networks are now supported, reusing the same per-neuron column generation as bare `torch::nn_sequential()` support (#149).
