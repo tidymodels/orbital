@@ -23,6 +23,38 @@ test_that("read and write json works", {
   expect_identical(new, orbital_obj)
 })
 
+test_that("json timestamp is optional and ignored on read", {
+  skip_if_not_installed("recipes")
+  skip_if_not_installed("tidypredict")
+  skip_if_not_installed("jsonlite")
+  skip_if_not_installed("workflows")
+  wf_fit <- parsnip::fit(
+    workflows::workflow(
+      recipes::recipe(mpg ~ ., data = mtcars),
+      parsnip::linear_reg()
+    ),
+    mtcars
+  )
+  orbital_obj <- orbital(wf_fit)
+
+  tmp_file <- tempfile()
+
+  orbital_json_write(orbital_obj, tmp_file)
+  expect_null(jsonlite::read_json(tmp_file)$created)
+
+  orbital_json_write(orbital_obj, tmp_file, timestamp = TRUE)
+  expect_match(
+    jsonlite::read_json(tmp_file)$created,
+    "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z$"
+  )
+  expect_identical(orbital_json_read(tmp_file), orbital_obj)
+
+  expect_snapshot(
+    orbital_json_write(orbital_obj, tmp_file, timestamp = NA),
+    error = TRUE
+  )
+})
+
 test_that("read and write json works - backwards from version 1", {
   skip_if_not_installed("recipes")
   skip_if_not_installed("tidypredict")
