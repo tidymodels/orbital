@@ -14,6 +14,15 @@ eval_orbital_eqs <- function(eqs, data) {
   data
 }
 
+## irlba 2.4.1 calls `oknum(scale)` with the default `scale = NULL`, and
+## `is.atomic(NULL)` is TRUE before R 4.4.0, so every irlba() call errors with
+## "LENGTH or similar applied to NULL object". Remove once irlba is fixed.
+skip_if_irlba_broken <- function() {
+  skip_if_not_installed("irlba")
+  broken <- getRversion() < "4.4.0" && utils::packageVersion("irlba") == "2.4.1"
+  skip_if(broken, "irlba 2.4.1 is broken on R < 4.4.0")
+}
+
 ## For sparklyr testing
 
 testthat_tbl <- function(name, data = NULL, repartition = 0L) {
