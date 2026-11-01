@@ -1,5 +1,6 @@
 test_that("step_pca_truncated works", {
   skip_if_not_installed("recipes")
+  skip_if_irlba_broken()
   skip_if_not_installed("embed")
 
   mtcars <- dplyr::as_tibble(mtcars)
@@ -21,6 +22,7 @@ test_that("step_pca_truncated works", {
 
 test_that("step_pca_truncated works with more than 9 PCs", {
   skip_if_not_installed("recipes")
+  skip_if_irlba_broken()
   skip_if_not_installed("embed")
 
   mtcars <- dplyr::as_tibble(mtcars)
@@ -41,6 +43,7 @@ test_that("step_pca_truncated works with more than 9 PCs", {
 
 test_that("step_pca_truncated only calculates what is sufficient", {
   skip_if_not_installed("recipes")
+  skip_if_irlba_broken()
 
   mtcars <- dplyr::as_tibble(mtcars)
   mtcars$hp <- NULL
@@ -60,6 +63,7 @@ test_that("step_pca_truncated only calculates what is sufficient", {
 
 test_that("step_pca_truncated works with empty selections", {
   skip_if_not_installed("recipes")
+  skip_if_irlba_broken()
   skip_if_not_installed("embed")
 
   mtcars <- dplyr::as_tibble(mtcars)
@@ -79,6 +83,7 @@ test_that("step_pca_truncated works with empty selections", {
 
 test_that("spark - step_pca_truncated works", {
   skip_if_not_installed("recipes")
+  skip_if_irlba_broken()
   skip_if_not_installed("embed")
   skip_if_not_installed("sparklyr")
   skip_if(is.na(testthat_spark_env_version()))
@@ -105,6 +110,7 @@ test_that("spark - step_pca_truncated works", {
 
 test_that("SQLite - step_pca_truncated works", {
   skip_if_not_installed("recipes")
+  skip_if_irlba_broken()
   skip_if_not_installed("embed")
   skip_if_not_installed("DBI")
   skip_if_not_installed("RSQLite")
@@ -134,6 +140,7 @@ test_that("SQLite - step_pca_truncated works", {
 
 test_that("duckdb - step_pca_truncated works", {
   skip_if_not_installed("recipes")
+  skip_if_irlba_broken()
   skip_if_not_installed("embed")
   skip_if_not_installed("DBI")
   skip_if_not_installed("duckdb")
@@ -162,6 +169,7 @@ test_that("duckdb - step_pca_truncated works", {
 
 test_that("arrow - step_pca_truncated works", {
   skip_if_not_installed("recipes")
+  skip_if_irlba_broken()
   skip_if_not_installed("embed")
   skip_if_not_installed("arrow")
 
