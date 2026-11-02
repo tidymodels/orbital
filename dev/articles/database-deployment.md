@@ -78,7 +78,7 @@ predictions <- mtcars_db |>
 # View the lazy query
 predictions
 #> # A query:  ?? x 12
-#> # Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1017-azure:R 4.6.2/:memory:]
+#> # Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1014-aws:R 4.6.2/:memory:]
 #>      mpg   cyl    disp     hp  drat       wt  qsec    vs    am  gear
 #>    <dbl> <dbl>   <dbl>  <dbl> <dbl>    <dbl> <dbl> <dbl> <dbl> <dbl>
 #>  1  21       6 -0.571  -0.535  3.9  -0.610    16.5     0     1     4

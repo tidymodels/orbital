@@ -2,83 +2,46 @@
 
 ## orbital (development version)
 
-- [`orbital_json_write()`](https://orbital.tidymodels.org/dev/reference/orbital_json_write.md)
-  gains a `timestamp` argument. When `TRUE`, the creation time is
-  recorded in a `created` field as an ISO 8601 UTC string. It defaults
-  to `FALSE` so unchanged objects don’t produce diffs under version
-  control, and
-  [`orbital_json_read()`](https://orbital.tidymodels.org/dev/reference/orbital_json_read.md)
-  ignores the field
-  ([\#2](https://github.com/tidymodels/orbital/issues/2)).
+## orbital 0.8.0
 
-- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-  no longer truncates long
-  [`recipes::step_mutate()`](https://recipes.tidymodels.org/reference/step_mutate.html)
+### Improvements
+
+- Neural network support:
+  [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   and
-  [`tailor::adjust_predictions_custom()`](https://tailor.tidymodels.org/reference/adjust_predictions_custom.html)
-  expressions to `...`, which previously produced equations that failed
-  at prediction time
-  ([\#192](https://github.com/tidymodels/orbital/issues/192)).
+  [`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
+  now support fully-connected feed-forward networks. Each neuron becomes
+  its own column, so predictions no longer inline exponentially with
+  network depth the way
+  [`tidypredict::tidypredict_fit()`](https://tidypredict.tidymodels.org/reference/tidypredict_fit.html)
+  did for `parsnip::mlp(engine = "nnet")`
+  ([\#149](https://github.com/tidymodels/orbital/issues/149),
+  [\#184](https://github.com/tidymodels/orbital/issues/184),
+  [\#185](https://github.com/tidymodels/orbital/issues/185)). Supported
+  inputs are:
 
-- `torch` and `keras3` in Suggests now have version floors
-  (`torch (>= 0.17.0)`, `keras3 (>= 1.5.1)`), matching the floor already
-  in place for `brulee`, at the versions verified against neural network
-  support ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+  - Bare
+    [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
+    and keras3 `Sequential` networks.
 
-- Bare keras3 `Sequential` fully-connected feed-forward networks are now
-  supported, reusing the same per-neuron column generation as bare
-  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
-  support ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+  - [`parsnip::mlp()`](https://parsnip.tidymodels.org/reference/mlp.html)
+    with the `"brulee"` and `"keras3"` engines, for regression and
+    classification.
 
-- [`estimate_orbital_size()`](https://orbital.tidymodels.org/dev/reference/estimate_orbital_size.md)
-  now supports `parsnip::mlp(engine = "brulee")` fits,
-  `parsnip::mlp(engine = "keras3")` fits, bare
-  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
-  networks, and bare keras3 `Sequential` networks
-  ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+  - `BatchNorm` and `LayerNorm` layers between a linear or `Dense` layer
+    and its activation.
 
-- [`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) with the
-  `"brulee"` engine is now supported for regression and classification,
-  reusing the same per-neuron column generation as bare
-  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
-  support, since a `brulee_mlp` fit is a torch `nn_sequential` under the
-  hood ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+  - Multi-output networks, where each head can be regression or
+    classification. For torch, supply
+    `list(trunk = ..., heads = list(...))`. For keras3, supply a
+    functional model with a named list of `outputs`. `mode`, `type`, and
+    `lvl` accept a list named by head, and predictions are named
+    `<prefix>_<head>*`.
 
-- [`mlp()`](https://parsnip.tidymodels.org/reference/mlp.html) with the
-  `"keras3"` engine is now supported for regression and classification,
-  reusing the same per-neuron column generation as bare keras3
-  `Sequential` support
-  ([\#149](https://github.com/tidymodels/orbital/issues/149)).
-
-- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)’s
-  new `output_layer` argument exposes an intermediate hidden layer’s
-  neuron columns alongside the usual `.pred*` columns, for
-  `parsnip::mlp(engine = "brulee")` fits,
-  `parsnip::mlp(engine = "keras3")` fits, bare
-  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
-  networks, and bare keras3 `Sequential` networks
-  ([\#149](https://github.com/tidymodels/orbital/issues/149)).
-
-- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-  now supports multi-output torch networks, given as an explicit
-  `list(trunk = ..., heads = list(...))` where the trunk and every head
-  is a bare
-  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html).
-  `mode`, `type`, and `lvl` each accept a list named by head so heads
-  can mix regression and classification, and predictions are named
-  `<prefix>_<head>*` (e.g. `.pred_price`, `.pred_category_class`) to
-  keep every head’s columns from colliding
-  ([\#185](https://github.com/tidymodels/orbital/issues/185)).
-
-- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
-  now supports multi-output bare keras3 functional models
-  ([`keras3::keras_model()`](https://keras3.posit.co/reference/keras_model.html)
-  with `outputs` a named list), inferring the shared trunk and each
-  head’s own layers directly from the model’s graph rather than
-  requiring a separate trunk/heads argument. `mode`, `type`, and `lvl`
-  each accept a list named by head, matching the multi-output torch
-  support above
-  ([\#185](https://github.com/tidymodels/orbital/issues/185)).
+  - The new `output_layer` argument of
+    [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+    exposes a hidden layer’s neuron columns alongside the usual `.pred*`
+    columns.
 
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   now supports fitted
@@ -89,25 +52,25 @@
   equations plus the elastic-net blending equations
   ([\#54](https://github.com/tidymodels/orbital/issues/54)).
 
-- Bare
-  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
-  fully-connected feed-forward networks are now supported, generating
-  one column per neuron so that predictions no longer inline
-  exponentially with network depth the way
-  [`tidypredict::tidypredict_fit()`](https://tidypredict.tidymodels.org/reference/tidypredict_fit.html)
-  did for `parsnip::mlp(engine = "nnet")`
-  ([\#149](https://github.com/tidymodels/orbital/issues/149)).
+- [`orbital_json_write()`](https://orbital.tidymodels.org/dev/reference/orbital_json_write.md)
+  gains a `timestamp` argument. When `TRUE`, the creation time is
+  recorded in a `created` field as an ISO 8601 UTC string. It defaults
+  to `FALSE` so unchanged objects don’t produce diffs under version
+  control, and
+  [`orbital_json_read()`](https://orbital.tidymodels.org/dev/reference/orbital_json_read.md)
+  ignores the field
+  ([\#2](https://github.com/tidymodels/orbital/issues/2)).
 
-- Neural network support now covers `BatchNorm`/`LayerNorm` layers
-  interleaved between a linear/`Dense` layer and its activation
-  ([`torch::nn_batch_norm1d()`](https://torch.mlverse.org/docs/reference/nn_batch_norm1d.html)/[`nn_layer_norm()`](https://torch.mlverse.org/docs/reference/nn_layer_norm.html)
-  and keras3’s
-  [`layer_batch_normalization()`](https://keras3.posit.co/reference/layer_batch_normalization.html)/[`layer_layer_normalization()`](https://keras3.posit.co/reference/layer_layer_normalization.html)),
-  for every neural network entry point: bare
-  [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html),
-  `mlp(engine = "brulee")`, bare keras3 `Sequential`, and
-  `mlp(engine = "keras3")`
-  ([\#184](https://github.com/tidymodels/orbital/issues/184)).
+### Bug fixes
+
+- [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
+  no longer truncates long
+  [`recipes::step_mutate()`](https://recipes.tidymodels.org/reference/step_mutate.html)
+  and
+  [`tailor::adjust_predictions_custom()`](https://tailor.tidymodels.org/reference/adjust_predictions_custom.html)
+  expressions to `...`, which previously produced equations that failed
+  at prediction time
+  ([\#192](https://github.com/tidymodels/orbital/issues/192)).
 
 ## orbital 0.7.0
 

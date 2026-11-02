@@ -139,7 +139,7 @@ mtcars_duckdb <- dplyr::copy_to(con_duckdb, mtcars)
 
 predict(orbital_obj, mtcars_duckdb)
 #> # A query:  ?? x 1
-#> # Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1017-azure:R 4.6.2/:memory:]
+#> # Database: DuckDB 2.0.0 [unknown@Linux 7.0.0-1014-aws:R 4.6.2/:memory:]
 #>    .pred
 #>    <dbl>
 #>  1  23.0
