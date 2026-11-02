@@ -1,30 +1,26 @@
-# orbital (development version)
+# orbital 0.8.0
 
-* `orbital_json_write()` gains a `timestamp` argument. When `TRUE`, the creation time is recorded in a `created` field as an ISO 8601 UTC string. It defaults to `FALSE` so unchanged objects don't produce diffs under version control, and `orbital_json_read()` ignores the field (#2).
+## Improvements
 
-* `orbital()` no longer truncates long `recipes::step_mutate()` and `tailor::adjust_predictions_custom()` expressions to `...`, which previously produced equations that failed at prediction time (#192).
+* Neural network support: `orbital()` and `estimate_orbital_size()` now support fully-connected feed-forward networks. Each neuron becomes its own column, so predictions no longer inline exponentially with network depth the way `tidypredict::tidypredict_fit()` did for `parsnip::mlp(engine = "nnet")` (#149, #184, #185). Supported inputs are:
 
-* `torch` and `keras3` in Suggests now have version floors (`torch (>= 0.17.0)`, `keras3 (>= 1.5.1)`), matching the floor already in place for `brulee`, at the versions verified against neural network support (#149).
+  * Bare `torch::nn_sequential()` and keras3 `Sequential` networks.
 
-* Bare keras3 `Sequential` fully-connected feed-forward networks are now supported, reusing the same per-neuron column generation as bare `torch::nn_sequential()` support (#149).
+  * `parsnip::mlp()` with the `"brulee"` and `"keras3"` engines, for regression and classification.
 
-* `estimate_orbital_size()` now supports `parsnip::mlp(engine = "brulee")` fits, `parsnip::mlp(engine = "keras3")` fits, bare `torch::nn_sequential()` networks, and bare keras3 `Sequential` networks (#149).
+  * `BatchNorm` and `LayerNorm` layers between a linear or `Dense` layer and its activation.
 
-* `mlp()` with the `"brulee"` engine is now supported for regression and classification, reusing the same per-neuron column generation as bare `torch::nn_sequential()` support, since a `brulee_mlp` fit is a torch `nn_sequential` under the hood (#149).
+  * Multi-output networks, where each head can be regression or classification. For torch, supply `list(trunk = ..., heads = list(...))`. For keras3, supply a functional model with a named list of `outputs`. `mode`, `type`, and `lvl` accept a list named by head, and predictions are named `<prefix>_<head>*`.
 
-* `mlp()` with the `"keras3"` engine is now supported for regression and classification, reusing the same per-neuron column generation as bare keras3 `Sequential` support (#149).
-
-* `orbital()`'s new `output_layer` argument exposes an intermediate hidden layer's neuron columns alongside the usual `.pred*` columns, for `parsnip::mlp(engine = "brulee")` fits, `parsnip::mlp(engine = "keras3")` fits, bare `torch::nn_sequential()` networks, and bare keras3 `Sequential` networks (#149).
-
-* `orbital()` now supports multi-output torch networks, given as an explicit `list(trunk = ..., heads = list(...))` where the trunk and every head is a bare `torch::nn_sequential()`. `mode`, `type`, and `lvl` each accept a list named by head so heads can mix regression and classification, and predictions are named `<prefix>_<head>*` (e.g. `.pred_price`, `.pred_category_class`) to keep every head's columns from colliding (#185).
-
-* `orbital()` now supports multi-output bare keras3 functional models (`keras3::keras_model()` with `outputs` a named list), inferring the shared trunk and each head's own layers directly from the model's graph rather than requiring a separate trunk/heads argument. `mode`, `type`, and `lvl` each accept a list named by head, matching the multi-output torch support above (#185).
+  * The new `output_layer` argument of `orbital()` exposes a hidden layer's neuron columns alongside the usual `.pred*` columns.
 
 * `orbital()` now supports fitted `stacks::stacks()` ensembles (`stacks::linear_stack` objects), reusing each member workflow's own `orbital()` equations plus the elastic-net blending equations (#54).
 
-* Bare `torch::nn_sequential()` fully-connected feed-forward networks are now supported, generating one column per neuron so that predictions no longer inline exponentially with network depth the way `tidypredict::tidypredict_fit()` did for `parsnip::mlp(engine = "nnet")` (#149).
+* `orbital_json_write()` gains a `timestamp` argument. When `TRUE`, the creation time is recorded in a `created` field as an ISO 8601 UTC string. It defaults to `FALSE` so unchanged objects don't produce diffs under version control, and `orbital_json_read()` ignores the field (#2).
 
-* Neural network support now covers `BatchNorm`/`LayerNorm` layers interleaved between a linear/`Dense` layer and its activation (`torch::nn_batch_norm1d()`/`nn_layer_norm()` and keras3's `layer_batch_normalization()`/`layer_layer_normalization()`), for every neural network entry point: bare `torch::nn_sequential()`, `mlp(engine = "brulee")`, bare keras3 `Sequential`, and `mlp(engine = "keras3")` (#184).
+## Bug fixes
+
+* `orbital()` no longer truncates long `recipes::step_mutate()` and `tailor::adjust_predictions_custom()` expressions to `...`, which previously produced equations that failed at prediction time (#192).
 
 # orbital 0.7.0
 
