@@ -5,7 +5,7 @@
 # reuses `nn_sequential_layers()`/`nn_forward_eqs()` from `R/model-torch.R` and
 # `R/nn-utils.R` unchanged.
 
-# `brulee:::revive_model()` and the `epoch + 1` indexing into `object$estimates`
+# The `epoch + 1` indexing into `object$estimates`
 # below are undocumented internals, not brulee's public API. Confirmed by
 # reading `brulee:::predict_brulee_mlp_raw()`'s own source: it indexes
 # `model$estimates[[epoch + 1]]`, i.e. `object$best_epoch` is 0-based (epoch 0
@@ -15,7 +15,11 @@
 # not assumed, since a future brulee release changing this indexing would
 # otherwise silently pick the wrong epoch's weights rather than error.
 brulee_revive_mlp <- function(x, epoch = x$best_epoch) {
-  module <- brulee:::revive_model(x$model_obj)
+  # Mirrors `brulee:::revive_model()` using only torch's public API.
+  con <- rawConnection(x$model_obj)
+  on.exit(close(con), add = TRUE)
+  module <- torch::torch_load(con)
+  module$to(device = "cpu")
   module$load_state_dict(x$estimates[[epoch + 1]])
   module$eval()
   module

@@ -3,22 +3,22 @@
 |field    |value                                                                                              |
 |:--------|:--------------------------------------------------------------------------------------------------|
 |version  |R version 4.6.1 (2026-06-24)                                                                       |
-|os       |macOS Tahoe 26.6.2                                                                                 |
+|os       |macOS Golden Gate 27.0.1                                                                           |
 |system   |aarch64, darwin23                                                                                  |
 |ui       |Positron                                                                                           |
 |language |(EN)                                                                                               |
 |collate  |en_US.UTF-8                                                                                        |
 |ctype    |en_US.UTF-8                                                                                        |
 |tz       |America/Los_Angeles                                                                                |
-|date     |2026-09-04                                                                                         |
+|date     |2026-11-02                                                                                         |
 |pandoc   |3.10 @ /Applications/Positron.app/Contents/Resources/app/quarto/bin/tools/aarch64/ (via rmarkdown) |
-|quarto   |1.9.35 @ /Applications/quarto/bin/quarto                                                           |
+|quarto   |99.9.9 @ /Users/emilhvitfeldt/Github/quarto-cli/package/dist/bin/quarto                            |
 
 # Dependencies
 
 |package    |old    |new        |Δ  |
 |:----------|:------|:----------|:--|
-|orbital    |0.5.1  |0.5.1.9000 |*  |
+|orbital    |0.7.0  |0.7.0.9000 |*  |
 |cli        |3.6.6  |3.6.6      |   |
 |dplyr      |1.2.1  |1.2.1      |   |
 |generics   |0.1.4  |0.1.4      |   |
