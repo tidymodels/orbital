@@ -17,6 +17,12 @@
   A complete list of supported parsnip models, recipes steps, and tailor
   adjustments that can be converted to orbital objects.
 
+- [Neural
+  networks](https://orbital.tidymodels.org/articles/neural-networks.md):
+
+  Converting bare torch, brulee, and keras3 neural networks to orbital
+  objects, including multi-output networks with a shared trunk.
+
 - [Pros and Cons](https://orbital.tidymodels.org/articles/pros-cons.md):
 
   Weigh the benefits and limitations of using orbital for prediction to

@@ -9,7 +9,7 @@ aware function such as dplyr::mutate()."><meta property="og:image" content="http
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,7 @@ aware function such as dplyr::mutate()."><meta property="og:image" content="http
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/supported-models.html">Supported Models and recipes steps</a></li>
+    <li><a class="dropdown-item" href="../articles/neural-networks.html">Neural networks</a></li>
     <li><a class="dropdown-item" href="../articles/pros-cons.html">Pros and Cons</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -38,7 +39,7 @@ aware function such as dplyr::mutate()."><meta property="og:image" content="http
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Convert orbital objects to quosures</h1>
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.7.0/R/inline.R" class="external-link"><code>R/inline.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.8.0/R/inline.R" class="external-link"><code>R/inline.R</code></a></small>
       <div class="d-none name"><code>orbital_inline.Rd</code></div>
     </div>
 
@@ -148,11 +149,11 @@ returns predictions.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $.pred</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">&lt;quosure&gt;</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> expr: ^20.090625 + (cyl * -0.199023961804226) + (disp *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> expr: ^20.090625 + (cyl * -0.199023961804221) + (disp *</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           1.65275221678761) + (hp * -1.47287569912409) + (drat *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           0.420851499782798) + (wt * -3.63526678164088) + (qsec *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           1.46715321419096) + (vs * 0.160157583474125) + (am *</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           1.25757032609057) + (gear * 0.483566388425265) + (carb *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           0.420851499782799) + (wt * -3.63526678164088) + (qsec *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1.46715321419096) + (vs * 0.160157583474124) + (am *</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           1.25757032609057) + (gear * 0.483566388425266) + (carb *</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           -0.322101975983201)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> env:  global</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>

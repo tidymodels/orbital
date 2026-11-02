@@ -34,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">orbital</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.8.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,6 +49,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/supported-models.html">Supported Models and recipes steps</a></li>
+    <li><a class="dropdown-item" href="../articles/neural-networks.html">Neural networks</a></li>
     <li><a class="dropdown-item" href="../articles/pros-cons.html">Pros and Cons</a></li>
     <li><hr class="dropdown-divider"></li>
     <li><a class="dropdown-item" href="../articles/index.html">More articles...</a></li>
@@ -76,7 +77,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>Supported Models and recipes steps</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.7.0/vignettes/supported-models.Rmd" class="external-link"><code>vignettes/supported-models.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/tidymodels/orbital/blob/v0.8.0/vignettes/supported-models.Rmd" class="external-link"><code>vignettes/supported-models.Rmd</code></a></small>
       <div class="d-none name"><code>supported-models.Rmd</code></div>
     </div>
 
@@ -748,6 +749,20 @@ to add model to table.</p>
 </tr>
 <tr>
 <td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/mlp.html" class="external-link">mlp()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"brulee"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/mlp.html" class="external-link">mlp()</a></code></span></td>
+<td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"keras3"</code></span></td>
+<td headers="numeric" class="gt_row gt_center">✅</td>
+<td headers="class" class="gt_row gt_center">✅</td>
+<td headers="prob" class="gt_row gt_center">✅</td>
+</tr>
+<tr>
+<td headers="parsnip" class="gt_row gt_left"><span class="gt_from_md"><code><a href="https://parsnip.tidymodels.org/reference/mlp.html" class="external-link">mlp()</a></code></span></td>
 <td headers="engine" class="gt_row gt_left"><span class="gt_from_md"><code>"nnet"</code></span></td>
 <td headers="numeric" class="gt_row gt_center">✅</td>
 <td headers="class" class="gt_row gt_center">✅</td>
@@ -912,6 +927,16 @@ orbital matches the model, and 0.5 does not.</p>
 <p>The general rule: where a model’s own prediction rule and the naive
 rule disagree, orbital follows the model.</p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="ensembles">Ensembles<a class="anchor" aria-label="anchor" href="#ensembles"></a>
+</h2>
+<p><code><a href="../reference/orbital.html">orbital()</a></code> supports fitted <code><a href="https://stacks.tidymodels.org/reference/stacks.html" class="external-link">stacks::stacks()</a></code>
+ensembles (<code>stacks::linear_stack</code> objects produced by
+<code>stacks() |&gt; add_candidates() |&gt; blend_predictions() |&gt; fit_members()</code>).
+Every member workflow must itself use a model orbital supports; the
+ensemble’s own blending step is always a <code>glmnet</code> fit and is
+always supported.</p>
 </div>
 <div class="section level2">
 <h2 id="recipes-steps">Recipes steps<a class="anchor" aria-label="anchor" href="#recipes-steps"></a>

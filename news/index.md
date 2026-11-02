@@ -1,6 +1,77 @@
 # Changelog
 
+## orbital 0.8.0
+
+### Improvements
+
+- Neural network support:
+  [`orbital()`](https://orbital.tidymodels.org/reference/orbital.md) and
+  [`estimate_orbital_size()`](https://orbital.tidymodels.org/reference/estimate_orbital_size.md)
+  now support fully-connected feed-forward networks. Each neuron becomes
+  its own column, so predictions no longer inline exponentially with
+  network depth the way
+  [`tidypredict::tidypredict_fit()`](https://tidypredict.tidymodels.org/reference/tidypredict_fit.html)
+  did for `parsnip::mlp(engine = "nnet")`
+  ([\#149](https://github.com/tidymodels/orbital/issues/149),
+  [\#184](https://github.com/tidymodels/orbital/issues/184),
+  [\#185](https://github.com/tidymodels/orbital/issues/185)). Supported
+  inputs are:
+
+  - Bare
+    [`torch::nn_sequential()`](https://torch.mlverse.org/docs/reference/nn_sequential.html)
+    and keras3 `Sequential` networks.
+
+  - [`parsnip::mlp()`](https://parsnip.tidymodels.org/reference/mlp.html)
+    with the `"brulee"` and `"keras3"` engines, for regression and
+    classification.
+
+  - `BatchNorm` and `LayerNorm` layers between a linear or `Dense` layer
+    and its activation.
+
+  - Multi-output networks, where each head can be regression or
+    classification. For torch, supply
+    `list(trunk = ..., heads = list(...))`. For keras3, supply a
+    functional model with a named list of `outputs`. `mode`, `type`, and
+    `lvl` accept a list named by head, and predictions are named
+    `<prefix>_<head>*`.
+
+  - The new `output_layer` argument of
+    [`orbital()`](https://orbital.tidymodels.org/reference/orbital.md)
+    exposes a hidden layer’s neuron columns alongside the usual `.pred*`
+    columns.
+
+- [`orbital()`](https://orbital.tidymodels.org/reference/orbital.md) now
+  supports fitted
+  [`stacks::stacks()`](https://stacks.tidymodels.org/reference/stacks.html)
+  ensembles (`stacks::linear_stack` objects), reusing each member
+  workflow’s own
+  [`orbital()`](https://orbital.tidymodels.org/reference/orbital.md)
+  equations plus the elastic-net blending equations
+  ([\#54](https://github.com/tidymodels/orbital/issues/54)).
+
+- [`orbital_json_write()`](https://orbital.tidymodels.org/reference/orbital_json_write.md)
+  gains a `timestamp` argument. When `TRUE`, the creation time is
+  recorded in a `created` field as an ISO 8601 UTC string. It defaults
+  to `FALSE` so unchanged objects don’t produce diffs under version
+  control, and
+  [`orbital_json_read()`](https://orbital.tidymodels.org/reference/orbital_json_read.md)
+  ignores the field
+  ([\#2](https://github.com/tidymodels/orbital/issues/2)).
+
+### Bug fixes
+
+- [`orbital()`](https://orbital.tidymodels.org/reference/orbital.md) no
+  longer truncates long
+  [`recipes::step_mutate()`](https://recipes.tidymodels.org/reference/step_mutate.html)
+  and
+  [`tailor::adjust_predictions_custom()`](https://tailor.tidymodels.org/reference/adjust_predictions_custom.html)
+  expressions to `...`, which previously produced equations that failed
+  at prediction time
+  ([\#192](https://github.com/tidymodels/orbital/issues/192)).
+
 ## orbital 0.7.0
+
+CRAN release: 2026-09-04
 
 ## orbital 0.6.0
 
