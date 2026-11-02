@@ -47,7 +47,7 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">orbital_json_write</span><span class="op">(</span><span class="va">x</span>, <span class="va">path</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">orbital_json_write</span><span class="op">(</span><span class="va">x</span>, <span class="va">path</span>, timestamp <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -60,6 +60,12 @@
 
 <dt id="arg-path">path<a class="anchor" aria-label="anchor" href="#arg-path"></a></dt>
 <dd><p>file on disk.</p></dd>
+
+
+<dt id="arg-timestamp">timestamp<a class="anchor" aria-label="anchor" href="#arg-timestamp"></a></dt>
+<dd><p>Whether to record the creation time in a <code>created</code> field,
+as an ISO 8601 UTC string. Defaults to <code>FALSE</code> so that re-writing an
+unchanged object doesn't produce a diff under version control.</p></dd>
 
 </dl></div>
     <div class="section level2">

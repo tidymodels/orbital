@@ -2,6 +2,15 @@
 
 ## orbital (development version)
 
+- [`orbital_json_write()`](https://orbital.tidymodels.org/dev/reference/orbital_json_write.md)
+  gains a `timestamp` argument. When `TRUE`, the creation time is
+  recorded in a `created` field as an ISO 8601 UTC string. It defaults
+  to `FALSE` so unchanged objects don’t produce diffs under version
+  control, and
+  [`orbital_json_read()`](https://orbital.tidymodels.org/dev/reference/orbital_json_read.md)
+  ignores the field
+  ([\#2](https://github.com/tidymodels/orbital/issues/2)).
+
 - [`orbital()`](https://orbital.tidymodels.org/dev/reference/orbital.md)
   no longer truncates long
   [`recipes::step_mutate()`](https://recipes.tidymodels.org/reference/step_mutate.html)

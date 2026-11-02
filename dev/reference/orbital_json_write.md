@@ -5,7 +5,7 @@ Saving an orbital object to disk in a human and machine readable way.
 ## Usage
 
 ``` r
-orbital_json_write(x, path)
+orbital_json_write(x, path, timestamp = FALSE)
 ```
 
 ## Arguments
@@ -18,6 +18,12 @@ orbital_json_write(x, path)
 - path:
 
   file on disk.
+
+- timestamp:
+
+  Whether to record the creation time in a `created` field, as an ISO
+  8601 UTC string. Defaults to `FALSE` so that re-writing an unchanged
+  object doesn't produce a diff under version control.
 
 ## Value
 
