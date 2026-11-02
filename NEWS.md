@@ -1,5 +1,7 @@
 # orbital (development version)
 
+* `orbital_json_write()` gains a `timestamp` argument. When `TRUE`, the creation time is recorded in a `created` field as an ISO 8601 UTC string. It defaults to `FALSE` so unchanged objects don't produce diffs under version control, and `orbital_json_read()` ignores the field (#2).
+
 * `orbital()` no longer truncates long `recipes::step_mutate()` and `tailor::adjust_predictions_custom()` expressions to `...`, which previously produced equations that failed at prediction time (#192).
 
 * `torch` and `keras3` in Suggests now have version floors (`torch (>= 0.17.0)`, `keras3 (>= 1.5.1)`), matching the floor already in place for `brulee`, at the versions verified against neural network support (#149).
